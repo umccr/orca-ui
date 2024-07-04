@@ -18,8 +18,11 @@
 |   |   |-- Button.tsx
 |   |   |-- InputField.tsx
 |   |-- /layout             # Layout-related components
+|   |   |-- Container.tsx
+|   |   |-- Grid.tsx
+|   |-- /navigation         # navigation-related components
+|   |   |-- NavBar.tsx
 |   |   |-- Header.tsx
-|   |   |-- Footer.tsx
 |   |-- /modals             # For modal-related components
 |   |   |-- SideModal.tsx
 |   |   |-- ConfirmationModal.tsx
@@ -48,6 +51,9 @@
 |-- /types                  # TypeScript type definitions
 |   |-- apiResponseTypes.ts
 |   |-- workflowTypes.ts
+|-- /stories                # storybook store
+|   |-- assets
+|   |-- Button.stories.tsx
 |-- App.tsx                 # Root component
 |-- main.tsx                # Entry point of the application
 |-- vite-env.d.ts           # TypeScript definitions for Vite
@@ -57,15 +63,15 @@
 ### general guide
 
 - Folders: Use lowercase to avoid case sensitivity issues across different operating systems.
+- Page folder: Use PascalCase to immediately recognize it as a component, with an index file defined inside.
 - Files:
   - React Components: Use PascalCase for files that define React components (e.g., UserProfile.tsx).
   - TypeScript Files: Use camelCase for other files (e.g., userApi.ts).
-  - Page folder: immediately recognizable as a component as index file defined inside.
 
 ### components
 
 - /common: Contains universally reusable UI components like Button.tsx and InputField.tsx.
-- /layout: Includes components that are part of the website’s layout, such as Header.tsx and Footer.tsx.
+- /layout: Includes components that are part of the website’s layout, such as Container.tsx
 
 ### others
 
