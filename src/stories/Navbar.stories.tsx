@@ -2,38 +2,43 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Navbar from '@/components/navigation/navbar/NavBar';
 import { withRouter, reactRouterParameters } from 'storybook-addon-remix-react-router';
 import {
-  CalendarIcon,
-  ChartPieIcon,
-  DocumentDuplicateIcon,
-  FolderIcon,
-  HomeIcon,
-  UsersIcon,
+  DocumentTextIcon,
+  ChartBarSquareIcon,
+  Bars3BottomLeftIcon,
+  BookOpenIcon,
+  ArrowPathRoundedSquareIcon,
+  ArrowsRightLeftIcon,
 } from '@heroicons/react/24/outline';
 
 const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon },
+  { name: 'Metadata', href: '#', icon: DocumentTextIcon },
   {
-    name: 'Teams',
-    icon: UsersIcon,
+    name: 'Subjects',
+    icon: ChartBarSquareIcon,
     children: [
-      { name: 'Engineering', href: '#' },
-      { name: 'Human Resources', href: '#' },
-      { name: 'Customer Success', href: '#' },
+      { name: 'Overview', href: '#' },
+      { name: 'Files', href: '#' },
+      { name: 'Reports', href: '#' },
     ],
   },
   {
-    name: 'Projects',
-    icon: FolderIcon,
+    name: 'Library',
+    icon: BookOpenIcon,
     children: [
-      { name: 'GraphQL API', href: '#' },
-      { name: 'iOS App', href: '#' },
-      { name: 'Android App', href: '#' },
-      { name: 'New Customer Portal', href: '#' },
+      { name: 'Overview', href: '#' },
+      { name: 'Files', href: '#' },
     ],
   },
-  { name: 'Calendar', href: '#', icon: CalendarIcon },
-  { name: 'Documents', href: '#', icon: DocumentDuplicateIcon },
-  { name: 'Reports', href: '#', icon: ChartPieIcon },
+  {
+    name: 'Sequence',
+    icon: Bars3BottomLeftIcon,
+    children: [
+      { name: 'Overview', href: '#' },
+      { name: 'Files', href: '#' },
+    ],
+  },
+  { name: 'Workflow', href: '#', icon: ArrowPathRoundedSquareIcon },
+  { name: 'Data Journey', href: '#', icon: ArrowsRightLeftIcon },
 ];
 
 const meta: Meta = {

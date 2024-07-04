@@ -1,6 +1,7 @@
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { useLocation } from 'react-router-dom';
+import { classNames } from '@/utils/utils';
 import { FC } from 'react';
 
 export interface NavigationItem {
@@ -12,10 +13,6 @@ export interface NavigationItem {
 
 export interface NavbarProps {
   navigation: NavigationItem[];
-}
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
 }
 
 const Navbar: FC<NavbarProps> = ({ navigation }) => {
@@ -39,7 +36,7 @@ const Navbar: FC<NavbarProps> = ({ navigation }) => {
                       )}
                     >
                       {item.icon && (
-                        <item.icon className='h-6 w-6 shrink-0 text-gray-400' aria-hidden='true' />
+                        <item.icon className='h-5 w-5 shrink-0 text-gray-400' aria-hidden='true' />
                       )}
                       {item.name}
                     </a>
@@ -55,7 +52,7 @@ const Navbar: FC<NavbarProps> = ({ navigation }) => {
                           >
                             {item.icon && (
                               <item.icon
-                                className='h-6 w-6 shrink-0 text-gray-400'
+                                className='h-5 w-5 shrink-0 text-gray-400'
                                 aria-hidden='true'
                               />
                             )}

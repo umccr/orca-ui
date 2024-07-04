@@ -8,6 +8,7 @@ import {
   MenuSeparator,
 } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { classNames } from '@/utils/utils';
 
 export interface DropdownItemProps {
   label: string;
@@ -21,9 +22,6 @@ export interface DropdownProps {
   items: DropdownItemProps[];
 }
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
 function showItemDialog() {
   alert('Open settings dialog!');
 }
