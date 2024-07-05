@@ -4,7 +4,7 @@ phases:
     runtime-versions:
       nodejs: 20
     commands:
-      - yarn install
+      - yarn install --production=true
   build:
     commands:
       - set -eu
