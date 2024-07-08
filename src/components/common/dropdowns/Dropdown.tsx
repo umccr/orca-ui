@@ -22,8 +22,8 @@ export interface DropdownProps {
   items: DropdownItemProps[];
 }
 
-function showItemDialog() {
-  alert('Open settings dialog!');
+function showItemDialog(event: React.MouseEvent<HTMLElement>) {
+  console.log((event.target as HTMLElement).textContent);
 }
 const Dropdown: FC<DropdownProps> = ({ items }) => {
   return (

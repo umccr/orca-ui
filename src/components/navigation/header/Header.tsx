@@ -83,6 +83,7 @@ const Header = () => {
                   </div>
                 </div>
               </div>
+              {/* mobile mode */}
               <div className='flex items-center lg:hidden'>
                 {/* Mobile menu button */}
                 <DisclosureButton className='relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500'>
@@ -95,6 +96,7 @@ const Header = () => {
                   )}
                 </DisclosureButton>
               </div>
+              {/*  */}
               <div className='hidden lg:ml-4 lg:flex lg:items-center'>
                 <button
                   type='button'
@@ -186,8 +188,8 @@ const Header = () => {
                   <div>xx@umccr.org</div>
                 </div>
                 <div className='ml-3'>
-                  <div className='text-base font-medium text-gray-800'>Tom Cook</div>
-                  <div className='text-sm font-medium text-gray-500'>tom@example.com</div>
+                  <div className='text-base font-medium text-gray-800'>Name here</div>
+                  <div className='text-sm font-medium text-gray-500'>name@example.com</div>
                 </div>
                 <button
                   type='button'
