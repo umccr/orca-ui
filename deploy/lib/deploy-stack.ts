@@ -1,14 +1,13 @@
-import { CustomResource, Duration, RemovalPolicy, Size, Stack, StackProps } from 'aws-cdk-lib';
+import * as path from 'path';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+import { Duration, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { BlockPublicAccess, Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
-import { Provider } from 'aws-cdk-lib/custom-resources';
-import * as path from 'path';
-import { Architecture, Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Architecture, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
 import {
   BuildEnvironmentVariableType,
   BuildSpec,
@@ -19,6 +18,8 @@ import {
 import { AwsCliLayer } from 'aws-cdk-lib/lambda-layer-awscli';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { CodeBuildStep, IFileSetProducer } from 'aws-cdk-lib/pipelines';
+import { TriggerFunction } from 'aws-cdk-lib/triggers';
+import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 
 export type ApplicationStackProps = {
   cloudFrontBucketName: string;
@@ -40,18 +41,38 @@ export class ApplicationStack extends Stack {
 
     this.setupS3CloudFrontIntegration(clientBucket, props.aliasDomainName);
 
-    // this.buildReactApp(clientBucket);
+    this.buildReactApp(clientBucket);
   }
 
   private buildReactApp(bucket: IBucket) {
+    const artifactBucketPrefix = 'artifact-source';
+
     const project = new Project(this, 'ReactBuildCodeBuildProject', {
-      buildSpec: BuildSpec.fromSourceFilename('buildspec.yml'),
-      source: Source.gitHub({
-        owner: 'umccr',
-        repo: 'orca-ui',
-        cloneDepth: 1,
+      buildSpec: BuildSpec.fromObject({
+        version: 0.2,
+        phases: {
+          install: {
+            'runtime-versions': {
+              nodejs: 20,
+            },
+            commands: ['node -v', 'corepack enable', 'yarn --version', 'yarn install --immutable'],
+          },
+          build: {
+            commands: [
+              'set -eu',
+              'env | grep VITE',
+              'yarn build',
+              'aws s3 rm s3://${VITE_BUCKET_NAME}/ --recursive && aws s3 sync ./dist s3://${VITE_BUCKET_NAME}',
+            ],
+          },
+        },
+      }),
+      source: Source.s3({
+        bucket: bucket,
+        path: `${artifactBucketPrefix}/`,
       }),
       description: 'Build react app and publish assets to S3',
+      environment: { buildImage: LinuxArmBuildImage.AMAZON_LINUX_2_STANDARD_3_0 },
       environmentVariables: {
         VITE_BUCKET_NAME: {
           value: bucket.bucketName,
@@ -64,35 +85,34 @@ export class ApplicationStack extends Stack {
         },
       },
     });
-
     bucket.grantReadWrite(project);
-    bucket.grantDelete(project);
 
-    const triggerCodeBuildLambda = new Function(this, 'TriggerCodeBuildLambda', {
-      code: Code.fromAsset(path.join(__dirname)),
+    const triggerCodeBuildLambda = new TriggerFunction(this, 'TriggerCodeBuildLambda', {
+      code: Code.fromDockerBuild(path.join(__dirname, '..', '..'), {
+        file: 'deploy/lambda/Dockerfile',
+        imagePath: 'app/output',
+      }),
       timeout: Duration.minutes(10),
       handler: 'start_build.handler',
+      logRetention: RetentionDays.ONE_WEEK,
       runtime: Runtime.PYTHON_3_12,
       architecture: Architecture.ARM_64,
-      memorySize: 2048,
-      ephemeralStorageSize: Size.mebibytes(1024),
-      environment: { CODEBUILD_PROJECT_NAME: project.projectName },
+      memorySize: 1024,
+      environment: {
+        CODEBUILD_PROJECT_NAME: project.projectName,
+        ARTIFACT_SOURCE_PREFIX: artifactBucketPrefix,
+        TARGET_BUCKET: bucket.bucketName,
+      },
       layers: [new AwsCliLayer(this, 'AwsCliLayer')],
+      initialPolicy: [
+        new PolicyStatement({
+          actions: ['codebuild:StartBuild'],
+          resources: [project.projectArn],
+        }),
+      ],
+      executeAfter: [project],
     });
-    triggerCodeBuildLambda.addToRolePolicy(
-      new PolicyStatement({
-        actions: ['codebuild:StartBuild'],
-        resources: [project.projectArn], // Ensure you use the ARN of the CodeBuild project
-      })
-    );
-
-    const provider = new Provider(this, 'Provider', {
-      onEventHandler: triggerCodeBuildLambda,
-    });
-
-    new CustomResource(this, 'CustomResource', {
-      serviceToken: provider.serviceToken,
-    });
+    bucket.grantReadWrite(triggerCodeBuildLambda);
   }
 
   private setupS3CloudFrontIntegration(s3Bucket: IBucket, aliasDomainName: string[]) {
