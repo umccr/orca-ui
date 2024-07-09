@@ -19,6 +19,7 @@ export class PipelineStack extends Stack {
 
     const pipeline = new CodePipeline(this, 'Pipeline', {
       synth: new CodeBuildStep('CdkSynth', {
+        installCommands: ['node -v', 'corepack enable'],
         commands: ['cd deploy', 'yarn install --immutable', 'yarn cdk synth'],
         input: sourceFile,
         primaryOutputDirectory: 'deploy/cdk.out',
