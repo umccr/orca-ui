@@ -5,7 +5,7 @@ export interface ButtonProps {
   size: 'sm' | 'md' | 'lg';
   rounded?: boolean;
   children: ReactNode;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   className?: string;
 }
 

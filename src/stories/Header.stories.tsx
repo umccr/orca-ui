@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Header from '@/components/navigation/header/Header';
 
 const meta: Meta = {
-  title: 'Common/Headers',
+  title: 'Naviagtion/Headers',
   component: Header,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout

@@ -1,11 +1,17 @@
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
+import { classNames } from '@/utils/utils';
+import { FC } from 'react';
 
-const pages = [
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Project Nero', href: '#', current: true },
-];
+export type BreadcrumbProps = {
+  pages: {
+    name: string;
+    href: string;
+    current: boolean;
+  }[];
+};
 
-const Breadcrumb = () => {
+const Breadcrumb: FC<BreadcrumbProps> = (props) => {
+  const { pages } = props;
   return (
     <nav className='flex' aria-label='Breadcrumb'>
       <ol role='list' className='flex items-center space-x-4'>
@@ -20,7 +26,10 @@ const Breadcrumb = () => {
               )}
               <a
                 href={page.href}
-                className='ml-4 text-sm font-medium text-blue-500 hover:text-blue-700'
+                className={classNames(
+                  'ml-4 text-sm font-medium hover:text-blue-700',
+                  page.current ? 'text-blue-500' : 'text-grey-500'
+                )}
                 aria-current={page.current ? 'page' : undefined}
               >
                 {page.name}
