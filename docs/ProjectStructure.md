@@ -11,8 +11,8 @@
 |   |-- /images
 |   |   |-- logo.png
 |   |   |-- banner.jpg
-|   |-- /fonts
-|   |   |-- Regular.ttf
+|   |-- /icons
+|   |   |-- Spinner.tsx
 |-- /components             # Reusable UI components
 |   |-- /common             # Generic reusable UI components
 |   |   |-- Button.tsx

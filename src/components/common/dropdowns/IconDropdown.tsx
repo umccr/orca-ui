@@ -1,6 +1,6 @@
-import { FC, Fragment } from 'react';
+import { FC } from 'react';
 import { Menu, MenuButton, MenuItems, MenuItem, MenuSeparator } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 import { classNames } from '@/utils/utils';
 
 export interface DropdownItemProps {
@@ -10,34 +10,27 @@ export interface DropdownItemProps {
   showDivider?: boolean;
 }
 
-export interface DropdownProps {
-  label: string;
+export interface IconDropdownProps {
+  BtnIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   className?: string;
   items: DropdownItemProps[];
 }
 
-const Dropdown: FC<DropdownProps> = ({ label, className = '', items }) => {
+const IconDropdown: FC<IconDropdownProps> = ({
+  BtnIcon = EllipsisVerticalIcon,
+  className = '',
+  items,
+}) => {
   return (
     <Menu as='div' className='relative inline-block text-left'>
-      <MenuButton as={Fragment}>
-        {({ active }) => (
-          <div
-            className={classNames(
-              'inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-none data-[hover]:bg-gray-70 data-[open]:bg-gray-70 data-[focus]:outline-1 data-[focus]:outline-white',
-              className,
-              active ? 'bg-gray-100' : 'bg-white'
-            )}
-          >
-            {label}
-            <ChevronDownIcon
-              className={classNames(
-                '-mr-1 h-5 w-5 text-gray-400 transition-transform duration-300',
-                active ? '-rotate-180' : 'rotate-0'
-              )}
-              aria-hidden='true'
-            />
-          </div>
+      <MenuButton
+        className={classNames(
+          'flex items-center rounded-full bg-white text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100',
+          className
         )}
+      >
+        <span className='sr-only'>Open options</span>
+        <BtnIcon aria-hidden='true' className='h-5 w-5' />
       </MenuButton>
 
       <MenuItems
@@ -68,4 +61,4 @@ const Dropdown: FC<DropdownProps> = ({ label, className = '', items }) => {
   );
 };
 
-export default Dropdown;
+export default IconDropdown;

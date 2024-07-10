@@ -1,18 +1,11 @@
+import { useState } from 'react';
 import Dialog from '@/components/dialogs/Dialog';
+import Button from '@/components/common/buttons/Button';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
-export interface DialogProps {
-  DialogIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-  dialogTitle: string;
-  dialogContent?: string;
-  open: boolean;
-  onClose: React.MouseEventHandler<HTMLButtonElement>;
-  onConfirm?: React.MouseEventHandler<HTMLButtonElement>;
-}
-
 const meta: Meta = {
-  title: 'Common/Alert',
+  title: 'Common/Dialogs',
   component: Dialog,
   parameters: {
     layout: 'centered',
@@ -25,16 +18,34 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const SimpleDialog: Story = {
-  args: {
-    DialogIcon: ExclamationTriangleIcon,
-    dialogTitle: 'Text Dialog',
-    dialogContent: 'This is a simple alert dialog',
-    open: true,
-    onClose: () => {
-      console.log('onClose');
-    },
-    onConfirm: () => {
-      console.log('onConfirm');
-    },
+  render: () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+
+    function open() {
+      setIsOpen(true);
+    }
+
+    function close() {
+      setIsOpen(false);
+    }
+
+    function confirm() {
+      setIsOpen(false);
+      console.log('confirm');
+    }
+    return (
+      <>
+        <Button onClick={open}>Open dialog</Button>
+        <Dialog
+          TitleIcon={ExclamationTriangleIcon}
+          open={isOpen}
+          title='Text Dialog'
+          content='This is a simple alert dialog'
+          closeBtn={{ label: 'Close', onClick: close }}
+          confirmBtn={{ label: 'Confirm', onClick: confirm }}
+        ></Dialog>
+      </>
+    );
   },
 };

@@ -1,8 +1,8 @@
 import { FC, ReactNode } from 'react';
 
 export interface ButtonProps {
-  type: 'primary' | 'secondary' | 'light' | 'green' | 'red' | 'yellow';
-  size: 'sm' | 'md' | 'lg';
+  type?: 'primary' | 'secondary' | 'light' | 'green' | 'red' | 'yellow';
+  size?: 'sm' | 'md' | 'lg';
   rounded?: boolean;
   children: ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -10,8 +10,8 @@ export interface ButtonProps {
 }
 
 const Button: FC<ButtonProps> = ({
-  type,
-  size,
+  type = 'primary',
+  size = 'md',
   children,
   rounded = false,
   onClick,
@@ -60,7 +60,7 @@ const Button: FC<ButtonProps> = ({
     lg: ' text-lg px-5 py-2.5 ',
   };
 
-  const roundedStyles = rounded ? ' rounded-full ' : ' rounded-lg ';
+  const roundedStyles = rounded ? ' rounded-full ' : ' rounded ';
 
   return (
     <button
