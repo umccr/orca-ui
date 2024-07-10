@@ -33,6 +33,7 @@ export class ApplicationStack extends Stack {
     const clientBucket = new Bucket(this, 'OrcaUIAssetCloudFrontBucket', {
       bucketName: props.cloudFrontBucketName,
       autoDeleteObjects: true,
+      enforceSSL: true,
       removalPolicy: RemovalPolicy.DESTROY,
       websiteIndexDocument: 'index.html',
       websiteErrorDocument: 'index.html',
@@ -40,13 +41,13 @@ export class ApplicationStack extends Stack {
     });
 
     this.setupS3CloudFrontIntegration(clientBucket, props.aliasDomainName);
-
     this.buildReactApp(clientBucket);
   }
 
   private buildReactApp(bucket: IBucket) {
     const artifactBucketPrefix = 'artifact-source';
 
+    // This CodeBuild responsible for building the React app and publish the assets to S3
     const project = new Project(this, 'ReactBuildCodeBuildProject', {
       buildSpec: BuildSpec.fromObject({
         version: 0.2,
@@ -87,6 +88,8 @@ export class ApplicationStack extends Stack {
     });
     bucket.grantReadWrite(project);
 
+    // Ths Lambda function upload file to S3 and trigger the CodeBuild project
+    // If lambda gets to big, we can use the s3_deployment construct to upload the file to S3
     const triggerCodeBuildLambda = new TriggerFunction(this, 'TriggerCodeBuildLambda', {
       code: Code.fromDockerBuild(path.join(__dirname, '..', '..'), {
         file: 'deploy/lambda/Dockerfile',
@@ -158,7 +161,7 @@ export class ApplicationStack extends Stack {
         enableIpV6: false,
         viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(certUse1, {
           aliases: aliasDomainName,
-          securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1,
+          securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
           sslMethod: cloudfront.SSLMethod.SNI,
         }),
       }
@@ -172,6 +175,11 @@ export class ApplicationStack extends Stack {
   }
 }
 
+/**
+ * Currently is not used!
+ * If we decide the build to be in the toolchain (instead of individual) account, this might be handy to put at the post
+ * step of each stage account
+ */
 export class ReactCodeBuildStep extends CodeBuildStep {
   constructor(id: string, props: { bucketName: string; input: IFileSetProducer }) {
     super(id, {

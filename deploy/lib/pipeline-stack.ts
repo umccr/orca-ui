@@ -3,7 +3,7 @@ import { ComputeType, LinuxArmBuildImage } from 'aws-cdk-lib/aws-codebuild';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { CodeBuildStep, CodePipeline, CodePipelineSource } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
-import { ApplicationStack, ApplicationStackProps, ReactCodeBuildStep } from './deploy-stack';
+import { ApplicationStack, ApplicationStackProps } from './application-stack';
 import { accountIdAlias, AppStage, getAppStackConfig, REGION } from '../config';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 
@@ -58,15 +58,7 @@ export class PipelineStack extends Stack {
           region: REGION,
         },
         betaConfig
-      ),
-      {
-        post: [
-          new ReactCodeBuildStep('BuildReactApp', {
-            bucketName: betaConfig.cloudFrontBucketName,
-            input: sourceFile,
-          }),
-        ],
-      }
+      )
     );
   }
 }
@@ -79,7 +71,7 @@ class DeploymentStage extends Stage {
     appStackProps: ApplicationStackProps
   ) {
     super(scope, environmentName, { env: env });
-    new ApplicationStack(this, 'OrcaUIApp', {
+    new ApplicationStack(this, 'ApplicationStack', {
       env: env,
       tags: {
         'umccr-org:Product': 'OrcaUI',
