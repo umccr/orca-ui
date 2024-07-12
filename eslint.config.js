@@ -5,6 +5,8 @@ import pluginReactConfig from 'eslint-plugin-react/configs/recommended.js';
 import eslintPluginReactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
+import eslintPluginPrettier from 'eslint-plugin-prettier';
+import prettierOptions from './prettier.config.js'; // Import Prettier configuration
 
 export default [
   {
@@ -42,6 +44,19 @@ export default [
   {
     plugins: {
       'react-refresh': reactRefresh,
+    },
+  },
+
+  // eslint-plugin-prettier
+  {
+    plugins: {
+      prettier: {
+        ...eslintPluginPrettier,
+        extends: ['plugin:prettier/recommended'],
+        rules: {
+          'prettier/prettier': ['error', prettierOptions],
+        },
+      },
     },
   },
 ];
