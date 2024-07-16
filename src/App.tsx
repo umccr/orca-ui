@@ -1,10 +1,12 @@
+import Router from '@/router';
+
+import UserProvider from '@/context/UserContext';
+
 function App() {
   return (
-    <>
-      <h1 className='text-3xl py-5'>Under development</h1>
-      <h1 className='text-3xl py-5'>{import.meta.env.VITE_BUCKET_NAME}</h1>
-      <h1 className='text-3xl py-5'>{import.meta.env.VITE_HOSTED_ID}</h1>
-    </>
+    <UserProvider>
+      <Router />
+    </UserProvider>
   );
 }
 

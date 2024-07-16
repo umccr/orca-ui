@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
-import Dropdown from '@/components/common/dropdowns/Dropdown';
-import IconDropdown from '@/components/common/dropdowns/IconDropdown';
+import { Dropdown, IconDropdown } from '@/components/common/dropdowns';
 import { PlusIcon } from '@heroicons/react/20/solid';
 
 const exampleItems = [
