@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 /* custom Toast effect */
-.Toastify__toast {
+/* .Toastify__toast {
   padding: 0.75rem !important;
   .Toastify__toast-body {
     display: flex;
     align-items: flex-start !important;
   }
-}
+} */

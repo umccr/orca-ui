@@ -1,4 +1,4 @@
-import Badge from '@/components/common/badges/Badge';
+import Badge from '@/components/common/badges';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta = {

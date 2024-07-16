@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Button from '@/components/common/buttons/Button';
-import toaster from '@/components/common/toaster/toaster';
+import Button from '@/components/common/buttons';
+import toaster from '@/components/common/toaster';
 import { ToastContainer } from 'react-toastify';
 
 const meta: Meta = {

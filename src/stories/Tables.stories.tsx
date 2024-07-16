@@ -1,4 +1,5 @@
-import Table from '@/components/tables/Tables';
+import Table, { GroupedTable } from '@/components/tables';
+
 import { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta = {
@@ -57,7 +58,7 @@ export const StripedTable: Story = {
         header: 'Email',
         accessor: 'email',
         sortable: true,
-        cell: (data: string) => (
+        cell: (data: string | number) => (
           <div>
             <span>Custom Node example</span>
             <div className='text-red-600'>{data}</div>
@@ -97,7 +98,7 @@ export const FullWidthTable: Story = {
         header: 'Email',
         accessor: 'email',
         sortable: true,
-        cell: (data: string) => (
+        cell: (data: string | number) => (
           <div>
             <span>Custom Node example</span>
             <div className='text-red-600'>{data}</div>
@@ -124,5 +125,72 @@ export const FullWidthTable: Story = {
     ],
     striped: true,
     inCard: false,
+  },
+};
+
+export const GroupedRowTableExample: Story = {
+  render: () => {
+    const args = {
+      tableHeader: 'People',
+      tableDescription: 'List of people in the company',
+      columns: [
+        { header: 'Name', accessor: 'name' },
+        { header: 'Title', accessor: 'title' },
+        {
+          header: 'Email',
+          accessor: 'email',
+          cell: (data: string | number) => (
+            <div>
+              <span>Custom Node example</span>
+              <div className='text-red-600'>{data}</div>
+            </div>
+          ),
+        },
+      ],
+      tableData: [
+        {
+          groupTitle: 'Group 1',
+          groupData: [
+            {
+              name: 'John Doe',
+              title: 'CEO',
+              email: 'xx@example.com',
+            },
+            {
+              name: 'Jane Doe',
+              title: 'CTO',
+              email: 'xx@example.com',
+            },
+            {
+              name: 'John Smith',
+              title: 'Developer',
+              email: 'xx@example.com',
+            },
+          ],
+        },
+        {
+          groupTitle: 'Group 2',
+          groupData: [
+            {
+              name: 'John Doe',
+              title: 'CEO',
+              email: 'xx@example.com',
+            },
+            {
+              name: 'Jane Doe',
+              title: 'CTO',
+              email: 'xx@example.com',
+            },
+            {
+              name: 'John Smith',
+              title: 'Developer',
+              email: 'xx@example.com',
+            },
+          ],
+        },
+      ],
+    };
+
+    return <GroupedTable {...args} />;
   },
 };

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Breadcrumb from '@/components/navigation/breadcrumbs/Breadcrumb';
+import Breadcrumb from '@/components/navigation/breadcrumbs';
 
 const pages = [
   { name: 'Subjects', href: '#', current: false },

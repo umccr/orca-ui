@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
-import Button, { ButtonProps } from '@/components/common/buttons/Button';
+import Button, { ButtonProps } from '@/components/common/buttons';
 import { CheckCircleIcon, PlusIcon } from '@heroicons/react/20/solid';
 import Spinner from '@/assets/icons/Spinner';
 

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Header from '@/components/navigation/header/Header';
+import Header from '@/components/navigation/header';
+import { UserContext } from '@/context/UserContext';
 
 const meta: Meta = {
   title: 'Naviagtion/Headers',
@@ -23,5 +24,19 @@ type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const SimpleHeader: Story = {
-  args: {},
+  render: () => {
+    return (
+      <UserContext.Provider
+        value={{
+          isAuth: true,
+          user: {
+            name: 'John Doe',
+            email: 'john.doe@example.com',
+          },
+        }}
+      >
+        <Header />
+      </UserContext.Provider>
+    );
+  },
 };

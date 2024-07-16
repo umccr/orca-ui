@@ -35,7 +35,7 @@
 |-- /hooks                  # Custom React hooks
 |   |-- useAuth.ts
 |   |-- useDialog.ts
-|-- /routes                 # react routes
+|-- /router                 # react routes
 |   |-- index.ts
 |   |-- portal.ts
 |   |-- status.ts

@@ -1,4 +1,4 @@
-import Card from '@/components/layouts/cards/Card';
+import Card from '@/components/layouts/cards';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta = {
@@ -23,7 +23,7 @@ export const SimpleCard: Story = {
 export const WithHeaderFooter: Story = {
   args: {
     header: 'Header',
-    body: 'This is a simple card',
+    children: 'This is a simple card',
     footer: 'Footer',
   },
 };
