@@ -8,7 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Dependencies and build folders
-node_modules
+**/node_modules/
 /.pnp
 .pnp.js
 dist
@@ -27,12 +27,18 @@ dist-ssr
 *.sw?
 
 # https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
+**/.pnp.*
+**/.yarn/*
+!**/.yarn/patches
+!**/.yarn/plugins
+!**/.yarn/releases
+!**/.yarn/sdks
+!**/.yarn/versions
 
-*storybook.log
+
+# CDK asset staging directory
+**/.cdk.staging
+**/cdk.out
+
+# .git
+**/.git/*

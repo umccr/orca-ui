@@ -31,3 +31,7 @@ Start Development Server
 ```sh
 yarn dev
 ```
+
+## Deployment
+
+Please the the [README.md](./deploy/README.md) in the `./deploy` directory.

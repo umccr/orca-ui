@@ -1,0 +1,30 @@
+{
+  "name": "deploy",
+  "packageManager": "yarn@4.3.1",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "jest",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "20.14.2",
+    "@types/regenerator-runtime": "^0",
+    "aws-cdk": "2.148.0",
+    "esbuild": "^0.23.0",
+    "jest": "^29.7.0",
+    "regenerator-runtime": "^0.14.1",
+    "ts-jest": "^29.1.5",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.4.5"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.609.0",
+    "@aws-sdk/lib-storage": "^3.609.0",
+    "aws-cdk-lib": "2.148.0",
+    "cdk-nag": "^2.28.157",
+    "constructs": "^10.0.0",
+    "source-map-support": "^0.5.21"
+  }
+}
