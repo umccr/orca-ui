@@ -23,7 +23,6 @@ export function useMetadataFullSubjectModel({
 }: UseQueryOptions<paths[typeof metadataFullSubjectPath]['get']>) {
   return useSuspenseQuery({
     ...reactQuery,
-    retry: 0,
     queryKey: [metadataFullSubjectPath, params],
     queryFn: async ({ signal }) => {
       const { data } = await client.GET(metadataFullSubjectPath, {
