@@ -4,6 +4,16 @@ This project is the UI representation of our [OrcaBus project](https://github.co
 
 Currently, this project is still in development.
 
+## Development
+
+### API Types Generator
+
+We utilize [OpenAPI Typescript](https://openapi-ts.dev/) to generate TypeScript types from the OpenAPI schema. To generate new types or update existing ones, run the following command:
+
+```sh
+make generate-openapi-types
+```
+
 ## Running locally
 
 Prerequisite

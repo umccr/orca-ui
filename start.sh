@@ -77,11 +77,13 @@ export VITE_STAGE=localhost
 export VITE_REGION=ap-southeast-2
 export VITE_COG_USER_POOL_ID=$cog_user_pool_id
 export VITE_COG_IDENTITY_POOL_ID=$cog_identity_pool_id
-export VITE_COG_APP_CLIENT_ID_LOCAL=$cog_app_client_id_local
+export VITE_COG_APP_CLIENT_ID=$cog_app_client_id_local
 export VITE_OAUTH_DOMAIN=$oauth_domain
-export VITE_OAUTH_REDIRECT_IN_LOCAL=$oauth_redirect_in_local
-export VITE_OAUTH_REDIRECT_OUT_LOCAL=$oauth_redirect_out_local
+export VITE_OAUTH_REDIRECT_IN=$oauth_redirect_in_local
+export VITE_OAUTH_REDIRECT_OUT=$oauth_redirect_out_local
 export VITE_UNSPLASH_CLIENT_ID=$unsplash_client_id
+export VITE_METADATA_URL='http://localhost:8000/'
+
 env | grep VITE
 
 yarn run -B vite

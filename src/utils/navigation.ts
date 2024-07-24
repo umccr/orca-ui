@@ -8,7 +8,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 const navigation = [
-  { name: 'Metadata', href: '#', icon: DocumentTextIcon },
+  { name: 'Metadata', href: '/metadata', icon: DocumentTextIcon },
   {
     name: 'Subjects',
     icon: ChartBarSquareIcon,
@@ -17,6 +17,7 @@ const navigation = [
       { name: 'Files', href: '#' },
       { name: 'Reports', href: '#' },
     ],
+    href: '#',
   },
   {
     name: 'Library',
@@ -25,6 +26,7 @@ const navigation = [
       { name: 'Overview', href: '#' },
       { name: 'Files', href: '#' },
     ],
+    href: '#',
   },
   {
     name: 'Sequence',
@@ -33,6 +35,7 @@ const navigation = [
       { name: 'Overview', href: '#' },
       { name: 'Files', href: '#' },
     ],
+    href: '#',
   },
   { name: 'Workflow', href: '#', icon: ArrowPathRoundedSquareIcon },
   { name: 'Data Journey', href: '#', icon: ArrowsRightLeftIcon },

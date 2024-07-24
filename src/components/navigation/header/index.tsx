@@ -57,7 +57,7 @@ const Header = () => {
                   </a> */}
                 </div>
               </div>
-              <div className='flex flex-1 items-center justify-center px-2 lg:ml-6'>
+              {/* <div className='flex flex-1 items-center justify-center px-2 lg:ml-6'>
                 <div className='w-full max-w-lg lg:max-w-xs'>
                   <label htmlFor='search' className='sr-only'>
                     Search
@@ -75,7 +75,7 @@ const Header = () => {
                     />
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/* mobile mode */}
               <div className='flex items-center lg:hidden'>
                 {/* Mobile menu button */}

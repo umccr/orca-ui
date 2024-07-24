@@ -1,24 +1,26 @@
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import { classNames } from '@/utils/utils';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import Pagination, { PaginationProps } from './Pagination';
 
-type TableData = Record<string, string | number>;
+type TableData = Record<string, unknown>;
 
-type Column = {
+export type Column = {
   header: ReactNode;
   accessor: string;
-  cell?: (data: string | number) => ReactNode;
+  cell?: (data: unknown) => ReactNode;
   sortable?: boolean;
 };
 
 interface TableProps {
-  tableHeader?: string;
+  tableHeader?: ReactNode | string;
   tableDescription?: string;
   columns: Column[];
   tableData: TableData[];
   striped?: boolean;
   inCard?: boolean;
   stickyHeader?: boolean;
+  paginationProps?: PaginationProps;
 }
 
 const Table: FC<TableProps> = ({
@@ -26,11 +28,12 @@ const Table: FC<TableProps> = ({
   tableDescription,
   columns,
   tableData,
+  paginationProps,
   striped = true,
   inCard = true,
   stickyHeader = false,
 }) => {
-  const [sortedData, setSortedData] = useState([...tableData]);
+  const [sortedData, setSortedData] = useState(tableData);
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: 'ascending' | 'descending';
@@ -52,6 +55,10 @@ const Table: FC<TableProps> = ({
     setSortConfig({ key, direction });
   };
 
+  useEffect(() => {
+    setSortedData(tableData);
+  }, [tableData]);
+
   return (
     <div className='px-4 sm:px-6 lg:px-8'>
       <div className='sm:flex sm:items-center'>
@@ -62,7 +69,7 @@ const Table: FC<TableProps> = ({
           {tableDescription && <p className='mt-2 text-sm text-gray-700'>{tableDescription}</p>}
         </div>
       </div>
-      <div className='mt-8 flow-root'>
+      <div className='mt-4 flow-root'>
         <div className='-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
           <div className='inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8'>
             <div
@@ -131,7 +138,7 @@ const Table: FC<TableProps> = ({
                           >
                             {column.cell
                               ? column.cell(data[column.accessor])
-                              : data[column.accessor]}
+                              : (data[column.accessor] as ReactNode)}
                           </td>
                         ))}
                     </tr>
@@ -142,6 +149,7 @@ const Table: FC<TableProps> = ({
           </div>
         </div>
       </div>
+      {paginationProps && <Pagination {...paginationProps} />}
     </div>
   );
 };

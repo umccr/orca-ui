@@ -22,9 +22,9 @@ Amplify.configure(
     },
     API: {
       REST: {
-        portal: {
-          endpoint: config.apiGateway.URL,
-          region: config.apiGateway.REGION,
+        metadata: {
+          endpoint: config.apiEndpoint.metadata,
+          region: config.region,
         },
       },
     },

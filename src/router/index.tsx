@@ -6,12 +6,12 @@ const SignInPage = lazy(() => import('@/pages/SignInPage'));
 const Sequences = lazy(() => import('@/pages/Sequences'));
 
 import MainLayout from '@/components/layouts/MainLayout';
+import MetadataPage from '@/pages/Metadata';
 
 export default function AppRoutes() {
   const isUserSignedIn = useUserContext().isAuth;
 
   if (!isUserSignedIn) {
-    console.log('User is not signed in');
     return (
       <Routes>
         <Route path='/signIn' element={<SignInPage />} />
@@ -49,8 +49,10 @@ export default function AppRoutes() {
           </MainLayout>
         }
       >
-        <Route index element={<Navigate to='sequences' />} />
+        <Route index element={<Navigate to='metadata' />} />
+        <Route path='metadata' element={<MetadataPage />} />
         <Route path='sequences' element={<Sequences />} />
+        <Route path='*' element={<div>Path not found/implemented!</div>} />
       </Route>
     </Routes>
   );
