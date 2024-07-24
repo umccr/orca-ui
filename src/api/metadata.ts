@@ -1,9 +1,10 @@
+import config from '@/config';
 import createClient, { ParamsOption, RequestBodyOption } from 'openapi-fetch';
 import type { paths } from './types/metadata';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { authMiddleware } from './utils';
 
-const client = createClient<paths>({ baseUrl: 'http://localhost:8000/' });
+const client = createClient<paths>({ baseUrl: config.apiEndpoint.metadata });
 client.use(authMiddleware);
 
 type UseQueryOptions<T> = ParamsOption<T> &
