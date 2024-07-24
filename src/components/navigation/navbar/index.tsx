@@ -1,12 +1,12 @@
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { classNames } from '@/utils/utils';
 import { FC } from 'react';
 
 export interface NavigationItem {
   name: string;
-  href?: string;
+  href: string;
   icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   children?: NavigationItem[];
 }
@@ -18,7 +18,6 @@ export interface NavbarProps {
 const Navbar: FC<NavbarProps> = ({ navigation }) => {
   const location = useLocation();
 
-  console.log('this is the current location', location);
   return (
     <div className='flex grow-0 flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6'>
       <nav className='flex flex-1 flex-col'>
@@ -28,8 +27,8 @@ const Navbar: FC<NavbarProps> = ({ navigation }) => {
               {navigation.map((item) => (
                 <li key={item.name}>
                   {!item.children ? (
-                    <a
-                      href={item.href}
+                    <Link
+                      to={item.href}
                       className={classNames(
                         item.href == location.pathname ? 'bg-gray-50' : 'hover:bg-gray-50',
                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700'
@@ -39,7 +38,7 @@ const Navbar: FC<NavbarProps> = ({ navigation }) => {
                         <item.icon className='h-5 w-5 shrink-0 text-gray-400' aria-hidden='true' />
                       )}
                       {item.name}
-                    </a>
+                    </Link>
                   ) : (
                     // <Disclosure as='div'>
                     //   {({ open }) => (

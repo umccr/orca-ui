@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Breadcrumb from '@/components/navigation/breadcrumbs';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 const pages = [
   { name: 'Subjects', href: '#', current: false },
@@ -7,11 +8,20 @@ const pages = [
 ];
 
 const meta: Meta = {
-  title: 'Naviagtion/Breadcrumbs',
+  title: 'Navigation/Breadcrumbs',
   component: Breadcrumb,
   parameters: {
     layout: 'centered',
   },
+  decorators: [
+    (Story) => (
+      <MemoryRouter initialEntries={['/subject/123']}>
+        <Routes>
+          <Route path='/subject/:myId' element={<Story />}></Route>
+        </Routes>
+      </MemoryRouter>
+    ),
+  ],
   tags: ['autodocs'],
   args: {},
 };
