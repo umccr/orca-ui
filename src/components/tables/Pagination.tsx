@@ -33,8 +33,8 @@ export default function Pagination({
   const to = Math.min((currentPage - 1) * rowsPerPage + rowsPerPage, totalCount);
 
   return (
-    <div className='flex items-center justify-between border-t border-gray-200 bg-white py-3'>
-      <div className='flex flex-1 justify-between sm:hidden'>
+    <div className='flex items-center justify-between border-t border-gray-200 bg-white pt-4 mt-2'>
+      <div className='flex flex-1 justify-between md:hidden'>
         <Button
           disabled={currentPage === 1}
           onClick={() => setPage(currentPage - 1)}
@@ -56,7 +56,7 @@ export default function Pagination({
           Next
         </Button>
       </div>
-      <div className='hidden sm:flex sm:flex-1 sm:items-center sm:justify-between'>
+      <div className='hidden md:flex md:flex-1 md:items-center md:justify-between'>
         <div>
           <p className='text-sm text-gray-700'>
             Showing <span className='font-medium'>{from}</span> to{' '}

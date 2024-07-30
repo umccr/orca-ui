@@ -27,10 +27,10 @@ export const SubjectTable = () => {
   return (
     <Table
       tableHeader={
-        <div className='flex'>
-          <div className='flex items-center'>{'Metadata Table'}</div>
-          <div className='flex flex-1 items-center justify-end py-2'>
-            <div className='w-full max-w-lg lg:max-w-xs'>
+        <div className='flex flex-col md:flex-row'>
+          <div className='flex items-center justify-center'>{'Metadata Table'}</div>
+          <div className='flex flex-1 items-center justify-end pt-2'>
+            <div className='w-full max-w-lg md:max-w-xs'>
               <label htmlFor='search' className='sr-only'>
                 Search
               </label>
@@ -49,7 +49,7 @@ export const SubjectTable = () => {
                     }
                   }}
                   onChange={(e) => {
-                    setSearchBox(e.target.value);
+                    setSearchBox(e.target.value.trim());
                     if (!e.target.value) {
                       setDataQueryParams({});
                     }
