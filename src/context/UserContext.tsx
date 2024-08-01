@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactElement, ReactNode } from 'react';
 import { fetchUserAttributes, FetchUserAttributesOutput } from '@aws-amplify/auth';
-import SpinnerrWithText from '@/components/common/SpinnerWithText';
+import SpinnerrWithText from '@/components/common/spinnerWithText';
 
 export const UserContext = createContext<{ isAuth: boolean; user: FetchUserAttributesOutput }>({
   isAuth: false,
