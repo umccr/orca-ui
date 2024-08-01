@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactElement, ReactNode } from 'react';
 import { fetchUserAttributes, FetchUserAttributesOutput } from '@aws-amplify/auth';
-import SpinnerrWithText from '@/components/common/spinnerWithText';
+import { SpinnerWithText } from '@/components/common/spinner';
 
 export const UserContext = createContext<{ isAuth: boolean; user: FetchUserAttributesOutput }>({
   isAuth: false,
@@ -42,7 +42,7 @@ function UserProvider(props: Props): ReactElement {
   return (
     <>
       {isAuthenticating ? (
-        <SpinnerrWithText text='Authenticating ...' />
+        <SpinnerWithText text='Authenticating ...' />
       ) : (
         <UserContext.Provider value={user}>{props.children}</UserContext.Provider>
       )}

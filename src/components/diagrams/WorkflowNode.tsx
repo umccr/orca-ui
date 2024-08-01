@@ -1,6 +1,6 @@
 import { ReactNode, FC } from 'react';
 import { Handle, HandleProps, type NodeProps } from '@xyflow/react';
-import StatusIcon from '@/components/common/statusIcon';
+import { StatusIcon } from '@/components/common/statusIcon';
 
 import { WorkflowNodeBackground, WORKFLOW_CLOUD } from '@/utils/workflows';
 import { classNames } from '@/utils/utils';

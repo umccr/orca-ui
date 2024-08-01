@@ -1,4 +1,4 @@
-import Diagram from '@/components/diagrams';
+import { WorkflowDiagram } from '@/components/diagrams';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const mockStatusData = {
@@ -79,7 +79,7 @@ const mockStatusData = {
 
 const meta: Meta = {
   title: 'Components/Diagrams',
-  component: Diagram,
+  component: WorkflowDiagram,
   parameters: {
     layout: 'fullscreen',
   },
@@ -93,7 +93,7 @@ export const WorkflowOverviewDiagram: Story = {
   render: () => {
     return (
       <div className='w-[1200px] h-[800px]'>
-        <Diagram pipelineType='overview' statusData={mockStatusData} />
+        <WorkflowDiagram pipelineType='overview' statusData={mockStatusData} />
       </div>
     );
   },
@@ -103,7 +103,7 @@ export const WGSWorkflowDiagram: Story = {
   render: () => {
     return (
       <div className='w-[1200px] h-[500px]'>
-        <Diagram pipelineType='wgs' statusData={mockStatusData} />
+        <WorkflowDiagram pipelineType='wgs' statusData={mockStatusData} />
       </div>
     );
   },
@@ -113,7 +113,7 @@ export const WTSWorkflowDiagram: Story = {
   render: () => {
     return (
       <div className='w-[1200px] h-[500px]'>
-        <Diagram pipelineType='wts' statusData={mockStatusData} />
+        <WorkflowDiagram pipelineType='wts' statusData={mockStatusData} />
       </div>
     );
   },
@@ -124,7 +124,7 @@ export const ctTSOWorkflowDiagram: Story = {
   render: () => {
     return (
       <div className='w-[1000px] h-[500px]'>
-        <Diagram pipelineType='ctTSO' statusData={mockStatusData} />
+        <WorkflowDiagram pipelineType='ctTSO' statusData={mockStatusData} />
       </div>
     );
   },
@@ -135,7 +135,7 @@ export const ctDNAWorkflowDiagram: Story = {
   render: () => {
     return (
       <div className='w-[1000px] h-[500px]'>
-        <Diagram pipelineType='ctDNA' statusData={mockStatusData} />
+        <WorkflowDiagram pipelineType='ctDNA' statusData={mockStatusData} />
       </div>
     );
   },

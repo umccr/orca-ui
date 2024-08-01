@@ -1,4 +1,4 @@
-import Table, { GroupedTable } from '@/components/tables';
+import { Table, GroupedTable } from '@/components/tables';
 
 import { Meta, StoryObj } from '@storybook/react';
 
