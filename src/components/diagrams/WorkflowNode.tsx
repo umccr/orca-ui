@@ -18,17 +18,17 @@ interface WorkflowNodeProps extends NodeProps {
   };
 }
 
+// func tp pick up teh color from tehe data.type
+
 const WorkflowNode: FC<WorkflowNodeProps> = ({ data, positionAbsoluteX, positionAbsoluteY }) => {
-  const backgroundColor = data.type
-    ? `bg-workflow-${WORKFLOW_CLOUD[data.type]}`
-    : 'bg-workflow-unactived';
+  const backgroundColor = WorkflowNodeBackground[WORKFLOW_CLOUD[data.type]];
 
   console.log('WorkflowNode:', data, positionAbsoluteX, positionAbsoluteY, backgroundColor);
 
   return (
     <div className='shadow-md rounded-md bg-white border-2 border-stone-400'>
       <div className='flex flex-col h-full w-full'>
-        <div className={classNames('text-lg font-bold px-4 py-2 bg-work ', backgroundColor)}>
+        <div className={classNames('text-lg font-bold px-4 py-2 ', backgroundColor)}>
           {data.title}
         </div>
         <div className='flex items-center px-4 py-1 p-2 '>

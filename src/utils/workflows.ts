@@ -35,16 +35,16 @@ export enum WORKFLOW_CLOUD_COLOR {
 
 // Workflow cloud group colors
 export enum WorkflowNodeBackground {
-  default = 'white',
-  unactived = 'gray',
-  ica_cloud = '#B0E3E6',
-  aws_cloud = '#E3C800',
-  basespace_cloud = '#D0CEE2',
-  uom_prem_unimelb = '#FA6800',
+  default = 'bg-white',
+  unactived = 'bg-gray',
+  'ica-cloud' = 'bg-[#B0E3E6]',
+  'aws-cloud' = 'bg-[#E3C800]',
+  'basespace-cloud' = 'bg-[#D0CEE2]',
+  'uom-prem-unimelb' = 'bg-[#FA6800]',
 }
 
 // workflow cloud group
-export const WORKFLOW_CLOUD: { [key: string]: string } = {
+export const WORKFLOW_CLOUD: { [key: string]: keyof typeof WorkflowNodeBackground } = {
   Sequencer: 'uom-prem-unimelb',
   BSSH: 'basespace-cloud',
   BCL_CONVERT: 'ica-cloud',

@@ -1,5 +1,4 @@
 import { Position, Edge, Node } from '@xyflow/react';
-import { WorkflowNodeBackground } from '@/utils/workflows';
 
 export const nodes = [
   {
@@ -475,7 +474,6 @@ export const nodes = [
     data: {
       type: 'GPL',
       title: 'GPL',
-      backgroundColor: WorkflowNodeBackground.aws_cloud,
       handlers: [
         {
           type: 'target',
@@ -498,7 +496,6 @@ export const nodes = [
     data: {
       type: 'ONCOANALYSER_WGS',
       title: 'ONCOANALYSER_WGS',
-      backgroundColor: WorkflowNodeBackground.aws_cloud,
       handlers: [
         {
           type: 'target',
@@ -531,7 +528,6 @@ export const nodes = [
     data: {
       type: 'SASH',
       title: 'SASH',
-      backgroundColor: WorkflowNodeBackground.aws_cloud,
       handlers: [
         {
           type: 'target',
@@ -560,7 +556,6 @@ export const nodes = [
     data: {
       type: 'ONCOANALYSER_WGTS_BOTH',
       title: 'ONCOANALYSER_WGTS_EXISTING_BOTH',
-      backgroundColor: WorkflowNodeBackground.aws_cloud,
       handlers: [
         {
           type: 'target',
