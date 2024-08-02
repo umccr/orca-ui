@@ -87,7 +87,10 @@ const Navbar: FC<NavbarProps> = ({ navigation }) => {
                     //     </>
                     //   )}
                     // </Disclosure>
-                    <Disclosure as='div'>
+                    <Disclosure
+                      as='div'
+                      defaultOpen={item.href ? location.pathname.includes(item.href) : false}
+                    >
                       <DisclosureButton
                         className={classNames(
                           item.href == location.pathname ? 'bg-gray-50' : 'hover:bg-gray-50',

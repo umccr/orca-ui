@@ -1,4 +1,4 @@
-import StatsCards from '@/components/stats/statsCards';
+import { StatsCards } from '@/components/stats';
 import type { Meta, StoryObj } from '@storybook/react';
 import { CursorArrowRaysIcon, EnvelopeOpenIcon, UsersIcon } from '@heroicons/react/24/outline';
 

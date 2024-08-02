@@ -32,7 +32,7 @@ const Dropdown: FC<DropdownProps> = ({ label, className = '', items }) => {
             <ChevronDownIcon
               className={classNames(
                 '-mr-1 h-5 w-5 text-gray-400 transition-transform duration-300',
-                active ? '-rotate-180' : 'rotate-0'
+                active ? 'rotate-180' : 'rotate-0'
               )}
               aria-hidden='true'
             />

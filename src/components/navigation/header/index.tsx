@@ -7,7 +7,7 @@ import {
   MenuItems,
   MenuItem,
 } from '@headlessui/react';
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
+//import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { classNames, getUsername } from '@/utils/utils';
 import { useUserContext } from '@/context/UserContext';

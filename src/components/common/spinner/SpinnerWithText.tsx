@@ -1,4 +1,4 @@
-import Spinner from '@/assets/icons/Spinner';
+import Spinner from './Spinner';
 import { FC } from 'react';
 
 export interface Props {

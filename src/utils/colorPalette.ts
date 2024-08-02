@@ -134,6 +134,16 @@ const colorPalette = {
 
   // Semantic colors
   'regal-blue': '#0E297A',
+
+  // workflow clouds group colors
+  workflow: {
+    'ica-cloud': '#B0E3E6',
+    'aws-cloud': '#E3C800',
+    'basespace-cloud': '#D0CEE2',
+    'uom-prem-unimelb': '#FA6800',
+    unactived: '#969696',
+    default: '#FFFFFF',
+  },
 };
 
 export default colorPalette;
