@@ -7,8 +7,8 @@ import { SpinnerWithText } from '@/components/common/spinner';
 export default function MetadataPage() {
   return (
     <Card>
-      <Suspense fallback={<SpinnerWithText text='Loading metadata table ...' />}>
-        <DetailedErrorBoundary errorTitle='Unable to load metadata table'>
+      <Suspense fallback={<SpinnerWithText text='Loading lab table ...' />}>
+        <DetailedErrorBoundary errorTitle='Unable to load lab table'>
           <SubjectTable />
         </DetailedErrorBoundary>
       </Suspense>

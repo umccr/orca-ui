@@ -42,6 +42,7 @@ export const SimpleDialog: Story = {
           open={isOpen}
           title='Text Dialog'
           content='This is a simple alert dialog'
+          onClose={close}
           closeBtn={{ label: 'Close', onClick: close }}
           confirmBtn={{ label: 'Confirm', onClick: confirm }}
         ></Dialog>

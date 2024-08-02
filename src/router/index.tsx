@@ -20,23 +20,6 @@ export default function AppRoutes() {
     );
   }
 
-  //   return useRoutes([
-  //     {
-  //       path: '/',
-  //       element: (
-  //         <MainLayout>
-  //           <Suspense>
-  //             <Outlet />
-  //           </Suspense>
-  //         </MainLayout>
-  //       ),
-  //       children: [
-  //         { index: true, element: <Navigate to='sequences' /> },
-  //         { path: 'sequences', element: <Sequences /> },
-  //       ],
-  //     },
-  //   ]);
-
   return (
     <Routes>
       <Route
@@ -49,9 +32,9 @@ export default function AppRoutes() {
           </MainLayout>
         }
       >
-        <Route index element={<Navigate to='metadata' />} />
-        <Route path='metadata' element={<MetadataPage />} />
-        <Route path='sequences' element={<Sequences />} />
+        <Route index element={<Navigate to='lab' />} />
+        <Route path='lab' element={<MetadataPage />} />
+        <Route path='runs' element={<Sequences />} />
         <Route path='*' element={<div>Path not found/implemented!</div>} />
       </Route>
     </Routes>
