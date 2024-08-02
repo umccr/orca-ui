@@ -1,3 +1,3 @@
-import SimpleDialog from './SimpleDiag';
+import SimpleDialog from './SimpleDialog';
 
 export { SimpleDialog as Dialog };

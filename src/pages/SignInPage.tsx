@@ -3,14 +3,14 @@ import { signInWithRedirect } from 'aws-amplify/auth';
 import { Navigate } from 'react-router-dom';
 import { useUserContext } from '@/context/UserContext';
 // import Card from '@mui/material/Card';
-import Card from '@/components/layouts/cards';
+import { Card } from '@/components/layouts/cards';
 // import Stack from '@mui/material/Stack';
 // import Button from '@mui/material/Button';
 import { createApi } from 'unsplash-js';
 import { Random } from 'unsplash-js/dist/methods/photos/types';
 // import ProgressBar from '@mui/material/LinearProgress';
-import Button from '@/components/common/buttons';
-import Spinner from '@/assets/icons/Spinner';
+import { Button } from '@/components/common/buttons';
+import { Spinner } from '@/components/common/spinner';
 
 const clientId = import.meta.env.VITE_UNSPLASH_CLIENT_ID;
 
