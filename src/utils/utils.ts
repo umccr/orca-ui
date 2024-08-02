@@ -3,9 +3,10 @@ export function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-// get username from email
-// ray.liu@umccr.org to Ray  Liu
-// rayray@umccr.org to Rayray
+/*
+  get username from email
+  example: test.name@example -> Test Name
+*/
 export function getUsername(email: string) {
   return email
     .split('@')[0]

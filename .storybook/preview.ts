@@ -1,6 +1,7 @@
 import type { Preview } from '@storybook/react';
 import '../src/main.css';
 import 'react-toastify/dist/ReactToastify.css';
+import '@xyflow/react/dist/style.css';
 
 const preview: Preview = {
   parameters: {

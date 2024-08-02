@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
-import Button, { ButtonProps } from '@/components/common/buttons';
+import { Button } from '@/components/common/buttons';
+import { ButtonProps } from '@/components/common/buttons/Button';
 import { CheckCircleIcon, PlusIcon } from '@heroicons/react/20/solid';
-import Spinner from '@/assets/icons/Spinner';
+import { Spinner } from '@/components/common/spinner';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta: Meta<ButtonProps> = {

@@ -1,12 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
-import 'react-toastify/dist/ReactToastify.css';
-import './main.css';
 import { BrowserRouter as Router } from 'react-router-dom';
-import config from './config';
 import { Amplify } from 'aws-amplify';
 import { fetchAuthSession } from 'aws-amplify/auth';
+
+// Import the global styles
+import './main.css';
+import 'react-toastify/dist/ReactToastify.css';
+import '@xyflow/react/dist/style.css';
+
+// Import the amplify configuration
+import config from './config';
 
 Amplify.configure(
   {
@@ -40,6 +45,7 @@ Amplify.configure(
     },
   }
 );
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Router>
