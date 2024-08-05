@@ -50,7 +50,7 @@ export default function AppRoutes() {
         }
       >
         <Route index element={<Navigate to='metadata' />} />
-        <Route path='metadata' element={<MetadataPage />} />
+        <Route path='lab' element={<MetadataPage />} />
         <Route path='sequences' element={<Sequences />} />
         <Route path='*' element={<div>Path not found/implemented!</div>} />
       </Route>

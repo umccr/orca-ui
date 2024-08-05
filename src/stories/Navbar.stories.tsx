@@ -1,11 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Navbar from '@/components/navigation/navbar';
+import { ModuleNavbar, SideNavbar } from '@/components/navigation/navbar';
 import { withRouter, reactRouterParameters } from 'storybook-addon-remix-react-router';
-import navigation from '@/utils/navigation';
+import navigation, {
+  subjectModuleNavigation,
+  libraryModuleNavigation,
+  runsModuleNavigation,
+} from '@/utils/navigation';
 
 const meta: Meta = {
-  title: 'Naviagtion/Navbar',
-  component: Navbar,
+  title: 'Naviagtion/ModuleNavbar',
+  component: SideNavbar,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
     layout: 'centered',
@@ -36,8 +40,20 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
-export const SimpleNavbar: Story = {
+export const SimpleSideNavbar: Story = {
   args: {
     navigation,
   },
+};
+
+export const SubjectModuleNavbar: Story = {
+  render: () => <ModuleNavbar navigation={subjectModuleNavigation} />,
+};
+
+export const LibraryModuleNavbar: Story = {
+  render: () => <ModuleNavbar navigation={libraryModuleNavigation} />,
+};
+
+export const RunsModuleNavbar: Story = {
+  render: () => <ModuleNavbar navigation={runsModuleNavigation} />,
 };
