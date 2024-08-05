@@ -6,7 +6,8 @@ const SignInPage = lazy(() => import('@/pages/SignInPage'));
 const Sequences = lazy(() => import('@/pages/Sequences'));
 
 import MainLayout from '@/components/layouts/MainLayout';
-import MetadataPage from '@/pages/Metadata';
+import LabPage from '@/pages/Lab';
+import { FileViewer } from '@/components/files';
 
 export default function AppRoutes() {
   const isUserSignedIn = useUserContext().isAuth;
@@ -33,9 +34,16 @@ export default function AppRoutes() {
         }
       >
         <Route index element={<Navigate to='lab' />} />
-        <Route path='lab' element={<MetadataPage />} />
+        <Route path='lab' element={<LabPage />} />
         <Route path='runs' element={<Sequences />} />
-        <Route path='*' element={<div>Path not found/implemented!</div>} />
+        <Route
+          path='*'
+          element={
+            <div>
+              <FileViewer s3Key='photo upload.png' bucket='elsa-data-example-bucket-1' />
+            </div>
+          }
+        />
       </Route>
     </Routes>
   );

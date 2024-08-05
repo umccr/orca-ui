@@ -4,7 +4,7 @@ import { SubjectTable } from './components/SubjectTable';
 import { DetailedErrorBoundary } from '@/components/common/error';
 import { SpinnerWithText } from '@/components/common/spinner';
 
-export default function MetadataPage() {
+export default function LabPage() {
   return (
     <Card>
       <Suspense fallback={<SpinnerWithText text='Loading lab table ...' />}>

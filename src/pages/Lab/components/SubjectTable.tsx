@@ -144,7 +144,7 @@ const subjectColumn: Column[] = [
 
       return (
         <Link
-          to={`/subject/${orcabus_id}`}
+          to={`subject/${orcabus_id}`}
           className={classNames(
             'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
           )}
@@ -198,7 +198,7 @@ const libraryColumn = [
             return (
               <div className='py-2' key={idx}>
                 <Link
-                  to={`/library/${item.orcabus_id}`}
+                  to={`library/${item.orcabus_id}`}
                   className={classNames(
                     'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
                   )}
