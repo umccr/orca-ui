@@ -20,41 +20,14 @@ const Header = () => {
   const userName = userInformation?.name || getUsername(userInformation?.email as string);
 
   return (
-    <Disclosure as='nav' className='bg-heritage-blue-100 shadow'>
+    <Disclosure as='nav' className='bg-heritage-blue-100 shadow py-0.5'>
       {({ open }) => (
         <>
           <div className='mx-auto max-w-8xl sm:px-4 lg:divide-y lg:divide-gray-700 lg:px-8'>
             <div className='flex h-12 justify-between'>
               <div className='flex px-2 lg:px-0'>
                 <div className='flex flex-shrink-0 items-center'>
-                  <div className='text-xl text-white'>UMCCR</div>
-                </div>
-                <div className='hidden lg:ml-6 lg:flex lg:space-x-8'>
-                  {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
-                  {/* <a
-                    href='#'
-                    className='inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900'
-                  >
-                    Dashboard
-                  </a>
-                  <a
-                    href='#'
-                    className='inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                  >
-                    Team
-                  </a>
-                  <a
-                    href='#'
-                    className='inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                  >
-                    Projects
-                  </a>
-                  <a
-                    href='#'
-                    className='inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                  >
-                    Calendar
-                  </a> */}
+                  <div className='text-2xl text-white'>UMCCR</div>
                 </div>
               </div>
               {/* <div className='flex flex-1 items-center justify-center px-2 lg:ml-6'>
@@ -144,37 +117,7 @@ const Header = () => {
           </div>
 
           <DisclosurePanel className='lg:hidden'>
-            <div className='space-y-1 pb-3 pt-2'>
-              {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800" */}
-              {/* <DisclosureButton
-                as='a'
-                href='#'
-                className='block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700'
-              >
-                Dashboard
-              </DisclosureButton>
-              <DisclosureButton
-                as='a'
-                href='#'
-                className='block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
-              >
-                Team
-              </DisclosureButton>
-              <DisclosureButton
-                as='a'
-                href='#'
-                className='block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
-              >
-                Projects
-              </DisclosureButton>
-              <DisclosureButton
-                as='a'
-                href='#'
-                className='block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
-              >
-                Calendar
-              </DisclosureButton> */}
-            </div>
+            <div className='space-y-1 pb-3 pt-2'></div>
             <div className='border-t border-gray-200 pb-3 pt-4'>
               <div className='flex items-center px-4'>
                 <div className='ml-3'>

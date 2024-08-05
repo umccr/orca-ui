@@ -23,7 +23,7 @@ interface WorkflowNodeProps extends NodeProps {
 const WorkflowNode: FC<WorkflowNodeProps> = ({ data, positionAbsoluteX, positionAbsoluteY }) => {
   const backgroundColor = WorkflowNodeBackground[WORKFLOW_CLOUD[data.type]];
 
-  console.log('WorkflowNode:', data, positionAbsoluteX, positionAbsoluteY, backgroundColor);
+  // console.log('WorkflowNode:', data, positionAbsoluteX, positionAbsoluteY, backgroundColor);
 
   return (
     <div className='shadow-md rounded-md bg-white border-2 border-stone-400'>
