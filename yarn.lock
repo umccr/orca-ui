@@ -8949,6 +8949,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"igv@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "igv@npm:3.0.0"
+  checksum: 10c0/87af4f9b648e16ba99425836fc0a3669c0ea2269436f8ea6209acff9ad7b7c16433a0ed93b80ccd4b3a2d5839270a6bca00aa27e592cacd916072b11d8f6078a
+  languageName: node
+  linkType: hard
+
 "immer@npm:9.0.6":
   version: 9.0.6
   resolution: "immer@npm:9.0.6"
@@ -10616,6 +10623,7 @@ __metadata:
     eslint-plugin-react-refresh: "npm:^0.4.7"
     eslint-plugin-storybook: "npm:^0.8.0"
     globals: "npm:^15.7.0"
+    igv: "npm:^3.0.0"
     moment: "npm:^2.30.1"
     openapi-fetch: "npm:^0.10.2"
     openapi-typescript: "npm:^7.1.0"
