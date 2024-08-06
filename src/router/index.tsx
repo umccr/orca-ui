@@ -7,7 +7,6 @@ const Sequences = lazy(() => import('@/pages/Sequences'));
 
 import MainLayout from '@/components/layouts/MainLayout';
 import LabPage from '@/pages/Lab';
-import { FileViewer } from '@/components/files';
 
 export default function AppRoutes() {
   const isUserSignedIn = useUserContext().isAuth;
@@ -33,17 +32,10 @@ export default function AppRoutes() {
           </MainLayout>
         }
       >
-        <Route index element={<Navigate to='lab' />} />
+        <Route index element={<Navigate to='metadata' />} />
         <Route path='lab' element={<LabPage />} />
-        <Route path='runs' element={<Sequences />} />
-        <Route
-          path='*'
-          element={
-            <div>
-              <FileViewer s3Key='photo upload.png' bucket='elsa-data-example-bucket-1' />
-            </div>
-          }
-        />
+        <Route path='sequences' element={<Sequences />} />
+        <Route path='*' element={<div>Path not found/implemented!</div>} />
       </Route>
     </Routes>
   );

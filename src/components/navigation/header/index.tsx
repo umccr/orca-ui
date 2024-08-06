@@ -26,7 +26,7 @@ const Header = () => {
   const openTokenDialogOpen = () => setIsTokenDialogOpen(true);
 
   return (
-    <Disclosure as='nav' className='bg-heritage-blue-100 shadow'>
+    <Disclosure as='nav' className='bg-heritage-blue-100 shadow py-0.5'>
       {({ open }) => (
         <>
           {isTokenDialogOpen && (
@@ -38,7 +38,7 @@ const Header = () => {
             <div className='flex h-12 justify-between'>
               <div className='flex px-2 lg:px-0'>
                 <div className='flex flex-shrink-0 items-center'>
-                  <div className='text-xl text-white'>UMCCR</div>
+                  <div className='text-2xl text-white'>UMCCR</div>
                 </div>
               </div>
 
