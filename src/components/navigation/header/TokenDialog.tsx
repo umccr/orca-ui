@@ -2,11 +2,14 @@ import { Dialog } from '@/components/dialogs';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { useEffect, useState } from 'react';
 import { SpinnerWithText } from '@/components/common/spinner';
-import moment from 'moment';
 import toaster from '@/components/common/toaster';
+import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { ToastContainer } from 'react-toastify';
 import { Button } from '@headlessui/react';
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
+
+dayjs.extend(localizedFormat);
 
 type Props = { onClose: () => void };
 
@@ -21,11 +24,13 @@ export const TokenDialog = ({ onClose }: Props) => {
 
       const token = (await fetchAuthSession({ forceRefresh: true })).tokens?.idToken;
       if (!token) throw new Error('Cannot create new JWT!');
+      const exp = token.payload.exp?.toString();
+      if (!exp) throw new Error('Cannot get JWT expiration time!');
 
       if (cancel) return;
       setJWTData({
         token: token.toString(),
-        expires: moment.unix(parseInt(token.payload.exp?.toString() ?? '')).toString(),
+        expires: dayjs.unix(parseInt(exp)).format('llll Z'),
       });
       setIsLoading(false);
     };
