@@ -1,6 +1,6 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
-import { InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { classNames } from '@/utils/utils';
 
 export interface DialogButtonProps {
@@ -11,21 +11,23 @@ export interface DialogButtonProps {
 export interface DialogProps {
   TitleIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   title: string;
-  content?: string;
+  content?: string | ReactNode;
   open: boolean;
-  closeBtn: DialogButtonProps;
+  onClose: () => void;
+  closeBtn?: DialogButtonProps;
   confirmBtn?: DialogButtonProps;
 }
 const SimpleDialog: FC<DialogProps> = ({
-  TitleIcon = InformationCircleIcon,
+  TitleIcon,
   title,
   content,
   open,
+  onClose,
   closeBtn,
   confirmBtn,
 }) => {
   return (
-    <Dialog open={open} onClose={closeBtn.onClick} className='relative z-10'>
+    <Dialog open={open} onClose={onClose} className='relative z-10'>
       <DialogBackdrop
         transition
         className='fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in'
@@ -42,51 +44,55 @@ const SimpleDialog: FC<DialogProps> = ({
                 <button
                   type='button'
                   className='rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
-                  onClick={closeBtn.onClick}
+                  onClick={onClose}
                 >
-                  <span className='sr-only'>{closeBtn.label}</span>
+                  <span className='sr-only'>closeBtn</span>
                   <XMarkIcon className='h-6 w-6' aria-hidden='true' />
                 </button>
               </div>
               <div className='sm:flex sm:items-start'>
-                <div className='mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-100 sm:mx-0 sm:h-10 sm:w-10'>
-                  <TitleIcon aria-hidden='true' className='h-6 w-6 text-red-600' />
-                </div>
-                <div className='mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left'>
+                {TitleIcon && (
+                  <div className='mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-100 sm:mx-0 sm:h-10 sm:w-10 sm:mr-4'>
+                    <TitleIcon aria-hidden='true' className='h-6 w-6 text-red-600' />
+                  </div>
+                )}
+                <div className='mt-3 text-center sm:mt-0 sm:text-left w-full'>
                   <DialogTitle as='h3' className='text-base font-semibold leading-6 text-gray-900'>
                     {title}
                   </DialogTitle>
-                  <div className='mt-2'>
-                    {content && <p className='text-sm text-gray-500'>{content}</p>}
-                  </div>
+                  <div className='mt-2 text-sm text-gray-500'>{content && content}</div>
                 </div>
               </div>
             </div>
-            <div className='bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6'>
-              <button
-                type='button'
-                onClick={closeBtn.onClick}
-                className={classNames(
-                  'inline-flex w-full justify-center rounded-md bg-blue-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto',
-                  closeBtn.className ? closeBtn.className : ''
+            {(closeBtn || confirmBtn) && (
+              <div className='bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6'>
+                {closeBtn && (
+                  <button
+                    type='button'
+                    onClick={closeBtn.onClick}
+                    className={classNames(
+                      'inline-flex w-full justify-center rounded-md bg-blue-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto',
+                      closeBtn.className ? closeBtn.className : ''
+                    )}
+                  >
+                    {closeBtn.label}
+                  </button>
                 )}
-              >
-                {closeBtn.label}
-              </button>
-              {confirmBtn && (
-                <button
-                  type='button'
-                  data-autofocus
-                  onClick={confirmBtn.onClick}
-                  className={classNames(
-                    'mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto',
-                    confirmBtn.className ? confirmBtn.className : ''
-                  )}
-                >
-                  {confirmBtn.label}
-                </button>
-              )}
-            </div>
+                {confirmBtn && (
+                  <button
+                    type='button'
+                    data-autofocus
+                    onClick={confirmBtn.onClick}
+                    className={classNames(
+                      'mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto',
+                      confirmBtn.className ? confirmBtn.className : ''
+                    )}
+                  >
+                    {confirmBtn.label}
+                  </button>
+                )}
+              </div>
+            )}
           </DialogPanel>
         </div>
       </div>

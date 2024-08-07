@@ -42,7 +42,6 @@ command -v jq >/dev/null 2>&1 || {
 }
 
 if [ -n "$1" ] && [ "$1" = "unset" ]; then
-  unset VITE_API_URL
   unset VITE_STAGE
   unset VITE_REGION
   unset VITE_COG_USER_POOL_ID
@@ -54,9 +53,6 @@ if [ -n "$1" ] && [ "$1" = "unset" ]; then
   echo "UNSET VITE ENV VAR"
   return 0
 fi
-
-api_url=${DATA_PORTAL_API_URL:-localhost:8000}
-htsget_url=${HTSGET_URL:-localhost:3100}
 
 cog_user_pool_id=$(aws ssm get-parameter --name '/data_portal/client/cog_user_pool_id' --with-decryption | jq -r .Parameter.Value)
 if [[ "$cog_user_pool_id" == "" ]]; then
@@ -71,8 +67,6 @@ oauth_redirect_out_local=$(aws ssm get-parameter --name '/data_portal/client/oau
 
 unsplash_client_id=$(aws ssm get-parameter --name '/data_portal/unsplash/client_id' --with-decryption | jq -r .Parameter.Value)
 
-export VITE_API_URL=$api_url
-export VITE_HTSGET_URL=$htsget_url
 export VITE_STAGE=localhost
 export VITE_REGION=ap-southeast-2
 export VITE_COG_USER_POOL_ID=$cog_user_pool_id
@@ -82,7 +76,14 @@ export VITE_OAUTH_DOMAIN=$oauth_domain
 export VITE_OAUTH_REDIRECT_IN=$oauth_redirect_in_local
 export VITE_OAUTH_REDIRECT_OUT=$oauth_redirect_out_local
 export VITE_UNSPLASH_CLIENT_ID=$unsplash_client_id
-export VITE_METADATA_URL='http://localhost:8000/'
+
+
+# Backend API URLs
+# https://github.com/umccr/orcabus#running-api-locally
+export VITE_METADATA_URL=${VITE_METADATA_MANAGER_URL:-"http://localhost:8100"}
+export VITE_WORKFLOW_URL=${VITE_SEQUENCE_RUN_MANAGER_URL:-"http://localhost:8200"}
+export VITE_SEQUENCE_RUN_URL=${VITE_WORKFLOW_MANAGER_URL:-"http://localhost:8300"}
+export VITE_FILE_URL=${VITE_FILE_MANAGER_URL:-"http://localhost:8400"}
 
 env | grep VITE
 

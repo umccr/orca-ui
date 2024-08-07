@@ -6,7 +6,7 @@ const SignInPage = lazy(() => import('@/pages/SignInPage'));
 const Sequences = lazy(() => import('@/pages/Sequences'));
 
 import MainLayout from '@/components/layouts/MainLayout';
-import MetadataPage from '@/pages/Metadata';
+import LabPage from '@/pages/Lab';
 
 export default function AppRoutes() {
   const isUserSignedIn = useUserContext().isAuth;
@@ -19,23 +19,6 @@ export default function AppRoutes() {
       </Routes>
     );
   }
-
-  //   return useRoutes([
-  //     {
-  //       path: '/',
-  //       element: (
-  //         <MainLayout>
-  //           <Suspense>
-  //             <Outlet />
-  //           </Suspense>
-  //         </MainLayout>
-  //       ),
-  //       children: [
-  //         { index: true, element: <Navigate to='sequences' /> },
-  //         { path: 'sequences', element: <Sequences /> },
-  //       ],
-  //     },
-  //   ]);
 
   return (
     <Routes>
@@ -50,7 +33,7 @@ export default function AppRoutes() {
         }
       >
         <Route index element={<Navigate to='metadata' />} />
-        <Route path='lab' element={<MetadataPage />} />
+        <Route path='lab' element={<LabPage />} />
         <Route path='sequences' element={<Sequences />} />
         <Route path='*' element={<div>Path not found/implemented!</div>} />
       </Route>

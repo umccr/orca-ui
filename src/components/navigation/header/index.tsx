@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Disclosure,
   DisclosurePanel,
@@ -12,6 +13,8 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { classNames, getUsername } from '@/utils/utils';
 import { useUserContext } from '@/context/UserContext';
 import { signOut } from 'aws-amplify/auth';
+import { TokenDialog } from './TokenDialog';
+import { DetailedErrorBoundary } from '@/components/common/error';
 
 export interface HeaderProps {}
 
@@ -19,10 +22,18 @@ const Header = () => {
   const userInformation = useUserContext().user;
   const userName = userInformation?.name || getUsername(userInformation?.email as string);
 
+  const [isTokenDialogOpen, setIsTokenDialogOpen] = useState<boolean>(false);
+  const openTokenDialogOpen = () => setIsTokenDialogOpen(true);
+
   return (
     <Disclosure as='nav' className='bg-heritage-blue-100 shadow py-0.5'>
       {({ open }) => (
         <>
+          {isTokenDialogOpen && (
+            <DetailedErrorBoundary errorTitle='Unable fetch fresh JWT'>
+              <TokenDialog onClose={() => setIsTokenDialogOpen(false)} />
+            </DetailedErrorBoundary>
+          )}
           <div className='mx-auto max-w-8xl sm:px-4 lg:divide-y lg:divide-gray-700 lg:px-8'>
             <div className='flex h-12 justify-between'>
               <div className='flex px-2 lg:px-0'>
@@ -30,6 +41,7 @@ const Header = () => {
                   <div className='text-2xl text-white'>UMCCR</div>
                 </div>
               </div>
+
               {/* <div className='flex flex-1 items-center justify-center px-2 lg:ml-6'>
                 <div className='w-full max-w-lg lg:max-w-xs'>
                   <label htmlFor='search' className='sr-only'>
@@ -49,6 +61,7 @@ const Header = () => {
                   </div>
                 </div>
               </div> */}
+
               {/* mobile mode */}
               <div className='flex items-center lg:hidden'>
                 {/* Mobile menu button */}
@@ -64,14 +77,14 @@ const Header = () => {
               </div>
               {/*  */}
               <div className='hidden lg:ml-4 lg:flex lg:items-center'>
-                <button
+                {/* <button
                   type='button'
                   className='relative flex-shrink-0 rounded-full bg-heritage-blue-100 p-1 text-white hover:text-gray-500 focus:outline-none '
                 >
                   <span className='absolute -inset-1.5' />
                   <span className='sr-only'>View notifications</span>
                   <BellIcon className='h-6 w-6' aria-hidden='true' />
-                </button>
+                </button> */}
 
                 {/* Profile dropdown */}
                 <Menu as='div' className='relative ml-4 flex-shrink-0'>
@@ -83,7 +96,7 @@ const Header = () => {
                     </MenuButton>
                   </div>
 
-                  <MenuItems className='absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                  <MenuItems className='absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-0 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
                     <MenuItem>
                       {({ disabled }) => (
                         <button
@@ -91,7 +104,7 @@ const Header = () => {
                             disabled ? 'bg-gray-100' : '',
                             'block w-full text-left px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900'
                           )}
-                          onClick={() => console.log('Token')}
+                          onClick={openTokenDialogOpen}
                         >
                           Token
                         </button>
@@ -117,32 +130,63 @@ const Header = () => {
           </div>
 
           <DisclosurePanel className='lg:hidden'>
-            <div className='space-y-1 pb-3 pt-2'></div>
+            {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800" */}
+            {/* <div className='space-y-1 pb-3 pt-2'>
+              <DisclosureButton
+                as='a'
+                href='#'
+                className='block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700'
+              >
+                Dashboard
+              </DisclosureButton>
+              <DisclosureButton
+                as='a'
+                href='#'
+                className='block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
+              >
+                Team
+              </DisclosureButton>
+              <DisclosureButton
+                as='a'
+                href='#'
+                className='block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
+              >
+                Projects
+              </DisclosureButton>
+              <DisclosureButton
+                as='a'
+                href='#'
+                className='block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
+              >
+                Calendar
+              </DisclosureButton>
+            </div> */}
             <div className='border-t border-gray-200 pb-3 pt-4'>
               <div className='flex items-center px-4'>
                 <div className='ml-3'>
                   <div className='text-base font-medium text-white'>{userName}</div>
                   <div className='text-sm font-medium text-white'>{userInformation.email}</div>
                 </div>
-                <button
+                {/* <button
                   type='button'
                   className='relative ml-auto flex-shrink-0 rounded-full bg-heritage-blue-75 p-1 text-white hover:bg-gray-100 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
                 >
                   <span className='absolute -inset-1.5' />
                   <span className='sr-only'>View notifications</span>
                   <BellIcon className='h-6 w-6' aria-hidden='true' />
-                </button>
+                </button> */}
               </div>
               <div className='mx-3 mt-3 space-y-1'>
                 <DisclosureButton
+                  onClick={openTokenDialogOpen}
                   as='button'
-                  className='block w-full text-left px-4 py-2 text-base font-medium text-white hover:bg-gray-100 hover:text-gray-800'
+                  className='rounded-lg block w-full text-left px-4 py-2 text-base font-medium text-white hover:bg-gray-100 hover:text-gray-800'
                 >
                   Token
                 </DisclosureButton>
                 <DisclosureButton
                   as='button'
-                  className='block w-full text-left px-4 py-2 text-base font-medium text-white hover:bg-gray-100 hover:text-gray-800'
+                  className='rounded-lg block w-full text-left px-4 py-2 text-base font-medium text-white hover:bg-gray-100 hover:text-gray-800'
                   onClick={() => signOut()}
                 >
                   Sign out

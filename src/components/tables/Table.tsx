@@ -60,7 +60,7 @@ const Table: FC<TableProps> = ({
   }, [tableData]);
 
   return (
-    <div className='px-4 sm:px-6 lg:px-8'>
+    <div className=''>
       <div className='sm:flex sm:items-center'>
         <div className='sm:flex-auto'>
           {tableHeader && (
@@ -69,14 +69,15 @@ const Table: FC<TableProps> = ({
           {tableDescription && <p className='mt-2 text-sm text-gray-700'>{tableDescription}</p>}
         </div>
       </div>
+
+      {paginationProps && <Pagination {...paginationProps} />}
+
       <div className='mt-4 flow-root'>
-        <div className='-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
-          <div className='inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8'>
+        <div className='overflow-x-auto '>
+          <div className='inline-block min-w-full align-middle'>
             <div
               className={classNames(
-                inCard
-                  ? 'overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg'
-                  : ''
+                inCard ? 'overflow-hidden border-2 border-black border-opacity-5 sm:rounded-lg' : ''
               )}
             >
               <table className='min-w-full divide-y divide-gray-300'>
@@ -149,7 +150,6 @@ const Table: FC<TableProps> = ({
           </div>
         </div>
       </div>
-      {paginationProps && <Pagination {...paginationProps} />}
     </div>
   );
 };

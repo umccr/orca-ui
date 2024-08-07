@@ -7055,6 +7055,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dayjs@npm:^1.11.12":
+  version: 1.11.12
+  resolution: "dayjs@npm:1.11.12"
+  checksum: 10c0/9673d37f3f9ad8a91caaeae9b3fea9a0010c81c7f58599fb9d860bc3359b86632fbff8eb7dddc86c2acaab01c5e6860bc672952f17b58c9286140c52b077c8e4
+  languageName: node
+  linkType: hard
+
 "debug@npm:2.6.9":
   version: 2.6.9
   resolution: "debug@npm:2.6.9"
@@ -8949,6 +8956,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"igv@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "igv@npm:3.0.0"
+  checksum: 10c0/87af4f9b648e16ba99425836fc0a3669c0ea2269436f8ea6209acff9ad7b7c16433a0ed93b80ccd4b3a2d5839270a6bca00aa27e592cacd916072b11d8f6078a
+  languageName: node
+  linkType: hard
+
 "immer@npm:9.0.6":
   version: 9.0.6
   resolution: "immer@npm:9.0.6"
@@ -10601,6 +10615,7 @@ __metadata:
     "@xyflow/react": "npm:^12.0.2"
     autoprefixer: "npm:^10.4.19"
     aws-amplify: "npm:^6.4.0"
+    dayjs: "npm:^1.11.12"
     eslint: "npm:^9.6.0"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-prettier: "npm:^5.1.3"
@@ -10609,6 +10624,7 @@ __metadata:
     eslint-plugin-react-refresh: "npm:^0.4.7"
     eslint-plugin-storybook: "npm:^0.8.0"
     globals: "npm:^15.7.0"
+    igv: "npm:^3.0.0"
     openapi-fetch: "npm:^0.10.2"
     openapi-typescript: "npm:^7.1.0"
     postcss: "npm:^8.4.39"
