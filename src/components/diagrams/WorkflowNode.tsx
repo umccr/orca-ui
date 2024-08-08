@@ -3,7 +3,7 @@ import { Handle, HandleProps, type NodeProps } from '@xyflow/react';
 import { StatusIcon } from '@/components/common/statusIcon';
 
 import { WorkflowNodeBackground, WORKFLOW_CLOUD } from '@/utils/workflows';
-import { classNames } from '@/utils/utils';
+import { classNames } from '@/utils/commonUtils';
 
 interface WorkflowNodeProps extends NodeProps {
   data: {
@@ -20,7 +20,7 @@ interface WorkflowNodeProps extends NodeProps {
 
 // func tp pick up teh color from tehe data.type
 
-const WorkflowNode: FC<WorkflowNodeProps> = ({ data, positionAbsoluteX, positionAbsoluteY }) => {
+const WorkflowNode: FC<WorkflowNodeProps> = ({ data }) => {
   const backgroundColor = WorkflowNodeBackground[WORKFLOW_CLOUD[data.type]];
 
   // console.log('WorkflowNode:', data, positionAbsoluteX, positionAbsoluteY, backgroundColor);

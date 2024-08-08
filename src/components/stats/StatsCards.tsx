@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/20/solid';
-import { classNames } from '@/utils/utils';
+import { classNames } from '@/utils/commonUtils';
 
 export interface StatsCardsProps {
   header: string;

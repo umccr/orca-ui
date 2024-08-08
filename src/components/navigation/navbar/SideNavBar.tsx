@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { classNames } from '@/utils/utils';
+import { classNames } from '@/utils/commonUtils';
 import { FC } from 'react';
 
 export interface NavigationItem {
@@ -19,21 +19,21 @@ const SideNavbar: FC<SideNavbarProps> = ({ navigation }) => {
   return (
     <div className=' bg-heritage-blue-100'>
       <nav>
-        <ul role='list' className='flex flex-1 flex-col items-center gap-y-5 space-y-1 w-full'>
+        <ul role='list' className='flex flex-1 flex-col items-center w-full'>
           {navigation.map((item) => (
-            <li key={item.name} className='w-full hover:bg-heritage-blue-50'>
+            <li key={item.name} className='w-full hover:bg-heritage-blue-75'>
               <Link
                 to={item.href}
                 className={classNames(
-                  'group flex flex-1 flex-col items-center text-sm text-white leading-6 font-semibold px-2 py-2',
+                  'group flex flex-1 flex-col items-center text-sm leading-6 font-semibold px-2 py-2',
                   location.pathname.includes(item.href)
                     ? 'bg-white text-heritage-blue-100'
-                    : 'hover:bg-heritage-blue-75'
+                    : 'hover:bg-heritage-blue-75 text-white'
                 )}
               >
                 {location.pathname.includes(item.href) ? (
                   <item.solidIcon
-                    className='h-6 w-6 shrink-0 text-heritage-blue-100'
+                    className='h-6 w-6 shrink-0 text-heritage-blue-75'
                     aria-hidden='true'
                   />
                 ) : (

@@ -2,19 +2,34 @@ import { useMetadataFullSubjectModel } from '@/api/metadata';
 import { components } from '@/api/types/metadata';
 import { Table } from '@/components/tables';
 import { Column } from '@/components/tables/Table';
-import { classNames } from '@/utils/utils';
+import { classNames } from '@/utils/commonUtils';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Fragment } from 'react/jsx-runtime';
+import { useQueryParams } from '@/hooks/useQueryParams';
+import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 
 export const SubjectTable = () => {
   const [page, setPage] = useState<number>(1);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(DEFAULT_PAGE_SIZE);
   const [searchBox, setSearchBox] = useState<string>('');
   const [dataQueryParams, setDataQueryParams] = useState<Record<string, string>>({});
 
+  const onChangeParams = async () => {
+    setPage(getPaginationParams().page);
+    setRowsPerPage(getPaginationParams().rowsPerPage);
+    // console.log('onChangeParams', getQueryParams());
+  };
+  const { setQueryParams, getPaginationParams } = useQueryParams(onChangeParams);
+
+  useEffect(() => {
+    setPage(getPaginationParams().page);
+    setRowsPerPage(getPaginationParams().rowsPerPage);
+  }, [getPaginationParams]);
+
   const fullSubjectModel = useMetadataFullSubjectModel({
-    params: { query: { page: page, ...dataQueryParams } },
+    params: { query: { page: page, rowsPerPage: rowsPerPage, ...dataQueryParams } },
   });
 
   const data = fullSubjectModel.data;
@@ -73,7 +88,10 @@ export const SubjectTable = () => {
         rowsPerPage: data.pagination.rowsPerPage ?? 0,
         currentPage: data.pagination.page ?? 0,
         setPage: (n: number) => {
-          setPage(n);
+          setQueryParams({ page: n });
+        },
+        setRowsPerPage: (n: number) => {
+          setQueryParams({ rowsPerPage: n });
         },
         countUnit: 'subjects',
       }}

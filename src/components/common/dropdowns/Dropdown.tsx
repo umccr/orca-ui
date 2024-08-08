@@ -1,7 +1,7 @@
 import { FC, Fragment } from 'react';
 import { Menu, MenuButton, MenuItems, MenuItem, MenuSeparator } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import { classNames } from '@/utils/utils';
+import { classNames } from '@/utils/commonUtils';
 
 export interface DropdownItemProps {
   label: string;
