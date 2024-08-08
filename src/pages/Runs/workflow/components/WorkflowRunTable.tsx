@@ -140,7 +140,7 @@ const sequenceRunColumn: Column[] = [
       if (!portalRunId) {
         return <div>-</div>;
       } else {
-        return <div>portalRunId</div>;
+        return <div>{portalRunId as string}</div>;
       }
     },
   },
