@@ -19,7 +19,7 @@ export const SubjectTable = () => {
 
   const data = fullSubjectModel.data;
   if (!data) {
-    throw new Error('No Data');
+    throw new Error('No subject data found!');
   }
 
   const tableData = processResults(data.results);
@@ -104,10 +104,7 @@ const processResults = (data: components['schemas']['SubjectFull'][]) => {
       for (const library of specimen.library_set) {
         rec.specimenId.push(specimen.internal_id ?? '-');
         rec.source.push(specimen.source ?? '-');
-        rec.libraryId.push({
-          orcabus_id: library.id,
-          internal_id: library.internal_id,
-        });
+        rec.libraryId.push(library.internal_id ?? '-');
         rec.phenotype.push(library.phenotype ?? '-');
         rec.workflow.push(library.workflow ?? '-');
         rec.quality.push(library.quality ?? '-');
@@ -136,7 +133,7 @@ const subjectColumn: Column[] = [
     header: 'SubjectId',
     accessor: 'subjectId',
     cell: (data: unknown) => {
-      const { orcabus_id, internal_id } = data as Record<string, string>;
+      const { internal_id } = data as Record<string, string>;
 
       if (!internal_id) {
         return <div>-</div>;
@@ -144,7 +141,7 @@ const subjectColumn: Column[] = [
 
       return (
         <Link
-          to={`subject/${orcabus_id}`}
+          to={`subject/${internal_id}`}
           className={classNames(
             'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
           )}
@@ -187,23 +184,22 @@ const libraryColumn = [
     header: 'LibraryId',
     accessor: 'libraryId',
     cell: (p: unknown) => {
-      const data = p as Record<string, string>[];
-
+      const data = p as string[];
       return (
         <Fragment>
-          {data.map((item, idx) => {
-            if (!item.internal_id) {
+          {data.map((libId, idx) => {
+            if (!libId) {
               return <div key={idx}>-</div>;
             }
             return (
               <div className='py-2' key={idx}>
                 <Link
-                  to={`library/${item.orcabus_id}`}
+                  to={`library/${libId}`}
                   className={classNames(
                     'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
                   )}
                 >
-                  {item.internal_id}
+                  {libId}
                 </Link>
               </div>
             );

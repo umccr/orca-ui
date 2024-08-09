@@ -33,3 +33,21 @@ export function useMetadataFullSubjectModel({
     },
   });
 }
+
+const metadataFullLibraryPath = '/library/full/';
+export function useMetadataFullLibraryModel({
+  params,
+  reactQuery,
+}: UseQueryOptions<paths[typeof metadataFullLibraryPath]['get']>) {
+  return useSuspenseQuery({
+    ...reactQuery,
+    queryKey: [metadataFullLibraryPath, params],
+    queryFn: async ({ signal }) => {
+      const { data } = await client.GET(metadataFullLibraryPath, {
+        params,
+        signal, // allows React Query to cancel request
+      });
+      return data;
+    },
+  });
+}

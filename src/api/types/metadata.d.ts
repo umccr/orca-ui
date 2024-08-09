@@ -477,14 +477,49 @@ export interface operations {
     library_full_list: {
         parameters: {
             query?: {
+                assay?: string | null;
+                coverage?: number | null;
+                id?: number;
+                internal_id?: string | null;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
                 page?: number;
+                /** @description * `normal` - Normal
+                 *     * `tumor` - Tumor
+                 *     * `negative-control` - Negative Control */
+                phenotype?: "normal" | "tumor" | "negative-control" | "" | null;
+                /** @description * `very-poor` - VeryPoor
+                 *     * `poor` - Poor
+                 *     * `good` - Good
+                 *     * `borderline` - Borderline */
+                quality?: "very-poor" | "poor" | "good" | "borderline" | "" | null;
                 /** @description Number of results to return per page. */
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
+                specimen?: number | null;
+                /** @description * `10X` - Ten X
+                 *     * `BiModal` - Bimodal
+                 *     * `ctDNA` - Ct Dna
+                 *     * `ctTSO` - Ct Tso
+                 *     * `exome` - Exome
+                 *     * `MeDIP` - Me Dip
+                 *     * `Metagenm` - Metagenm
+                 *     * `MethylSeq` - Methyl Seq
+                 *     * `TSO-DNA` - TSO_DNA
+                 *     * `TSO-RNA` - TSO_RNA
+                 *     * `WGS` - Wgs
+                 *     * `WTS` - Wts
+                 *     * `other` - Other */
+                type?: "10X" | "BiModal" | "ctDNA" | "ctTSO" | "exome" | "MeDIP" | "Metagenm" | "MethylSeq" | "TSO-DNA" | "TSO-RNA" | "WGS" | "WTS" | "other" | "" | null;
+                /** @description * `clinical` - Clinical
+                 *     * `research` - Research
+                 *     * `qc` - Qc
+                 *     * `control` - Control
+                 *     * `bcl` - Bcl
+                 *     * `manual` - Manual */
+                workflow?: "clinical" | "research" | "qc" | "control" | "bcl" | "manual" | "" | null;
             };
             header?: never;
             path?: never;
@@ -636,6 +671,8 @@ export interface operations {
     subject_full_list: {
         parameters: {
             query?: {
+                id?: number;
+                internal_id?: string | null;
                 /** @description Filter the subjects that contain this particular internal_id in the Library model. */
                 library_internal_id?: string;
                 /** @description Which field to use when ordering the results. */
