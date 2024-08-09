@@ -25,7 +25,7 @@ const SideNavbar: FC<SideNavbarProps> = ({ navigation }) => {
               <Link
                 to={item.href}
                 className={classNames(
-                  'group flex flex-1 flex-col items-center text-sm leading-6 font-semibold px-2 py-2',
+                  'group flex flex-1 flex-col items-center text-sm leading-6 font-semibold px-1 py-2 transition-colors duration-200 transform',
                   location.pathname.includes(item.href)
                     ? 'bg-white text-heritage-blue-100'
                     : 'hover:bg-heritage-blue-75 text-white'

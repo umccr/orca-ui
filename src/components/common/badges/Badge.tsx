@@ -18,7 +18,7 @@ const Badge = ({ children, type = 'primary', status, className }: BadgeProps) =>
     success: 'text-white bg-green-700 ',
     fail: 'text-white bg-red-700 ',
     warning: 'text-white bg-yellow-400 ',
-    abort: 'text-gray-600 bg-grey-100 ',
+    abort: 'text-gray-600 bg-gray-300 ',
     unknown: 'text-white bg-gray-500 ',
     running: 'text-white bg-blue-500 ',
   };
@@ -29,21 +29,20 @@ const Badge = ({ children, type = 'primary', status, className }: BadgeProps) =>
 const getBadgeType = (status: string) => {
   switch (status.toUpperCase()) {
     case 'REQUESTED':
-      return 'primary';
     case 'QUEUED':
-      return 'secondary';
+      return 'primary';
+
     case 'INITIALIZING':
-      return 'secondary';
-    case 'PREPARING INPUTS':
-      return 'secondary';
+    case 'PREPARING_INPUTS':
     case 'IN PROGRESS':
+    case 'GENERATING_OUTPUTS':
       return 'running';
-    case 'GENERATING OUTPUTS':
-      return 'secondary';
+
     case 'ABORTING':
       return 'abort';
     case 'ABORTED':
       return 'abort';
+
     case 'FAILED':
       return 'fail';
     case 'SUCCEEDED':

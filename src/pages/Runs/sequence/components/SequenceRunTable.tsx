@@ -9,8 +9,8 @@ import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import dayjs from '@/utils/dayjs';
 import { Badge } from '@/components/common/badges';
-// import { StatusIcon } from '@/components/common/statusIcon';
 import { TableCellsIcon, RectangleGroupIcon, ClipboardIcon } from '@heroicons/react/24/outline';
+import { StatusIcon } from '@/components/common/statusIcon';
 
 const SequenceRunTable = () => {
   const [page, setPage] = useState<number>(1);
@@ -37,7 +37,6 @@ const SequenceRunTable = () => {
   });
 
   const data = fullSubjectModel.data;
-  console.log('data', data);
   if (!data) {
     throw new Error('No Data');
   }
@@ -161,16 +160,19 @@ const sequenceRunColumn: Column[] = [
     cell: (status: unknown) => {
       if (!status) {
         return (
-          <Badge type='unknown' className='flex flex-row h-8'>
+          <Badge type='unknown' className='flex flex-row h-7'>
             {/* <StatusIcon status={status as string} className='h-4 w-4 text-white pr-2'></StatusIcon> */}
             {'unkown'}
           </Badge>
         );
       } else {
         return (
-          <Badge type='success' className='flex flex-row h-8'>
-            {/* <StatusIcon status={status as string} className='h-4 w-4 text-white pr-2'></StatusIcon> */}
-            {status as string}
+          <Badge status={status as string} className='flex flex-row items-center h-7'>
+            <div className='pr-2 '>
+              <StatusIcon status={status as string} className='  !text-white'></StatusIcon>
+            </div>
+
+            <span>{status as string}</span>
           </Badge>
         );
       }
@@ -182,16 +184,19 @@ const sequenceRunColumn: Column[] = [
     cell: (status: unknown) => {
       if (!status) {
         return (
-          <Badge type='unknown' className='flex flex-row h-8'>
+          <Badge type='unknown' className='flex flex-row h-7'>
             {/* <StatusIcon status={status as string} className='h-4 w-4 text-white pr-2'></StatusIcon> */}
             {'unkown'}
           </Badge>
         );
       } else {
         return (
-          <Badge type='unknown' className='flex flex-row h-8'>
-            {/* <StatusIcon status={status as string} className='h-4 w-4 text-white pr-2'></StatusIcon> */}
-            {status as string}
+          <Badge status={status as string} className='flex flex-row items-center h-7'>
+            <div className='pr-2 '>
+              <StatusIcon status={status as string} className='  !text-white'></StatusIcon>
+            </div>
+
+            <span>{status as string}</span>
           </Badge>
         );
       }
