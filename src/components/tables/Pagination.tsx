@@ -1,4 +1,4 @@
-import { classNames } from '@/utils/utils';
+import { classNames } from '@/utils/commonUtils';
 import { Button } from '@headlessui/react';
 import {
   ChevronDoubleLeftIcon,
@@ -13,6 +13,7 @@ export type PaginationProps = {
   rowsPerPage: number;
   currentPage: number;
   setPage: (newPage: number) => void;
+  setRowsPerPage: (newRowsPerPage: number) => void;
   countUnit?: string;
 };
 
@@ -21,12 +22,16 @@ export default function Pagination({
   rowsPerPage,
   countUnit,
   setPage,
+  setRowsPerPage,
   currentPage,
 }: PaginationProps) {
   const [inputPageNumber, setInputPageNumber] = useState(currentPage);
+  const [rowsPerPageNumber, setRowsPerPageNumber] = useState(rowsPerPage);
+
   useEffect(() => {
     setInputPageNumber(currentPage);
-  }, [currentPage]);
+    setRowsPerPageNumber(rowsPerPage);
+  }, [currentPage, rowsPerPage]);
 
   const maxPage = Math.ceil(totalCount / rowsPerPage);
   const from = Math.min((currentPage - 1) * rowsPerPage + 1, totalCount);
@@ -57,13 +62,38 @@ export default function Pagination({
         </Button>
       </div>
       <div className='hidden md:flex md:flex-1 md:items-center md:justify-between'>
-        <div>
+        <div className='flex flex-row'>
           <p className='text-sm text-gray-700'>
             Showing <span className='font-medium'>{from}</span> to{' '}
             <span className='font-medium'>{to}</span> of{' '}
             <span className='font-medium'>{totalCount}</span> {countUnit ?? 'results'}
           </p>
+
+          {/* Rows per page: */}
+          <div className='flex flex-row'>
+            <label
+              htmlFor='rows-per-page'
+              className='text-sm text-gray-700 font-medium text-nowrap pl-2 pr-1'
+            >
+              entries
+            </label>
+            <select
+              id='rows-per-page'
+              name='rows-per-page'
+              className='block  text-sm w-full rounded border-gray-300 bg-white text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600'
+              value={rowsPerPageNumber}
+              onChange={(e) => {
+                setRowsPerPage(parseInt(e.target.value));
+              }}
+            >
+              <option value='10'>10</option>
+              <option value='20'>20</option>
+              <option value='50'>50</option>
+              <option value='100'>100</option>
+            </select>
+          </div>
         </div>
+
         <div>
           <nav aria-label='Pagination' className='isolate inline-flex space-x-2 rounded-md'>
             <Button
@@ -95,7 +125,7 @@ export default function Pagination({
               name='set-page'
               min={1}
               max={maxPage}
-              className='block w-24 rounded-md border-0 bg-white px-4 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600'
+              className='block w-16 my-1 text-sm rounded-md border-0 bg-white px-4 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600'
               value={inputPageNumber}
               onChange={(e) => {
                 if (e.target.value === '') {

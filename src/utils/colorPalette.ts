@@ -131,6 +131,8 @@ const colorPalette = {
   black: '#000000',
   white: '#FFFFFF',
   link: '#083973',
+  'link-dark': '#083468',
+  'link-light': '#204C81',
 
   // Semantic colors
   'regal-blue': '#0E297A',

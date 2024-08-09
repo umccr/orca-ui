@@ -12,14 +12,24 @@ const sideNavigation = [
 
 const subjectModuleNavigation = [
   {
-    name: 'Subject',
+    title: 'Subject',
     children: [
       { name: 'Overview', href: '/lab/subject/overview' },
       { name: 'Launch Pad', href: '/lab/subject/launchpad' },
     ],
   },
+];
+
+const libraryModuleNavigation = [
   {
-    name: 'Reports',
+    title: 'Library',
+    children: [
+      { name: 'Overview', href: '/lab/library/overview' },
+      { name: 'File View', href: '/lab/library/fileview' },
+    ],
+  },
+  {
+    title: 'Reports',
     children: [
       { name: 'WGS', href: '/lab/subject/reports/wgs' },
       { name: 'WTS', href: '/lab/subject/reports/wts' },
@@ -31,20 +41,11 @@ const subjectModuleNavigation = [
     ],
   },
 ];
-const libraryModuleNavigation = [
-  {
-    name: 'Library',
-    children: [
-      { name: 'Overview', href: '/lab/library/overview' },
-      { name: 'File View', href: '/lab/library/fileview' },
-    ],
-  },
-];
 
 const runsModuleNavigation = [
   {
     children: [
-      { name: 'Sequence', href: '/runs/Sequence' },
+      { name: 'Sequence', href: '/runs/sequence' },
       { name: 'Library', href: '/runs/library' },
       {
         name: 'Workflow',

@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { classNames } from '@/utils/utils';
+import { classNames } from '@/utils/commonUtils';
 
 export interface DialogButtonProps {
   label: string;

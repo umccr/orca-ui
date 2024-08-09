@@ -3,13 +3,10 @@ import { fetchAuthSession } from 'aws-amplify/auth';
 import { useEffect, useState } from 'react';
 import { SpinnerWithText } from '@/components/common/spinner';
 import toaster from '@/components/common/toaster';
-import dayjs from 'dayjs';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
+import dayjs from '@/utils/dayjs';
 import { ToastContainer } from 'react-toastify';
 import { Button } from '@headlessui/react';
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
-
-dayjs.extend(localizedFormat);
 
 type Props = { onClose: () => void };
 

@@ -11,16 +11,21 @@ import {
   ArrowRightCircleIcon,
   CloudArrowDownIcon,
   ArrowDownOnSquareIcon,
-} from '@heroicons/react/24/outline';
+} from '@heroicons/react/24/solid';
 
-const StatusIcon: FC<{ status: string; className?: string }> = ({ status, className }) => {
-  const iconStyles = 'h-5 w-5 flex ' + className;
+interface StatusCircleIconProps {
+  status: string;
+  className?: string;
+}
+
+const StatusCircleIcon: FC<StatusCircleIconProps> = ({ status, className }) => {
+  const iconStyles = 'h-9 w-9 ' + className;
 
   switch (status.toUpperCase()) {
     case 'REQUESTED':
       return (
         <ArrowRightCircleIcon
-          className={'text-kookaburra-light-100 ' + iconStyles}
+          className={iconStyles + ' text-kookaburra-light-100'}
           title='Requested'
         />
       );
@@ -40,7 +45,7 @@ const StatusIcon: FC<{ status: string; className?: string }> = ({ status, classN
     case 'IN_PROGRESS':
       return (
         <ArrowPathIcon
-          className={iconStyles + ' h-4 w-4 animate-spin text-kookaburra-light-100'}
+          className={iconStyles + ' animate-spin text-kookaburra-light-100'}
           title='In Progress'
         />
       );
@@ -54,23 +59,19 @@ const StatusIcon: FC<{ status: string; className?: string }> = ({ status, classN
     case 'ABORTING':
       return <StopIcon className={iconStyles + ' text-sheoak-light-50'} title='Aborting' />;
     case 'ABORTED':
-      return <StopCircleIcon className={iconStyles + ' text-sheoak-light-50'} title='Aborted' />;
+      return <StopCircleIcon className={iconStyles + ' text-sheoak-light-75'} title='Aborted' />;
     case 'FAILED':
-      return <XCircleIcon className={iconStyles + ' text-sheoak-light-50'} title='Failed' />;
-    case 'COMPLETED':
+      return <XCircleIcon className={iconStyles + ' text-sheoak-light-100'} title='Failed' />;
     case 'SUCCEEDED':
-      return (
-        <CheckCircleIcon className={iconStyles + ' text-yam-daisy-yellow-75'} title='Completed' />
-      );
-    case 'UNKNOWN':
-      return (
-        <ExclamationCircleIcon className={iconStyles + ' text-sheoak-light-50'} title='Unknown' />
-      );
+      return <CheckCircleIcon className={iconStyles + ' text-red-gum-dark-75'} title='Succeeded' />;
     default:
       return (
-        <ExclamationCircleIcon className={iconStyles + ' text-sheoak-light-50'} title='Unknown' />
+        <ExclamationCircleIcon
+          className={iconStyles + ' text-magpie-light-100'}
+          title='Unknown Status'
+        />
       );
   }
 };
 
-export default StatusIcon;
+export default StatusCircleIcon;

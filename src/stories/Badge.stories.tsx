@@ -54,3 +54,9 @@ export const AbortBadge: Story = {
     type: 'abort',
   },
 };
+export const UnknownBadge: Story = {
+  args: {
+    children: 'Unknown Badge',
+    type: 'unknown',
+  },
+};

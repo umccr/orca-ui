@@ -1,5 +1,5 @@
 import { FC, ReactNode, Fragment } from 'react';
-import { classNames } from '@/utils/utils';
+import { classNames } from '@/utils/commonUtils';
 
 type TableData = {
   groupTitle: string;
