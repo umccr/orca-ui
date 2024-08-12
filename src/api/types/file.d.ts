@@ -250,6 +250,10 @@ export interface components {
         };
         /** @enum {string} */
         StorageClass: "DeepArchive" | "Glacier" | "GlacierIr" | "IntelligentTiering" | "OnezoneIa" | "Outposts" | "ReducedRedundancy" | "Snow" | "Standard" | "StandardIa";
+        /** @description A wildcard type represents a filter to match arbitrary characters. Use '%' for multiple characters
+         *     and '_' for a single character. Use '\\' to escape these characters. Wildcards are converted to
+         *     postgres `like` or `ilike` queries. */
+        Wildcard: string;
     };
     responses: never;
     parameters: never;
@@ -316,11 +320,15 @@ export interface operations {
                 /** @description The page to fetch from the list of objects.
                  *     If this is zero then the default is used. */
                 page_size?: number;
+                /** @description The case sensitivity when using filter operations with a wildcard.
+                 *     Setting this true means that an SQL `like` statement is used, and false
+                 *     means `ilike` is used. */
+                case_sensitive?: boolean;
                 /** @description Query by JSON attributes. Supports nested syntax to access inner
                  *     fields, e.g. `attributes[attribute_id]=...`. This only deserializes
                  *     into string fields, and does not support other JSON types. E.g.
                  *     `attributes[attribute_id]=1` converts to `{ "attribute_id" = "1" }`
-                 *     rather than `{ "attribute_id" = 1 }`. */
+                 *     rather than `{ "attribute_id" = 1 }`. Supports wildcards. */
                 attributes?: components["schemas"]["Json"] | null;
             };
             header?: never;
@@ -335,7 +343,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["FileObject"][];
+                    "application/json": components["schemas"]["ListResponseObject"];
                 };
             };
             /** @description the request could not be parsed or the request triggered a constraint error in the database */
@@ -370,11 +378,15 @@ export interface operations {
     update_object_collection_attributes: {
         parameters: {
             query?: {
+                /** @description The case sensitivity when using filter operations with a wildcard.
+                 *     Setting this true means that an SQL `like` statement is used, and false
+                 *     means `ilike` is used. */
+                case_sensitive?: boolean;
                 /** @description Query by JSON attributes. Supports nested syntax to access inner
                  *     fields, e.g. `attributes[attribute_id]=...`. This only deserializes
                  *     into string fields, and does not support other JSON types. E.g.
                  *     `attributes[attribute_id]=1` converts to `{ "attribute_id" = "1" }`
-                 *     rather than `{ "attribute_id" = 1 }`. */
+                 *     rather than `{ "attribute_id" = 1 }`. Supports wildcards. */
                 attributes?: components["schemas"]["Json"] | null;
             };
             header?: never;
@@ -428,11 +440,15 @@ export interface operations {
     count_objects: {
         parameters: {
             query?: {
+                /** @description The case sensitivity when using filter operations with a wildcard.
+                 *     Setting this true means that an SQL `like` statement is used, and false
+                 *     means `ilike` is used. */
+                case_sensitive?: boolean;
                 /** @description Query by JSON attributes. Supports nested syntax to access inner
                  *     fields, e.g. `attributes[attribute_id]=...`. This only deserializes
                  *     into string fields, and does not support other JSON types. E.g.
                  *     `attributes[attribute_id]=1` converts to `{ "attribute_id" = "1" }`
-                 *     rather than `{ "attribute_id" = 1 }`. */
+                 *     rather than `{ "attribute_id" = 1 }`. Supports wildcards. */
                 attributes?: components["schemas"]["Json"] | null;
             };
             header?: never;
@@ -591,6 +607,10 @@ export interface operations {
                 /** @description The page to fetch from the list of objects.
                  *     If this is zero then the default is used. */
                 page_size?: number;
+                /** @description The case sensitivity when using filter operations with a wildcard.
+                 *     Setting this true means that an SQL `like` statement is used, and false
+                 *     means `ilike` is used. */
+                case_sensitive?: boolean;
                 /** @description Fetch the current state of objects in storage.
                  *     This ensures that only `Created` events which represent current
                  *     objects in storage are returned, and any historical `Deleted`
@@ -600,33 +620,33 @@ export interface operations {
                  *     in the following order: `Created` -> `Deleted` -> `Created`. Then setting
                  *     `?current_state=true` would return only the last `Created` event. */
                 current_state?: boolean | null;
-                /** @description Query by event type. */
-                event_type?: components["schemas"]["EventType"] | null;
-                /** @description Query by bucket. */
-                bucket?: string | null;
-                /** @description Query by key. */
-                key?: string | null;
-                /** @description Query by version_id. */
-                version_id?: string | null;
-                /** @description Query by date. */
-                date?: components["schemas"]["DateTimeWithTimeZone"] | null;
+                /** @description Query by event type. Supports wildcards. */
+                event_type?: components["schemas"]["Wildcard"];
+                /** @description Query by bucket. Supports wildcards. */
+                bucket?: components["schemas"]["Wildcard"] | null;
+                /** @description Query by key. Supports wildcards. */
+                key?: components["schemas"]["Wildcard"] | null;
+                /** @description Query by version_id. Supports wildcards. */
+                version_id?: components["schemas"]["Wildcard"] | null;
+                /** @description Query by date. Supports wildcards. */
+                date?: components["schemas"]["Wildcard"];
                 /** @description Query by size. */
                 size?: number | null;
                 /** @description Query by the sha256 checksum. */
                 sha256?: string | null;
-                /** @description Query by the last modified date. */
-                last_modified_date?: components["schemas"]["DateTimeWithTimeZone"] | null;
+                /** @description Query by the last modified date. Supports wildcards. */
+                last_modified_date?: components["schemas"]["Wildcard"];
                 /** @description Query by the e_tag. */
                 e_tag?: string | null;
-                /** @description Query by the storage class. */
-                storage_class?: components["schemas"]["StorageClass"] | null;
+                /** @description Query by the storage class. Supports wildcards. */
+                storage_class?: components["schemas"]["Wildcard"];
                 /** @description Query by the object delete marker. */
                 is_delete_marker?: boolean | null;
                 /** @description Query by JSON attributes. Supports nested syntax to access inner
                  *     fields, e.g. `attributes[attribute_id]=...`. This only deserializes
                  *     into string fields, and does not support other JSON types. E.g.
                  *     `attributes[attribute_id]=1` converts to `{ "attribute_id" = "1" }`
-                 *     rather than `{ "attribute_id" = 1 }`. */
+                 *     rather than `{ "attribute_id" = 1 }`. Supports wildcards. */
                 attributes?: components["schemas"]["Json"] | null;
             };
             header?: never;
@@ -641,7 +661,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["FileS3Object"][];
+                    "application/json": components["schemas"]["ListResponseS3Object"];
                 };
             };
             /** @description the request could not be parsed or the request triggered a constraint error in the database */
@@ -676,6 +696,10 @@ export interface operations {
     update_s3_object_collection_attributes: {
         parameters: {
             query?: {
+                /** @description The case sensitivity when using filter operations with a wildcard.
+                 *     Setting this true means that an SQL `like` statement is used, and false
+                 *     means `ilike` is used. */
+                case_sensitive?: boolean;
                 /** @description Fetch the current state of objects in storage.
                  *     This ensures that only `Created` events which represent current
                  *     objects in storage are returned, and any historical `Deleted`
@@ -689,7 +713,7 @@ export interface operations {
                  *     fields, e.g. `attributes[attribute_id]=...`. This only deserializes
                  *     into string fields, and does not support other JSON types. E.g.
                  *     `attributes[attribute_id]=1` converts to `{ "attribute_id" = "1" }`
-                 *     rather than `{ "attribute_id" = 1 }`. */
+                 *     rather than `{ "attribute_id" = 1 }`. Supports wildcards. */
                 attributes?: components["schemas"]["Json"] | null;
             };
             header?: never;
@@ -743,6 +767,10 @@ export interface operations {
     count_s3_objects: {
         parameters: {
             query?: {
+                /** @description The case sensitivity when using filter operations with a wildcard.
+                 *     Setting this true means that an SQL `like` statement is used, and false
+                 *     means `ilike` is used. */
+                case_sensitive?: boolean;
                 /** @description Fetch the current state of objects in storage.
                  *     This ensures that only `Created` events which represent current
                  *     objects in storage are returned, and any historical `Deleted`
@@ -752,33 +780,33 @@ export interface operations {
                  *     in the following order: `Created` -> `Deleted` -> `Created`. Then setting
                  *     `?current_state=true` would return only the last `Created` event. */
                 current_state?: boolean | null;
-                /** @description Query by event type. */
-                event_type?: components["schemas"]["EventType"] | null;
-                /** @description Query by bucket. */
-                bucket?: string | null;
-                /** @description Query by key. */
-                key?: string | null;
-                /** @description Query by version_id. */
-                version_id?: string | null;
-                /** @description Query by date. */
-                date?: components["schemas"]["DateTimeWithTimeZone"] | null;
+                /** @description Query by event type. Supports wildcards. */
+                event_type?: components["schemas"]["Wildcard"];
+                /** @description Query by bucket. Supports wildcards. */
+                bucket?: components["schemas"]["Wildcard"] | null;
+                /** @description Query by key. Supports wildcards. */
+                key?: components["schemas"]["Wildcard"] | null;
+                /** @description Query by version_id. Supports wildcards. */
+                version_id?: components["schemas"]["Wildcard"] | null;
+                /** @description Query by date. Supports wildcards. */
+                date?: components["schemas"]["Wildcard"];
                 /** @description Query by size. */
                 size?: number | null;
                 /** @description Query by the sha256 checksum. */
                 sha256?: string | null;
-                /** @description Query by the last modified date. */
-                last_modified_date?: components["schemas"]["DateTimeWithTimeZone"] | null;
+                /** @description Query by the last modified date. Supports wildcards. */
+                last_modified_date?: components["schemas"]["Wildcard"];
                 /** @description Query by the e_tag. */
                 e_tag?: string | null;
-                /** @description Query by the storage class. */
-                storage_class?: components["schemas"]["StorageClass"] | null;
+                /** @description Query by the storage class. Supports wildcards. */
+                storage_class?: components["schemas"]["Wildcard"];
                 /** @description Query by the object delete marker. */
                 is_delete_marker?: boolean | null;
                 /** @description Query by JSON attributes. Supports nested syntax to access inner
                  *     fields, e.g. `attributes[attribute_id]=...`. This only deserializes
                  *     into string fields, and does not support other JSON types. E.g.
                  *     `attributes[attribute_id]=1` converts to `{ "attribute_id" = "1" }`
-                 *     rather than `{ "attribute_id" = 1 }`. */
+                 *     rather than `{ "attribute_id" = 1 }`. Supports wildcards. */
                 attributes?: components["schemas"]["Json"] | null;
             };
             header?: never;
