@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { components } from '@/api/types/metadata';
 import { Table } from '@/components/tables';
 import { Column } from '@/components/tables/Table';
-import { classNames } from '@/utils/utils';
+import { classNames } from '@/utils/commonUtils';
 
 export const SubjectBasedLibraryTable = () => {
   const { subjectId } = useParams();

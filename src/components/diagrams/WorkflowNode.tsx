@@ -1,9 +1,9 @@
 import { ReactNode, FC } from 'react';
 import { Handle, HandleProps, type NodeProps } from '@xyflow/react';
-import { StatusIcon } from '@/components/common/statusIcon';
+import { StatusCircleIcon } from '@/components/common/statusIcon';
 
 import { WorkflowNodeBackground, WORKFLOW_CLOUD } from '@/utils/workflows';
-import { classNames } from '@/utils/utils';
+import { classNames } from '@/utils/commonUtils';
 
 interface WorkflowNodeProps extends NodeProps {
   data: {
@@ -20,7 +20,7 @@ interface WorkflowNodeProps extends NodeProps {
 
 // func tp pick up teh color from tehe data.type
 
-const WorkflowNode: FC<WorkflowNodeProps> = ({ data, positionAbsoluteX, positionAbsoluteY }) => {
+const WorkflowNode: FC<WorkflowNodeProps> = ({ data }) => {
   const backgroundColor = WorkflowNodeBackground[WORKFLOW_CLOUD[data.type]];
 
   // console.log('WorkflowNode:', data, positionAbsoluteX, positionAbsoluteY, backgroundColor);
@@ -32,7 +32,7 @@ const WorkflowNode: FC<WorkflowNodeProps> = ({ data, positionAbsoluteX, position
           {data.title}
         </div>
         <div className='flex items-center px-4 py-1 p-2 '>
-          <StatusIcon status={data.detail.status} className='text-lg' />
+          <StatusCircleIcon status={data.detail.status} className='text-lg' />
           <div className='pl-2 pr-4 max-w-[200px]'>
             <div className='text-lg'>{data.detail?.status}</div>
             <span className='text-gray-500'>{data.detail?.description}</span>

@@ -1,7 +1,7 @@
 import { PropsWithChildren, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { Card } from '../cards';
+import { Card } from '@/components/common/cards';
 import { SpinnerWithText } from '@/components/common/spinner';
 import { DetailedErrorBoundary } from '@/components/common/error';
 import { LibrarySideNavBar } from './components/LibrarySideNavBar';

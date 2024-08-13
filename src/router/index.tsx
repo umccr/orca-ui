@@ -3,11 +3,14 @@ import { Routes, Route, Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { useUserContext } from '@/context/UserContext';
 
 const SignInPage = lazy(() => import('@/pages/SignInPage'));
-const Sequences = lazy(() => import('@/pages/Sequences'));
+const Sequence = lazy(() => import('@/pages/Runs/sequence'));
+const Library = lazy(() => import('@/pages/Runs/library'));
+const Workflow = lazy(() => import('@/pages/Runs/workflow'));
 
 import MainLayout from '@/components/layouts/MainLayout';
 import { LabRouter } from './LabRouter';
 import { DetailedErrorBoundary } from '@/components/common/error';
+import RunsModuleLayout from '@/components/layouts/RunsModuleLayout';
 
 export default function AppRoutes() {
   const isUserSignedIn = useUserContext().isAuth;
@@ -38,7 +41,19 @@ export default function AppRoutes() {
       >
         <Route index element={<Navigate to='lab' />} />
         <Route path='lab/*' element={<LabRouter />} />
-        <Route path='sequences' element={<Sequences />} />
+        <Route
+          path='runs'
+          element={
+            <RunsModuleLayout>
+              <Outlet />
+            </RunsModuleLayout>
+          }
+        >
+          <Route index element={<Navigate to='sequence' />} />
+          <Route path='sequence' element={<Sequence />} />
+          <Route path='library' element={<Library />} />
+          <Route path='workflow' element={<Workflow />} />
+        </Route>
         <Route path='*' element={<div>Path not found/implemented!</div>} />
       </Route>
     </Routes>

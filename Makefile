@@ -3,7 +3,7 @@
 # Default from OrcaBus API
 # https://github.com/umccr/orcabus#running-api-locally
 
-VITE_METADATA_MANAGER_URL ?= http://localhost:8000
+VITE_METADATA_MANAGER_URL ?= http://localhost:8100
 VITE_WORKFLOW_MANAGER_URL ?= http://localhost:8200
 VITE_SEQUENCE_RUN_MANAGER_URL ?= http://localhost:8300
 VITE_FILE_MANAGER_URL ?= http://localhost:8400

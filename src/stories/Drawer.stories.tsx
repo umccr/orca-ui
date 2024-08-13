@@ -18,7 +18,6 @@ type Story = StoryObj<typeof meta>;
 
 export const SimpleDrawer: Story = {
   render: () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     // const [isOpen, setIsOpen] = useState<boolean>(false);
 
     // function open() {

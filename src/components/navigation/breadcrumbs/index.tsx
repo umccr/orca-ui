@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
-import { classNames } from '@/utils/utils';
+import { classNames } from '@/utils/commonUtils';
 import { FC } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 

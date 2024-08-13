@@ -6,6 +6,7 @@ const config = {
   apiEndpoint: {
     metadata: import.meta.env.VITE_METADATA_URL,
     workflow: import.meta.env.VITE_WORKFLOW_URL,
+    sequenceRun: import.meta.env.VITE_SEQUENCE_RUN_URL,
     file: import.meta.env.VITE_FILE_URL,
   },
   cognito: {

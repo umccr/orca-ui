@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { classNames } from '@/utils/utils';
+import { classNames } from '@/utils/commonUtils';
 
 export type CardProps = {
   className?: string;

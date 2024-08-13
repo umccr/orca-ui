@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { classNames } from '@/utils/utils';
+import { classNames } from '@/utils/commonUtils';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import Pagination, { PaginationProps } from './Pagination';
 
@@ -69,8 +69,6 @@ const Table: FC<TableProps> = ({
           {tableDescription && <p className='mt-2 text-sm text-gray-700'>{tableDescription}</p>}
         </div>
       </div>
-
-      {paginationProps && <Pagination {...paginationProps} />}
 
       <div className='mt-4 flow-root'>
         <div className='overflow-x-auto '>
@@ -150,6 +148,8 @@ const Table: FC<TableProps> = ({
           </div>
         </div>
       </div>
+
+      {paginationProps && <Pagination {...paginationProps} />}
     </div>
   );
 };

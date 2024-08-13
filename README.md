@@ -14,33 +14,50 @@ We utilize [OpenAPI Typescript](https://openapi-ts.dev/) to generate TypeScript 
 make generate-openapi-types
 ```
 
-## Running locally
+## Running Frontend locally
 
 Prerequisite
 
-```sh
-pre-commit --version
-pre-commit 3.7.0
+- Node.js with Yarn
+- Docker (for API run locally)
+- Active AWS SSO login session (e.g. `aws sso login --profile dev && export AWS_PROFILE=dev`)
 
-node --version
-v20.9.0
+```sh
+$ node --version
+v20.15.0
 
 #  run 'corepack enable' to activate corepack
-corepack -v
+$ corepack -v
 0.20.0
 ```
 
-Install the dependencies
+Install the dependencies (precommit will be installed)
 
 ```sh
-make install
+$ make install
+
+$ pre-commit --version
+pre-commit 3.7.0
 ```
 
-Start Development Server
+Start Front-end Development Server
 
 ```sh
-yarn dev
+make start
 ```
+
+## Run Orcabus API Locally
+
+For Run Orcabus API Locally, please refer [Running API Locally](https://github.com/umccr/orcabus?tab=readme-ov-file#running-api-locally)
+
+The APIs will run on `localhost` with the following port assignments:
+
+| Microservice         | Local Endpoint          |
+| -------------------- | ----------------------- |
+| Metadata Manager     | <http://localhost:8100> |
+| Workflow Manager     | <http://localhost:8200> |
+| Sequence Run Manager | <http://localhost:8300> |
+| File Manager         | <http://localhost:8400> |
 
 ## Deployment
 

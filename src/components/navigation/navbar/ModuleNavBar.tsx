@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { classNames } from '@/utils/utils';
+import { classNames } from '@/utils/commonUtils';
 import { FC } from 'react';
 
 export interface NavigationChildrenItem {
@@ -8,7 +8,7 @@ export interface NavigationChildrenItem {
 }
 
 export interface NavigationItem {
-  name?: string;
+  title?: string;
   children: NavigationChildrenItem[];
 }
 
@@ -19,13 +19,15 @@ export interface ModuleNavbarProps {
 const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation }) => {
   const location = useLocation();
   return (
-    <div className='flex grow-0 flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white min-w-40'>
+    <div className='flex grow-0 flex-col gap-y-5 overflow-y-auto  bg-white min-w-40'>
       <nav className='flex flex-1 flex-col'>
         <ul role='list' className='flex flex-1 flex-col space-y-1 px-1'>
           {navigation.map((item, index) => (
             <li key={index}>
-              {item.name && (
-                <div className='pt-6 pb-3 pl-5 pr-6 text-xl font-medium'>{item.name}</div>
+              {item.title ? (
+                <div className='pt-3 pb-3 pl-5 pr-6 text-xl font-medium'>{item.title}</div>
+              ) : (
+                <div className='pb-3'></div>
               )}
 
               {item.children.map((item) => (

@@ -3,7 +3,7 @@ import { signInWithRedirect } from 'aws-amplify/auth';
 import { Navigate } from 'react-router-dom';
 import { useUserContext } from '@/context/UserContext';
 // import Card from '@mui/material/Card';
-import { Card } from '@/components/layouts/cards';
+import { Card } from '@/components/common/cards';
 // import Stack from '@mui/material/Stack';
 // import Button from '@mui/material/Button';
 import { createApi } from 'unsplash-js';
@@ -57,7 +57,7 @@ function SignInContainer() {
       <Button
         onClick={() => loggingIn()}
         // style={{ width: '100%', background: '#0E297A' }}
-        className='w-full bg-regal-blue text-center'
+        className='w-full bg-regal-blue text-center focus:ring-0'
       >
         {isLoading ? (
           <>
@@ -77,7 +77,7 @@ function SignInContainer() {
       <Card className='w-[40rem] shadow-inner-lg bg-opacity-10 bg-white backdrop-blur-lg p-5 border border-transparent  rounded-lg'>
         {header}
         <div style={{ textAlign: 'justify', color: 'white' }}>
-          <h1 style={{ fontSize: '2em', textAlign: 'center' }}>UMCCR Status Page</h1>
+          <h1 style={{ fontSize: '2em', textAlign: 'center' }}>UMCCR Orcabus</h1>
           <p className='m-2' style={{ lineHeight: '1.5' }}>
             Led by Professor Sean Grimmond, UMCCR aims to foster innovation and integration in
             cancer care, research, education and training to achieve a world-leading cancer centre
