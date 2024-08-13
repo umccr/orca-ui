@@ -16,14 +16,11 @@ type UseQueryOptions<T> = ParamsOption<T> &
     };
   };
 
-const workflowPath = '/wfm/v1/workflow/';
-export function useWorkflowModel({
-  params,
-  reactQuery,
-}: UseQueryOptions<paths[typeof workflowPath]['get']>) {
+const filePath = '/api/v1/object/';
+export function useFileObject({ params, reactQuery }: UseQueryOptions<Record<string, string>>) {
   return useSuspenseQuery({
     ...reactQuery,
-    queryKey: [workflowPath, params],
+    queryKey: [filePath, params],
     queryFn: async ({ signal }) => {
       // const { data } = await client.GET(workflowPath, {
       //   params,
@@ -37,37 +34,6 @@ export function useWorkflowModel({
         },
         pagination: {
           count: 3,
-          page: 1,
-          rowsPerPage: 10,
-        },
-        results: [],
-      };
-      return data;
-    },
-  });
-}
-
-const workflowrunPath = '/wfm/v1/workflowrun/';
-export function useWorkflowrunModel({
-  params,
-  reactQuery,
-}: UseQueryOptions<paths[typeof workflowrunPath]['get']>) {
-  return useSuspenseQuery({
-    ...reactQuery,
-    queryKey: [workflowrunPath, params],
-    queryFn: async ({ signal }) => {
-      // const { data } = await client.GET(workflowPath, {
-      //   params,
-      //   signal, // allows React Query to cancel request
-      // });
-
-      const data = {
-        links: {
-          next: null,
-          previous: null,
-        },
-        pagination: {
-          count: 2,
           page: 1,
           rowsPerPage: 10,
         },

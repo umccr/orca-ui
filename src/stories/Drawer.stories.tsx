@@ -1,11 +1,11 @@
-import { InfoDrawer } from '@/components/common/drawers';
+import { Drawer } from '@/components/common/drawers';
 // import { Button } from "@/components/common/buttons";
 // import { useState } from "react";
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta = {
   title: 'Common/Drawers',
-  component: InfoDrawer,
+  component: Drawer,
   parameters: {
     layout: 'centered',
   },
@@ -36,13 +36,13 @@ export const SimpleDrawer: Story = {
     return (
       <>
         {/* <Button onClick={open}>Open drawer</Button> */}
-        <InfoDrawer
+        <Drawer
         // open={isOpen}
         // title='Text Drawer'
         // content='This is a simple alert drawer'
         // closeBtn={{ label: 'Close', onClick: close }}
         // confirmBtn={{ label: 'Confirm', onClick: confirm }}
-        ></InfoDrawer>
+        ></Drawer>
       </>
     );
   },

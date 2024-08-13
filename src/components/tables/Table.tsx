@@ -89,9 +89,9 @@ const Table: FC<TableProps> = ({
                           key={column.accessor}
                           scope='col'
                           className={classNames(
-                            'px-3 py-3.5 text-left text-sm font-semibold text-gray-900',
-                            index == 0 ? 'pl-4 sm:pl-6 lg:pl-8' : '',
-                            index == columns.length - 1 ? 'pr-4 sm:pr-6 lg:pr-8' : '',
+                            'px-3 py-3.5 text-left text-sm font-bold text-gray-900',
+                            index == 0 ? 'pl-4 sm:pl-6' : '',
+                            index == columns.length - 1 ? 'pr-4 sm:pr-6 ' : '',
                             stickyHeader
                               ? 'sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75'
                               : ''

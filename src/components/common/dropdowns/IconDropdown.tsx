@@ -25,7 +25,7 @@ const IconDropdown: FC<IconDropdownProps> = ({
     <Menu as='div' className='relative inline-block text-left'>
       <MenuButton
         className={classNames(
-          'flex items-center rounded-full bg-white text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100',
+          'flex items-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-magpie-light-50 data-[open]:bg-magpie-light-50 data-[open]:ring-2 data-[open]:ring-offset-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 focus:ring-offset-gray-100',
           className
         )}
       >
@@ -45,7 +45,9 @@ const IconDropdown: FC<IconDropdownProps> = ({
               <MenuItem disabled={item.disabled}>
                 <button
                   className={classNames(
-                    item.disabled ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                    item.disabled
+                      ? 'bg-gray-100 text-gray-900 cursor-not-allowed'
+                      : 'text-gray-700',
                     'group flex w-full px-4 py-2 text-left text-sm data-[focus]:bg-gray-100 data-[focus]:text-gray-900'
                   )}
                   onClick={item.onClick}

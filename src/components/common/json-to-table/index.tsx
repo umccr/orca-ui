@@ -8,7 +8,7 @@ const rowClassName = 'even:bg-gray-50';
 
 export const JsonToTable = ({ data }: Props) => {
   return (
-    <table className='border-y border-gray-50'>
+    <table className='w-full border-y border-gray-50'>
       <tbody>
         {Object.entries(data).map(([key, value]) => {
           if (Array.isArray(value)) {

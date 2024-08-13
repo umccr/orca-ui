@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
-const InfoDrawer = () => {
-  const [open, setOpen] = useState(true);
+interface DrawerProps {
+  defaultIsOpen?: boolean;
+}
 
+const Drawer: FC<DrawerProps> = ({ defaultIsOpen = true }) => {
+  const [isOpen, setIsOpen] = useState(defaultIsOpen);
   return (
-    <Dialog open={open} onClose={setOpen} className='relative z-10'>
+    <Dialog open={isOpen} onClose={setIsOpen} className='relative z-10'>
       <DialogBackdrop
         transition
         className='fixed inset-0 bg-magpie-light-75 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0'
@@ -28,7 +31,7 @@ const InfoDrawer = () => {
                     <div className='ml-3 flex h-7 items-center'>
                       <button
                         type='button'
-                        onClick={() => setOpen(false)}
+                        onClick={() => setIsOpen(false)}
                         className='relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
                       >
                         <span className='absolute -inset-2.5' />
@@ -48,4 +51,4 @@ const InfoDrawer = () => {
   );
 };
 
-export default InfoDrawer;
+export default Drawer;

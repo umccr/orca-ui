@@ -64,7 +64,7 @@ export const IgvViewer = ({ bucket, s3Key: key }: Props) => {
         <p className='inline-block align-middle mr-2'>Reference Genome:</p>
         <Dropdown
           className='w-full'
-          label={refGenome}
+          value={refGenome}
           items={genomes.map((g) => ({
             label: g.id,
             onClick: () => {

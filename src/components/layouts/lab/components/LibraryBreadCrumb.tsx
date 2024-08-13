@@ -1,11 +1,12 @@
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { classNames } from '@/utils/utils';
 import { FC } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { useMetadataFullLibraryModel } from '@/api/metadata';
 
 export const LibraryBreadCrumb: FC = () => {
-  const { libraryId } = useParams();
+  const { pathname } = useLocation();
+  const { libraryId, workflowType, portalRunId } = useParams();
   if (!libraryId) {
     throw new Error('No library id in URL path!');
   }
@@ -21,15 +22,34 @@ export const LibraryBreadCrumb: FC = () => {
   const subjectId = library.specimen.subject.internal_id;
 
   const libraryBreadCrumbProps = [
-    { name: 'lab', href: '/lab', isCurrent: false },
-    { name: 'subject', href: '/lab' },
+    { name: 'SUBJECT', href: '/lab', isCurrent: false },
     { name: subjectId ?? '-', href: `/lab/subject/${subjectId}`, isCurrent: false },
-    { name: 'library', href: '/lab', isCurrent: false },
-    { name: library.internal_id, href: `/lab/library/${library.internal_id}`, isCurrent: true },
+    { name: 'LIBRARY', href: '/lab', isCurrent: false },
+    {
+      name: library.internal_id,
+      href: `/lab/library/${library.internal_id}`,
+      isCurrent: library.internal_id ? pathname.endsWith(library.internal_id) : false,
+    },
   ];
 
+  if (workflowType) {
+    libraryBreadCrumbProps.push({
+      name: workflowType,
+      href: `/lab/library/${library.internal_id}/${workflowType}`,
+      isCurrent: pathname.endsWith(workflowType),
+    });
+
+    if (portalRunId) {
+      libraryBreadCrumbProps.push({
+        name: portalRunId,
+        href: `/lab/library/${library.internal_id}/${workflowType}/${portalRunId}`,
+        isCurrent: pathname.endsWith(portalRunId),
+      });
+    }
+  }
+
   return (
-    <nav className='flex mb-3' aria-label='Breadcrumb'>
+    <nav className='flex' aria-label='Breadcrumb'>
       <ol role='list' className='flex items-center space-x-2 -ml-2'>
         {libraryBreadCrumbProps.map((p, key) => (
           <li key={key}>
@@ -43,7 +63,7 @@ export const LibraryBreadCrumb: FC = () => {
               <Link
                 to={p.href}
                 className={classNames(
-                  'ml-2 text-sm uppercase font-medium hover:text-blue-700',
+                  'ml-2 text-sm font-medium hover:text-blue-700',
                   p.isCurrent ? 'text-blue-500' : 'text-grey-500'
                 )}
                 aria-current={p.isCurrent ? 'page' : undefined}

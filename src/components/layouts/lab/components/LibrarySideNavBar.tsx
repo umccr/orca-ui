@@ -11,7 +11,7 @@ export const LibrarySideNavBar = () => {
 
   const baseHref = `/lab/library/${libraryId}`;
 
-  const workflowRun = useWorkflowModel({
+  const workflow = useWorkflowModel({
     // Disable until libraryId annotation is added to the workflow model (below only return mock)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     params: { query: { libraryId: libraryId } as any },
@@ -26,7 +26,7 @@ export const LibrarySideNavBar = () => {
         },
         {
           name: 'Workflows',
-          children: workflowRun.results.map((wf) => ({
+          children: workflow.results.map((wf) => ({
             name: `${wf.workflowName}`,
             href: `${baseHref}/${wf.workflowName}`,
           })),

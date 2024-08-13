@@ -4,7 +4,7 @@ import { toast, ToastOptions } from 'react-toastify';
 export type Id = string | number;
 export interface MsgProps {
   title: string;
-  message: string;
+  message?: string;
 }
 export const Msg: FC<MsgProps> = ({ title, message }) => {
   return (
