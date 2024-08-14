@@ -4,14 +4,14 @@
  */
 
 export interface paths {
-    "/library/": {
+    "/api/v1/library/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["library_list"];
+        get: operations["api_v1_library_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -20,14 +20,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/library/{id}/": {
+    "/api/v1/library/{id}/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["library_retrieve"];
+        get: operations["api_v1_library_retrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -36,14 +36,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/library/{id}/full/": {
+    "/api/v1/library/{id}/full/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["library_full_retrieve"];
+        get: operations["api_v1_library_full_retrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -52,14 +52,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/library/full/": {
+    "/api/v1/library/full/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["library_full_list"];
+        get: operations["api_v1_library_full_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -68,14 +68,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/specimen/": {
+    "/api/v1/specimen/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["specimen_list"];
+        get: operations["api_v1_specimen_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -84,14 +84,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/specimen/{id}/": {
+    "/api/v1/specimen/{id}/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["specimen_retrieve"];
+        get: operations["api_v1_specimen_retrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -100,14 +100,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/subject/": {
+    "/api/v1/subject/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["subject_list"];
+        get: operations["api_v1_subject_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -116,14 +116,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/subject/{id}/": {
+    "/api/v1/subject/{id}/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["subject_retrieve"];
+        get: operations["api_v1_subject_retrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -132,14 +132,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/subject/{id}/full/": {
+    "/api/v1/subject/{id}/full/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["subject_full_list_2"];
+        get: operations["api_v1_subject_full_list_2"];
         put?: never;
         post?: never;
         delete?: never;
@@ -148,14 +148,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/subject/full/": {
+    "/api/v1/subject/full/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["subject_full_list"];
+        get: operations["api_v1_subject_full_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -402,7 +402,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    library_list: {
+    api_v1_library_list: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -430,7 +430,7 @@ export interface operations {
             };
         };
     };
-    library_retrieve: {
+    api_v1_library_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -452,7 +452,7 @@ export interface operations {
             };
         };
     };
-    library_full_retrieve: {
+    api_v1_library_full_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -474,52 +474,17 @@ export interface operations {
             };
         };
     };
-    library_full_list: {
+    api_v1_library_full_list: {
         parameters: {
             query?: {
-                assay?: string | null;
-                coverage?: number | null;
-                id?: number;
-                internal_id?: string | null;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
                 page?: number;
-                /** @description * `normal` - Normal
-                 *     * `tumor` - Tumor
-                 *     * `negative-control` - Negative Control */
-                phenotype?: "normal" | "tumor" | "negative-control" | "" | null;
-                /** @description * `very-poor` - VeryPoor
-                 *     * `poor` - Poor
-                 *     * `good` - Good
-                 *     * `borderline` - Borderline */
-                quality?: "very-poor" | "poor" | "good" | "borderline" | "" | null;
                 /** @description Number of results to return per page. */
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
-                specimen?: number | null;
-                /** @description * `10X` - Ten X
-                 *     * `BiModal` - Bimodal
-                 *     * `ctDNA` - Ct Dna
-                 *     * `ctTSO` - Ct Tso
-                 *     * `exome` - Exome
-                 *     * `MeDIP` - Me Dip
-                 *     * `Metagenm` - Metagenm
-                 *     * `MethylSeq` - Methyl Seq
-                 *     * `TSO-DNA` - TSO_DNA
-                 *     * `TSO-RNA` - TSO_RNA
-                 *     * `WGS` - Wgs
-                 *     * `WTS` - Wts
-                 *     * `other` - Other */
-                type?: "10X" | "BiModal" | "ctDNA" | "ctTSO" | "exome" | "MeDIP" | "Metagenm" | "MethylSeq" | "TSO-DNA" | "TSO-RNA" | "WGS" | "WTS" | "other" | "" | null;
-                /** @description * `clinical` - Clinical
-                 *     * `research` - Research
-                 *     * `qc` - Qc
-                 *     * `control` - Control
-                 *     * `bcl` - Bcl
-                 *     * `manual` - Manual */
-                workflow?: "clinical" | "research" | "qc" | "control" | "bcl" | "manual" | "" | null;
             };
             header?: never;
             path?: never;
@@ -537,7 +502,7 @@ export interface operations {
             };
         };
     };
-    specimen_list: {
+    api_v1_specimen_list: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -565,7 +530,7 @@ export interface operations {
             };
         };
     };
-    specimen_retrieve: {
+    api_v1_specimen_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -587,7 +552,7 @@ export interface operations {
             };
         };
     };
-    subject_list: {
+    api_v1_subject_list: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -615,7 +580,7 @@ export interface operations {
             };
         };
     };
-    subject_retrieve: {
+    api_v1_subject_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -637,7 +602,7 @@ export interface operations {
             };
         };
     };
-    subject_full_list_2: {
+    api_v1_subject_full_list_2: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -668,11 +633,9 @@ export interface operations {
             };
         };
     };
-    subject_full_list: {
+    api_v1_subject_full_list: {
         parameters: {
             query?: {
-                id?: number;
-                internal_id?: string | null;
                 /** @description Filter the subjects that contain this particular internal_id in the Library model. */
                 library_internal_id?: string;
                 /** @description Which field to use when ordering the results. */

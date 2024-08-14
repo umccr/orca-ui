@@ -16,7 +16,7 @@ type UseQueryOptions<T> = ParamsOption<T> &
     };
   };
 
-const metadataFullSubjectPath = '/subject/full/';
+const metadataFullSubjectPath = '/api/v1/subject/full/';
 export function useMetadataFullSubjectModel({
   params,
   reactQuery,
@@ -34,7 +34,7 @@ export function useMetadataFullSubjectModel({
   });
 }
 
-const metadataFullLibraryPath = '/library/full/';
+const metadataFullLibraryPath = '/api/v1/library/full/';
 export function useMetadataFullLibraryModel({
   params,
   reactQuery,

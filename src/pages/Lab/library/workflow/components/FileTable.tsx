@@ -7,13 +7,17 @@ import dayjs from 'dayjs';
 import { IconDropdown } from '@/components/common/dropdowns';
 import toaster from '@/components/common/toaster';
 import { ToastContainer } from 'react-toastify';
-import { Drawer } from '@/components/common/drawers';
+import { getFilenameFromKey } from '@/utils/commonUtils';
+import { FilePreviewDrawer } from './FilePreviewDrawer';
+// import { FilePreviewDrawer } from './FilePreviewDrawer';
 
 export const FileTable = ({ portalRunId }: { portalRunId: string }) => {
   const [page, setPage] = useState<number>(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const data = useFileObject({
-    params: { query: { page: page, portalRunId: portalRunId } },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    params: { query: { page: page, rowsPerPage: rowsPerPage, portalRunId: portalRunId } as any },
   }).data;
 
   return (
@@ -21,7 +25,7 @@ export const FileTable = ({ portalRunId }: { portalRunId: string }) => {
       columns={tableColumn}
       tableData={data.results.map((item) => ({
         ...item,
-        actionButton: { s3Key: item.key, bucket: item.bucket },
+        objectInfo: { s3Key: item.key, bucket: item.bucket },
       }))}
       paginationProps={{
         totalCount: data.pagination.count ?? 0,
@@ -31,16 +35,12 @@ export const FileTable = ({ portalRunId }: { portalRunId: string }) => {
           setPage(n);
         },
         countUnit: 'files',
+        setRowsPerPage: (n) => {
+          setRowsPerPage(n);
+        },
       }}
     />
   );
-};
-
-/**
- * Extract filename from S3 key
- */
-const getFilenameFromKey = (key: string): string => {
-  return key.split('/').pop() || '';
 };
 
 /**
@@ -80,8 +80,17 @@ const tableColumn: Column[] = [
     },
   },
   {
+    header: '',
+    accessor: 'objectInfo',
+    cell: (data: unknown) => {
+      const { s3Key, bucket } = data as { s3Key: string; bucket: string };
+
+      return <FilePreviewDrawer s3Key={s3Key} bucket={bucket} />;
+    },
+  },
+  {
     header: 'Action button',
-    accessor: 'actionButton',
+    accessor: 'objectInfo',
     cell: (data: unknown) => {
       const { s3Key, bucket } = data as { s3Key: string; bucket: string };
       return <DataActionButton s3Key={s3Key} bucket={bucket} />;
@@ -106,11 +115,8 @@ const tableColumn: Column[] = [
 const DataActionButton = ({ s3Key, bucket }: { s3Key: string; bucket: string }) => {
   const s3Uri = `s3://${bucket}/${s3Key}`;
 
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-
   return (
     <>
-      {isPreviewOpen && <Drawer isOpen={isPreviewOpen} setIsOpen={() => setIsPreviewOpen(false)} />}
       <ToastContainer />
       <IconDropdown
         className='size-8 items-center justify-center'
@@ -123,11 +129,10 @@ const DataActionButton = ({ s3Key, bucket }: { s3Key: string; bucket: string }) 
             },
           },
           {
-            label: 'Generate Download Link',
+            label: 'Generate download link',
             onClick: () => console.log('download link'),
             disabled: true,
           },
-          { label: 'Preview', onClick: () => setIsPreviewOpen(true) },
         ]}
         BtnIcon={Bars3Icon}
       />

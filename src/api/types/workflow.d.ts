@@ -4,14 +4,14 @@
  */
 
 export interface paths {
-    "/wfm/v1/payload/": {
+    "/api/v1/payload/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["wfm_v1_payload_list"];
+        get: operations["api_v1_payload_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -20,14 +20,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/wfm/v1/payload/{id}/": {
+    "/api/v1/payload/{id}/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["wfm_v1_payload_retrieve"];
+        get: operations["api_v1_payload_retrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -36,14 +36,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/wfm/v1/workflow/": {
+    "/api/v1/workflow/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["wfm_v1_workflow_list"];
+        get: operations["api_v1_workflow_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -52,14 +52,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/wfm/v1/workflow/{id}/": {
+    "/api/v1/workflow/{id}/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["wfm_v1_workflow_retrieve"];
+        get: operations["api_v1_workflow_retrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -68,14 +68,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/wfm/v1/workflowrun/": {
+    "/api/v1/workflowrun/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["wfm_v1_workflowrun_list"];
+        get: operations["api_v1_workflowrun_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -84,14 +84,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/wfm/v1/workflowrun/{id}/": {
+    "/api/v1/workflowrun/{id}/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["wfm_v1_workflowrun_retrieve"];
+        get: operations["api_v1_workflowrun_retrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -166,26 +166,26 @@ export interface components {
         };
         PayloadModel: {
             readonly id: number;
-            payload_ref_id: string;
+            payloadRefId: string;
             version: string;
             data: unknown;
         };
         WorkflowModel: {
             readonly id: number;
-            workflow_name: string;
-            workflow_version: string;
-            execution_engine: string;
-            execution_engine_pipeline_id: string;
-            approval_state: string;
+            workflowName: string;
+            workflowVersion: string;
+            executionEngine: string;
+            executionEnginePipelineId: string;
+            approvalState: string;
         };
         WorkflowRunModel: {
             readonly id: number;
-            portal_run_id: string;
+            portalRunId: string;
             status: string;
             /** Format: date-time */
             timestamp: string;
-            execution_id?: string | null;
-            workflow_run_name?: string | null;
+            executionId?: string | null;
+            workflowRunName?: string | null;
             comment?: string | null;
             workflow?: number | null;
             payload?: number | null;
@@ -199,7 +199,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    wfm_v1_payload_list: {
+    api_v1_payload_list: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -227,7 +227,7 @@ export interface operations {
             };
         };
     };
-    wfm_v1_payload_retrieve: {
+    api_v1_payload_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -249,7 +249,7 @@ export interface operations {
             };
         };
     };
-    wfm_v1_workflow_list: {
+    api_v1_workflow_list: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -277,7 +277,7 @@ export interface operations {
             };
         };
     };
-    wfm_v1_workflow_retrieve: {
+    api_v1_workflow_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -299,7 +299,7 @@ export interface operations {
             };
         };
     };
-    wfm_v1_workflowrun_list: {
+    api_v1_workflowrun_list: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -327,7 +327,7 @@ export interface operations {
             };
         };
     };
-    wfm_v1_workflowrun_retrieve: {
+    api_v1_workflowrun_retrieve: {
         parameters: {
             query?: never;
             header?: never;

@@ -44,3 +44,10 @@ export function cleanObject(obj: Record<string, any>) {
     {} as Record<string, any>
   );
 }
+
+/**
+ * Extract filename from S3 key
+ */
+export const getFilenameFromKey = (key: string): string => {
+  return key.split('/').pop() || '';
+};

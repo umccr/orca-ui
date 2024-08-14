@@ -16,7 +16,7 @@ generate-openapi-types:
 	@yarn run -B openapi-typescript ${VITE_METADATA_MANAGER_URL}/schema/openapi.json -o ./src/api/types/metadata.d.ts
 	@yarn run -B openapi-typescript ${VITE_SEQUENCE_RUN_MANAGER_URL}/schema/openapi.json -o ./src/api/types/sequence-run.d.ts
 	@yarn run -B openapi-typescript ${VITE_WORKFLOW_MANAGER_URL}/schema/openapi.json -o ./src/api/types/workflow.d.ts
-	@yarn run -B openapi-typescript ${VITE_FILE_MANAGER_URL}/api_docs/openapi.json -o ./src/api/types/file.d.ts
+	@yarn run -B openapi-typescript ${VITE_FILE_MANAGER_URL}/schema/openapi.json -o ./src/api/types/file.d.ts
 
 start:
 	@yarn run start

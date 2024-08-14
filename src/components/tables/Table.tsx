@@ -84,7 +84,7 @@ const Table: FC<TableProps> = ({
                     {columns &&
                       columns.map((column, index) => (
                         <th
-                          key={column.accessor}
+                          key={`${column.accessor}-${index}`}
                           scope='col'
                           className={classNames(
                             'px-3 py-3.5 text-left text-sm font-bold text-gray-900',
@@ -128,7 +128,7 @@ const Table: FC<TableProps> = ({
                       {columns &&
                         columns.map((column, index) => (
                           <td
-                            key={column.accessor}
+                            key={`${column.accessor}-${index}`}
                             className={classNames(
                               'whitespace-nowrap py-4 px-3 text-sm font-medium text-gray-900',
                               index == 0 ? 'pl-4 sm:pl-6' : '',

@@ -21,15 +21,16 @@ export const LibrarySideNavBar = () => {
     <ModuleNavbar
       navigation={[
         {
-          name: 'Library',
+          title: 'Library',
           children: [{ name: 'Overview', href: `${baseHref}` }],
         },
         {
-          name: 'Workflows',
-          children: workflow.results.map((wf) => ({
-            name: `${wf.workflowName}`,
-            href: `${baseHref}/${wf.workflowName}`,
-          })),
+          title: 'Workflows',
+          children:
+            workflow?.results.map((wf) => ({
+              name: `${wf.workflowName}`,
+              href: `${baseHref}/${wf.workflowName}`,
+            })) ?? [],
         },
       ]}
     />

@@ -5,10 +5,11 @@ import LocationBreadcrumb from '@/components/navigation/breadcrumbs';
 import { Card } from '@/components/common/cards';
 import { SpinnerWithText } from '@/components/common/spinner';
 import { DetailedErrorBoundary } from '@/components/common/error';
+import MainArea from '../MainArea';
 
 const SubjectLayout = ({ children }: PropsWithChildren) => {
   return (
-    <div className='py-4 px-5'>
+    <MainArea>
       <LocationBreadcrumb />
       <Card>
         <Suspense fallback={<SpinnerWithText text='Loading subject page ...' />}>
@@ -17,7 +18,7 @@ const SubjectLayout = ({ children }: PropsWithChildren) => {
           </DetailedErrorBoundary>
         </Suspense>
       </Card>
-    </div>
+    </MainArea>
   );
 };
 

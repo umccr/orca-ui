@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 
 export interface ButtonProps {
-  type?: 'primary' | 'secondary' | 'light' | 'green' | 'red' | 'yellow';
+  type?: 'primary' | 'secondary' | 'light' | 'green' | 'red' | 'yellow' | 'gray';
   size?: 'sm' | 'md' | 'lg';
   rounded?: boolean;
   children: ReactNode;
@@ -52,6 +52,10 @@ const Button: FC<ButtonProps> = ({
       ' hover:bg-yellow-500' +
       ' focus:ring-4 focus:ring-yellow-300' +
       ' dark:focus:ring-yellow-900',
+    gray:
+      'text-gray-400' +
+      ' hover:text-gray-600 hover:bg-magpie-light-50' +
+      ' focus:ring-2 focus:ring-blue-500/50',
   };
 
   const sizeStyles: { [key: string]: string } = {

@@ -1,6 +1,6 @@
 import config from '@/config';
 import createClient, { ParamsOption, RequestBodyOption } from 'openapi-fetch';
-import type { paths } from './types/workflow';
+import type { paths } from './types/file';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { authMiddleware } from './utils';
 
@@ -16,11 +16,14 @@ type UseQueryOptions<T> = ParamsOption<T> &
     };
   };
 
-const filePath = '/api/v1/object/';
-export function useFileObject({ params, reactQuery }: UseQueryOptions<Record<string, string>>) {
+const s3Path = '/api/v1/s3';
+export function useFileObject({
+  params,
+  reactQuery,
+}: UseQueryOptions<paths[typeof s3Path]['get']>) {
   return useSuspenseQuery({
     ...reactQuery,
-    queryKey: [filePath, params],
+    queryKey: [s3Path, params],
     queryFn: async ({ signal }) => {
       // const { data } = await client.GET(workflowPath, {
       //   params,

@@ -34,13 +34,15 @@ export default function LibraryWorkflowPage() {
             onClick={() => setIsOpenWorkflowDetails(true)}
           >
             {wf.workflowVersion}
-            <Dialog
-              open={isOpenWorkflowDetails}
-              title='Workflow Details'
-              content={<JsonToTable data={wf} />}
-              onClose={() => setIsOpenWorkflowDetails(false)}
-              closeBtn={{ label: 'Close', onClick: () => setIsOpenWorkflowDetails(false) }}
-            />
+            {isOpenWorkflowDetails && (
+              <Dialog
+                open={isOpenWorkflowDetails}
+                title='Workflow Details'
+                content={<JsonToTable data={wf} />}
+                onClose={() => setIsOpenWorkflowDetails(false)}
+                closeBtn={{ label: 'Close', onClick: () => setIsOpenWorkflowDetails(false) }}
+              />
+            )}
           </div>
         </div>
         <PortalRunIdDropdown />

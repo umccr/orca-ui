@@ -15,7 +15,11 @@ export const PortalRunIdDropdown = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     params: { query: { libraryId: libraryId, ordering: '-portalRunId' } as any },
     // sort by desc portalRunId and index first element to get latest run
-  }).data.results;
+  }).data?.results;
+
+  if (!workflowRun) {
+    throw new Error('No workflow run found!');
+  }
 
   if (!portalRunId) {
     return <Navigate to={`${workflowRun[0].portalRunId}`} />;

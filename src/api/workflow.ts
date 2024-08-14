@@ -16,7 +16,7 @@ type UseQueryOptions<T> = ParamsOption<T> &
     };
   };
 
-const workflowPath = '/wfm/v1/workflow/';
+const workflowPath = '/api/v1/workflow/';
 export function useWorkflowModel({
   params,
   reactQuery,
@@ -47,7 +47,7 @@ export function useWorkflowModel({
   });
 }
 
-const workflowrunPath = '/wfm/v1/workflowrun/';
+const workflowrunPath = '/api/v1/workflowrun/';
 export function useWorkflowrunModel({
   params,
   reactQuery,
@@ -56,7 +56,7 @@ export function useWorkflowrunModel({
     ...reactQuery,
     queryKey: [workflowrunPath, params],
     queryFn: async ({ signal }) => {
-      // const { data } = await client.GET(workflowPath, {
+      // const { data } = await client.GET(workflowrunPath, {
       //   params,
       //   signal, // allows React Query to cancel request
       // });

@@ -14,7 +14,8 @@ export const SubjectBasedLibraryTable = () => {
   }
 
   const fullSubjectModel = useMetadataFullSubjectModel({
-    params: { query: { internal_id: subjectId } },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    params: { query: { internal_id: subjectId } as any },
   });
 
   const data = fullSubjectModel.data;

@@ -4,14 +4,14 @@
  */
 
 export interface paths {
-    "/srm/v1/sequence/": {
+    "/api/v1/sequence/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["srm_v1_sequence_list"];
+        get: operations["api_v1_sequence_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -20,14 +20,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/srm/v1/sequence/{id}/": {
+    "/api/v1/sequence/{id}/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["srm_v1_sequence_retrieve"];
+        get: operations["api_v1_sequence_retrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -94,7 +94,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    srm_v1_sequence_list: {
+    api_v1_sequence_list: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -122,7 +122,7 @@ export interface operations {
             };
         };
     };
-    srm_v1_sequence_retrieve: {
+    api_v1_sequence_retrieve: {
         parameters: {
             query?: never;
             header?: never;

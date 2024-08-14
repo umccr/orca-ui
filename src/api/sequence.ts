@@ -16,7 +16,7 @@ type UseQueryOptions<T> = ParamsOption<T> &
     };
   };
 
-const sequenceRunDataPath = '/srm/v1/sequence/';
+const sequenceRunDataPath = '/api/v1/sequence/';
 export function useSequenceRunDataModel({
   params,
   reactQuery,

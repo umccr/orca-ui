@@ -12,7 +12,8 @@ export const LibraryBreadCrumb: FC = () => {
   }
 
   const fullLibraryModel = useMetadataFullLibraryModel({
-    params: { query: { internal_id: libraryId } },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    params: { query: { internal_id: libraryId } as any },
   }).data;
 
   if (!fullLibraryModel || fullLibraryModel.results.length == 0) {
