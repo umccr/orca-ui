@@ -9,7 +9,8 @@ import toaster from '@/components/common/toaster';
 import { ToastContainer } from 'react-toastify';
 import { getFilenameFromKey } from '@/utils/commonUtils';
 import { FilePreviewDrawer } from './FilePreviewDrawer';
-// import { FilePreviewDrawer } from './FilePreviewDrawer';
+import { Dialog } from '@/components/dialogs';
+import { JsonToTable } from '@/components/common/json-to-table';
 
 export const FileTable = ({ portalRunId }: { portalRunId: string }) => {
   const [page, setPage] = useState<number>(1);
@@ -24,8 +25,9 @@ export const FileTable = ({ portalRunId }: { portalRunId: string }) => {
     <Table
       columns={tableColumn}
       tableData={data.results.map((item) => ({
-        ...item,
-        objectInfo: { s3Key: item.key, bucket: item.bucket },
+        lastModifiedDate: item.lastModifiedDate,
+        size: item.size,
+        fileRecord: item,
       }))}
       paginationProps={{
         totalCount: data.pagination.count ?? 0,
@@ -74,26 +76,26 @@ const humanFileSize = (bytes: number): string => {
 const tableColumn: Column[] = [
   {
     header: 'Filename',
-    accessor: 'key',
+    accessor: 'fileRecord',
     cell: (data: unknown) => {
-      return <div>{getFilenameFromKey(data as string)}</div>;
+      const { key } = data as { key: string };
+      return <div>{getFilenameFromKey(key)}</div>;
     },
   },
   {
     header: '',
-    accessor: 'objectInfo',
+    accessor: 'fileRecord',
     cell: (data: unknown) => {
-      const { s3Key, bucket } = data as { s3Key: string; bucket: string };
+      const { key: s3Key, bucket } = data as { key: string; bucket: string };
 
       return <FilePreviewDrawer s3Key={s3Key} bucket={bucket} />;
     },
   },
   {
     header: 'Action button',
-    accessor: 'objectInfo',
+    accessor: 'fileRecord',
     cell: (data: unknown) => {
-      const { s3Key, bucket } = data as { s3Key: string; bucket: string };
-      return <DataActionButton s3Key={s3Key} bucket={bucket} />;
+      return <DataActionButton fileRecord={data as Record<string, string>} />;
     },
   },
   {
@@ -105,18 +107,29 @@ const tableColumn: Column[] = [
   },
   {
     header: 'Last Modified Date ',
-    accessor: 'last_modified_date',
+    accessor: 'lastModifiedDate',
     cell: (data: unknown) => {
       return <div className=''>{data ? dayjs(data as string).format('lll Z') : '-'}</div>;
     },
   },
 ];
 
-const DataActionButton = ({ s3Key, bucket }: { s3Key: string; bucket: string }) => {
+const DataActionButton = ({ fileRecord }: { fileRecord: Record<string, string> }) => {
+  const { key: s3Key, bucket } = fileRecord;
   const s3Uri = `s3://${bucket}/${s3Key}`;
 
+  const [isOpenRecordDetails, setIsOpenRecordDetails] = useState(false);
   return (
     <>
+      {isOpenRecordDetails && (
+        <Dialog
+          open={isOpenRecordDetails}
+          title='Record Details'
+          content={<JsonToTable data={fileRecord} />}
+          onClose={() => setIsOpenRecordDetails(false)}
+          closeBtn={{ label: 'Close', onClick: () => setIsOpenRecordDetails(false) }}
+        />
+      )}
       <ToastContainer />
       <IconDropdown
         className='size-8 items-center justify-center'
@@ -132,6 +145,12 @@ const DataActionButton = ({ s3Key, bucket }: { s3Key: string; bucket: string }) 
             label: 'Generate download link',
             onClick: () => console.log('download link'),
             disabled: true,
+          },
+          {
+            label: 'View record details',
+            onClick: () => {
+              setIsOpenRecordDetails(true);
+            },
           },
         ]}
         BtnIcon={Bars3Icon}

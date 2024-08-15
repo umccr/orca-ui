@@ -11,7 +11,7 @@ export const FilePreviewDrawer = ({ s3Key, bucket }: { s3Key: string; bucket: st
   return (
     <>
       <Button
-        className='!p-2 !m-0'
+        className='!p-2 !m-0 shadow-none'
         onClick={() => {
           setIsFilePreview(true);
         }}

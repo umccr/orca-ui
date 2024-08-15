@@ -25,7 +25,7 @@ const Drawer: FC<DrawerProps> = ({ isOpen, setIsOpen, title, dialogPanelClassNam
             <DialogPanel
               transition
               className={classNames(
-                'pointer-events-auto w-screen max-w-md transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700',
+                'pointer-events-auto w-screen max-w-screen-2xl transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700',
                 dialogPanelClassName ? dialogPanelClassName : ''
               )}
             >
