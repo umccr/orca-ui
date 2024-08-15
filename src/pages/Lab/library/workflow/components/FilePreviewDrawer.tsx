@@ -8,6 +8,7 @@ import { EyeIcon } from '@heroicons/react/24/outline';
 
 export const FilePreviewDrawer = ({ s3Key, bucket }: { s3Key: string; bucket: string }) => {
   const [isFilePreview, setIsFilePreview] = useState(false);
+
   return (
     <>
       <Button
@@ -25,7 +26,7 @@ export const FilePreviewDrawer = ({ s3Key, bucket }: { s3Key: string; bucket: st
         title={getFilenameFromKey(s3Key)}
         isOpen={isFilePreview}
         setIsOpen={() => setIsFilePreview(false)}
-        dialogPanelClassName='max-w-5xl'
+        dialogPanelClassName='!max-w-full'
         content={
           <DetailedErrorBoundary errorTitle='Unable to view file'>
             <FileViewer bucket={bucket} s3Key={s3Key} />

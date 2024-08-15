@@ -25,7 +25,7 @@ const Drawer: FC<DrawerProps> = ({ isOpen, setIsOpen, title, dialogPanelClassNam
             <DialogPanel
               transition
               className={classNames(
-                'pointer-events-auto w-screen max-w-screen-2xl transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700',
+                'pointer-events-auto w-full max-w-md transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700',
                 dialogPanelClassName ? dialogPanelClassName : ''
               )}
             >
@@ -48,7 +48,7 @@ const Drawer: FC<DrawerProps> = ({ isOpen, setIsOpen, title, dialogPanelClassNam
                     </div>
                   </div>
                 </div>
-                <div className='relative mt-6 flex-1 px-4 sm:px-6'>{isOpen && content}</div>
+                <div className='relative mt-6 flex-1 px-4 sm:px-6'>{content}</div>
               </div>
             </DialogPanel>
           </div>
