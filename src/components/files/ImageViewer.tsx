@@ -1,16 +1,12 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { generatePresignedUrl } from './utils';
+import { usePresignedFileObjectId } from '@/api/file';
 
-type Props = { bucket: string; s3Key: string };
-export const ImageViewer = ({ bucket, s3Key: key }: Props) => {
-  const url = useSuspenseQuery({
-    queryKey: ['generatePresignedUrl', { bucket, key }],
-    queryFn: async () => {
-      return await generatePresignedUrl({ bucket, key });
-    },
+type Props = { s3ObjectId: string };
+export const ImageViewer = ({ s3ObjectId }: Props) => {
+  const url = usePresignedFileObjectId({
+    params: { path: { id: s3ObjectId }, query: { responseContentDisposition: 'inline' } },
   }).data;
 
-  if (!url) throw new Error('No Data');
+  if (!url) throw new Error('Unable to create presigned url');
 
   return (
     <div className='w-full h-full text-center'>

@@ -1,8 +1,3 @@
-export const generatePresignedUrl = async (props: { bucket: string; key: string }) => {
-  console.log('Generating presigned url for', props);
-  return 'http://...';
-};
-
 export const getPreSignedUrlData = async (url: string) => {
   const fetchResponse = await fetch(url);
 

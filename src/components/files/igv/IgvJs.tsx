@@ -1,32 +1,32 @@
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { generatePresignedUrl } from '../utils';
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { genomes } from './genomes';
 // @ts-expect-error - IGV is not typed
 import igv from 'igv';
 import { constructIgvNameParameter, createIdxFileKey, createIgvFileTrack } from './utils';
 import { Dropdown } from '@/components/common/dropdowns';
+import { usePresignedFileList, usePresignedFileObjectId } from '@/api/file';
 
-type Props = { bucket: string; s3Key: string };
-export const IgvViewer = ({ bucket, s3Key: key }: Props) => {
-  const [isInitIgv, setIsInitIgv] = useState(false);
+type Props = { s3ObjectId: string; bucket: string; s3Key: string };
+export const IgvViewer = ({ s3ObjectId, bucket, s3Key: key }: Props) => {
   const idxKey = createIdxFileKey(key);
 
-  const baseFileSignedUrl = useSuspenseQuery({
-    queryKey: ['generatePresignedUrl', { bucket, key }],
-    queryFn: async () => {
-      return await generatePresignedUrl({ bucket, key });
-    },
+  const baseFileSignedUrl = usePresignedFileObjectId({
+    params: { path: { id: s3ObjectId } },
   }).data;
 
-  const idxFileSignedUrl = useSuspenseQuery({
-    queryKey: ['generatePresignedUrl', { bucket, idxKey }],
-    queryFn: async () => {
-      return await generatePresignedUrl({ bucket, key });
-    },
+  const idxFileSignedUrlResults = usePresignedFileList({
+    params: { query: { bucket, key: idxKey } },
   }).data;
 
-  if (!baseFileSignedUrl || !idxFileSignedUrl) throw new Error('No Data');
+  const idxFileSignedUrl =
+    idxFileSignedUrlResults?.results.length == 1
+      ? (idxFileSignedUrlResults?.results[0] as unknown as string)
+      : null;
+
+  if (!baseFileSignedUrl || !idxFileSignedUrl) throw new Error('Unable to create presigned url');
+
+  const [isInitIgv, setIsInitIgv] = useState(false);
 
   const initRefGenome = 'hg38';
   const [refGenome, setRefGenome] = useState<string>(initRefGenome);

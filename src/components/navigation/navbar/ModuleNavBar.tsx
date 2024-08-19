@@ -23,7 +23,12 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation }) => {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className='relative flex grow-0 flex-col gap-y-5 overflow-y-auto bg-white min-w-14'>
+    <div
+      className={classNames(
+        'relative flex grow-0 flex-col gap-y-5 overflow-y-auto',
+        isOpen ? 'bg-white min-w-40' : 'bg-white min-w-14'
+      )}
+    >
       {isOpen ? (
         <>
           <button

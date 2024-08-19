@@ -1,22 +1,28 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { generatePresignedUrl, getPreSignedUrlData } from './utils';
+import { getPreSignedUrlData } from './utils';
 import { useState } from 'react';
 import { Table } from '../tables';
 import { Column } from '../tables/Table';
+import { usePresignedFileObjectId } from '@/api/file';
 
-type Props = { bucket: string; s3Key: string };
-export const TableViewer = ({ bucket, s3Key: key }: Props) => {
-  const [isPrettify, setIsPrettify] = useState(true);
+type Props = { s3ObjectId: string; s3Key: string };
+
+export const TableViewer = ({ s3ObjectId, s3Key: key }: Props) => {
+  const url = usePresignedFileObjectId({
+    params: { path: { id: s3ObjectId }, query: { responseContentDisposition: 'inline' } },
+  }).data;
+  if (!url) throw new Error('Unable to create presigned url');
+
   const data = useSuspenseQuery({
-    queryKey: ['generatePresignedUrl', { bucket, key }],
+    queryKey: ['downloadPresignedData', url],
     queryFn: async () => {
-      const url = await generatePresignedUrl({ bucket, key });
       const data = await getPreSignedUrlData(url);
-
       return data;
     },
   }).data;
+  if (!data) throw new Error('Unable to load data');
 
+  const [isPrettify, setIsPrettify] = useState(true);
   if (!key.endsWith) throw new Error('No Data');
 
   let delimiter = '';

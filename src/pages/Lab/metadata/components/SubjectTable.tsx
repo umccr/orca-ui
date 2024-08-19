@@ -29,7 +29,7 @@ export const SubjectTable = () => {
   }, [getPaginationParams]);
 
   const fullSubjectModel = useMetadataFullSubjectModel({
-    params: { query: { page: page, rowsPerPage: rowsPerPage, ...dataQueryParams } },
+    params: { query: { ...dataQueryParams, page: page, rowsPerPage: rowsPerPage } },
   });
 
   const data = fullSubjectModel.data;
@@ -54,6 +54,9 @@ export const SubjectTable = () => {
                   <MagnifyingGlassIcon className='h-5 w-5 text-gray-400' aria-hidden='true' />
                 </div>
                 <input
+                  onBlur={() => {
+                    setDataQueryParams({ key: searchBox });
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       if (searchBox.startsWith('S')) {

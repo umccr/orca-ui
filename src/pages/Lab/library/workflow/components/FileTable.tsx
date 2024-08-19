@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useFileObject } from '@/api/file';
+import { S3Record, useFileObject } from '@/api/file';
 import { Table } from '@/components/tables';
 import { Column } from '@/components/tables/Table';
-import { Bars3Icon } from '@heroicons/react/24/outline';
+import { Bars3Icon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import dayjs from 'dayjs';
 import { IconDropdown } from '@/components/common/dropdowns';
 import toaster from '@/components/common/toaster';
@@ -12,18 +12,67 @@ import { FilePreviewDrawer } from './FilePreviewDrawer';
 import { Dialog } from '@/components/dialogs';
 import { JsonToTable } from '@/components/common/json-to-table';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const FileTable = ({ portalRunId }: { portalRunId: string }) => {
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [searchBox, setSearchBox] = useState<string>('');
+  const [dataQueryParams, setDataQueryParams] = useState<Record<string, string>>({});
 
   const data = useFileObject({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    params: { query: { page: page, rowsPerPage: rowsPerPage, portalRunId: portalRunId } as any },
+    params: {
+      query: {
+        ...dataQueryParams,
+        page: page,
+        rowsPerPage: rowsPerPage,
+        currentState: true,
+      },
+    },
   }).data;
+
+  if (!data) throw new Error('Data is not available');
 
   return (
     <Table
       columns={tableColumn}
+      tableHeader={
+        <div className='flex flex-col md:flex-row'>
+          <div className='flex flex-1 items-center justify-start pt-2'>
+            <div className='w-full'>
+              <label htmlFor='search' className='sr-only'>
+                Search
+              </label>
+              <div className='relative'>
+                <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
+                  <MagnifyingGlassIcon className='h-5 w-5 text-gray-400' aria-hidden='true' />
+                </div>
+                <input
+                  onBlur={() => {
+                    setDataQueryParams({ key: searchBox });
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      setDataQueryParams({ key: searchBox });
+                    }
+                  }}
+                  onChange={(e) => {
+                    setSearchBox(e.target.value.trim());
+                    if (!e.target.value) {
+                      setDataQueryParams({});
+                    }
+                  }}
+                  value={searchBox}
+                  id='search'
+                  name='search'
+                  className='block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                  placeholder='Search (Object key)'
+                  type='search'
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      }
       tableData={data.results.map((item) => ({
         lastModifiedDate: item.lastModifiedDate,
         size: item.size,
@@ -86,23 +135,23 @@ const tableColumn: Column[] = [
     header: '',
     accessor: 'fileRecord',
     cell: (data: unknown) => {
-      const { key: s3Key, bucket } = data as { key: string; bucket: string };
+      const { key: s3Key, bucket, s3ObjectId } = data as S3Record;
 
-      return <FilePreviewDrawer s3Key={s3Key} bucket={bucket} />;
+      return <FilePreviewDrawer s3Key={s3Key} bucket={bucket} s3ObjectId={s3ObjectId} />;
     },
   },
   {
     header: 'Action button',
     accessor: 'fileRecord',
     cell: (data: unknown) => {
-      return <DataActionButton fileRecord={data as Record<string, string>} />;
+      return <DataActionButton fileRecord={data as S3Record} />;
     },
   },
   {
     header: 'Size',
     accessor: 'size',
     cell: (data: unknown) => {
-      return <div>{humanFileSize(data as number)}</div>;
+      return <div>{data ? humanFileSize(data as number) : '-'}</div>;
     },
   },
   {
@@ -114,7 +163,7 @@ const tableColumn: Column[] = [
   },
 ];
 
-const DataActionButton = ({ fileRecord }: { fileRecord: Record<string, string> }) => {
+const DataActionButton = ({ fileRecord }: { fileRecord: S3Record }) => {
   const { key: s3Key, bucket } = fileRecord;
   const s3Uri = `s3://${bucket}/${s3Key}`;
 
