@@ -1,4 +1,4 @@
-import { useWorkflowRunDataModel } from '@/api/workflow';
+import { useSequenceRunListModel } from '@/api/sequenceRun';
 import { Table } from '@/components/tables';
 import { Column } from '@/components/tables/Table';
 import { classNames } from '@/utils/commonUtils';
@@ -8,11 +8,10 @@ import { Link } from 'react-router-dom';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import dayjs from '@/utils/dayjs';
-import { Badge } from '@/components/common/badges';
-import { TableCellsIcon } from '@heroicons/react/24/outline';
-import { StatusIcon } from '@/components/common/statusIcon';
+import { TableCellsIcon, RectangleGroupIcon, ClipboardIcon } from '@heroicons/react/24/outline';
+import { StatusBadge } from '@/components/common/statusBadge';
 
-const WorkflowRunTable = () => {
+const SequenceRunTable = () => {
   const [page, setPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(DEFAULT_PAGE_SIZE);
   const [searchBox, setSearchBox] = useState<string>('');
@@ -30,9 +29,9 @@ const WorkflowRunTable = () => {
     setRowsPerPage(getPaginationParams().rowsPerPage);
   }, [getPaginationParams]);
 
-  const fullSubjectModel = useWorkflowRunDataModel({
+  const fullSubjectModel = useSequenceRunListModel({
     // params: { query: { page: page, rowsPerPage: rowsPerPage, ...dataQueryParams } },
-    // bugs on rows per page of workflow run call
+    // bugs on rows per page of sequence api call
     params: { query: { page: page, ...dataQueryParams } },
   });
 
@@ -113,39 +112,39 @@ const WorkflowRunTable = () => {
 
 const sequenceRunColumn: Column[] = [
   {
-    header: 'Workflow Run Name',
-    accessor: 'workflowRunName',
-    cell: (workflowRunName: unknown) => {
-      if (!workflowRunName) {
+    header: 'Instrument Run Id',
+    accessor: 'instrumentRunId',
+    cell: (instrumentRunId: unknown) => {
+      if (!instrumentRunId) {
         return <div>-</div>;
       } else {
         return (
           <Link
-            to={`workflow/${workflowRunName}/details`}
+            to={`sequence/${instrumentRunId}`}
             className={classNames(
               'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
             )}
           >
-            {workflowRunName as string}
+            {instrumentRunId as string}
           </Link>
         );
       }
     },
   },
   {
-    header: 'Portal Run Id',
-    accessor: 'portalRunId',
-    cell: (portalRunId: unknown) => {
-      if (!portalRunId) {
+    header: 'Start Time',
+    accessor: 'startTime',
+    cell: (startTime: unknown) => {
+      if (!startTime) {
         return <div>-</div>;
       } else {
-        return <div>{portalRunId as string}</div>;
+        return <div>{dayjs(startTime as string).format('llll')}</div>;
       }
     },
   },
   {
-    header: 'Time Stamp',
-    accessor: 'timestamp',
+    header: 'End Time',
+    accessor: 'endTime',
     cell: (endTime: unknown) => {
       if (!endTime) {
         return <div>-</div>;
@@ -155,50 +154,57 @@ const sequenceRunColumn: Column[] = [
     },
   },
   {
-    header: 'Status',
+    header: 'Sequencing',
     accessor: 'status',
     cell: (status: unknown) => {
-      if (!status) {
-        return (
-          <Badge type='unknown' className='flex flex-row h-8'>
-            <div className='pr-2 '>
-              <StatusIcon status={status as string} className=' !text-white'></StatusIcon>
-            </div>
-
-            {'unkown'}
-          </Badge>
-        );
-      } else {
-        return (
-          <Badge status={status as string} className='flex flex-row items-center h-7'>
-            <div className='pr-2 '>
-              <StatusIcon status={status as string} className='  !text-white'></StatusIcon>
-            </div>
-
-            <span>{status as string}</span>
-          </Badge>
-        );
-      }
+      return <StatusBadge status={(status as string) || 'unkmown'}></StatusBadge>;
     },
   },
-
+  {
+    header: 'Bcl Convert',
+    accessor: 'bclConvertStatus',
+    cell: (status: unknown) => {
+      return <StatusBadge status={(status as string) || 'unkmown'}></StatusBadge>;
+    },
+  },
   {
     header: '',
-    accessor: 'portalRunId',
-    cell: (portalRunId: unknown) => {
-      if (!portalRunId) {
+    accessor: 'instrumentRunId',
+    cell: (instrumentRunId: unknown) => {
+      if (!instrumentRunId) {
         return <div>-</div>;
       } else {
         return (
           <div className='flex flex-row items-center'>
             <Link
-              to={`sequence/${portalRunId}/details`}
+              to={`sequence/${instrumentRunId}/details`}
               className={classNames(
                 'flex flex-row items-center ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
               )}
             >
               <TableCellsIcon className='h-5 w-5 pr-1 shrink-0 text-blue-500' aria-hidden='true' />
               Details
+            </Link>
+            <Link
+              to={`sequence/${instrumentRunId}/diagram`}
+              className={classNames(
+                'flex flex-row items-center ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+              )}
+            >
+              <RectangleGroupIcon
+                className='h-5 w-5 pr-1 shrink-0 text-blue-500'
+                aria-hidden='true'
+              />
+              Diagram
+            </Link>
+            <Link
+              to={`sequence/${instrumentRunId}/report`}
+              className={classNames(
+                'flex flex-row items-center ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+              )}
+            >
+              <ClipboardIcon className='h-5 w-5 pr-1 shrink-0 text-blue-500' aria-hidden='true' />
+              Diagram
             </Link>
           </div>
         );
@@ -207,4 +213,4 @@ const sequenceRunColumn: Column[] = [
   },
 ];
 
-export default WorkflowRunTable;
+export default SequenceRunTable;

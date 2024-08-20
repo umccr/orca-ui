@@ -10,16 +10,6 @@ const sideNavigation = [
   { name: 'sscheck', icon: CloudArrowUpIcon, solidIcon: SolidCloudArrowUpIcon, href: '/sscheck' },
 ];
 
-const subjectModuleNavigation = [
-  {
-    title: 'Subject',
-    children: [
-      { name: 'Overview', href: '/lab/subject/overview' },
-      { name: 'Launch Pad', href: '/lab/subject/launchpad' },
-    ],
-  },
-];
-
 const libraryModuleNavigation = [
   {
     title: 'Library',
@@ -31,13 +21,13 @@ const libraryModuleNavigation = [
   {
     title: 'Reports',
     children: [
-      { name: 'WGS', href: '/lab/subject/reports/wgs' },
-      { name: 'WTS', href: '/lab/subject/reports/wts' },
-      { name: 'TSO500', href: '/lab/subject/reports/tso500' },
-      { name: 'TSO500 (V2)', href: '/lab/subject/reports/tso500v2' },
-      { name: 'WGS (bcbio)', href: '/lab/subject/reports/wgsbcbio' },
-      { name: 'WTS (bcbio)', href: '/lab/subject/reports/wtsbcbio' },
-      { name: 'WGS (sash)', href: '/lab/subject/reports/wgssash' },
+      { name: 'WGS', href: '/lab/library/reports/wgs' },
+      { name: 'WTS', href: '/lab/library/reports/wts' },
+      { name: 'TSO500', href: '/lab/library/reports/tso500' },
+      { name: 'TSO500 (V2)', href: '/lab/library/reports/tso500v2' },
+      { name: 'WGS (bcbio)', href: '/lab/library/reports/wgsbcbio' },
+      { name: 'WTS (bcbio)', href: '/lab/library/reports/wtsbcbio' },
+      { name: 'WGS (sash)', href: '/lab/library/reports/wgssash' },
     ],
   },
 ];
@@ -45,15 +35,12 @@ const libraryModuleNavigation = [
 const runsModuleNavigation = [
   {
     children: [
-      { name: 'Sequence', href: '/runs/sequence' },
-      { name: 'Library', href: '/runs/library' },
-      {
-        name: 'Workflow',
-        href: '/runs/workflow',
-      },
+      { name: 'Sequence', href: '/runs/sequence/' },
+      { name: 'Library', href: '/runs/library/' },
+      { name: 'Workflow', href: '/runs/workflow/' },
     ],
   },
 ];
 
 export default sideNavigation;
-export { subjectModuleNavigation, libraryModuleNavigation, runsModuleNavigation };
+export { libraryModuleNavigation, runsModuleNavigation };

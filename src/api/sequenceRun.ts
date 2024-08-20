@@ -1,13 +1,13 @@
 import config from '@/config';
 import createClient from 'openapi-fetch';
-import type { paths } from './types/workflow';
+import type { paths } from './types/sequence-run';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { authMiddleware, UseQueryOptions } from './utils';
 
-const client = createClient<paths>({ baseUrl: config.apiEndpoint.workflow });
+const client = createClient<paths>({ baseUrl: config.apiEndpoint.sequenceRun });
 client.use(authMiddleware);
 
-function createWorkflowFetchingHook<K extends keyof paths>(path: K) {
+function createSequenceRunFetchingHook<K extends keyof paths>(path: K) {
   return function ({ params, reactQuery }: UseQueryOptions<paths[typeof path]['get']>) {
     return useSuspenseQuery({
       ...reactQuery,
@@ -24,5 +24,5 @@ function createWorkflowFetchingHook<K extends keyof paths>(path: K) {
   };
 }
 
-export const useWorkflowRunListModel = createWorkflowFetchingHook('/api/v1/workflowrun/');
-export const useWorkflowRunDetailModel = createWorkflowFetchingHook('/api/v1/workflowrun/{id}/');
+export const useSequenceRunListModel = createSequenceRunFetchingHook('/api/v1/sequence/');
+export const useSequenceRunDetailModel = createSequenceRunFetchingHook('/api/v1/sequence/{id}/');

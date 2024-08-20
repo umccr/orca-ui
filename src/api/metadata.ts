@@ -1,35 +1,27 @@
 import config from '@/config';
-import createClient, { ParamsOption, RequestBodyOption } from 'openapi-fetch';
+import createClient from 'openapi-fetch';
 import type { paths } from './types/metadata';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { authMiddleware } from './utils';
+import { authMiddleware, UseQueryOptions } from './utils';
 
 const client = createClient<paths>({ baseUrl: config.apiEndpoint.metadata });
 client.use(authMiddleware);
 
-type UseQueryOptions<T> = ParamsOption<T> &
-  RequestBodyOption<T> & {
-    // add your custom options here
-    reactQuery?: {
-      // Note: React Query type’s inference is difficult to apply automatically, hence manual option passing here
-      // add other React Query options as needed
-    };
+function createMeatdataFetchingHook<K extends keyof paths>(path: K) {
+  return function ({ params, reactQuery }: UseQueryOptions<paths[typeof path]['get']>) {
+    return useSuspenseQuery({
+      ...reactQuery,
+      queryKey: [path, params],
+      queryFn: async ({ signal }) => {
+        const { data } = await client.GET(path, {
+          params,
+          signal,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any);
+        return data;
+      },
+    });
   };
-
-const metadataFullSubjectPath = '/subject/full/';
-export function useMetadataFullSubjectModel({
-  params,
-  reactQuery,
-}: UseQueryOptions<paths[typeof metadataFullSubjectPath]['get']>) {
-  return useSuspenseQuery({
-    ...reactQuery,
-    queryKey: [metadataFullSubjectPath, params],
-    queryFn: async ({ signal }) => {
-      const { data } = await client.GET(metadataFullSubjectPath, {
-        params,
-        signal, // allows React Query to cancel request
-      });
-      return data;
-    },
-  });
 }
+
+export const useMetadataFullSubjectModel = createMeatdataFetchingHook('/api/v1/subject/full/');

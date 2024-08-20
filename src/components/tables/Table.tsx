@@ -84,10 +84,10 @@ const Table: FC<TableProps> = ({
                     {columns &&
                       columns.map((column, index) => (
                         <th
-                          key={column.accessor}
+                          key={index}
                           scope='col'
                           className={classNames(
-                            'px-3 py-3.5 text-left text-sm font-semibold text-gray-900',
+                            'px-2 py-3 text-left text-sm font-semibold text-gray-900',
                             index == 0 ? 'pl-4 sm:pl-6 lg:pl-8' : '',
                             index == columns.length - 1 ? 'pr-4 sm:pr-6 lg:pr-8' : '',
                             stickyHeader
@@ -128,9 +128,9 @@ const Table: FC<TableProps> = ({
                       {columns &&
                         columns.map((column, index) => (
                           <td
-                            key={column.accessor}
+                            key={index}
                             className={classNames(
-                              'whitespace-nowrap py-4 px-3 text-sm font-medium text-gray-900',
+                              'whitespace-nowrap py-1 px-3 text-sm font-medium text-gray-900',
                               index == 0 ? 'pl-4 sm:pl-6' : '',
                               index == columns.length - 1 ? 'pr-4 sm:pr-6' : ''
                             )}

@@ -4,144 +4,144 @@
  */
 
 export interface paths {
-    "/srm/v1/sequence/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["srm_v1_sequence_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+  '/api/v1/sequence/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/srm/v1/sequence/{id}/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["srm_v1_sequence_retrieve"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get: operations['api_v1_sequence_list'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/v1/sequence/{id}/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
+    get: operations['api_v1_sequence_retrieve'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: {
-        PaginatedSequenceList: {
-            links: {
-                /**
-                 * Format: uri
-                 * @example http://api.example.org/accounts/?page=4
-                 */
-                next?: string | null;
-                /**
-                 * Format: uri
-                 * @example http://api.example.org/accounts/?page=2
-                 */
-                previous?: string | null;
-            };
-            pagination: {
-                count?: number;
-                page?: number;
-                rowsPerPage?: number;
-            };
-            results: components["schemas"]["Sequence"][];
-        };
-        Sequence: {
-            readonly id: number;
-            instrument_run_id: string;
-            run_volume_name: string;
-            run_folder_path: string;
-            run_data_uri: string;
-            status: components["schemas"]["StatusEnum"];
-            /** Format: date-time */
-            start_time: string;
-            /** Format: date-time */
-            end_time?: string | null;
-            reagent_barcode?: string | null;
-            flowcell_barcode?: string | null;
-            sample_sheet_name?: string | null;
-            sequence_run_id?: string | null;
-            sequence_run_name?: string | null;
-        };
+  schemas: {
+    PaginatedSequenceList: {
+      links: {
         /**
-         * @description * `STARTED` - Started
-         *     * `FAILED` - Failed
-         *     * `SUCCEEDED` - Succeeded
-         *     * `ABORTED` - Aborted
-         * @enum {string}
+         * Format: uri
+         * @example http://api.example.org/accounts/?page=4
          */
-        StatusEnum: "STARTED" | "FAILED" | "SUCCEEDED" | "ABORTED";
+        next?: string | null;
+        /**
+         * Format: uri
+         * @example http://api.example.org/accounts/?page=2
+         */
+        previous?: string | null;
+      };
+      pagination: {
+        count?: number;
+        page?: number;
+        rowsPerPage?: number;
+      };
+      results: components['schemas']['Sequence'][];
     };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+    Sequence: {
+      readonly id: number;
+      instrument_run_id: string;
+      run_volume_name: string;
+      run_folder_path: string;
+      run_data_uri: string;
+      status: components['schemas']['StatusEnum'];
+      /** Format: date-time */
+      start_time: string;
+      /** Format: date-time */
+      end_time?: string | null;
+      reagent_barcode?: string | null;
+      flowcell_barcode?: string | null;
+      sample_sheet_name?: string | null;
+      sequence_run_id?: string | null;
+      sequence_run_name?: string | null;
+    };
+    /**
+     * @description * `STARTED` - Started
+     *     * `FAILED` - Failed
+     *     * `SUCCEEDED` - Succeeded
+     *     * `ABORTED` - Aborted
+     * @enum {string}
+     */
+    StatusEnum: 'STARTED' | 'FAILED' | 'SUCCEEDED' | 'ABORTED';
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    srm_v1_sequence_list: {
-        parameters: {
-            query?: {
-                /** @description Which field to use when ordering the results. */
-                ordering?: string;
-                /** @description A page number within the paginated result set. */
-                page?: number;
-                /** @description Number of results to return per page. */
-                rowsPerPage?: number;
-                /** @description A search term. */
-                search?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedSequenceList"];
-                };
-            };
-        };
+  api_v1_sequence_list: {
+    parameters: {
+      query?: {
+        /** @description Which field to use when ordering the results. */
+        ordering?: string;
+        /** @description A page number within the paginated result set. */
+        page?: number;
+        /** @description Number of results to return per page. */
+        rowsPerPage?: number;
+        /** @description A search term. */
+        search?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    srm_v1_sequence_retrieve: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A unique integer value identifying this sequence. */
-                id: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Sequence"];
-                };
-            };
+        content: {
+          'application/json': components['schemas']['PaginatedSequenceList'];
         };
+      };
     };
+  };
+  api_v1_sequence_retrieve: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description A unique integer value identifying this sequence. */
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Sequence'];
+        };
+      };
+    };
+  };
 }

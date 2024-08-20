@@ -1,57 +1,57 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { useRoutes, Navigate, Outlet } from 'react-router-dom';
 import { useUserContext } from '@/context/UserContext';
+import Page from '@/components/common/page';
+import { AppURLs } from '@/utils/appURLs';
 
-const SignInPage = lazy(() => import('@/pages/SignInPage'));
-const LabPage = lazy(() => import('@/pages/Lab'));
-const Sequence = lazy(() => import('@/pages/Runs/sequence'));
-const Library = lazy(() => import('@/pages/Runs/library'));
-const Workflow = lazy(() => import('@/pages/Runs/workflow'));
-
+const SignInPage = lazy(() => import('@/modules/auth/SignInPage'));
 import MainLayout from '@/components/layouts/MainLayout';
-import RunsModuleLayout from '@/components/layouts/RunsModuleLayout';
+
+import modules from './modules';
 
 export default function AppRoutes() {
-  const isUserSignedIn = useUserContext().isAuth;
+  const { isAuth } = useUserContext();
 
-  if (!isUserSignedIn) {
-    return (
-      <Routes>
-        <Route path='/signIn' element={<SignInPage />} />
-        <Route path='*' element={<Navigate replace to='signIn' />} />
-      </Routes>
-    );
-  }
+  const routes = [
+    {
+      path: '/',
+      element: isAuth ? (
+        <MainLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Outlet />
+          </Suspense>
+        </MainLayout>
+      ) : (
+        <Navigate to='/signIn' replace />
+      ),
+      children: [
+        { path: '', element: <Navigate to='lab' replace /> },
+        ...modules.map((x) => {
+          return {
+            ...x.Router,
+            children: Array.isArray(x.Router.children)
+              ? x.Router.children.map((c) => ({
+                  ...c,
+                  element: <Page title={c.title}>{c.element}</Page>,
+                }))
+              : [],
+          };
+        }),
+        { path: '*', element: <div>Path not found/implemented!</div> },
+      ],
+    },
+    // Unauthenticated routes
+    {
+      path: AppURLs.SignIn,
+      element: <SignInPage />,
+    },
+    {
+      path: '*',
+      element: <Navigate to='/signIn' replace />,
+    },
+  ];
 
-  return (
-    <Routes>
-      <Route
-        path='/'
-        element={
-          <MainLayout>
-            <Suspense>
-              <Outlet />
-            </Suspense>
-          </MainLayout>
-        }
-      >
-        <Route index element={<Navigate to='lab' />} />
-        <Route path='lab' element={<LabPage />} />
-        <Route
-          path='runs'
-          element={
-            <RunsModuleLayout>
-              <Outlet />
-            </RunsModuleLayout>
-          }
-        >
-          <Route index element={<Navigate to='sequence' />} />
-          <Route path='sequence' element={<Sequence />} />
-          <Route path='library' element={<Library />} />
-          <Route path='workflow' element={<Workflow />} />
-        </Route>
-        <Route path='*' element={<div>Path not found/implemented!</div>} />
-      </Route>
-    </Routes>
-  );
+  // useRoutes hook for customize module routes
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return useRoutes(routes as any);
 }
