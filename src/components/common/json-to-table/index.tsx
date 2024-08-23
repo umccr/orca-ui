@@ -6,7 +6,6 @@ const valueClassName = 'py-2';
 const rowClassName = 'even:bg-gray-50';
 
 export const JsonToTable = ({ data }: { data: Record<string, any> }) => {
-  console.log('data', data);
   const renderValue = (value: any) => {
     if (!value) {
       return '-';

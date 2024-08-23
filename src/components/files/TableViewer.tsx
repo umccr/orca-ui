@@ -32,9 +32,10 @@ export const TableViewer = ({ s3ObjectId, s3Key: key }: Props) => {
   // Sanitize and split string
   const sanitizeContent: string = data.replace(/\r\n/g, '\n');
   const allRows: string[] = sanitizeContent.split('\n');
+  const viewableRows = allRows.slice(0, 1000);
   const headerRow: string[] = allRows[0].split(delimiter);
 
-  const jsonData = allRows.slice(1).map((row, idx) => {
+  const jsonData = viewableRows.slice(1).map((row, idx) => {
     // Split each row by commas to get the individual cell values
     const values = row.split(delimiter);
 
@@ -60,7 +61,12 @@ export const TableViewer = ({ s3ObjectId, s3Key: key }: Props) => {
   });
 
   return (
-    <div className='w-full h-full flex flex-col'>
+    <div className='w-full h-full flex flex-col mb-2'>
+      {allRows.length > 1000 && (
+        <div className='w-full bg-amber-100 text-amber-700 p-2 border mb-3'>
+          Only showing the first 1000 rows
+        </div>
+      )}
       <div className='flex items-center'>
         <input
           id='default-checkbox'
@@ -77,13 +83,8 @@ export const TableViewer = ({ s3ObjectId, s3Key: key }: Props) => {
       {isPrettify ? (
         <Table tableData={jsonData} columns={headerTableProps} />
       ) : (
-        <pre
-          className='overflow-auto inline-block m-0 mt-4 p-3 w-full bg-white border border-solid border-current border-round-xs'
-          style={{
-            minWidth: '50vw',
-          }}
-        >
-          {data}
+        <pre className='overflow-auto inline-block m-0 mt-4 p-3 w-full bg-white border border-solid border-current border-round-xs'>
+          {viewableRows.join('\n')}
         </pre>
       )}
     </div>

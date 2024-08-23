@@ -19,7 +19,6 @@ export const SubjectTable = () => {
   const onChangeParams = async () => {
     setPage(getPaginationParams().page);
     setRowsPerPage(getPaginationParams().rowsPerPage);
-    // console.log('onChangeParams', getQueryParams());
   };
   const { setQueryParams, getPaginationParams } = useQueryParams(onChangeParams);
 
@@ -60,9 +59,9 @@ export const SubjectTable = () => {
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       if (searchBox.startsWith('S')) {
-                        setDataQueryParams({ internal_id: searchBox });
+                        setDataQueryParams({ subjectId: searchBox });
                       } else {
-                        setDataQueryParams({ library_internal_id: searchBox });
+                        setDataQueryParams({ libraryId: searchBox });
                       }
                     }
                   }}
@@ -121,11 +120,11 @@ const processResults = (data: components['schemas']['SubjectFull'][]) => {
       coverage: [],
     };
 
-    for (const specimen of subject.specimen_set) {
-      for (const library of specimen.library_set) {
-        rec.specimenId.push(specimen.internal_id ?? '-');
+    for (const specimen of subject.specimenSet) {
+      for (const library of specimen.librarySet) {
+        rec.specimenId.push(specimen.specimenId ?? '-');
         rec.source.push(specimen.source ?? '-');
-        rec.libraryId.push(library.internal_id ?? '-');
+        rec.libraryId.push(library.libraryId ?? '-');
         rec.phenotype.push(library.phenotype ?? '-');
         rec.workflow.push(library.workflow ?? '-');
         rec.quality.push(library.quality ?? '-');
@@ -137,8 +136,8 @@ const processResults = (data: components['schemas']['SubjectFull'][]) => {
 
     return {
       subjectId: {
-        orcabus_id: subject.id,
-        internal_id: subject.internal_id,
+        orcabus_id: subject.orcabusId,
+        subjectId: subject.subjectId,
       },
       ...rec,
     };
@@ -154,20 +153,20 @@ const subjectColumn: Column[] = [
     header: 'SubjectId',
     accessor: 'subjectId',
     cell: (data: unknown) => {
-      const { internal_id } = data as Record<string, string>;
+      const { subjectId } = data as Record<string, string>;
 
-      if (!internal_id) {
+      if (!subjectId) {
         return <div>-</div>;
       }
 
       return (
         <Link
-          to={`subject/${internal_id}`}
+          to={`subject/${subjectId}`}
           className={classNames(
             'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
           )}
         >
-          {internal_id}
+          {subjectId}
         </Link>
       );
     },

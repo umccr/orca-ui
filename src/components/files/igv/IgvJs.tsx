@@ -6,10 +6,11 @@ import igv from 'igv';
 import { constructIgvNameParameter, createIdxFileKey, createIgvFileTrack } from './utils';
 import { Dropdown } from '@/components/common/dropdowns';
 import { usePresignedFileList, usePresignedFileObjectId } from '@/api/file';
+import { IgvDesktopButton } from './IgvDesktop';
 
 type Props = { s3ObjectId: string; bucket: string; s3Key: string };
-export const IgvViewer = ({ s3ObjectId, bucket, s3Key: key }: Props) => {
-  const idxKey = createIdxFileKey(key);
+export const IgvViewer = ({ s3ObjectId, bucket, s3Key }: Props) => {
+  const idxKey = createIdxFileKey(s3Key);
 
   const baseFileSignedUrl = usePresignedFileObjectId({
     params: { path: { id: s3ObjectId } },
@@ -18,13 +19,11 @@ export const IgvViewer = ({ s3ObjectId, bucket, s3Key: key }: Props) => {
   const idxFileSignedUrlResults = usePresignedFileList({
     params: { query: { bucket, key: idxKey } },
   }).data;
-
   const idxFileSignedUrl =
-    idxFileSignedUrlResults?.results.length == 1
-      ? (idxFileSignedUrlResults?.results[0] as unknown as string)
-      : null;
+    idxFileSignedUrlResults?.results.length == 1 ? idxFileSignedUrlResults?.results[0] : null;
 
-  if (!baseFileSignedUrl || !idxFileSignedUrl) throw new Error('Unable to create presigned url');
+  if (!baseFileSignedUrl) throw new Error('Unable to presigned url!');
+  if (!idxFileSignedUrl) throw new Error('No index file found!');
 
   const [isInitIgv, setIsInitIgv] = useState(false);
 
@@ -37,7 +36,7 @@ export const IgvViewer = ({ s3ObjectId, bucket, s3Key: key }: Props) => {
       const igvDiv = document.getElementById('igv-div');
       if (!igvDiv) throw new Error('No IGV Div Element');
 
-      const igvName = constructIgvNameParameter({ key: key });
+      const igvName = constructIgvNameParameter({ key: s3Key });
       const track = createIgvFileTrack({
         igvName,
         baseFilePresignedUrl: baseFileSignedUrl,
@@ -60,19 +59,22 @@ export const IgvViewer = ({ s3ObjectId, bucket, s3Key: key }: Props) => {
 
   return (
     <div className='w-full h-full flex flex-col'>
-      <div className='w-full'>
-        <p className='inline-block align-middle mr-2'>Reference Genome:</p>
-        <Dropdown
-          className='w-full'
-          value={refGenome}
-          items={genomes.map((g) => ({
-            label: g.id,
-            onClick: () => {
-              igvBrowser?.loadGenome(g.id);
-              setRefGenome(g.id);
-            },
-          }))}
-        />
+      <div className='w-full flex flex-row items-center	justify-between'>
+        <IgvDesktopButton s3ObjectId={s3ObjectId} bucket={bucket} s3Key={s3Key} />
+        <div>
+          <p className='inline-block align-middle mr-2'>Reference Genome:</p>
+          <Dropdown
+            className='w-full'
+            value={refGenome}
+            items={genomes.map((g) => ({
+              label: g.id,
+              onClick: () => {
+                igvBrowser?.loadGenome(g.id);
+                setRefGenome(g.id);
+              },
+            }))}
+          />
+        </div>
       </div>
       <div id='igv-div' />
     </div>

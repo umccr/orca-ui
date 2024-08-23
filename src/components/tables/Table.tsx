@@ -38,7 +38,6 @@ const Table: FC<TableProps> = ({
     key: string;
     direction: 'ascending' | 'descending';
   } | null>(null);
-
   const onSort = (key: string) => {
     const direction =
       sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending'

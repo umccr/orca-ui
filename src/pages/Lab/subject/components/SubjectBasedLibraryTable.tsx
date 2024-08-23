@@ -14,8 +14,7 @@ export const SubjectBasedLibraryTable = () => {
   }
 
   const fullSubjectModel = useMetadataFullSubjectModel({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    params: { query: { internal_id: subjectId } as any },
+    params: { query: { subjectId: subjectId } },
   });
 
   const data = fullSubjectModel.data;
@@ -60,12 +59,12 @@ export const SubjectBasedLibraryTable = () => {
 
 const convertLibraryData = (data: components['schemas']['SubjectFull']) => {
   const lib: Record<string, string>[] = [];
-  for (const specimen of data.specimen_set) {
-    for (const library of specimen.library_set) {
+  for (const specimen of data.specimenSet) {
+    for (const library of specimen.librarySet) {
       lib.push({
-        specimenId: specimen.internal_id ?? '-',
+        specimenId: specimen.specimenId ?? '-',
         source: specimen.source ?? '-',
-        libraryId: library.internal_id ?? '-',
+        libraryId: library.libraryId ?? '-',
         phenotype: library.phenotype ?? '-',
         workflow: library.workflow ?? '-',
         quality: library.quality ?? '-',

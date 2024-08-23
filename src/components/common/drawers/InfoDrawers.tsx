@@ -21,7 +21,7 @@ const Drawer: FC<DrawerProps> = ({ isOpen, setIsOpen, title, dialogPanelClassNam
 
       <div className='fixed inset-0 overflow-hidden'>
         <div className='absolute inset-0 overflow-hidden'>
-          <div className='pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10'>
+          <div className='pointer-events-none fixed inset-y-0 right-0 flex pl-10 w-full'>
             <DialogPanel
               transition
               className={classNames(

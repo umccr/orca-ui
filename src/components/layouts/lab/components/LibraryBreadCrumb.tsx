@@ -12,38 +12,37 @@ export const LibraryBreadCrumb: FC = () => {
   }
 
   const fullLibraryModel = useMetadataFullLibraryModel({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    params: { query: { internal_id: libraryId } as any },
+    params: { query: { libraryId: libraryId } },
   }).data;
 
   if (!fullLibraryModel || fullLibraryModel.results.length == 0) {
     throw new Error('No library Id found in metadata!');
   }
   const library = fullLibraryModel.results[0];
-  const subjectId = library.specimen.subject.internal_id;
+  const subjectId = library.specimen.subject.subjectId;
 
   const libraryBreadCrumbProps = [
     { name: 'SUBJECT', href: '/lab', isCurrent: false },
     { name: subjectId ?? '-', href: `/lab/subject/${subjectId}`, isCurrent: false },
     { name: 'LIBRARY', href: '/lab', isCurrent: false },
     {
-      name: library.internal_id,
-      href: `/lab/library/${library.internal_id}`,
-      isCurrent: library.internal_id ? pathname.endsWith(library.internal_id) : false,
+      name: library.libraryId,
+      href: `/lab/library/${library.libraryId}`,
+      isCurrent: library.libraryId ? pathname.endsWith(library.libraryId) : false,
     },
   ];
 
   if (workflowType) {
     libraryBreadCrumbProps.push({
       name: workflowType,
-      href: `/lab/library/${library.internal_id}/${workflowType}`,
+      href: `/lab/library/${library.libraryId}/${workflowType}`,
       isCurrent: pathname.endsWith(workflowType),
     });
 
     if (portalRunId) {
       libraryBreadCrumbProps.push({
         name: portalRunId,
-        href: `/lab/library/${library.internal_id}/${workflowType}/${portalRunId}`,
+        href: `/lab/library/${library.libraryId}/${workflowType}/${portalRunId}`,
         isCurrent: pathname.endsWith(portalRunId),
       });
     }

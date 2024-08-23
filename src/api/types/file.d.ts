@@ -59,6 +59,49 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/s3/presign": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Generate AWS presigned URLs for s3_objects according to the parameters.
+         * @description This route implies `currentState=true` because only existing objects can be presigned.
+         *     Less presigned URLs may be returned than the amount of objects in the database because some
+         *     objects may be over the `FILEMANAGER_API_PRESIGN_LIMIT`.
+         */
+        get: operations["presign_s3"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/s3/presign/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Generate AWS presigned URLs for a single S3 object using its `s3_object_id`.
+         * @description This route will not return an object if it has been deleted from the database, or its size
+         *     is greater than `FILEMANAGER_API_PRESIGN_LIMIT`.
+         */
+        get: operations["presign_s3_by_id"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/s3/{id}": {
         parameters: {
             query?: never;
@@ -81,6 +124,11 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * @description Specify the content-disposition, either `inline` or `attachment`.
+         * @enum {string}
+         */
+        ContentDisposition: "inline" | "attachment";
         /**
          * Format: date-time
          * @description A newtype equivalent to a `DateTime` with a time zone.
@@ -127,6 +175,13 @@ export interface components {
             /** @description The results of the list operation. */
             results: components["schemas"]["S3"][];
         };
+        /** @description The response type for list operations. */
+        ListResponseUrl: {
+            links: components["schemas"]["Links"];
+            pagination: components["schemas"]["PaginatedResponse"];
+            /** @description The results of the list operation. */
+            results: string[];
+        };
         /** @description Pagination response component. */
         PaginatedResponse: components["schemas"]["Pagination"] & {
             /**
@@ -140,10 +195,10 @@ export interface components {
         Pagination: {
             /**
              * Format: int64
-             * @description The zero-indexed page to fetch from the list of objects.
-             *     Increments by 1 starting from 0.
+             * @description The one-indexed page to fetch from the list of objects.
+             *     Increments by 1 starting from 1.
              *     Defaults to the beginning of the collection.
-             * @default 0
+             * @default 1
              */
             page: number;
             /**
@@ -160,35 +215,28 @@ export interface components {
          * @description The attributes to update for the request. This updates attributes according to JSON patch.
          *     See [JSON patch](https://jsonpatch.com/) and [RFC6902](https://datatracker.ietf.org/doc/html/rfc6902/).
          *
-         *     In order to apply the patch, the outer type of the JSON input must have one key called "attributes".
-         *     Then any JSON patch operation can be used to update the attributes, e.g. "add" or "replace". The
-         *     "test" operation can be used to confirm whether a key is a specific value before updating. If the
-         *     check fails,  a `BAD_REQUEST` is returned and no records are updated.
-         * @example {
-         *       "attributes": [
-         *         {
-         *           "op": "test",
-         *           "path": "/attributeId",
-         *           "value": "1"
-         *         },
-         *         {
-         *           "op": "replace",
-         *           "path": "/attributeId",
-         *           "value": "attributeId"
-         *         }
-         *       ]
-         *     }
+         *     In order to apply the patch, JSON body must contain an array with patch operations. The patch operations
+         *     are append-only, which means that only "add" and "test" is supported. If a "test" check fails,
+         *     a patch operations that isn't "add" or "test" is used, or if a key already exists, a `BAD_REQUEST`
+         *     is returned and no records are updated.
+         * @example [
+         *       {
+         *         "op": "add",
+         *         "path": "/attributeId",
+         *         "value": "attributeId"
+         *       }
+         *     ]
          */
         PatchBody: {
             attributes: components["schemas"]["Patch"];
-        };
+        } | components["schemas"]["Patch"];
         S3: {
             attributes?: components["schemas"]["Json"] | null;
             bucket: string;
-            date?: components["schemas"]["DateTimeWithTimeZone"] | null;
             deletedDate?: components["schemas"]["DateTimeWithTimeZone"] | null;
             deletedSequencer?: string | null;
             eTag?: string | null;
+            eventTime?: components["schemas"]["DateTimeWithTimeZone"] | null;
             eventType: components["schemas"]["EventType"];
             isDeleteMarker: boolean;
             key: string;
@@ -271,10 +319,10 @@ export interface operations {
     list_s3: {
         parameters: {
             query?: {
-                /** @description The zero-indexed page to fetch from the list of objects.
-                 *     Increments by 1 starting from 0.
+                /** @description The one-indexed page to fetch from the list of objects.
+                 *     Increments by 1 starting from 1.
                  *     Defaults to the beginning of the collection. */
-                page?: number | null;
+                page?: number;
                 /** @description The number of rows per page, i.e. the page size.
                  *     If this is zero then the default is used. */
                 rowsPerPage?: number;
@@ -291,16 +339,16 @@ export interface operations {
                  *     in the following order: `Created` -> `Deleted` -> `Created`. Then setting
                  *     `?current_state=true` would return only the last `Created` event. */
                 currentState?: boolean | null;
-                /** @description Query by event type. Supports wildcards. */
-                eventType?: components["schemas"]["Wildcard"];
+                /** @description Query by event type. */
+                eventType?: components["schemas"]["EventType"] | null;
                 /** @description Query by bucket. Supports wildcards. */
                 bucket?: components["schemas"]["Wildcard"] | null;
                 /** @description Query by key. Supports wildcards. */
                 key?: components["schemas"]["Wildcard"] | null;
                 /** @description Query by version_id. Supports wildcards. */
                 versionId?: components["schemas"]["Wildcard"] | null;
-                /** @description Query by date. Supports wildcards. */
-                date?: components["schemas"]["Wildcard"];
+                /** @description Query by event_time. Supports wildcards. */
+                eventTime?: components["schemas"]["Wildcard"];
                 /** @description Query by size. */
                 size?: number | null;
                 /** @description Query by the sha256 checksum. */
@@ -310,7 +358,7 @@ export interface operations {
                 /** @description Query by the e_tag. */
                 eTag?: string | null;
                 /** @description Query by the storage class. Supports wildcards. */
-                storageClass?: components["schemas"]["Wildcard"];
+                storageClass?: components["schemas"]["StorageClass"] | null;
                 /** @description Query by the object delete marker. */
                 isDeleteMarker?: boolean | null;
                 /** @description Query by JSON attributes. Supports nested syntax to access inner
@@ -380,16 +428,16 @@ export interface operations {
                  *     in the following order: `Created` -> `Deleted` -> `Created`. Then setting
                  *     `?current_state=true` would return only the last `Created` event. */
                 currentState?: boolean | null;
-                /** @description Query by event type. Supports wildcards. */
-                eventType?: components["schemas"]["Wildcard"];
+                /** @description Query by event type. */
+                eventType?: components["schemas"]["EventType"] | null;
                 /** @description Query by bucket. Supports wildcards. */
                 bucket?: components["schemas"]["Wildcard"] | null;
                 /** @description Query by key. Supports wildcards. */
                 key?: components["schemas"]["Wildcard"] | null;
                 /** @description Query by version_id. Supports wildcards. */
                 versionId?: components["schemas"]["Wildcard"] | null;
-                /** @description Query by date. Supports wildcards. */
-                date?: components["schemas"]["Wildcard"];
+                /** @description Query by event_time. Supports wildcards. */
+                eventTime?: components["schemas"]["Wildcard"];
                 /** @description Query by size. */
                 size?: number | null;
                 /** @description Query by the sha256 checksum. */
@@ -399,7 +447,7 @@ export interface operations {
                 /** @description Query by the e_tag. */
                 eTag?: string | null;
                 /** @description Query by the storage class. Supports wildcards. */
-                storageClass?: components["schemas"]["Wildcard"];
+                storageClass?: components["schemas"]["StorageClass"] | null;
                 /** @description Query by the object delete marker. */
                 isDeleteMarker?: boolean | null;
                 /** @description Query by JSON attributes. Supports nested syntax to access inner
@@ -473,16 +521,16 @@ export interface operations {
                  *     in the following order: `Created` -> `Deleted` -> `Created`. Then setting
                  *     `?current_state=true` would return only the last `Created` event. */
                 currentState?: boolean | null;
-                /** @description Query by event type. Supports wildcards. */
-                eventType?: components["schemas"]["Wildcard"];
+                /** @description Query by event type. */
+                eventType?: components["schemas"]["EventType"] | null;
                 /** @description Query by bucket. Supports wildcards. */
                 bucket?: components["schemas"]["Wildcard"] | null;
                 /** @description Query by key. Supports wildcards. */
                 key?: components["schemas"]["Wildcard"] | null;
                 /** @description Query by version_id. Supports wildcards. */
                 versionId?: components["schemas"]["Wildcard"] | null;
-                /** @description Query by date. Supports wildcards. */
-                date?: components["schemas"]["Wildcard"];
+                /** @description Query by event_time. Supports wildcards. */
+                eventTime?: components["schemas"]["Wildcard"];
                 /** @description Query by size. */
                 size?: number | null;
                 /** @description Query by the sha256 checksum. */
@@ -492,7 +540,7 @@ export interface operations {
                 /** @description Query by the e_tag. */
                 eTag?: string | null;
                 /** @description Query by the storage class. Supports wildcards. */
-                storageClass?: components["schemas"]["Wildcard"];
+                storageClass?: components["schemas"]["StorageClass"] | null;
                 /** @description Query by the object delete marker. */
                 isDeleteMarker?: boolean | null;
                 /** @description Query by JSON attributes. Supports nested syntax to access inner
@@ -515,6 +563,149 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ListCount"];
+                };
+            };
+            /** @description the request could not be parsed or the request triggered a constraint error in the database */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the resource or route could not be found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description an unexpected error occurred in the server */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    presign_s3: {
+        parameters: {
+            query?: {
+                /** @description The one-indexed page to fetch from the list of objects.
+                 *     Increments by 1 starting from 1.
+                 *     Defaults to the beginning of the collection. */
+                page?: number;
+                /** @description The number of rows per page, i.e. the page size.
+                 *     If this is zero then the default is used. */
+                rowsPerPage?: number;
+                /** @description The case sensitivity when using filter operations with a wildcard.
+                 *     Setting this true means that an SQL `like` statement is used, and false
+                 *     means `ilike` is used. */
+                caseSensitive?: boolean;
+                /** @description Specify the content-disposition for the presigned URLs themselves.
+                 *     This sets the `response-content-disposition` for the presigned `GetObject` request. */
+                responseContentDisposition?: components["schemas"]["ContentDisposition"];
+                /** @description Query by event type. */
+                eventType?: components["schemas"]["EventType"] | null;
+                /** @description Query by bucket. Supports wildcards. */
+                bucket?: components["schemas"]["Wildcard"] | null;
+                /** @description Query by key. Supports wildcards. */
+                key?: components["schemas"]["Wildcard"] | null;
+                /** @description Query by version_id. Supports wildcards. */
+                versionId?: components["schemas"]["Wildcard"] | null;
+                /** @description Query by event_time. Supports wildcards. */
+                eventTime?: components["schemas"]["Wildcard"];
+                /** @description Query by size. */
+                size?: number | null;
+                /** @description Query by the sha256 checksum. */
+                sha256?: string | null;
+                /** @description Query by the last modified date. Supports wildcards. */
+                lastModifiedDate?: components["schemas"]["Wildcard"];
+                /** @description Query by the e_tag. */
+                eTag?: string | null;
+                /** @description Query by the storage class. Supports wildcards. */
+                storageClass?: components["schemas"]["StorageClass"] | null;
+                /** @description Query by the object delete marker. */
+                isDeleteMarker?: boolean | null;
+                /** @description Query by JSON attributes. Supports nested syntax to access inner
+                 *     fields, e.g. `attributes[attribute_id]=...`. This only deserializes
+                 *     into string fields, and does not support other JSON types. E.g.
+                 *     `attributes[attribute_id]=1` converts to `{ "attribute_id" = "1" }`
+                 *     rather than `{ "attribute_id" = 1 }`. Supports wildcards. */
+                attributes?: components["schemas"]["Json"] | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The list of presigned urls */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListResponseUrl"];
+                };
+            };
+            /** @description the request could not be parsed or the request triggered a constraint error in the database */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the resource or route could not be found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description an unexpected error occurred in the server */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    presign_s3_by_id: {
+        parameters: {
+            query?: {
+                /** @description Specify the content-disposition for the presigned URLs themselves.
+                 *     This sets the `response-content-disposition` for the presigned `GetObject` request. */
+                responseContentDisposition?: components["schemas"]["ContentDisposition"];
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The presigned url for the object with the id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string | null;
                 };
             };
             /** @description the request could not be parsed or the request triggered a constraint error in the database */

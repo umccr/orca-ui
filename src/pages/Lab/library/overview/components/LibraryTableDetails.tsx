@@ -9,8 +9,7 @@ export const LibraryTableDetails = () => {
     throw new Error('No library id in URL path!');
   }
   const fullLibraryModel = useMetadataFullLibraryModel({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    params: { query: { internal_id: libraryId } as any },
+    params: { query: { libraryId: libraryId } },
   }).data;
 
   if (!fullLibraryModel || fullLibraryModel.results.length == 0) {
@@ -22,10 +21,10 @@ export const LibraryTableDetails = () => {
   return (
     <JsonToTable
       data={{
-        subjectId: library.specimen.subject.internal_id ?? '-',
-        specimenId: library.specimen.internal_id ?? '-',
+        subjectId: library.specimen.subject.subjectId ?? '-',
+        specimenId: library.specimen.specimenId ?? '-',
         specimenSource: library.specimen.source ?? '-',
-        libraryId: library.internal_id ?? '-',
+        libraryId: library.libraryId ?? '-',
         phenotype: library.phenotype ?? '-',
         workflow: library.workflow ?? '-',
         quality: library.quality ?? '-',

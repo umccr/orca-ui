@@ -20,7 +20,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/library/{id}/": {
+    "/api/v1/library/{orcabus_id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -36,7 +36,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/library/{id}/full/": {
+    "/api/v1/library/{orcabus_id}/full/": {
         parameters: {
             query?: never;
             header?: never;
@@ -84,7 +84,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/specimen/{id}/": {
+    "/api/v1/specimen/{orcabus_id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -116,7 +116,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/subject/{id}/": {
+    "/api/v1/subject/{orcabus_id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -132,14 +132,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/subject/{id}/full/": {
+    "/api/v1/subject/{orcabus_id}/full/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_subject_full_list_2"];
+        get: operations["/api/v1/subject/id/full/"];
         put?: never;
         post?: never;
         delete?: never;
@@ -155,7 +155,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_subject_full_list"];
+        get: operations["/api/v1/subject/full/"];
         put?: never;
         post?: never;
         delete?: never;
@@ -171,8 +171,8 @@ export interface components {
         /** @enum {unknown} */
         BlankEnum: "";
         Library: {
-            readonly id: number;
-            internal_id?: string | null;
+            readonly orcabusId: string;
+            libraryId?: string | null;
             phenotype?: (components["schemas"]["PhenotypeEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
             workflow?: (components["schemas"]["WorkflowEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
             quality?: (components["schemas"]["QualityEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
@@ -180,13 +180,15 @@ export interface components {
             assay?: string | null;
             /** Format: double */
             coverage?: number | null;
-            specimen?: number | null;
+            projectOwner?: string | null;
+            projectName?: string | null;
+            specimen?: string | null;
         };
         /** @description This is a full Library serializer which include the specimen and subject models */
         LibraryFull: {
-            readonly id: number;
+            readonly orcabusId: string;
             specimen: components["schemas"]["SpecimenSubject"];
-            internal_id?: string | null;
+            libraryId?: string | null;
             phenotype?: (components["schemas"]["PhenotypeEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
             workflow?: (components["schemas"]["WorkflowEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
             quality?: (components["schemas"]["QualityEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
@@ -194,6 +196,8 @@ export interface components {
             assay?: string | null;
             /** Format: double */
             coverage?: number | null;
+            projectOwner?: string | null;
+            projectName?: string | null;
         };
         /** @enum {unknown} */
         NullEnum: null;
@@ -336,35 +340,35 @@ export interface components {
          */
         SourceEnum: "ascites" | "blood" | "bone-marrow" | "buccal" | "cell-line" | "cfDNA" | "cyst-fluid" | "DNA" | "eyebrow-hair" | "FFPE" | "FNA" | "OCT" | "organoid" | "PDX-tissue" | "plasma-serum" | "RNA" | "tissue" | "skin" | "water";
         Specimen: {
-            readonly id: number;
-            internal_id?: string | null;
+            readonly orcabusId: string;
+            specimenId?: string | null;
             source?: (components["schemas"]["SourceEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
-            subject?: number | null;
+            subject?: string | null;
         };
         /** @description This is a full Specimen serializer which include the library model */
         SpecimenLibrary: {
-            readonly id: number;
-            library_set: components["schemas"]["Library"][];
-            internal_id?: string | null;
+            readonly orcabusId: string;
+            librarySet: components["schemas"]["Library"][];
+            specimenId?: string | null;
             source?: (components["schemas"]["SourceEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
-            subject?: number | null;
+            subject?: string | null;
         };
         /** @description This is a full Specimen serializer which include the subject model */
         SpecimenSubject: {
-            readonly id: number;
+            readonly orcabusId: string;
             subject: components["schemas"]["Subject"];
-            internal_id?: string | null;
+            specimenId?: string | null;
             source?: (components["schemas"]["SourceEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
         };
         Subject: {
-            readonly id: number;
-            internal_id?: string | null;
+            readonly orcabusId: string;
+            subjectId?: string | null;
         };
         /** @description This is a full Subject serializer which include all the children's (specimen and library) related models */
         SubjectFull: {
-            readonly id: number;
-            specimen_set: components["schemas"]["SpecimenLibrary"][];
-            internal_id?: string | null;
+            readonly orcabusId: string;
+            specimenSet: components["schemas"]["SpecimenLibrary"][];
+            subjectId?: string | null;
         };
         /**
          * @description * `10X` - Ten X
@@ -405,14 +409,51 @@ export interface operations {
     api_v1_library_list: {
         parameters: {
             query?: {
+                assay?: string | null;
+                coverage?: number | null;
+                libraryId?: string | null;
+                orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
                 page?: number;
+                /** @description * `normal` - Normal
+                 *     * `tumor` - Tumor
+                 *     * `negative-control` - Negative Control */
+                phenotype?: "normal" | "tumor" | "negative-control" | "" | null;
+                projectName?: string | null;
+                projectOwner?: string | null;
+                /** @description * `very-poor` - VeryPoor
+                 *     * `poor` - Poor
+                 *     * `good` - Good
+                 *     * `borderline` - Borderline */
+                quality?: "very-poor" | "poor" | "good" | "borderline" | "" | null;
                 /** @description Number of results to return per page. */
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
+                specimen?: string | null;
+                /** @description * `10X` - Ten X
+                 *     * `BiModal` - Bimodal
+                 *     * `ctDNA` - Ct Dna
+                 *     * `ctTSO` - Ct Tso
+                 *     * `exome` - Exome
+                 *     * `MeDIP` - Me Dip
+                 *     * `Metagenm` - Metagenm
+                 *     * `MethylSeq` - Methyl Seq
+                 *     * `TSO-DNA` - TSO_DNA
+                 *     * `TSO-RNA` - TSO_RNA
+                 *     * `WGS` - Wgs
+                 *     * `WTS` - Wts
+                 *     * `other` - Other */
+                type?: "10X" | "BiModal" | "ctDNA" | "ctTSO" | "exome" | "MeDIP" | "Metagenm" | "MethylSeq" | "TSO-DNA" | "TSO-RNA" | "WGS" | "WTS" | "other" | "" | null;
+                /** @description * `clinical` - Clinical
+                 *     * `research` - Research
+                 *     * `qc` - Qc
+                 *     * `control` - Control
+                 *     * `bcl` - Bcl
+                 *     * `manual` - Manual */
+                workflow?: "clinical" | "research" | "qc" | "control" | "bcl" | "manual" | "" | null;
             };
             header?: never;
             path?: never;
@@ -435,8 +476,8 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description A unique integer value identifying this library. */
-                id: number;
+                /** @description A unique value identifying this library. */
+                orcabusId: string;
             };
             cookie?: never;
         };
@@ -457,8 +498,8 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description A unique integer value identifying this library. */
-                id: number;
+                /** @description A unique value identifying this library. */
+                orcabusId: string;
             };
             cookie?: never;
         };
@@ -505,6 +546,7 @@ export interface operations {
     api_v1_specimen_list: {
         parameters: {
             query?: {
+                orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
@@ -513,6 +555,28 @@ export interface operations {
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
+                /** @description * `ascites` - Ascites
+                 *     * `blood` - Blood
+                 *     * `bone-marrow` - BoneMarrow
+                 *     * `buccal` - Buccal
+                 *     * `cell-line` - Cell_line
+                 *     * `cfDNA` - Cfdna
+                 *     * `cyst-fluid` - Cyst Fluid
+                 *     * `DNA` - Dna
+                 *     * `eyebrow-hair` - Eyebrow Hair
+                 *     * `FFPE` - Ffpe
+                 *     * `FNA` - Fna
+                 *     * `OCT` - Oct
+                 *     * `organoid` - Organoid
+                 *     * `PDX-tissue` - Pdx Tissue
+                 *     * `plasma-serum` - Plasma Serum
+                 *     * `RNA` - Rna
+                 *     * `tissue` - Tissue
+                 *     * `skin` - Skin
+                 *     * `water` - Water */
+                source?: "ascites" | "blood" | "bone-marrow" | "buccal" | "cell-line" | "cfDNA" | "cyst-fluid" | "DNA" | "eyebrow-hair" | "FFPE" | "FNA" | "OCT" | "organoid" | "PDX-tissue" | "plasma-serum" | "RNA" | "tissue" | "skin" | "water" | "" | null;
+                specimenId?: string | null;
+                subject?: string | null;
             };
             header?: never;
             path?: never;
@@ -535,8 +599,8 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description A unique integer value identifying this specimen. */
-                id: number;
+                /** @description A unique value identifying this specimen. */
+                orcabusId: string;
             };
             cookie?: never;
         };
@@ -555,6 +619,7 @@ export interface operations {
     api_v1_subject_list: {
         parameters: {
             query?: {
+                orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
@@ -563,6 +628,7 @@ export interface operations {
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
+                subjectId?: string | null;
             };
             header?: never;
             path?: never;
@@ -585,8 +651,8 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description A unique integer value identifying this subject. */
-                id: number;
+                /** @description A unique value identifying this subject. */
+                orcabusId: string;
             };
             cookie?: never;
         };
@@ -602,7 +668,7 @@ export interface operations {
             };
         };
     };
-    api_v1_subject_full_list_2: {
+    "/api/v1/subject/id/full/": {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -616,8 +682,8 @@ export interface operations {
             };
             header?: never;
             path: {
-                /** @description A unique integer value identifying this subject. */
-                id: number;
+                /** @description A unique value identifying this subject. */
+                orcabusId: string;
             };
             cookie?: never;
         };
@@ -633,11 +699,12 @@ export interface operations {
             };
         };
     };
-    api_v1_subject_full_list: {
+    "/api/v1/subject/full/": {
         parameters: {
             query?: {
-                /** @description Filter the subjects that contain this particular internal_id in the Library model. */
-                library_internal_id?: string;
+                /** @description Filter the subjects that has the given library_id in the Library model. */
+                libraryId?: string;
+                orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
@@ -646,6 +713,7 @@ export interface operations {
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
+                subjectId?: string | null;
             };
             header?: never;
             path?: never;

@@ -18,9 +18,21 @@ export const PreViewer = ({ s3ObjectId }: Props) => {
   }).data;
   if (!data) throw new Error('Unable to load data');
 
+  // Sanitize and split string
+  const sanitizeContent: string = data.replace(/\r\n/g, '\n');
+  const allRows: string[] = sanitizeContent.split('\n');
+  const viewableRows = allRows.slice(0, 1000);
+
   return (
-    <div>
-      <pre>{data}</pre>
-    </div>
+    <>
+      {viewableRows.length > 1000 && (
+        <div className='w-full bg-amber-100 text-amber-700 p-2 border mb-3'>
+          Only showing the first 1000 rows
+        </div>
+      )}
+      <pre className='overflow-auto inline-block m-0 mt-4 p-3 w-full bg-white border border-solid border-current border-round-xs'>
+        {viewableRows.join('\n')}
+      </pre>
+    </>
   );
 };

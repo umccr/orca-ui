@@ -56,7 +56,7 @@ export interface components {
             pagination: {
                 count?: number;
                 page?: number;
-                rowsPerPage?: number;
+                rows_per_page?: number;
             };
             results: components["schemas"]["Sequence"][];
         };
@@ -102,7 +102,7 @@ export interface operations {
                 /** @description A page number within the paginated result set. */
                 page?: number;
                 /** @description Number of results to return per page. */
-                rowsPerPage?: number;
+                rows_per_page?: number;
                 /** @description A search term. */
                 search?: string;
             };
