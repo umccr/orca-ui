@@ -26,7 +26,7 @@ const Dropdown: FC<DropdownProps> = ({
   items,
 }) => {
   return (
-    <Menu as='div' className='relative inline-block text-left cursor-pointer'>
+    <Menu as='div' className='relative inline-block text-left cursor-pointer min-w-48'>
       {floatingLabel && (
         <label
           className={classNames(
@@ -41,7 +41,7 @@ const Dropdown: FC<DropdownProps> = ({
         {({ active }) => (
           <div
             className={classNames(
-              'inline-flex w-full justify-center gap-x-1.5 rounded-md p-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-none data-[hover]:bg-gray-70 data-[open]:bg-gray-70 data-[focus]:outline-1 data-[focus]:outline-white',
+              'inline-flex w-full justify-between gap-x-1.5 rounded-md p-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-none data-[hover]:bg-gray-70 data-[open]:bg-gray-70 data-[focus]:outline-1 data-[focus]:outline-white',
               className,
               active ? 'bg-gray-100' : 'bg-white'
             )}

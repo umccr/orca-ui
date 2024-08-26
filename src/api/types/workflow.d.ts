@@ -169,8 +169,8 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         LibraryModel: {
-            orcabus_id: string;
-            library_id: string;
+            orcabusId: string;
+            libraryId: string;
         };
         PaginatedLibraryModelList: {
             links: {
@@ -188,7 +188,7 @@ export interface components {
             pagination: {
                 count?: number;
                 page?: number;
-                rows_per_page?: number;
+                rowsPerPage?: number;
             };
             results: components["schemas"]["LibraryModel"][];
         };
@@ -208,7 +208,7 @@ export interface components {
             pagination: {
                 count?: number;
                 page?: number;
-                rows_per_page?: number;
+                rowsPerPage?: number;
             };
             results: components["schemas"]["PayloadModel"][];
         };
@@ -228,7 +228,7 @@ export interface components {
             pagination: {
                 count?: number;
                 page?: number;
-                rows_per_page?: number;
+                rowsPerPage?: number;
             };
             results: components["schemas"]["StateModel"][];
         };
@@ -248,7 +248,7 @@ export interface components {
             pagination: {
                 count?: number;
                 page?: number;
-                rows_per_page?: number;
+                rowsPerPage?: number;
             };
             results: components["schemas"]["WorkflowModel"][];
         };
@@ -268,13 +268,13 @@ export interface components {
             pagination: {
                 count?: number;
                 page?: number;
-                rows_per_page?: number;
+                rowsPerPage?: number;
             };
             results: components["schemas"]["WorkflowRunModel"][];
         };
         PayloadModel: {
             readonly id: number;
-            payload_ref_id: string;
+            payloadRefId: string;
             version: string;
             data: unknown;
         };
@@ -284,22 +284,22 @@ export interface components {
             /** Format: date-time */
             timestamp: string;
             comment?: string | null;
-            workflow_run: number;
+            workflowRun: number;
             payload?: number | null;
         };
         WorkflowModel: {
             readonly id: number;
-            workflow_name: string;
-            workflow_version: string;
-            execution_engine: string;
-            execution_engine_pipeline_id: string;
-            approval_state: string;
+            workflowName: string;
+            workflowVersion: string;
+            executionEngine: string;
+            executionEnginePipelineId: string;
+            approvalState: string;
         };
         WorkflowRunModel: {
             readonly id: number;
-            portal_run_id: string;
-            execution_id?: string | null;
-            workflow_run_name?: string | null;
+            portalRunId: string;
+            executionId?: string | null;
+            workflowRunName?: string | null;
             comment?: string | null;
             workflow?: number | null;
             readonly libraries: string[];
@@ -321,7 +321,7 @@ export interface operations {
                 /** @description A page number within the paginated result set. */
                 page?: number;
                 /** @description Number of results to return per page. */
-                rows_per_page?: number;
+                rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
             };
@@ -371,7 +371,7 @@ export interface operations {
                 /** @description A page number within the paginated result set. */
                 page?: number;
                 /** @description Number of results to return per page. */
-                rows_per_page?: number;
+                rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
             };
@@ -421,7 +421,7 @@ export interface operations {
                 /** @description A page number within the paginated result set. */
                 page?: number;
                 /** @description Number of results to return per page. */
-                rows_per_page?: number;
+                rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
             };
@@ -471,13 +471,13 @@ export interface operations {
                 /** @description A page number within the paginated result set. */
                 page?: number;
                 /** @description Number of results to return per page. */
-                rows_per_page?: number;
+                rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
             };
             header?: never;
             path: {
-                workflowrun_id: string;
+                workflowrunId: string;
             };
             cookie?: never;
         };
@@ -499,7 +499,7 @@ export interface operations {
             header?: never;
             path: {
                 id: string;
-                workflowrun_id: string;
+                workflowrunId: string;
             };
             cookie?: never;
         };
@@ -523,13 +523,13 @@ export interface operations {
                 /** @description A page number within the paginated result set. */
                 page?: number;
                 /** @description Number of results to return per page. */
-                rows_per_page?: number;
+                rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
             };
             header?: never;
             path: {
-                workflowrun_id: string;
+                workflowrunId: string;
             };
             cookie?: never;
         };
@@ -551,7 +551,7 @@ export interface operations {
             header?: never;
             path: {
                 id: string;
-                workflowrun_id: string;
+                workflowrunId: string;
             };
             cookie?: never;
         };

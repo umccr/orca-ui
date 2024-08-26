@@ -42,6 +42,30 @@ export interface paths {
         patch: operations["update_s3_collection_attributes"];
         trace?: never;
     };
+    "/api/v1/s3/attributes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List all S3 objects according to a set of attribute filter parameters.
+         * @description This route is a convenience for querying using top-level attributes and accepts arbitrary
+         *     parameters. For example, instead of using `/api/v1/s3?attributes[attributeId]=...`, this route
+         *     can express the same query as `/api/v1/s3/attributes?attributeId=...`. Similar to the
+         *     `attributes` filter parameter, nested JSON queries are supported using the bracket notation.
+         *     Note that regular filtering parameters, like `key` or `bucket` are not supported on this route.
+         */
+        get: operations["attributes_s3"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/s3/count": {
         parameters: {
             query?: never;
@@ -474,6 +498,77 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["S3"][];
+                };
+            };
+            /** @description the request could not be parsed or the request triggered a constraint error in the database */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the resource or route could not be found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description an unexpected error occurred in the server */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    attributes_s3: {
+        parameters: {
+            query?: {
+                /** @description The one-indexed page to fetch from the list of objects.
+                 *     Increments by 1 starting from 1.
+                 *     Defaults to the beginning of the collection. */
+                page?: number;
+                /** @description The number of rows per page, i.e. the page size.
+                 *     If this is zero then the default is used. */
+                rowsPerPage?: number;
+                /** @description The case sensitivity when using filter operations with a wildcard.
+                 *     Setting this true means that an SQL `like` statement is used, and false
+                 *     means `ilike` is used. */
+                caseSensitive?: boolean;
+                /** @description Fetch the current state of objects in storage.
+                 *     This ensures that only `Created` events which represent current
+                 *     objects in storage are returned, and any historical `Deleted`
+                 *     or `Created`events are omitted.
+                 *
+                 *     For example, consider that there are three events for a given bucket, key and version_id
+                 *     in the following order: `Created` -> `Deleted` -> `Created`. Then setting
+                 *     `?current_state=true` would return only the last `Created` event. */
+                currentState?: boolean | null;
+                params?: {
+                    [key: string]: components["schemas"]["Json"] | undefined;
+                };
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The collection of s3_objects */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListResponseS3"];
                 };
             };
             /** @description the request could not be parsed or the request triggered a constraint error in the database */

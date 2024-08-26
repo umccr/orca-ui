@@ -7,6 +7,7 @@ import { Bars3Icon } from '@heroicons/react/24/outline';
 export interface NavigationChildrenItem {
   name: string;
   href: string;
+  isCurrent?: boolean;
 }
 
 export interface NavigationItem {
@@ -16,9 +17,10 @@ export interface NavigationItem {
 
 export interface ModuleNavbarProps {
   navigation: NavigationItem[];
+  footer?: React.ReactNode;
 }
 
-const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation }) => {
+const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(true);
 
@@ -56,7 +58,7 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation }) => {
                       to={item.href}
                       className={classNames(
                         'group flex gap-x-3 py-2 px-10 text-sm rounded-md leading-6 font-normal text-magpie-dark-75 hover:bg-magpie-light-25',
-                        item.href == location.pathname ? 'bg-magpie-light-25' : ''
+                        item.isCurrent || item.href == location.pathname ? 'bg-magpie-light-25' : ''
                       )}
                     >
                       {item.name}
@@ -66,6 +68,8 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation }) => {
               ))}
             </ul>
           </nav>
+
+          {footer && footer}
         </>
       ) : (
         <button onClick={() => setIsOpen((p) => !p)} className='h-full hover:bg-gray-50 z-10'>

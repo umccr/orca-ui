@@ -2,7 +2,7 @@ import { PropsWithChildren, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { Card } from '@/components/common/cards';
-import { SpinnerWithText } from '@/components/common/spinner';
+import { Spinner, SpinnerWithText } from '@/components/common/spinner';
 import { DetailedErrorBoundary } from '@/components/common/error';
 import { LibrarySideNavBar } from './components/LibrarySideNavBar';
 import { LibraryBreadCrumb } from './components/LibraryBreadCrumb';
@@ -10,7 +10,7 @@ import { Dropdown } from '@/components/common/dropdowns';
 
 const MetadataLayout = ({ children }: PropsWithChildren) => {
   return (
-    <Suspense fallback={<SpinnerWithText text='Loading library table ...' />}>
+    <Suspense fallback={<SpinnerWithText text='Loading library page ...' />}>
       <div className='flex flex-row h-full'>
         <div className='flex h-full'>
           <LibrarySideNavBar />
@@ -22,9 +22,11 @@ const MetadataLayout = ({ children }: PropsWithChildren) => {
           </div>
 
           <Card className='mt-3'>
-            <DetailedErrorBoundary errorTitle='Unable to load library page'>
-              {children || <Outlet />}
-            </DetailedErrorBoundary>
+            <Suspense fallback={<Spinner />}>
+              <DetailedErrorBoundary errorTitle='Unable to load library page'>
+                {children || <Outlet />}
+              </DetailedErrorBoundary>
+            </Suspense>
           </Card>
         </div>
       </div>

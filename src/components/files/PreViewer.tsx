@@ -1,11 +1,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getPreSignedUrlData } from './utils';
+import { getMimeType, getPreSignedUrlData } from './utils';
 import { usePresignedFileObjectId } from '@/api/file';
 
-type Props = { s3ObjectId: string };
-export const PreViewer = ({ s3ObjectId }: Props) => {
+type Props = { s3ObjectId: string; s3Key: string };
+export const PreViewer = ({ s3ObjectId, s3Key }: Props) => {
   const url = usePresignedFileObjectId({
     params: { path: { id: s3ObjectId }, query: { responseContentDisposition: 'inline' } },
+    headers: { 'Content-Type': getMimeType(s3Key) },
   }).data;
   if (!url) throw new Error('Unable to create presigned url');
 

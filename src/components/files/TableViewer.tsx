@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getPreSignedUrlData } from './utils';
+import { getMimeType, getPreSignedUrlData } from './utils';
 import { useState } from 'react';
 import { Table } from '../tables';
 import { Column } from '../tables/Table';
@@ -7,9 +7,10 @@ import { usePresignedFileObjectId } from '@/api/file';
 
 type Props = { s3ObjectId: string; s3Key: string };
 
-export const TableViewer = ({ s3ObjectId, s3Key: key }: Props) => {
+export const TableViewer = ({ s3ObjectId, s3Key }: Props) => {
   const url = usePresignedFileObjectId({
     params: { path: { id: s3ObjectId }, query: { responseContentDisposition: 'inline' } },
+    headers: { 'Content-Type': getMimeType(s3Key) },
   }).data;
   if (!url) throw new Error('Unable to create presigned url');
 
@@ -23,11 +24,11 @@ export const TableViewer = ({ s3ObjectId, s3Key: key }: Props) => {
   if (!data) throw new Error('Unable to load data');
 
   const [isPrettify, setIsPrettify] = useState(true);
-  if (!key.endsWith) throw new Error('No Data');
+  if (!s3Key.endsWith) throw new Error('No Data');
 
   let delimiter = '';
-  if (key.endsWith('tsv')) delimiter = '\t';
-  if (key.endsWith('csv')) delimiter = ',';
+  if (s3Key.endsWith('tsv')) delimiter = '\t';
+  if (s3Key.endsWith('csv')) delimiter = ',';
 
   // Sanitize and split string
   const sanitizeContent: string = data.replace(/\r\n/g, '\n');

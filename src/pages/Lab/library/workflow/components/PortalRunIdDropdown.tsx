@@ -2,41 +2,59 @@ import React from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Dropdown } from '@/components/common/dropdowns';
 import { useWorkflowrunModel } from '@/api/workflow';
+import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
 
 export const PortalRunIdDropdown = () => {
   const navigate = useNavigate();
-  const { libraryId, portalRunId } = useParams();
+  const { libraryId, portalRunId, workflowType } = useParams();
   if (!libraryId) {
     throw new Error('No library id in URL path!');
   }
 
   const workflowRun = useWorkflowrunModel({
-    // Disable until libraryId annotation is added to the workflow model (below only return mock)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    params: { query: { libraryId: libraryId, ordering: '-portalRunId' } as any },
-    // sort by desc portalRunId and index first element to get latest run
-  }).data?.results;
+    params: {
+      query: {
+        libraries__libraryId: libraryId,
+        workflow__workflowName: workflowType,
+        ordering: '-portalRunId',
+        rowsPerPage: DEFAULT_NON_PAGINATE_PAGE_SIZE,
+      },
+    },
+  }).data;
 
-  if (!workflowRun) {
+  const workflowRunResults = workflowRun?.results;
+
+  if (!workflowRunResults?.length) {
     throw new Error('No workflow run found!');
   }
-
   if (!portalRunId) {
-    return <Navigate to={`${workflowRun[0].portalRunId}`} />;
+    return <Navigate to={`${workflowRunResults[0].portalRunId}`} />;
+  }
+
+  // If portalRunId is not found in the list of workflowRun, it is invalid link
+  if (!workflowRunResults.find((i) => i.portalRunId === portalRunId)) {
+    throw new Error('Invalid link!');
   }
 
   return (
-    <div className='flex flex-row font-medium'>
-      <div className='flex flex-wrap content-center'>
+    <div className='flex '>
+      <div className='flex flex-row font-medium flex-wrap content-center'>
         <Dropdown
           floatingLabel='Portal Run Id'
           value={portalRunId}
-          items={workflowRun.map((i) => ({
+          items={workflowRunResults.map((i) => ({
             label: i.portalRunId,
             onClick: () => navigate(`../${i.portalRunId}`),
           }))}
         />
       </div>
+      {/* In case portalRunId return is beyond the first page, at least some warning as we do not have
+      pagination implemented */}
+      {workflowRun?.links.next ? (
+        <div className='p-4 text-slate-400 text-xs italic'>
+          *Some portal run id may not be listed.
+        </div>
+      ) : undefined}
     </div>
   );
 };
