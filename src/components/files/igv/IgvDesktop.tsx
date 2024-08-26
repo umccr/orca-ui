@@ -81,7 +81,7 @@ export const IgvDesktopButton = ({ s3ObjectId, bucket, s3Key, className }: Props
           type='light'
         >
           <ComputerDesktopIcon className='size-4 ' />
-          Open in IGV desktop
+          Add to IGV desktop
         </Button>
       )}
     </div>
