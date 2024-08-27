@@ -9,7 +9,7 @@ import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import dayjs from '@/utils/dayjs';
 import { TableCellsIcon, RectangleGroupIcon, ClipboardIcon } from '@heroicons/react/24/outline';
-import { StatusBadge } from '@/components/common/statusBadge';
+import { StatusBadge } from '@/components/common/badges';
 
 const SequenceRunTable = () => {
   const [page, setPage] = useState<number>(1);

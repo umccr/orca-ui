@@ -9,7 +9,7 @@ import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import dayjs from '@/utils/dayjs';
 import { TableCellsIcon } from '@heroicons/react/24/outline';
-import { StatusBadge } from '@/components/common/statusBadge';
+import { StatusBadge } from '@/components/common/badges';
 import { Select } from '@/components/common/select';
 import { WORKFLOW_TYPES } from '@/utils/workflows';
 
