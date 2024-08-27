@@ -223,10 +223,10 @@ const LibraryRunTable = () => {
     setRowsPerPage(getPaginationParams().rowsPerPage);
   }, [getPaginationParams]);
 
-  const mockWGSLibraryRunData = generateMockLibraryRunData(20, LibraryType.WGS);
-  const mockWTSLibraryRunData = generateMockLibraryRunData(20, LibraryType.WTS);
-  const mockctTSOLibraryRunData = generateMockLibraryRunData(10, LibraryType.ctTSO);
-  const mockctDNALibraryRunData = generateMockLibraryRunData(10, LibraryType.ctDNA);
+  const mockWGSLibraryRunData = generateMockLibraryRunData(5, LibraryType.WGS);
+  const mockWTSLibraryRunData = generateMockLibraryRunData(5, LibraryType.WTS);
+  const mockctTSOLibraryRunData = generateMockLibraryRunData(5, LibraryType.ctTSO);
+  const mockctDNALibraryRunData = generateMockLibraryRunData(5, LibraryType.ctDNA);
 
   console.log('mockLibraryData', mockWGSLibraryRunData);
   console.log('mockWGSWorkflowRunData', mockWTSLibraryRunData);
@@ -241,6 +241,7 @@ const LibraryRunTable = () => {
     },
     results: mockWGSLibraryRunData,
   };
+  console.log('data', data);
 
   const tableData = data.results;
   // const wtsTableData = mockWTSWorkflowRunData;
@@ -288,7 +289,7 @@ const LibraryRunTable = () => {
               </div>
               <div className='px-5 flex items-center align w-full max-w-lg md:max-w-xs'>
                 <label className='px-2' htmlFor='select'>
-                  Libray Type
+                  Workflow Type
                 </label>
                 <Select
                   // id='select'

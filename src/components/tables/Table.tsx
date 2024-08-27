@@ -6,7 +6,7 @@ import Pagination, { PaginationProps } from './Pagination';
 type TableData = Record<string, unknown>;
 
 export type Column = {
-  header: ReactNode;
+  header: string;
   accessor: string;
   cell?: (data: unknown) => ReactNode;
   sortable?: boolean;

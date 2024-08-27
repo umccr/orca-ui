@@ -142,3 +142,19 @@ export const WORKFLOW_COLUMN_DISPLAY = {
   sequence_run: false,
   batch_run: false,
 };
+
+export const WORKFLOW_TYPES = [
+  'BCL_CONVERT',
+  'DRAGEN_WGS_QC',
+  'TUMOR_NORMAL',
+  'DRAGEN_TSO_CTDNA',
+  'DRAGEN_WTS',
+  'UMCCRISE',
+  'ONCOANALYSER_WGS',
+  'SASH',
+  'ONCOANALYSER_WGTS_BOTH',
+  'DRAGEN_WTS_QC',
+  'RNASUM',
+  'STAR_ALIGNMENT',
+  'ONCOANALYSER_WTS',
+];

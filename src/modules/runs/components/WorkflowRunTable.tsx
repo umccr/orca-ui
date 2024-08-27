@@ -10,12 +10,20 @@ import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import dayjs from '@/utils/dayjs';
 import { TableCellsIcon } from '@heroicons/react/24/outline';
 import { StatusBadge } from '@/components/common/statusBadge';
+import { Select } from '@/components/common/select';
+import { WORKFLOW_TYPES } from '@/utils/workflows';
 
 const WorkflowRunsTable = () => {
   const [page, setPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(DEFAULT_PAGE_SIZE);
   const [searchBox, setSearchBox] = useState<string>('');
   const [dataQueryParams, setDataQueryParams] = useState<Record<string, string>>({});
+  const [workflowType, setWorkflowType] = useState<string>('Workflow Type');
+
+  const workflowTypeOptions = WORKFLOW_TYPES.map((workflowType: string) => ({
+    value: workflowType,
+    label: workflowType,
+  }));
 
   const onChangeParams = async () => {
     setPage(getPaginationParams().page);
@@ -25,8 +33,10 @@ const WorkflowRunsTable = () => {
   const { setQueryParams, getPaginationParams, clearQueryParams } = useQueryParams(onChangeParams);
 
   useEffect(() => {
-    setPage(getPaginationParams().page);
-    setRowsPerPage(getPaginationParams().rowsPerPage);
+    if (getPaginationParams().page && getPaginationParams().rowsPerPage) {
+      setPage(getPaginationParams().page);
+      setRowsPerPage(getPaginationParams().rowsPerPage);
+    }
   }, [getPaginationParams]);
 
   const WorkflowRunsModel = useWorkflowRunListModel({
@@ -75,10 +85,23 @@ const WorkflowRunsTable = () => {
                   id='search'
                   name='search'
                   className='block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-                  placeholder='Search (SubjectId or LibraryId)'
+                  placeholder='Search (SubjectId, LibraryId or WorkflowrunId)'
                   type='search'
                 />
               </div>
+            </div>
+            <div className='px-5 flex text-sm items-center align w-full max-w-lg md:max-w-xs'>
+              <label className='px-2' htmlFor='select'>
+                Workflow Type
+              </label>
+              <Select
+                // id='select'
+                options={workflowTypeOptions}
+                value={{ value: workflowType, label: workflowType }}
+                onChange={(selected: any) => {
+                  setWorkflowType(selected.value);
+                }}
+              />
             </div>
             <button
               onClick={() => {

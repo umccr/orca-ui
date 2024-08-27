@@ -1,13 +1,20 @@
-import { CircleStackIcon, ArrowPathIcon, CloudArrowUpIcon } from '@heroicons/react/24/outline';
+import { CircleStackIcon, ChartBarIcon, CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import {
   CircleStackIcon as SolidCircleStackIcon,
   CloudArrowUpIcon as SolidCloudArrowUpIcon,
-} from '@heroicons/react/24/solid';
+  ChartBarIcon as SolidChartBarIcon,
+} from '@heroicons/react/20/solid';
+import { AppURLs } from './appURLs';
 
 const sideNavigation = [
-  { name: 'Lab', icon: CircleStackIcon, solidIcon: SolidCircleStackIcon, href: '/lab' },
-  { name: 'Runs', icon: ArrowPathIcon, solidIcon: ArrowPathIcon, href: '/runs' },
-  { name: 'sscheck', icon: CloudArrowUpIcon, solidIcon: SolidCloudArrowUpIcon, href: '/sscheck' },
+  { name: 'Lab', icon: CircleStackIcon, solidIcon: SolidCircleStackIcon, href: AppURLs.Lab },
+  { name: 'Runs', icon: ChartBarIcon, solidIcon: SolidChartBarIcon, href: AppURLs.Runs },
+  {
+    name: 'sscheck',
+    icon: CloudArrowUpIcon,
+    solidIcon: SolidCloudArrowUpIcon,
+    href: AppURLs.Sscheck,
+  },
 ];
 
 const libraryModuleNavigation = [
@@ -34,10 +41,11 @@ const libraryModuleNavigation = [
 
 const runsModuleNavigation = [
   {
+    title: 'Runs',
     children: [
-      { name: 'Sequence', href: '/runs/sequence/' },
-      { name: 'Library', href: '/runs/library/' },
-      { name: 'Workflow', href: '/runs/workflow/' },
+      { name: 'Sequence', href: AppURLs.RunsSequence },
+      { name: 'Library', href: AppURLs.RunsLibrary },
+      { name: 'Workflow', href: AppURLs.RunsWorkflow },
     ],
   },
 ];

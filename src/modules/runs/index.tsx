@@ -7,9 +7,10 @@ import RunsModuleLayout from '@/components/layouts/RunsModuleLayout';
 const SequenceRunPage = lazy(() => import('@/modules/runs/Pages/SequenceRuns'));
 const LibraryRunPage = lazy(() => import('@/modules/runs/Pages/LibraryRuns'));
 const WorkflowRunPage = lazy(() => import('@/modules/runs/Pages/WorkflowRuns'));
+const SequenceRunDetailsPage = lazy(() => import('@/modules/runs/Pages/SequenceRunsDetails'));
 
 export const Router: RouteObject = {
-  path: '',
+  path: AppURLs.Runs,
   element: (
     <RunsModuleLayout>
       <Outlet />
@@ -20,5 +21,10 @@ export const Router: RouteObject = {
     { path: AppURLs.RunsSequence, title: 'Runs - Sequence Run', element: <SequenceRunPage /> },
     { path: AppURLs.RunsLibrary, title: 'Runs - Library Run', element: <LibraryRunPage /> },
     { path: AppURLs.RunsWorkflow, title: 'Runs - Workflow Run', element: <WorkflowRunPage /> },
+    {
+      path: AppURLs.RunsSequenceDeatils,
+      title: 'Runs - Sequence Run Details',
+      element: <SequenceRunDetailsPage />,
+    },
   ],
 };

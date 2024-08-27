@@ -1,7 +1,7 @@
 import { WorkflowDiagram } from '@/components/diagrams';
 import type { Meta, StoryObj } from '@storybook/react';
 
-const mockStatusData = {
+export const mockStatusData = {
   Sequencer: {
     status: 'Requested',
     description: '',

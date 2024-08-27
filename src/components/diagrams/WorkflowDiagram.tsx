@@ -60,6 +60,8 @@ const WorkflowDiagram: FC<DiagramProps> = ({ pipelineType, statusData }) => {
     buttonedge: ButtonEdge,
   };
 
+  const proOptions = { hideAttribution: true };
+
   return (
     <>
       <CustomArrowHeader />
@@ -72,8 +74,9 @@ const WorkflowDiagram: FC<DiagramProps> = ({ pipelineType, statusData }) => {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         fitView
+        proOptions={proOptions}
       >
-        <Background />
+        {/* <Background /> */}
         {/* <MiniMap /> */}
         <Controls />
       </ReactFlow>

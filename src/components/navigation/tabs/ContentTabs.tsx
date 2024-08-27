@@ -1,5 +1,6 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useState } from 'react';
+import { useQueryParams } from '@/hooks/useQueryParams';
 
 interface TabItemProps {
   label: string;
@@ -10,10 +11,25 @@ export interface TabsProps {
 }
 
 export const Tabs: FC<TabsProps> = ({ tabs }) => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const onChangeParams = (queryParams: URLSearchParams) => {
+    const tab = queryParams.get('tab');
+    if (tab) {
+      setSelectedIndex(tabs.findIndex((t) => t.label === tab));
+    }
+  };
+
+  const onChangeTabs = (index: number) => {
+    setSelectedIndex(index);
+    setQueryParams({ tab: tabs[index].label });
+  };
+
+  const { setQueryParams } = useQueryParams(onChangeParams);
+
   return (
-    <div className='flex h-screen w-full justify-center pt-24 px-4 '>
-      <div className='w-full max-w-md'>
-        <TabGroup>
+    <div className='flex h-full w-full justify-center pt-4 px-4 '>
+      <div className='w-full'>
+        <TabGroup selectedIndex={selectedIndex} onChange={onChangeTabs}>
           <TabList className='flex'>
             {tabs.map(({ label }, index) => (
               <Tab
@@ -26,7 +42,7 @@ export const Tabs: FC<TabsProps> = ({ tabs }) => {
           </TabList>
           <TabPanels className='mt-3'>
             {tabs.map(({ content }, index) => (
-              <TabPanel key={index} className='rounded-xl bg-white p-3'>
+              <TabPanel key={index} className='rounded-xl p-3'>
                 {content}
               </TabPanel>
             ))}

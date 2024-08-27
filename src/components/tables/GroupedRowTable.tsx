@@ -7,7 +7,7 @@ type TableData = {
 };
 
 type Column = {
-  header: ReactNode;
+  header: string;
   accessor: string;
   cell?: (data: string | number) => ReactNode;
 };

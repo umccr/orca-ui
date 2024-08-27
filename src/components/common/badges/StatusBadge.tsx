@@ -1,7 +1,7 @@
-import { Badge } from '../badges';
+import { Badge } from '.';
 import { StatusIcon } from '../statusIcon';
 
-export const StatusBadge = ({ status }: { status: string }) => {
+const StatusBadge = ({ status }: { status: string }) => {
   return (
     <Badge status={status} className='flex flex-row items-center h-7'>
       <div className='pr-2 '>
@@ -12,3 +12,5 @@ export const StatusBadge = ({ status }: { status: string }) => {
     </Badge>
   );
 };
+
+export default StatusBadge;

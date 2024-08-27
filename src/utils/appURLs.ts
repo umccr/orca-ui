@@ -17,6 +17,7 @@ export enum AppURLs {
   // Runs
   Runs = '/runs',
   RunsSequence = '/runs/sequence',
+  RunsSequenceDeatils = '/runs/sequence/:id',
   RunsSequenceDeatilsTable = '/runs/sequence/:id/table',
   RunsSequenceDeatilsDiagram = '/runs/sequence/:id/diagram',
   RunsSequenceDeatilsReport = '/runs/sequence/:id/report',

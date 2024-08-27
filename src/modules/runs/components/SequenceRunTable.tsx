@@ -120,7 +120,7 @@ const sequenceRunColumn: Column[] = [
       } else {
         return (
           <Link
-            to={`sequence/${instrumentRunId}`}
+            to={`${instrumentRunId}`}
             className={classNames(
               'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
             )}

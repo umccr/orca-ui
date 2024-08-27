@@ -45,7 +45,7 @@ const Breadcrumb: FC = () => {
                 />
               )}
               <Link
-                to={splitPath.slice(0, key + 1).join('/')}
+                to={`/${splitPath.slice(0, key + 1).join('/')}`}
                 className={classNames(
                   'ml-2 text-sm uppercase font-medium hover:text-blue-700',
                   currentPage == path ? 'text-blue-500' : 'text-grey-500'
