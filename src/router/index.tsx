@@ -1,13 +1,12 @@
 import { lazy, Suspense } from 'react';
 import { useRoutes, Navigate, Outlet } from 'react-router-dom';
 import { useUserContext } from '@/context/UserContext';
-import Page from '@/components/common/page';
 import { AppURLs } from '@/utils/appURLs';
 
 const SignInPage = lazy(() => import('@/modules/auth/SignInPage'));
 import MainLayout from '@/components/layouts/MainLayout';
 
-import modules from './modules';
+import modulesRouters from './modules';
 
 export default function AppRoutes() {
   const { isAuth } = useUserContext();
@@ -26,17 +25,7 @@ export default function AppRoutes() {
       ),
       children: [
         { path: '', element: <Navigate to='lab' replace /> },
-        ...modules.map((x) => {
-          return {
-            ...x.Router,
-            children: Array.isArray(x.Router.children)
-              ? x.Router.children.map((c) => ({
-                  ...c,
-                  element: <Page title={c.title}>{c.element}</Page>,
-                }))
-              : [],
-          };
-        }),
+        ...modulesRouters,
         { path: '*', element: <div>Path not found/implemented!</div> },
       ],
     },
@@ -50,7 +39,6 @@ export default function AppRoutes() {
       element: <Navigate to='/signIn' replace />,
     },
   ];
-
   // useRoutes hook for customize module routes
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return useRoutes(routes as any);

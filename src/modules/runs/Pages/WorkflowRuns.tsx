@@ -5,6 +5,7 @@ import MainArea from '@/components/layouts/MainArea';
 import WorkflowTable from '../components/WorkflowRunTable';
 
 const Workflow = () => {
+  console.log('workflows');
   return (
     <Suspense fallback={<SpinnerWithText text='Loading metadata table ...' />}>
       <DetailedErrorBoundary errorTitle='Unable to load metadata table'>

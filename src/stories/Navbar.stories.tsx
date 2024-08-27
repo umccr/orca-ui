@@ -1,11 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ModuleNavbar, SideNavbar } from '@/components/navigation/navbar';
 import { withRouter, reactRouterParameters } from 'storybook-addon-remix-react-router';
-import navigation, {
-  subjectModuleNavigation,
-  libraryModuleNavigation,
-  runsModuleNavigation,
-} from '@/utils/navigation';
+import navigation, { libraryModuleNavigation, runsModuleNavigation } from '@/utils/navigation';
 
 const meta: Meta = {
   title: 'Naviagtion/ModuleNavbar',
@@ -44,10 +40,6 @@ export const SimpleSideNavbar: Story = {
   args: {
     navigation,
   },
-};
-
-export const SubjectModuleNavbar: Story = {
-  render: () => <ModuleNavbar navigation={subjectModuleNavigation} />,
 };
 
 export const LibraryModuleNavbar: Story = {

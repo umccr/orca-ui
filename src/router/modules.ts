@@ -1,6 +1,6 @@
 import * as Runs from '@/modules/runs';
 import * as Lab from '@/modules/lab';
 
-const modules = [Lab, Runs];
+const modulesRouters = [Lab.Router, Runs.Router];
 
-export default modules;
+export default modulesRouters;

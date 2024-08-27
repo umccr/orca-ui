@@ -1,22 +1,39 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { generatePresignedUrl, getPreSignedUrlData } from './utils';
+import { getMimeType, getPreSignedUrlData } from './utils';
+import { usePresignedFileObjectId } from '@/api/file';
 
-type Props = { bucket: string; s3Key: string };
-export const PreViewer = ({ bucket, s3Key: key }: Props) => {
+type Props = { s3ObjectId: string; s3Key: string };
+export const PreViewer = ({ s3ObjectId, s3Key }: Props) => {
+  const url = usePresignedFileObjectId({
+    params: { path: { id: s3ObjectId }, query: { responseContentDisposition: 'inline' } },
+    headers: { 'Content-Type': getMimeType(s3Key) },
+  }).data;
+  if (!url) throw new Error('Unable to create presigned url');
+
   const data = useSuspenseQuery({
-    queryKey: ['generatePresignedUrl', { bucket, key }],
+    queryKey: ['downloadPresignedData', url],
     queryFn: async () => {
-      const url = await generatePresignedUrl({ bucket, key });
       const data = await getPreSignedUrlData(url);
       return data;
     },
   }).data;
+  if (!data) throw new Error('Unable to load data');
 
-  if (!data) throw new Error('No Data');
+  // Sanitize and split string
+  const sanitizeContent: string = data.replace(/\r\n/g, '\n');
+  const allRows: string[] = sanitizeContent.split('\n');
+  const viewableRows = allRows.slice(0, 1000);
 
   return (
-    <div>
-      <pre>{data}</pre>
-    </div>
+    <>
+      {viewableRows.length > 1000 && (
+        <div className='w-full bg-amber-100 text-amber-700 p-2 border mb-3'>
+          Only showing the first 1000 rows
+        </div>
+      )}
+      <pre className='overflow-auto inline-block m-0 mt-4 p-3 w-full bg-white border border-solid border-current border-round-xs'>
+        {viewableRows.join('\n')}
+      </pre>
+    </>
   );
 };

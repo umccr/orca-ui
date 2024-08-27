@@ -1,34 +1,42 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { generatePresignedUrl, getPreSignedUrlData } from './utils';
+import { getMimeType, getPreSignedUrlData } from './utils';
 import { useState } from 'react';
 import { Table } from '../tables';
 import { Column } from '../tables/Table';
+import { usePresignedFileObjectId } from '@/api/file';
 
-type Props = { bucket: string; s3Key: string };
-export const TableViewer = ({ bucket, s3Key: key }: Props) => {
-  const [isPrettify, setIsPrettify] = useState(true);
+type Props = { s3ObjectId: string; s3Key: string };
+
+export const TableViewer = ({ s3ObjectId, s3Key }: Props) => {
+  const url = usePresignedFileObjectId({
+    params: { path: { id: s3ObjectId }, query: { responseContentDisposition: 'inline' } },
+    headers: { 'Content-Type': getMimeType(s3Key) },
+  }).data;
+  if (!url) throw new Error('Unable to create presigned url');
+
   const data = useSuspenseQuery({
-    queryKey: ['generatePresignedUrl', { bucket, key }],
+    queryKey: ['downloadPresignedData', url],
     queryFn: async () => {
-      const url = await generatePresignedUrl({ bucket, key });
       const data = await getPreSignedUrlData(url);
-
       return data;
     },
   }).data;
+  if (!data) throw new Error('Unable to load data');
 
-  if (!key.endsWith) throw new Error('No Data');
+  const [isPrettify, setIsPrettify] = useState(true);
+  if (!s3Key.endsWith) throw new Error('No Data');
 
   let delimiter = '';
-  if (key.endsWith('tsv')) delimiter = '\t';
-  if (key.endsWith('csv')) delimiter = ',';
+  if (s3Key.endsWith('tsv')) delimiter = '\t';
+  if (s3Key.endsWith('csv')) delimiter = ',';
 
   // Sanitize and split string
   const sanitizeContent: string = data.replace(/\r\n/g, '\n');
   const allRows: string[] = sanitizeContent.split('\n');
+  const viewableRows = allRows.slice(0, 1000);
   const headerRow: string[] = allRows[0].split(delimiter);
 
-  const jsonData = allRows.slice(1).map((row, idx) => {
+  const jsonData = viewableRows.slice(1).map((row, idx) => {
     // Split each row by commas to get the individual cell values
     const values = row.split(delimiter);
 
@@ -54,7 +62,12 @@ export const TableViewer = ({ bucket, s3Key: key }: Props) => {
   });
 
   return (
-    <div className='w-full h-full flex flex-col'>
+    <div className='w-full h-full flex flex-col mb-2'>
+      {allRows.length > 1000 && (
+        <div className='w-full bg-amber-100 text-amber-700 p-2 border mb-3'>
+          Only showing the first 1000 rows
+        </div>
+      )}
       <div className='flex items-center'>
         <input
           id='default-checkbox'
@@ -71,13 +84,8 @@ export const TableViewer = ({ bucket, s3Key: key }: Props) => {
       {isPrettify ? (
         <Table tableData={jsonData} columns={headerTableProps} />
       ) : (
-        <pre
-          className='overflow-auto inline-block m-0 mt-4 p-3 w-full bg-white border border-solid border-current border-round-xs'
-          style={{
-            minWidth: '50vw',
-          }}
-        >
-          {data}
+        <pre className='overflow-auto inline-block m-0 mt-4 p-3 w-full bg-white border border-solid border-current border-round-xs'>
+          {viewableRows.join('\n')}
         </pre>
       )}
     </div>

@@ -1,16 +1,17 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { generatePresignedUrl } from './utils';
+import { usePresignedFileObjectId } from '@/api/file';
+import { getMimeType } from './utils';
 
-type Props = { bucket: string; s3Key: string };
-export const IFrameViewer = ({ bucket, s3Key: key }: Props) => {
-  const url = useSuspenseQuery({
-    queryKey: ['generatePresignedUrl', { bucket, key }],
-    queryFn: async () => {
-      return await generatePresignedUrl({ bucket, key });
+type Props = { s3ObjectId: string; s3Key: string };
+export const IFrameViewer = ({ s3ObjectId, s3Key }: Props) => {
+  const url = usePresignedFileObjectId({
+    params: {
+      path: { id: s3ObjectId },
+      query: { responseContentDisposition: 'inline' },
     },
+    headers: { 'Content-Type': getMimeType(s3Key) },
   }).data;
 
-  if (!url) throw new Error('No Data');
+  if (!url) throw new Error('Unable to create presigned url');
 
   return (
     <div className='w-full h-full'>

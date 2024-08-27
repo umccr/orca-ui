@@ -1,8 +1,9 @@
 import { lazy } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
-import { RouteObject } from '@/types/routeObject';
-import { AppURLs } from '@/utils/appURLs';
+// import { RouteObject } from '@/types/routeObject';
+// import { AppURLs } from '@/utils/appURLs';
 import RunsModuleLayout from '@/components/layouts/RunsModuleLayout';
+import { RouteObject } from 'react-router-dom';
 
 const SequenceRunPage = lazy(() => import('@/modules/runs/Pages/SequenceRuns'));
 const LibraryRunPage = lazy(() => import('@/modules/runs/Pages/LibraryRuns'));
@@ -10,20 +11,19 @@ const WorkflowRunPage = lazy(() => import('@/modules/runs/Pages/WorkflowRuns'));
 const SequenceRunDetailsPage = lazy(() => import('@/modules/runs/Pages/SequenceRunsDetails'));
 
 export const Router: RouteObject = {
-  path: AppURLs.Runs,
+  path: 'runs',
   element: (
     <RunsModuleLayout>
       <Outlet />
     </RunsModuleLayout>
   ),
   children: [
-    { path: AppURLs.Runs, element: <Navigate to='sequence' replace /> },
-    { path: AppURLs.RunsSequence, title: 'Runs - Sequence Run', element: <SequenceRunPage /> },
-    { path: AppURLs.RunsLibrary, title: 'Runs - Library Run', element: <LibraryRunPage /> },
-    { path: AppURLs.RunsWorkflow, title: 'Runs - Workflow Run', element: <WorkflowRunPage /> },
+    { path: '', element: <Navigate to='sequence' replace /> },
+    { path: 'sequence', element: <SequenceRunPage /> },
+    { path: 'library', element: <LibraryRunPage /> },
+    { path: 'workflow', element: <WorkflowRunPage /> },
     {
-      path: AppURLs.RunsSequenceDeatils,
-      title: 'Runs - Sequence Run Details',
+      path: 'sequence/:id',
       element: <SequenceRunDetailsPage />,
     },
   ],

@@ -38,7 +38,6 @@ const Table: FC<TableProps> = ({
     key: string;
     direction: 'ascending' | 'descending';
   } | null>(null);
-
   const onSort = (key: string) => {
     const direction =
       sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending'
@@ -84,12 +83,12 @@ const Table: FC<TableProps> = ({
                     {columns &&
                       columns.map((column, index) => (
                         <th
-                          key={index}
+                          key={`${column.accessor}-${index}`}
                           scope='col'
                           className={classNames(
-                            'px-2 py-3 text-left text-sm font-semibold text-gray-900',
-                            index == 0 ? 'pl-4 sm:pl-6 lg:pl-8' : '',
-                            index == columns.length - 1 ? 'pr-4 sm:pr-6 lg:pr-8' : '',
+                            'px-3 py-3.5 text-left text-sm font-bold text-gray-900',
+                            index == 0 ? 'pl-4 sm:pl-6' : '',
+                            index == columns.length - 1 ? 'pr-4 sm:pr-6 ' : '',
                             stickyHeader
                               ? 'sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75'
                               : ''
@@ -128,7 +127,7 @@ const Table: FC<TableProps> = ({
                       {columns &&
                         columns.map((column, index) => (
                           <td
-                            key={index}
+                            key={`${column.accessor}-${index}`}
                             className={classNames(
                               'whitespace-nowrap py-1 px-3 text-sm font-medium text-gray-900',
                               index == 0 ? 'pl-4 sm:pl-6' : '',
