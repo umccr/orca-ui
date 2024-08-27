@@ -7,7 +7,7 @@ import { authMiddleware } from './utils';
 const client = createClient<paths>({ baseUrl: config.apiEndpoint.sequenceRun });
 client.use(authMiddleware);
 
-type UseQueryOptions<T> = ParamsOption<T> &
+type UseSuspenseQueryOptions<T> = ParamsOption<T> &
   RequestBodyOption<T> & {
     // add your custom options here
     reactQuery?: {
@@ -16,11 +16,11 @@ type UseQueryOptions<T> = ParamsOption<T> &
     };
   };
 
-const sequenceRunDataPath = '/srm/v1/sequence/';
+const sequenceRunDataPath = '/api/v1/sequence/';
 export function useSequenceRunDataModel({
   params,
   reactQuery,
-}: UseQueryOptions<paths[typeof sequenceRunDataPath]['get']>) {
+}: UseSuspenseQueryOptions<paths[typeof sequenceRunDataPath]['get']>) {
   return useSuspenseQuery({
     ...reactQuery,
     queryKey: [sequenceRunDataPath, params],

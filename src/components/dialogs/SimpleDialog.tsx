@@ -60,7 +60,9 @@ const SimpleDialog: FC<DialogProps> = ({
                   <DialogTitle as='h3' className='text-base font-semibold leading-6 text-gray-900'>
                     {title}
                   </DialogTitle>
-                  <div className='mt-2 text-sm text-gray-500'>{content && content}</div>
+                  <div className='mt-2 text-sm text-gray-500 overflow-auto'>
+                    {!!content && content}
+                  </div>
                 </div>
               </div>
             </div>

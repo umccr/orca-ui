@@ -65,7 +65,7 @@ export const TokenDialog = ({ onClose }: Props) => {
                   <td>{jwtData.expires}</td>
                 </tr>
                 <tr className='h-8'>
-                  <td className='w-24font-bold'>JWT</td>
+                  <td className='w-24 font-bold'>JWT</td>
                   <td className='text-ellipsis text-nowrap overflow-hidden'>{jwtData.token}</td>
                 </tr>
                 <tr className='h-12'>

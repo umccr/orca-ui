@@ -1,18 +1,20 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { Routes, Route, Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { useUserContext } from '@/context/UserContext';
 
 const SignInPage = lazy(() => import('@/pages/SignInPage'));
-const LabPage = lazy(() => import('@/pages/Lab'));
 const Sequence = lazy(() => import('@/pages/Runs/sequence'));
 const Library = lazy(() => import('@/pages/Runs/library'));
 const Workflow = lazy(() => import('@/pages/Runs/workflow'));
 
 import MainLayout from '@/components/layouts/MainLayout';
+import { LabRouter } from './LabRouter';
+import { DetailedErrorBoundary } from '@/components/common/error';
 import RunsModuleLayout from '@/components/layouts/RunsModuleLayout';
 
 export default function AppRoutes() {
   const isUserSignedIn = useUserContext().isAuth;
+  const navigate = useNavigate();
 
   if (!isUserSignedIn) {
     return (
@@ -30,13 +32,15 @@ export default function AppRoutes() {
         element={
           <MainLayout>
             <Suspense>
-              <Outlet />
+              <DetailedErrorBoundary onCloseError={() => navigate('/')}>
+                <Outlet />
+              </DetailedErrorBoundary>
             </Suspense>
           </MainLayout>
         }
       >
         <Route index element={<Navigate to='lab' />} />
-        <Route path='lab' element={<LabPage />} />
+        <Route path='lab/*' element={<LabRouter />} />
         <Route
           path='runs'
           element={

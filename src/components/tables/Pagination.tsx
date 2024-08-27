@@ -20,7 +20,7 @@ export type PaginationProps = {
 export default function Pagination({
   totalCount,
   rowsPerPage,
-  countUnit,
+  countUnit = 'records',
   setPage,
   setRowsPerPage,
   currentPage,
@@ -66,32 +66,32 @@ export default function Pagination({
           <p className='text-sm text-gray-700'>
             Showing <span className='font-medium'>{from}</span> to{' '}
             <span className='font-medium'>{to}</span> of{' '}
-            <span className='font-medium'>{totalCount}</span> {countUnit ?? 'results'}
+            <span className='font-medium'>{totalCount}</span> {countUnit}
           </p>
+        </div>
 
-          {/* Rows per page: */}
-          <div className='flex flex-row'>
-            <label
-              htmlFor='rows-per-page'
-              className='text-sm text-gray-700 font-medium text-nowrap pl-2 pr-1'
-            >
-              entries
-            </label>
-            <select
-              id='rows-per-page'
-              name='rows-per-page'
-              className='block  text-sm w-full rounded border-gray-300 bg-white text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600'
-              value={rowsPerPageNumber}
-              onChange={(e) => {
-                setRowsPerPage(parseInt(e.target.value));
-              }}
-            >
-              <option value='10'>10</option>
-              <option value='20'>20</option>
-              <option value='50'>50</option>
-              <option value='100'>100</option>
-            </select>
-          </div>
+        {/* Rows per page: */}
+        <div className='flex flex-row items-center'>
+          <label
+            htmlFor='rows-per-page'
+            className='text-sm text-gray-700 font-medium text-nowrap pl-2 pr-1'
+          >
+            entries
+          </label>
+          <select
+            id='rows-per-page'
+            name='rows-per-page'
+            className='block text-sm my-1 w-full h-7 p-1 rounded border-gray-300 bg-white text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-500/75'
+            value={rowsPerPageNumber}
+            onChange={(e) => {
+              setRowsPerPage(parseInt(e.target.value));
+            }}
+          >
+            <option value='10'>10</option>
+            <option value='20'>20</option>
+            <option value='50'>50</option>
+            <option value='100'>100</option>
+          </select>
         </div>
 
         <div>
@@ -125,7 +125,7 @@ export default function Pagination({
               name='set-page'
               min={1}
               max={maxPage}
-              className='block w-16 my-1 text-sm rounded-md border-0 bg-white px-4 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600'
+              className='block w-16 my-1 text-sm rounded-md border-0 bg-white px-4 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-500/75'
               value={inputPageNumber}
               onChange={(e) => {
                 if (e.target.value === '') {

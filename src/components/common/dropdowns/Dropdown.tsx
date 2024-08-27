@@ -11,24 +11,42 @@ export interface DropdownItemProps {
 }
 
 export interface DropdownProps {
-  label: string;
+  floatingLabel?: string;
+  floatingLabelClassName?: string;
+  value: string;
   className?: string;
   items: DropdownItemProps[];
 }
 
-const Dropdown: FC<DropdownProps> = ({ label, className = '', items }) => {
+const Dropdown: FC<DropdownProps> = ({
+  floatingLabel,
+  floatingLabelClassName,
+  value,
+  className = '',
+  items,
+}) => {
   return (
-    <Menu as='div' className='relative inline-block text-left'>
+    <Menu as='div' className='relative inline-block text-left cursor-pointer min-w-48'>
+      {floatingLabel && (
+        <label
+          className={classNames(
+            'absolute text-sm text-gray-500 -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 start-1',
+            floatingLabelClassName ? floatingLabelClassName : ''
+          )}
+        >
+          {floatingLabel}
+        </label>
+      )}
       <MenuButton as={Fragment}>
         {({ active }) => (
           <div
             className={classNames(
-              'inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-none data-[hover]:bg-gray-70 data-[open]:bg-gray-70 data-[focus]:outline-1 data-[focus]:outline-white',
+              'inline-flex w-full justify-between gap-x-1.5 rounded-md p-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-none data-[hover]:bg-gray-70 data-[open]:bg-gray-70 data-[focus]:outline-1 data-[focus]:outline-white',
               className,
               active ? 'bg-gray-100' : 'bg-white'
             )}
           >
-            {label}
+            {value}
             <ChevronDownIcon
               className={classNames(
                 '-mr-1 h-5 w-5 text-gray-400 transition-transform duration-300',

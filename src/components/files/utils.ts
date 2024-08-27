@@ -1,7 +1,4 @@
-export const generatePresignedUrl = async (props: { bucket: string; key: string }) => {
-  console.log('Generating presigned url for', props);
-  return 'http://...';
-};
+import mimeDb from 'mime-db';
 
 export const getPreSignedUrlData = async (url: string) => {
   const fetchResponse = await fetch(url);
@@ -12,4 +9,16 @@ export const getPreSignedUrlData = async (url: string) => {
 
   const responseString = await fetchResponse.text();
   return responseString;
+};
+
+export const getMimeType = (filename: string): string => {
+  const extension = filename.split('.').pop();
+  if (!extension) return 'application/octet-stream';
+
+  for (const [key, value] of Object.entries(mimeDb)) {
+    if (value.extensions && value.extensions.includes(extension)) {
+      return key;
+    }
+  }
+  return 'application/octet-stream';
 };

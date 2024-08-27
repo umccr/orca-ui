@@ -1,3 +1,3 @@
-import InfoDrawer from './InfoDrawers';
+import Drawer from './InfoDrawers';
 
-export { InfoDrawer };
+export { Drawer };

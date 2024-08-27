@@ -4,14 +4,14 @@
  */
 
 export interface paths {
-    "/wfm/v1/payload/": {
+    "/api/v1/payload/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["wfm_v1_payload_list"];
+        get: operations["api_v1_payload_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -20,14 +20,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/wfm/v1/payload/{id}/": {
+    "/api/v1/payload/{id}/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["wfm_v1_payload_retrieve"];
+        get: operations["api_v1_payload_retrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -36,14 +36,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/wfm/v1/workflow/": {
+    "/api/v1/workflow/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["wfm_v1_workflow_list"];
+        get: operations["api_v1_workflow_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -52,14 +52,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/wfm/v1/workflow/{id}/": {
+    "/api/v1/workflow/{id}/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["wfm_v1_workflow_retrieve"];
+        get: operations["api_v1_workflow_retrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -68,14 +68,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/wfm/v1/workflowrun/": {
+    "/api/v1/workflowrun/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["wfm_v1_workflowrun_list"];
+        get: operations["api_v1_workflowrun_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -84,14 +84,78 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/wfm/v1/workflowrun/{id}/": {
+    "/api/v1/workflowrun/{id}/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["wfm_v1_workflowrun_retrieve"];
+        get: operations["api_v1_workflowrun_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/{workflowrun_id}/library/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["api_v1_workflowrun_library_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/{workflowrun_id}/library/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["api_v1_workflowrun_library_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/{workflowrun_id}/state/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["api_v1_workflowrun_state_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/{workflowrun_id}/state/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["api_v1_workflowrun_state_retrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -104,6 +168,30 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        LibraryModel: {
+            orcabusId: string;
+            libraryId: string;
+        };
+        PaginatedLibraryModelList: {
+            links: {
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=4
+                 */
+                next?: string | null;
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=2
+                 */
+                previous?: string | null;
+            };
+            pagination: {
+                count?: number;
+                page?: number;
+                rowsPerPage?: number;
+            };
+            results: components["schemas"]["LibraryModel"][];
+        };
         PaginatedPayloadModelList: {
             links: {
                 /**
@@ -123,6 +211,26 @@ export interface components {
                 rowsPerPage?: number;
             };
             results: components["schemas"]["PayloadModel"][];
+        };
+        PaginatedStateModelList: {
+            links: {
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=4
+                 */
+                next?: string | null;
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=2
+                 */
+                previous?: string | null;
+            };
+            pagination: {
+                count?: number;
+                page?: number;
+                rowsPerPage?: number;
+            };
+            results: components["schemas"]["StateModel"][];
         };
         PaginatedWorkflowModelList: {
             links: {
@@ -166,29 +274,35 @@ export interface components {
         };
         PayloadModel: {
             readonly id: number;
-            payload_ref_id: string;
+            payloadRefId: string;
             version: string;
             data: unknown;
         };
-        WorkflowModel: {
+        StateModel: {
             readonly id: number;
-            workflow_name: string;
-            workflow_version: string;
-            execution_engine: string;
-            execution_engine_pipeline_id: string;
-            approval_state: string;
-        };
-        WorkflowRunModel: {
-            readonly id: number;
-            portal_run_id: string;
             status: string;
             /** Format: date-time */
             timestamp: string;
-            execution_id?: string | null;
-            workflow_run_name?: string | null;
+            comment?: string | null;
+            workflowRun: number;
+            payload?: number | null;
+        };
+        WorkflowModel: {
+            readonly id: number;
+            workflowName: string;
+            workflowVersion: string;
+            executionEngine: string;
+            executionEnginePipelineId: string;
+            approvalState: string;
+        };
+        WorkflowRunModel: {
+            readonly id: number;
+            portalRunId: string;
+            executionId?: string | null;
+            workflowRunName?: string | null;
             comment?: string | null;
             workflow?: number | null;
-            payload?: number | null;
+            readonly libraries: string[];
         };
     };
     responses: never;
@@ -199,7 +313,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    wfm_v1_payload_list: {
+    api_v1_payload_list: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -227,7 +341,7 @@ export interface operations {
             };
         };
     };
-    wfm_v1_payload_retrieve: {
+    api_v1_payload_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -249,7 +363,7 @@ export interface operations {
             };
         };
     };
-    wfm_v1_workflow_list: {
+    api_v1_workflow_list: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -277,7 +391,7 @@ export interface operations {
             };
         };
     };
-    wfm_v1_workflow_retrieve: {
+    api_v1_workflow_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -299,7 +413,7 @@ export interface operations {
             };
         };
     };
-    wfm_v1_workflowrun_list: {
+    api_v1_workflowrun_list: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -327,7 +441,7 @@ export interface operations {
             };
         };
     };
-    wfm_v1_workflowrun_retrieve: {
+    api_v1_workflowrun_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -345,6 +459,110 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkflowRunModel"];
+                };
+            };
+        };
+    };
+    api_v1_workflowrun_library_list: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description Number of results to return per page. */
+                rowsPerPage?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path: {
+                workflowrunId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedLibraryModelList"];
+                };
+            };
+        };
+    };
+    api_v1_workflowrun_library_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                workflowrunId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LibraryModel"];
+                };
+            };
+        };
+    };
+    api_v1_workflowrun_state_list: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description Number of results to return per page. */
+                rowsPerPage?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path: {
+                workflowrunId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedStateModelList"];
+                };
+            };
+        };
+    };
+    api_v1_workflowrun_state_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                workflowrunId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StateModel"];
                 };
             };
         };

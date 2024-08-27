@@ -1,12 +1,13 @@
 import { FC, ReactNode } from 'react';
 
 export interface ButtonProps {
-  type?: 'primary' | 'secondary' | 'light' | 'green' | 'red' | 'yellow';
+  type?: 'primary' | 'secondary' | 'light' | 'green' | 'red' | 'yellow' | 'gray';
   size?: 'sm' | 'md' | 'lg';
   rounded?: boolean;
   children: ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   className?: string;
+  disabled?: boolean;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -16,6 +17,7 @@ const Button: FC<ButtonProps> = ({
   rounded = false,
   onClick,
   className = '',
+  disabled = false,
 }) => {
   const baseStyles =
     'font-normal text-center me-2 mb-2 py-1.5 px-3 text-sm shadow-sm transition-colors duration-300 transform focus:outline-none focus:ring-opacity-80 flex items-center gap-x-2 ';
@@ -52,6 +54,7 @@ const Button: FC<ButtonProps> = ({
       ' hover:bg-yellow-500' +
       ' focus:ring-4 focus:ring-yellow-300' +
       ' dark:focus:ring-yellow-900',
+    gray: 'text-gray-500' + ' hover:bg-magpie-light-50' + ' focus:ring-2 focus:ring-blue-500/50',
   };
 
   const sizeStyles: { [key: string]: string } = {
@@ -61,12 +64,14 @@ const Button: FC<ButtonProps> = ({
   };
 
   const roundedStyles = rounded ? ' rounded-full ' : ' rounded ';
+  const disabledStyles = disabled ? ' opacity-50 cursor-not-allowed hover:!bg-transparent' : ' ';
 
   return (
     <button
       type='button'
-      className={`${baseStyles} ${typeStyles[type]} ${sizeStyles[size]} ${roundedStyles} ${className}`}
+      className={`${baseStyles} ${typeStyles[type]} ${sizeStyles[size]} ${roundedStyles} ${disabledStyles} ${className}`}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </button>

@@ -11,7 +11,7 @@ export type BreadcrumbProps = {
   }[];
 };
 
-const Breadcrumb: FC = () => {
+const LocationBreadcrumb: FC = () => {
   // const { pages } = props;
 
   let fullPath = useLocation().pathname;
@@ -31,7 +31,6 @@ const Breadcrumb: FC = () => {
 
   const splitPath = fullPath.split('/');
   const currentPage = splitPath[splitPath.length - 1];
-
   return (
     <nav className='flex mb-3' aria-label='Breadcrumb'>
       <ol role='list' className='flex items-center space-x-2 -ml-2'>
@@ -45,7 +44,7 @@ const Breadcrumb: FC = () => {
                 />
               )}
               <Link
-                to={splitPath.slice(0, key + 1).join('/')}
+                to={`/${splitPath.slice(0, key + 1).join('/')}`}
                 className={classNames(
                   'ml-2 text-sm uppercase font-medium hover:text-blue-700',
                   currentPage == path ? 'text-blue-500' : 'text-grey-500'
@@ -62,4 +61,4 @@ const Breadcrumb: FC = () => {
   );
 };
 
-export default Breadcrumb;
+export default LocationBreadcrumb;
