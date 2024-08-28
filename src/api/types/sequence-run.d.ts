@@ -11,7 +11,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_sequence_list"];
+        get: operations["apiV1SequenceList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -27,7 +27,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_sequence_retrieve"];
+        get: operations["apiV1SequenceRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -56,26 +56,26 @@ export interface components {
             pagination: {
                 count?: number;
                 page?: number;
-                rows_per_page?: number;
+                rowsPerPage?: number;
             };
             results: components["schemas"]["Sequence"][];
         };
         Sequence: {
             readonly id: number;
-            instrument_run_id: string;
-            run_volume_name: string;
-            run_folder_path: string;
-            run_data_uri: string;
+            instrumentRunId: string;
+            runVolumeName: string;
+            runFolderPath: string;
+            runDataUri: string;
             status: components["schemas"]["StatusEnum"];
             /** Format: date-time */
-            start_time: string;
+            startTime: string;
             /** Format: date-time */
-            end_time?: string | null;
-            reagent_barcode?: string | null;
-            flowcell_barcode?: string | null;
-            sample_sheet_name?: string | null;
-            sequence_run_id?: string | null;
-            sequence_run_name?: string | null;
+            endTime?: string | null;
+            reagentBarcode?: string | null;
+            flowcellBarcode?: string | null;
+            sampleSheetName?: string | null;
+            sequenceRunId?: string | null;
+            sequenceRunName?: string | null;
         };
         /**
          * @description * `STARTED` - Started
@@ -94,7 +94,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    api_v1_sequence_list: {
+    apiV1SequenceList: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -102,7 +102,7 @@ export interface operations {
                 /** @description A page number within the paginated result set. */
                 page?: number;
                 /** @description Number of results to return per page. */
-                rows_per_page?: number;
+                rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
             };
@@ -122,7 +122,7 @@ export interface operations {
             };
         };
     };
-    api_v1_sequence_retrieve: {
+    apiV1SequenceRetrieve: {
         parameters: {
             query?: never;
             header?: never;

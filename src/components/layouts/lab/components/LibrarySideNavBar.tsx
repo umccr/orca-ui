@@ -1,4 +1,3 @@
-import React from 'react';
 import { ModuleNavbar } from '@/components/navigation/navbar';
 import { useLocation, useParams } from 'react-router-dom';
 import { useWorkflowModel } from '@/api/workflow';

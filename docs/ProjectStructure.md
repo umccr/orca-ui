@@ -37,26 +37,25 @@
 |   |-- useDialog.ts
 |-- /router                 # react routes
 |   |-- index.ts
-|   |-- portal.ts
-|   |-- status.ts
-|   |-- paths.ts            # route paths defined in system
-|-- /pages                  # Route-specific components
-|   |-- /HomePage
-|   |   |-- index.tsx       # Main component for the HomePage
-|   |   |-- /page-sections
-|   |       |-- WorkflowTable.tsx  # Hero section of the HomePage
+|   |-- modules.ts            # modules routers collections defined in system
+|-- /modules                  # Route-specific components
+|   |-- /runs
+|   |   |-- index.tsx       # router for thsi modules
+|   |   |-- /Pages
+|   |       |-- WorkflowRuns.tsx  # Page section of the ModulesPage
+|   |   |-- /components
+|   |       |-- WorkflowTable.tsx  # components section of the HomePage
 |-- /utils                  # Utility functions
 |   |-- formatDate.ts
 |   |-- calculateTotal.ts
 |-- /types                  # TypeScript type definitions
-|   |-- apiResponseTypes.ts
-|   |-- workflowTypes.ts
+|   |-- commonTypes.d.ts
+|   |-- vite-env.d.ts
 |-- /stories                # storybook store
 |   |-- assets
 |   |-- Button.stories.tsx
 |-- App.tsx                 # Root component
 |-- main.tsx                # Entry point of the application
-|-- vite-env.d.ts           # TypeScript definitions for Vite
 |-- index.css               # Global styles
 ```
 

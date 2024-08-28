@@ -6,7 +6,7 @@ import Pagination, { PaginationProps } from './Pagination';
 type TableData = Record<string, unknown>;
 
 export type Column = {
-  header: ReactNode;
+  header: string;
   accessor: string;
   cell?: (data: unknown) => ReactNode;
   sortable?: boolean;
@@ -129,7 +129,7 @@ const Table: FC<TableProps> = ({
                           <td
                             key={`${column.accessor}-${index}`}
                             className={classNames(
-                              'whitespace-nowrap py-4 px-3 text-sm font-medium text-gray-900',
+                              'whitespace-nowrap py-1 px-3 text-sm font-medium text-gray-900',
                               index == 0 ? 'pl-4 sm:pl-6' : '',
                               index == columns.length - 1 ? 'pr-4 sm:pr-6' : ''
                             )}

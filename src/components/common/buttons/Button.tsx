@@ -20,7 +20,7 @@ const Button: FC<ButtonProps> = ({
   disabled = false,
 }) => {
   const baseStyles =
-    'font-normal text-center me-2 mb-2 py-1.5 px-3 text-sm shadow-sm transition-colors duration-300 transform focus:outline-none focus:ring-opacity-80 flex items-center gap-x-2 ';
+    'font-normal text-center py-1.5 px-3 text-sm shadow-sm transition-colors duration-300 transform focus:outline-none focus:ring-opacity-80 flex items-center gap-x-2 ';
   const typeStyles: { [key: string]: string } = {
     primary:
       ' text-white bg-blue-700' +
@@ -69,7 +69,7 @@ const Button: FC<ButtonProps> = ({
   return (
     <button
       type='button'
-      className={`${baseStyles} ${typeStyles[type]} ${sizeStyles[size]} ${roundedStyles} ${disabledStyles} ${className}`}
+      className={`${className} ${baseStyles} ${typeStyles[type]} ${sizeStyles[size]} ${roundedStyles} ${disabledStyles} `}
       onClick={onClick}
       disabled={disabled}
     >

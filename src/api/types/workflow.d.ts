@@ -11,7 +11,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_payload_list"];
+        get: operations["apiV1PayloadList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -27,7 +27,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_payload_retrieve"];
+        get: operations["apiV1PayloadRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -43,7 +43,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_workflow_list"];
+        get: operations["apiV1WorkflowList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -59,7 +59,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_workflow_retrieve"];
+        get: operations["apiV1WorkflowRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -75,7 +75,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_workflowrun_list"];
+        get: operations["apiV1WorkflowrunList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -91,7 +91,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_workflowrun_retrieve"];
+        get: operations["apiV1WorkflowrunRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -100,14 +100,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/workflowrun/{workflowrun_id}/library/": {
+    "/api/v1/workflowrun/{workflowrunId}/library/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_workflowrun_library_list"];
+        get: operations["apiV1WorkflowrunLibraryList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -116,14 +116,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/workflowrun/{workflowrun_id}/library/{id}/": {
+    "/api/v1/workflowrun/{workflowrunId}/library/{id}/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_workflowrun_library_retrieve"];
+        get: operations["apiV1WorkflowrunLibraryRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -132,14 +132,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/workflowrun/{workflowrun_id}/state/": {
+    "/api/v1/workflowrun/{workflowrunId}/state/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_workflowrun_state_list"];
+        get: operations["apiV1WorkflowrunStateList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -148,14 +148,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/workflowrun/{workflowrun_id}/state/{id}/": {
+    "/api/v1/workflowrun/{workflowrunId}/state/{id}/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_workflowrun_state_retrieve"];
+        get: operations["apiV1WorkflowrunStateRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -313,7 +313,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    api_v1_payload_list: {
+    apiV1PayloadList: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -341,7 +341,7 @@ export interface operations {
             };
         };
     };
-    api_v1_payload_retrieve: {
+    apiV1PayloadRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -363,7 +363,7 @@ export interface operations {
             };
         };
     };
-    api_v1_workflow_list: {
+    apiV1WorkflowList: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -391,7 +391,7 @@ export interface operations {
             };
         };
     };
-    api_v1_workflow_retrieve: {
+    apiV1WorkflowRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -413,7 +413,7 @@ export interface operations {
             };
         };
     };
-    api_v1_workflowrun_list: {
+    apiV1WorkflowrunList: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -441,7 +441,7 @@ export interface operations {
             };
         };
     };
-    api_v1_workflowrun_retrieve: {
+    apiV1WorkflowrunRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -463,7 +463,7 @@ export interface operations {
             };
         };
     };
-    api_v1_workflowrun_library_list: {
+    apiV1WorkflowrunLibraryList: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -493,7 +493,7 @@ export interface operations {
             };
         };
     };
-    api_v1_workflowrun_library_retrieve: {
+    apiV1WorkflowrunLibraryRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -515,7 +515,7 @@ export interface operations {
             };
         };
     };
-    api_v1_workflowrun_state_list: {
+    apiV1WorkflowrunStateList: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -545,7 +545,7 @@ export interface operations {
             };
         };
     };
-    api_v1_workflowrun_state_retrieve: {
+    apiV1WorkflowrunStateRetrieve: {
         parameters: {
             query?: never;
             header?: never;

@@ -11,7 +11,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_library_list"];
+        get: operations["apiV1LibraryList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -20,14 +20,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/library/{orcabus_id}/": {
+    "/api/v1/library/{orcabusId}/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_library_retrieve"];
+        get: operations["apiV1LibraryRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -36,14 +36,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/library/{orcabus_id}/full/": {
+    "/api/v1/library/{orcabusId}/full/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_library_full_retrieve"];
+        get: operations["apiV1LibraryFullRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -59,7 +59,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_library_full_list"];
+        get: operations["apiV1LibraryFullList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -75,7 +75,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_specimen_list"];
+        get: operations["apiV1SpecimenList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -84,14 +84,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/specimen/{orcabus_id}/": {
+    "/api/v1/specimen/{orcabusId}/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_specimen_retrieve"];
+        get: operations["apiV1SpecimenRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -107,7 +107,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_subject_list"];
+        get: operations["apiV1SubjectList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -116,14 +116,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/subject/{orcabus_id}/": {
+    "/api/v1/subject/{orcabusId}/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["api_v1_subject_retrieve"];
+        get: operations["apiV1SubjectRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -132,7 +132,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/subject/{orcabus_id}/full/": {
+    "/api/v1/subject/{orcabusId}/full/": {
         parameters: {
             query?: never;
             header?: never;
@@ -406,7 +406,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    api_v1_library_list: {
+    apiV1LibraryList: {
         parameters: {
             query?: {
                 assay?: string | null;
@@ -471,7 +471,7 @@ export interface operations {
             };
         };
     };
-    api_v1_library_retrieve: {
+    apiV1LibraryRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -493,7 +493,7 @@ export interface operations {
             };
         };
     };
-    api_v1_library_full_retrieve: {
+    apiV1LibraryFullRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -515,17 +515,54 @@ export interface operations {
             };
         };
     };
-    api_v1_library_full_list: {
+    apiV1LibraryFullList: {
         parameters: {
             query?: {
+                assay?: string | null;
+                coverage?: number | null;
+                libraryId?: string | null;
+                orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
                 page?: number;
+                /** @description * `normal` - Normal
+                 *     * `tumor` - Tumor
+                 *     * `negative-control` - Negative Control */
+                phenotype?: "normal" | "tumor" | "negative-control" | "" | null;
+                projectName?: string | null;
+                projectOwner?: string | null;
+                /** @description * `very-poor` - VeryPoor
+                 *     * `poor` - Poor
+                 *     * `good` - Good
+                 *     * `borderline` - Borderline */
+                quality?: "very-poor" | "poor" | "good" | "borderline" | "" | null;
                 /** @description Number of results to return per page. */
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
+                specimen?: string | null;
+                /** @description * `10X` - Ten X
+                 *     * `BiModal` - Bimodal
+                 *     * `ctDNA` - Ct Dna
+                 *     * `ctTSO` - Ct Tso
+                 *     * `exome` - Exome
+                 *     * `MeDIP` - Me Dip
+                 *     * `Metagenm` - Metagenm
+                 *     * `MethylSeq` - Methyl Seq
+                 *     * `TSO-DNA` - TSO_DNA
+                 *     * `TSO-RNA` - TSO_RNA
+                 *     * `WGS` - Wgs
+                 *     * `WTS` - Wts
+                 *     * `other` - Other */
+                type?: "10X" | "BiModal" | "ctDNA" | "ctTSO" | "exome" | "MeDIP" | "Metagenm" | "MethylSeq" | "TSO-DNA" | "TSO-RNA" | "WGS" | "WTS" | "other" | "" | null;
+                /** @description * `clinical` - Clinical
+                 *     * `research` - Research
+                 *     * `qc` - Qc
+                 *     * `control` - Control
+                 *     * `bcl` - Bcl
+                 *     * `manual` - Manual */
+                workflow?: "clinical" | "research" | "qc" | "control" | "bcl" | "manual" | "" | null;
             };
             header?: never;
             path?: never;
@@ -543,7 +580,7 @@ export interface operations {
             };
         };
     };
-    api_v1_specimen_list: {
+    apiV1SpecimenList: {
         parameters: {
             query?: {
                 orcabusId?: string;
@@ -594,7 +631,7 @@ export interface operations {
             };
         };
     };
-    api_v1_specimen_retrieve: {
+    apiV1SpecimenRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -616,7 +653,7 @@ export interface operations {
             };
         };
     };
-    api_v1_subject_list: {
+    apiV1SubjectList: {
         parameters: {
             query?: {
                 orcabusId?: string;
@@ -646,7 +683,7 @@ export interface operations {
             };
         };
     };
-    api_v1_subject_retrieve: {
+    apiV1SubjectRetrieve: {
         parameters: {
             query?: never;
             header?: never;

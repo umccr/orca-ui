@@ -1,4 +1,3 @@
-import React from 'react';
 import { ImageViewer } from './ImageViewer';
 import { IFrameViewer } from './IFrameViewer';
 import { PreViewer } from './PreViewer';

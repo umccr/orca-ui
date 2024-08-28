@@ -806,7 +806,7 @@ export const edges = [
     type: 'smoothstep',
     sourceHandle: 'WTS_TUMOR_ONLY-handle-2',
     targetHandle: 'RNASUM-handle-1',
-    label: 'use transcriptome bam as input',
+    label: 'use expression files as input',
     animated: true,
     markerEnd: 'diamond',
   },

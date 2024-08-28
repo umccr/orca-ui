@@ -7,40 +7,23 @@ import { authMiddleware, UseSuspenseQueryOptions } from './utils';
 const client = createClient<paths>({ baseUrl: config.apiEndpoint.workflow });
 client.use(authMiddleware);
 
-const workflowPath = '/api/v1/workflow/';
-export function useWorkflowModel({
-  params,
-  reactQuery,
-}: UseSuspenseQueryOptions<paths[typeof workflowPath]['get']>) {
-  return useSuspenseQuery({
-    ...reactQuery,
-    queryKey: [workflowPath, params],
-    queryFn: async ({ signal }) => {
-      const { data } = await client.GET(workflowPath, {
-        params,
-        signal, // allows React Query to cancel request
-      });
-
-      return data;
-    },
-  });
+function createWorkflowFetchingHook<K extends keyof paths>(path: K) {
+  return function ({ params, reactQuery }: UseSuspenseQueryOptions<paths[typeof path]['get']>) {
+    return useSuspenseQuery({
+      ...reactQuery,
+      queryKey: [path, params],
+      queryFn: async ({ signal }) => {
+        const { data } = await client.GET(path, {
+          params,
+          signal,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any);
+        return data;
+      },
+    });
+  };
 }
 
-const workflowrunPath = '/api/v1/workflowrun/';
-export function useWorkflowrunModel({
-  params,
-  reactQuery,
-}: UseSuspenseQueryOptions<paths[typeof workflowrunPath]['get']>) {
-  return useSuspenseQuery({
-    ...reactQuery,
-    queryKey: [workflowrunPath, params],
-    queryFn: async ({ signal }) => {
-      const { data } = await client.GET(workflowrunPath, {
-        params,
-        signal, // allows React Query to cancel request
-      });
-
-      return data;
-    },
-  });
-}
+export const useWorkflowModel = createWorkflowFetchingHook('/api/v1/workflow/');
+export const useWorkflowRunListModel = createWorkflowFetchingHook('/api/v1/workflowrun/');
+export const useWorkflowRunDetailModel = createWorkflowFetchingHook('/api/v1/workflowrun/{id}/');

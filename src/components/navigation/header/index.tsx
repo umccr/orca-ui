@@ -38,7 +38,7 @@ const Header = () => {
             <div className='flex h-12 justify-between'>
               <div className='flex px-2 lg:px-0'>
                 <div className='flex flex-shrink-0 items-center'>
-                  <div className='text-2xl text-white'>UMCCR</div>
+                  <div className='text-xl text-white'>UMCCR</div>
                 </div>
               </div>
 
@@ -89,7 +89,7 @@ const Header = () => {
                 {/* Profile dropdown */}
                 <Menu as='div' className='relative ml-4 flex-shrink-0'>
                   <div>
-                    <MenuButton className='relative flex rounded-full bg-heritage-blue-100 p-1 text-white hover:text-gray-500 focus:outline-none'>
+                    <MenuButton className='relative flex rounded-full bg-heritage-blue-100 p-1 text-white text-base hover:text-gray-500 focus:outline-none'>
                       <span className='absolute -inset-1.5' />
                       <span className='sr-only'>Open user menu</span>
                       {userName}
