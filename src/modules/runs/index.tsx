@@ -2,7 +2,7 @@ import { lazy } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 // import { RouteObject } from '@/types/routeObject';
 // import { AppURLs } from '@/utils/appURLs';
-import RunsModuleLayout from '@/components/layouts/RunsModuleLayout';
+import RunsModuleLayout from '@/components/layouts/runs/RunsModuleLayout';
 import { RouteObject } from 'react-router-dom';
 
 const SequenceRunPage = lazy(() => import('@/modules/runs/Pages/SequenceRuns'));

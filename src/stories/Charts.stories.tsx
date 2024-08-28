@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { PieChart, GanttChart } from '@/components/charts';
 
-import { generateGanttData } from '@/api/_mock/mockTestData';
+import { generateMockGanttData } from '@/api/_mock/mockTestData';
 
 const data = [
   { name: 'bcl_convert', value: 1 },
@@ -19,7 +19,7 @@ const data = [
   { name: 'sash', value: 4 },
 ];
 
-const ganttData = generateGanttData();
+const ganttData = generateMockGanttData(data);
 
 const meta: Meta = {
   title: 'Charts/PieChart',

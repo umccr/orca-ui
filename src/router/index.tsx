@@ -4,6 +4,7 @@ import { useUserContext } from '@/context/UserContext';
 import { AppURLs } from '@/utils/appURLs';
 
 const SignInPage = lazy(() => import('@/modules/auth/SignInPage'));
+const NotFoundPage = lazy(() => import('@/modules/error/NotFoundPage'));
 import MainLayout from '@/components/layouts/MainLayout';
 
 import modulesRouters from './modules';
@@ -26,7 +27,7 @@ export default function AppRoutes() {
       children: [
         { path: '', element: <Navigate to='lab' replace /> },
         ...modulesRouters,
-        { path: '*', element: <div>Path not found/implemented!</div> },
+        { path: '*', element: <NotFoundPage /> },
       ],
     },
     // Unauthenticated routes
