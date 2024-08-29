@@ -13,11 +13,8 @@ function createWorkflowFetchingHook<K extends keyof paths>(path: K) {
       ...reactQuery,
       queryKey: [path, params],
       queryFn: async ({ signal }) => {
-        const { data } = await client.GET(path, {
-          params,
-          signal,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any);
+        // @ts-expect-error: params is dynamic type type for openapi-fetch
+        const { data } = await client.GET(path, { params, signal });
         return data;
       },
     });
