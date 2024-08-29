@@ -22,6 +22,5 @@ function createMetadataFetchingHook<K extends keyof paths>(path: K) {
   };
 }
 
-
 export const useMetadataFullSubjectModel = createMetadataFetchingHook('/api/v1/subject/full/');
 export const useMetadataFullLibraryModel = createMetadataFetchingHook('/api/v1/library/full/');
