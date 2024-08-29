@@ -28,18 +28,36 @@ export const getAppStackConfig = (appStage: AppStage): ApplicationStackProps => 
       return {
         cloudFrontBucketName: cloudFrontBucketNameConfig[appStage],
         aliasDomainName: ['orcaui.dev.umccr.org'],
+        reactBuildEnvVariables: {
+          VITE_METADATA_URL: `https://metadata.dev.umccr.org`,
+          VITE_WORKFLOW_URL: `https://workflow.dev.umccr.org`,
+          VITE_SEQUENCE_RUN_URL: `https://sequence.dev.umccr.org`,
+          VITE_FILE_URL: `https://file.dev.umccr.org`,
+        },
       };
 
     case AppStage.GAMMA:
       return {
         cloudFrontBucketName: cloudFrontBucketNameConfig[appStage],
         aliasDomainName: ['orcaui.stg.umccr.org'],
+        reactBuildEnvVariables: {
+          VITE_METADATA_URL: `https://metadata.stg.umccr.org`,
+          VITE_WORKFLOW_URL: `https://workflow.stg.umccr.org`,
+          VITE_SEQUENCE_RUN_URL: `https://sequence.stg.umccr.org`,
+          VITE_FILE_URL: `https://file.stg.umccr.org`,
+        },
       };
 
     case AppStage.PROD:
       return {
         cloudFrontBucketName: cloudFrontBucketNameConfig[appStage],
         aliasDomainName: ['orcaui.umccr.org', 'orcaui.prod.umccr.org'],
+        reactBuildEnvVariables: {
+          VITE_METADATA_URL: `https://metadata.umccr.org`,
+          VITE_WORKFLOW_URL: `https://workflow.umccr.org`,
+          VITE_SEQUENCE_RUN_URL: `https://sequence.umccr.org`,
+          VITE_FILE_URL: `https://file.umccr.org`,
+        },
       };
   }
 };

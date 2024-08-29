@@ -24,6 +24,7 @@ import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 export type ApplicationStackProps = {
   cloudFrontBucketName: string;
   aliasDomainName: string[];
+  reactBuildEnvVariables: Record<string, string>;
 };
 
 export class ApplicationStack extends Stack {
@@ -41,10 +42,10 @@ export class ApplicationStack extends Stack {
     });
 
     this.setupS3CloudFrontIntegration(clientBucket, props.aliasDomainName);
-    this.buildReactApp(clientBucket);
+    this.buildReactApp(clientBucket, props.reactBuildEnvVariables);
   }
 
-  private buildReactApp(bucket: IBucket) {
+  private buildReactApp(bucket: IBucket, reactBuildEnvVariables: Record<string, string>) {
     const artifactBucketPrefix = 'artifact-source';
 
     // This CodeBuild responsible for building the React app and publish the assets to S3
@@ -84,6 +85,46 @@ export class ApplicationStack extends Stack {
           value: '/hosted_zone/umccr/name',
           type: BuildEnvironmentVariableType.PARAMETER_STORE,
         },
+        VITE_REGION: { value: 'ap-southeast-2', type: BuildEnvironmentVariableType.PLAINTEXT },
+        VITE_COG_USER_POOL_ID: {
+          value: '/data_portal/client/cog_user_pool_id',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        VITE_COG_IDENTITY_POOL_ID: {
+          value: '/data_portal/client/cog_user_pool_id',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        VITE_COG_APP_CLIENT_ID: {
+          value: '/data_portal/orcaui_page/cog_app_client_id_stage',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        VITE_OAUTH_DOMAIN: {
+          value: '/data_portal/client/oauth_domain',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        VITE_OAUTH_REDIRECT_IN: {
+          value: '/data_portal/orcaui_page/oauth_redirect_in_stage',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        VITE_OAUTH_REDIRECT_OUT: {
+          value: '/data_portal/status_page/oauth_redirect_out_stage',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        VITE_UNSPLASH_CLIENT_ID: {
+          value: '/data_portal/unsplash/client_id',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        // spread the reactBuildEnvironmentVariables
+        ...Object.entries(reactBuildEnvVariables).reduce(
+          (acc, [key, value]) => {
+            acc[key] = {
+              value: value,
+              type: BuildEnvironmentVariableType.PLAINTEXT,
+            };
+            return acc;
+          },
+          {} as Record<string, Record<string, string>>
+        ),
       },
     });
     bucket.grantReadWrite(project);
