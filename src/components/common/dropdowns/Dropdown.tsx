@@ -1,4 +1,4 @@
-import { FC, Fragment } from 'react';
+import { FC } from 'react';
 import { Menu, MenuButton, MenuItems, MenuItem, MenuSeparator } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { classNames } from '@/utils/commonUtils';
@@ -37,7 +37,7 @@ const Dropdown: FC<DropdownProps> = ({
           {floatingLabel}
         </label>
       )}
-      <MenuButton as={Fragment}>
+      <MenuButton as={'div'}>
         {({ active }) => (
           <div
             className={classNames(

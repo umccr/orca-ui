@@ -1,9 +1,9 @@
-import { SubjectTable } from './components/SubjectTable';
+import { MetadataTable } from './components/MetadataTable';
 
 export default function LabPage() {
   return (
     <>
-      <SubjectTable />
+      <MetadataTable />
     </>
   );
 }

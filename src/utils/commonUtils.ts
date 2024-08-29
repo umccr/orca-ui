@@ -17,14 +17,23 @@ export function getUsername(email: string) {
 }
 
 // a function to get quey params from URLSearchParams
-// example: ?name=John&age=30
-// output: { name: 'John', age: '30' }
-
+// example: ?name=John&age=30&division=HR&division=IT
+// output: { name: 'John', age: '30', division: ['HR', 'IT'] }
 export const getQueryParams = (searchParams: URLSearchParams) => {
-  const params: Record<string, any> = {};
-  searchParams.forEach((value, key) => {
-    params[key] = value;
-  });
+  const params = [...searchParams.entries()].reduce((acc, tuple) => {
+    const [key, val] = tuple;
+    if (Object.prototype.hasOwnProperty.call(acc, key)) {
+      if (Array.isArray(acc[key])) {
+        acc[key] = [...acc[key], val];
+      } else {
+        acc[key] = [acc[key], val];
+      }
+    } else {
+      acc[key] = val;
+    }
+
+    return acc;
+  }, {} as any);
   return cleanObject(params);
 };
 

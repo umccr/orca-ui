@@ -20,7 +20,7 @@ export const SimpleTable: Story = {
     tableHeader: 'People',
     tableDescription: 'List of people in the company',
     columns: [
-      { header: 'Name', accessor: 'name', sortable: true },
+      { header: 'Name', accessor: 'name', sortDirection: 'desc', onSort: () => {} },
       { header: 'Title', accessor: 'title' },
       {
         header: 'Email',
@@ -52,12 +52,13 @@ export const StripedTable: Story = {
     tableHeader: 'People',
     tableDescription: 'List of people in the company',
     columns: [
-      { header: 'Name', accessor: 'name', sortable: true },
-      { header: 'Title', accessor: 'title', sortable: true },
+      { header: 'Name', accessor: 'name', onSort: () => {} },
+      { header: 'Title', accessor: 'title', onSort: () => {} },
       {
         header: 'Email',
         accessor: 'email',
-        sortable: true,
+        sortDirection: 'desc',
+        onSort: () => {},
         cell: (data: string | number) => (
           <div>
             <span>Custom Node example</span>
@@ -92,12 +93,12 @@ export const FullWidthTable: Story = {
     tableHeader: 'People',
     tableDescription: 'List of people in the company',
     columns: [
-      { header: 'Name', accessor: 'name', sortable: true },
-      { header: 'Title', accessor: 'title', sortable: true },
+      { header: 'Name', accessor: 'name', onSort: () => {} },
+      { header: 'Title', accessor: 'title', onSort: () => {} },
       {
         header: 'Email',
         accessor: 'email',
-        sortable: true,
+        onSort: () => {},
         cell: (data: string | number) => (
           <div>
             <span>Custom Node example</span>

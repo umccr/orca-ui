@@ -12,7 +12,7 @@ const SimpleCard: FC<CardProps> = ({ className, header, children, footer }) => {
   return (
     <div
       className={classNames(
-        'divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow',
+        'divide-y divide-gray-200 overflow-hidden rounded-lg bg-white',
         className ? className : ''
       )}
     >

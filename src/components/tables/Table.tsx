@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import { classNames } from '@/utils/commonUtils';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import Pagination, { PaginationProps } from './Pagination';
@@ -9,7 +9,8 @@ export type Column = {
   header: string;
   accessor: string;
   cell?: (data: unknown) => ReactNode;
-  sortable?: boolean;
+  onSort?: () => void;
+  sortDirection?: 'asc' | 'desc';
 };
 
 interface TableProps {
@@ -33,31 +34,6 @@ const Table: FC<TableProps> = ({
   inCard = true,
   stickyHeader = false,
 }) => {
-  const [sortedData, setSortedData] = useState(tableData);
-  const [sortConfig, setSortConfig] = useState<{
-    key: string;
-    direction: 'ascending' | 'descending';
-  } | null>(null);
-  const onSort = (key: string) => {
-    const direction =
-      sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending'
-        ? 'descending'
-        : 'ascending';
-    const sorted = [...tableData].sort((a, b) => {
-      if (a[key] && b[key]) {
-        if (a[key] < b[key]) return direction === 'ascending' ? -1 : 1;
-        if (a[key] > b[key]) return direction === 'ascending' ? 1 : -1;
-      }
-      return 0;
-    });
-    setSortedData(sorted);
-    setSortConfig({ key, direction });
-  };
-
-  useEffect(() => {
-    setSortedData(tableData);
-  }, [tableData]);
-
   return (
     <div className=''>
       <div className='sm:flex sm:items-center'>
@@ -83,35 +59,31 @@ const Table: FC<TableProps> = ({
                     {columns &&
                       columns.map((column, index) => (
                         <th
-                          key={`${column.accessor}-${index}`}
+                          key={column.accessor}
                           scope='col'
                           className={classNames(
-                            'px-3 py-3.5 text-left text-sm font-bold text-gray-900',
-                            index == 0 ? 'pl-4 sm:pl-6' : '',
-                            index == columns.length - 1 ? 'pr-4 sm:pr-6 ' : '',
+                            'px-3 py-3.5 text-left text-sm font-semibold text-gray-900',
+                            index == 0 ? 'pl-4 sm:pl-6 lg:pl-8' : '',
+                            index == columns.length - 1 ? 'pr-4 sm:pr-6 lg:pr-8' : '',
                             stickyHeader
                               ? 'sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75'
                               : ''
                           )}
-                          onClick={() => column.sortable && onSort(column.accessor)}
+                          onClick={() => column.onSort && column.onSort()}
                         >
                           <div
                             className={classNames(
-                              column.sortable ? 'group inline-flex cursor-pointer' : ''
+                              column.onSort ? 'group inline-flex cursor-pointer' : ''
                             )}
                           >
                             {column.header}
-                            {column.sortable && (
-                              <span className='invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible'>
+                            {column.sortDirection && (
+                              <span className='visible ml-2 flex-none rounded text-gray-400'>
                                 <ChevronDownIcon
                                   aria-hidden='true'
                                   className={classNames(
                                     'h-5 w-5 transition-transform duration-300',
-                                    sortConfig &&
-                                      sortConfig.key === column.accessor &&
-                                      sortConfig.direction === 'descending'
-                                      ? '-rotate-180'
-                                      : 'rotate-0'
+                                    column.sortDirection === 'asc' ? '-rotate-180' : 'rotate-0'
                                   )}
                                 />
                               </span>
@@ -122,12 +94,12 @@ const Table: FC<TableProps> = ({
                   </tr>
                 </thead>
                 <tbody className='divide-y divide-gray-200 bg-white'>
-                  {sortedData.map((data, index) => (
+                  {tableData.map((data, index) => (
                     <tr key={index} className={classNames(striped ? 'even:bg-gray-50' : '')}>
                       {columns &&
                         columns.map((column, index) => (
                           <td
-                            key={`${column.accessor}-${index}`}
+                            key={column.accessor}
                             className={classNames(
                               'whitespace-nowrap py-1 px-3 text-sm font-medium text-gray-900',
                               index == 0 ? 'pl-4 sm:pl-6' : '',
@@ -154,3 +126,25 @@ const Table: FC<TableProps> = ({
 };
 
 export default Table;
+
+/**
+ * Helper function to sort array of json objects
+ */
+export const handleSort = ({
+  data,
+  sortColumn,
+  sortDirection,
+}: {
+  data: Record<string, string>[];
+  sortColumn: string;
+  sortDirection: 'asc' | 'desc';
+}): Record<string, string>[] => {
+  const sorted = [...data].sort((a, b) => {
+    if (a[sortColumn] && b[sortColumn]) {
+      if (a[sortColumn] < b[sortColumn]) return sortDirection === 'asc' ? -1 : 1;
+      if (a[sortColumn] > b[sortColumn]) return sortDirection === 'asc' ? 1 : -1;
+    }
+    return 0;
+  });
+  return sorted;
+};
