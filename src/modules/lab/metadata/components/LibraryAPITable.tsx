@@ -5,8 +5,8 @@ import { MetadataTable } from './MetadataTable';
 import { useQueryParams } from '@/hooks/useQueryParams';
 
 export const LIBRARY_FILTER_KEY = [
-  // Leaving out coverage as it
-  // coverage?: number[];
+  'coverage__lte',
+  'coverage__gte',
   'libraryId',
   'assay',
   'projectName',
