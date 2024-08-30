@@ -110,7 +110,7 @@ export default function Pagination({
           <select
             id='rows-per-page'
             name='rows-per-page'
-            className='block text-sm my-1 w-full h-7 p-1 rounded border-gray-300 bg-white text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-500/75'
+            className='block text-sm my-1 w-16 h-7 p-1 pl-2 rounded border-gray-300 bg-white text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-500/75'
             value={rowsPerPageNumber}
             onChange={(e) => {
               setRowsPerPage(parseInt(e.target.value));

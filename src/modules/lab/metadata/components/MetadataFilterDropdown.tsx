@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ClosePopoverWrapper, PopoverDropdown } from '@/components/common/dropdowns';
 import { useQueryParams } from '@/hooks/useQueryParams';
 
 import type { PhenotypeEnum, QualityEnum, TypeEnum, WorkflowEnum } from '@/api/metadata';
 import { Button } from '@/components/common/buttons';
 import { FunnelIcon } from '@heroicons/react/24/outline';
+import { classNames } from '@/utils/commonUtils';
+import { LIBRARY_FILTER_KEY } from './LibraryAPITable';
 
 type FilterType = {
+  subjectId?: string[];
+  libraryId?: string[];
   assay?: string[];
-  // coverage?: number[];
+  coverage__gte?: string;
+  coverage__lte?: string;
   projectName?: string[];
   projectOwner?: string[];
   phenotype?: PhenotypeEnum[];
@@ -37,11 +42,24 @@ const TYPE_OPTION: TypeEnum[] = [
 const WORKFLOW_OPTION: WorkflowEnum[] = ['clinical', 'research', 'qc', 'control', 'bcl', 'manual'];
 
 export const MetadataFilterDropdown = () => {
-  const { setQueryParams, getQueryParams, clearQueryParams } = useQueryParams();
+  const [filter, setFilter] = useState<FilterType>({});
 
-  const [filter, setFilter] = useState<FilterType>(getQueryParams());
-  const handleFilterChange = (key: keyof FilterType, value: string) => {
-    const currentFilterValue = filter[key] || [];
+  const { setQueryParams, getQueryParams, clearQueryParams } = useQueryParams();
+  const filterJsonString = JSON.stringify(getQueryParams());
+  useEffect(() => {
+    const filterJson = JSON.parse(filterJsonString);
+    setFilter(filterJson);
+  }, [filterJsonString]);
+
+  const handleIsCheckedFunc = (key: keyof FilterType, value: string) => {
+    const currentFilterValue: string[] = [];
+
+    if (typeof filter[key] == 'string') {
+      currentFilterValue.push(filter[key]);
+    }
+    if (Array.isArray(filter[key])) {
+      currentFilterValue.push(...filter[key]);
+    }
 
     if (currentFilterValue.includes(value)) {
       const idx = currentFilterValue.indexOf(value);
@@ -52,12 +70,24 @@ export const MetadataFilterDropdown = () => {
 
     setFilter((prev) => ({ ...prev, [key]: currentFilterValue }));
   };
-  const isFilterActive = (key: keyof FilterType, value: string) => {
+  const isCheckedFilterActive = (key: keyof FilterType, value: string) => {
     const currentFilterValue = filter[key] || [];
     return currentFilterValue.includes(value);
   };
 
-  console.log(filter);
+  const handleFilterChange = (key: keyof FilterType, value: string[]) => {
+    // subjectId is a special case, if subjectId uses subject endpoint so other filter must be cleared
+    if (key == 'subjectId') {
+      setFilter(() => ({ [key]: value }));
+    } else {
+      setFilter((prev) => ({ ...prev, [key]: value, subjectId: undefined }));
+    }
+  };
+
+  const isSubjectFilterApplied = filter.subjectId ? true : false;
+  const isFilterLibraryApplied = !!Object.keys(filter).find((key) =>
+    LIBRARY_FILTER_KEY.includes(key)
+  );
   return (
     <PopoverDropdown
       btnChildren={
@@ -66,38 +96,91 @@ export const MetadataFilterDropdown = () => {
         </Button>
       }
       content={
-        <div className='z-10 bg-white rounded-lg w-60'>
-          <div className='h-96 px-3 pb-3 overflow-y-auto text-sm text-gray-700 '>
+        <div className='z-10 bg-white rounded-lg w-80'>
+          <div className='h-[500px] px-3 pb-3 overflow-y-auto text-sm text-gray-700 '>
+            <div>
+              <div className='font-medium'>{`Subject Id*`}</div>
+              <div className='mt-2 italic text-s text-gray-700 font-thin'>{`If subject Id filter is applied, other filters will be disabled`}</div>
+              <FilterTextInput
+                keyFilter='subjectId'
+                defaultInput={filter.subjectId ? filter.subjectId : []}
+                handleFilterChange={handleFilterChange}
+                disabled={isFilterLibraryApplied}
+              />
+            </div>
+
+            <FilterTextInput
+              title='Library Id*'
+              keyFilter='libraryId'
+              defaultInput={filter.libraryId ? filter.libraryId : []}
+              handleFilterChange={handleFilterChange}
+              disabled={isSubjectFilterApplied}
+            />
+            <FilterTextInput
+              title='Assay*'
+              keyFilter='assay'
+              defaultInput={filter.assay ? filter.assay : []}
+              handleFilterChange={handleFilterChange}
+              disabled={isSubjectFilterApplied}
+            />
+            <FilterTextInput
+              title='Project Name*'
+              keyFilter='projectName'
+              defaultInput={filter.projectName ? filter.projectName : []}
+              handleFilterChange={handleFilterChange}
+              disabled={isSubjectFilterApplied}
+            />
+            <FilterTextInput
+              title='Project Owner*'
+              keyFilter='projectOwner'
+              defaultInput={filter.projectOwner ? filter.projectOwner : []}
+              handleFilterChange={handleFilterChange}
+              disabled={isSubjectFilterApplied}
+            />
+            <div className='border-b-2 mb-2 pb-2 italic text-s	text-gray-700 font-thin	'>
+              {`*Text input support multi value with comma separated value. E.g. "L000001,L000002"`}
+            </div>
+            <CoverageFilter
+              handleFilterChange={handleFilterChange}
+              defaultMaxInput={filter.coverage__lte ? parseInt(filter.coverage__lte) : undefined}
+              defaultMinInput={filter.coverage__gte ? parseInt(filter.coverage__gte) : undefined}
+              disabled={isSubjectFilterApplied}
+            />
+
             <CheckboxGroup
               title='Phenotype'
               keyFilter='phenotype'
               options={PHENOTYPE_OPTION}
-              handleIsCheckedFunc={handleFilterChange}
-              isCheckedFunc={isFilterActive}
+              handleIsCheckedFunc={handleIsCheckedFunc}
+              isCheckedFunc={isCheckedFilterActive}
+              disabled={isSubjectFilterApplied}
             />
             <CheckboxGroup
               title='Quality'
               keyFilter='quality'
               options={QUALITY_OPTION}
-              handleIsCheckedFunc={handleFilterChange}
-              isCheckedFunc={isFilterActive}
+              handleIsCheckedFunc={handleIsCheckedFunc}
+              isCheckedFunc={isCheckedFilterActive}
+              disabled={isSubjectFilterApplied}
             />
             <CheckboxGroup
               title='Type'
               keyFilter='type'
               options={TYPE_OPTION}
-              handleIsCheckedFunc={handleFilterChange}
-              isCheckedFunc={isFilterActive}
+              handleIsCheckedFunc={handleIsCheckedFunc}
+              isCheckedFunc={isCheckedFilterActive}
+              disabled={isSubjectFilterApplied}
             />
             <CheckboxGroup
               title='Workflow'
               keyFilter='workflow'
               options={WORKFLOW_OPTION}
-              handleIsCheckedFunc={handleFilterChange}
-              isCheckedFunc={isFilterActive}
+              handleIsCheckedFunc={handleIsCheckedFunc}
+              isCheckedFunc={isCheckedFilterActive}
+              disabled={isSubjectFilterApplied}
             />
           </div>
-          <ClosePopoverWrapper>
+          <ClosePopoverWrapper className='mt-4'>
             <Button
               className='w-full justify-center'
               type='red'
@@ -113,7 +196,8 @@ export const MetadataFilterDropdown = () => {
             className='w-full justify-center mt-2'
             type='primary'
             onClick={() => {
-              setQueryParams(filter);
+              // since 2 api can be used for this tables, clearing the ordering
+              setQueryParams({ ...filter, ordering: undefined });
             }}
           >
             Apply
@@ -124,18 +208,83 @@ export const MetadataFilterDropdown = () => {
   );
 };
 
+const CoverageFilter = ({
+  defaultMinInput,
+  defaultMaxInput,
+  handleFilterChange,
+  disabled = false,
+}: {
+  defaultMinInput?: number;
+  defaultMaxInput?: number;
+  handleFilterChange: (key: keyof FilterType, value: string[]) => void;
+  disabled?: boolean;
+}) => {
+  const [minInput, setMinInput] = useState(defaultMinInput);
+  const [maxInput, setMaxInput] = useState(defaultMaxInput);
+
+  return (
+    <>
+      <div className='font-medium mb-2'>{`Coverage`}</div>
+      <div className='relative inline-block text-left cursor-pointer w-24'>
+        <label
+          className={classNames(
+            'absolute text-sm text-gray-500 -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 start-1'
+          )}
+        >
+          {`Minimum`}
+        </label>
+        <input
+          disabled={disabled}
+          value={minInput}
+          onChange={(e) => setMinInput(parseInt(e.target.value))}
+          onBlur={() => {
+            if (minInput) {
+              handleFilterChange('coverage__gte', [minInput.toString()]);
+            }
+          }}
+          type='number'
+          className='my-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500/50 focus:border-blue-500/50 block w-full p-2.5'
+        />
+      </div>
+      <div className='ml-2 relative inline-block text-left cursor-pointer w-24'>
+        <label
+          className={classNames(
+            'absolute text-sm text-gray-500 -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 start-1'
+          )}
+        >
+          {`Maximum`}
+        </label>
+        <input
+          disabled={disabled}
+          value={maxInput}
+          onChange={(e) => setMaxInput(parseInt(e.target.value))}
+          onBlur={() => {
+            if (maxInput) {
+              handleFilterChange('coverage__lte', [maxInput.toString()]);
+            }
+          }}
+          type='number'
+          className='my-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500/50 focus:border-blue-500/50 block w-full p-2.5'
+        />
+      </div>
+    </>
+  );
+};
+
 const CheckboxGroup = ({
   title,
   keyFilter,
   options,
   handleIsCheckedFunc,
   isCheckedFunc,
+  disabled = false,
 }: {
   title: string;
   keyFilter: keyof FilterType;
   options: string[];
   handleIsCheckedFunc: (key: keyof FilterType, value: string) => void;
   isCheckedFunc: (key: keyof FilterType, value: string) => boolean;
+  disabled?: boolean;
 }) => {
   return (
     <>
@@ -144,10 +293,14 @@ const CheckboxGroup = ({
         <div
           key={`${keyFilter}-${key}`}
           className='flex items-center ps-2 rounded hover:bg-gray-100 cursor-pointer'
-          onClick={() => handleIsCheckedFunc(keyFilter, item)}
+          onClick={() => {
+            if (disabled) return;
+            handleIsCheckedFunc(keyFilter, item);
+          }}
         >
           <input
             readOnly
+            disabled={disabled}
             checked={isCheckedFunc(keyFilter, item)}
             type='checkbox'
             className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500/50 focus:ring-2 cursor-pointer'
@@ -161,28 +314,48 @@ const CheckboxGroup = ({
   );
 };
 
-// const InputGroup = ({
-//   title,
-//   keyFilter,
-//   handleIsCheckedFunc,
-//   defaultInput,
-// }: {
-//   title: string;
-//   keyFilter: keyof FilterType;
-//   options: string[];
-//   handleIsCheckedFunc: (key: keyof FilterType, value: string) => void;
-//   isCheckedFunc: (key: keyof FilterType, value: string) => boolean;
-// }) => {
-//   const [input, setInput] = useState('');
-//   return (
-//     <>
-//       <div className='font-medium'>{title}</div>
-//       <input
-//         type='text'
-//         id='input-group-search'
-//         className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500/50 focus:border-blue-500/50 block w-full ps-10 p-2.5'
-//         placeholder='Search user'
-//       />
-//     </>
-//   );
-// };
+const FilterTextInput = ({
+  title,
+  keyFilter,
+  defaultInput,
+  handleFilterChange,
+  disabled = false,
+}: {
+  title?: string;
+  keyFilter: keyof FilterType;
+  defaultInput: string | string[];
+  handleFilterChange: (key: keyof FilterType, value: string[]) => void;
+  disabled?: boolean;
+}) => {
+  const [input, setInput] = useState<string>('');
+
+  useEffect(() => {
+    if (typeof defaultInput === 'string') setInput(defaultInput);
+    else {
+      setInput(defaultInput.join(','));
+    }
+  }, [defaultInput]);
+
+  return (
+    <>
+      {title && <div className='font-medium'>{title}</div>}
+      <div className='pl-2'>
+        <input
+          disabled={disabled}
+          value={input}
+          onChange={(e) => setInput(e.target.value.trim())}
+          onBlur={() => {
+            if (input == '') {
+              handleFilterChange(keyFilter, []);
+              return;
+            } else {
+              handleFilterChange(keyFilter, input.split(','));
+            }
+          }}
+          type='text'
+          className='my-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500/50 focus:border-blue-500/50 block w-full p-2.5'
+        />
+      </div>
+    </>
+  );
+};
