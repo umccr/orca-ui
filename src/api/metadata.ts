@@ -1,6 +1,6 @@
 import config from '@/config';
 import createClient from 'openapi-fetch';
-import type { paths } from './types/metadata';
+import type { paths, components } from './types/metadata';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { authMiddleware, UseSuspenseQueryOptions } from './utils';
 
@@ -21,6 +21,10 @@ function createMetadataFetchingHook<K extends keyof paths>(path: K) {
     });
   };
 }
+export type PhenotypeEnum = components['schemas']['PhenotypeEnum'];
+export type QualityEnum = components['schemas']['QualityEnum'];
+export type TypeEnum = components['schemas']['TypeEnum'];
+export type WorkflowEnum = components['schemas']['WorkflowEnum'];
 
 export const useMetadataFullSubjectModel = createMetadataFetchingHook('/api/v1/subject/full/');
 export const useMetadataFullLibraryModel = createMetadataFetchingHook('/api/v1/library/full/');

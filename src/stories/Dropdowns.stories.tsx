@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import { Dropdown, IconDropdown } from '@/components/common/dropdowns';
-import { PlusIcon } from '@heroicons/react/20/solid';
+import { FunnelIcon, PlusIcon } from '@heroicons/react/20/solid';
+import PopoverDropdown from '@/components/common/dropdowns/PopoverDropdown';
 
 const exampleItems = [
   {
@@ -110,6 +111,18 @@ export const IconDropdownWithPlusIcon: Story = {
   render: () => {
     return (
       <IconDropdown items={exampleItems} BtnIcon={PlusIcon} className='!text-white !bg-blue-700' />
+    );
+  },
+};
+export const CheckboxDropdown: Story = {
+  render: () => {
+    return (
+      <PopoverDropdown>
+        <div className='flex flex-row items-center'>
+          <FunnelIcon className='h-5 w-5 mr-2' />
+          (3)
+        </div>
+      </PopoverDropdown>
     );
   },
 };
