@@ -91,11 +91,11 @@ export class ApplicationStack extends Stack {
           type: BuildEnvironmentVariableType.PARAMETER_STORE,
         },
         VITE_COG_IDENTITY_POOL_ID: {
-          value: '/data_portal/client/cog_user_pool_id',
+          value: '/data_portal/client/cog_identity_pool_id',
           type: BuildEnvironmentVariableType.PARAMETER_STORE,
         },
         VITE_COG_APP_CLIENT_ID: {
-          value: '/data_portal/orcaui_page/cog_app_client_id_stage',
+          value: '/orcaui/cog_app_client_id_stage',
           type: BuildEnvironmentVariableType.PARAMETER_STORE,
         },
         VITE_OAUTH_DOMAIN: {
@@ -103,11 +103,11 @@ export class ApplicationStack extends Stack {
           type: BuildEnvironmentVariableType.PARAMETER_STORE,
         },
         VITE_OAUTH_REDIRECT_IN: {
-          value: '/data_portal/orcaui_page/oauth_redirect_in_stage',
+          value: '/orcaui/oauth_redirect_in_stage',
           type: BuildEnvironmentVariableType.PARAMETER_STORE,
         },
         VITE_OAUTH_REDIRECT_OUT: {
-          value: '/data_portal/status_page/oauth_redirect_out_stage',
+          value: '/orcaui/oauth_redirect_out_stage',
           type: BuildEnvironmentVariableType.PARAMETER_STORE,
         },
         VITE_UNSPLASH_CLIENT_ID: {
