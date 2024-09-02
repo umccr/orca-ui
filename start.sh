@@ -61,9 +61,9 @@ fi
 cog_identity_pool_id=$(aws ssm get-parameter --name '/data_portal/client/cog_identity_pool_id' --with-decryption | jq -r .Parameter.Value)
 oauth_domain=$(aws ssm get-parameter --name '/data_portal/client/oauth_domain' --with-decryption | jq -r .Parameter.Value)
 unsplash_client_id=$(aws ssm get-parameter --name '/data_portal/unsplash/client_id' --with-decryption | jq -r .Parameter.Value)
-cog_app_client_id_local=$(aws ssm get-parameter --name '/orcaui/cog_app_client_id_stage' --with-decryption | jq -r .Parameter.Value)
-oauth_redirect_in_local=$(aws ssm get-parameter --name '/orcaui/oauth_redirect_in_stage' --with-decryption | jq -r .Parameter.Value)
-oauth_redirect_out_local=$(aws ssm get-parameter --name '/orcaui/oauth_redirect_out_stage' --with-decryption | jq -r .Parameter.Value)
+cog_app_client_id_local=$(aws ssm get-parameter --name '/data_portal/client/cog_app_client_id_local' --with-decryption | jq -r .Parameter.Value)
+oauth_redirect_in_local=$(aws ssm get-parameter --name '/data_portal/client/oauth_redirect_in_local' --with-decryption | jq -r .Parameter.Value)
+oauth_redirect_out_local=$(aws ssm get-parameter --name '/data_portal/client/oauth_redirect_out_local' --with-decryption | jq -r .Parameter.Value)
 
 export VITE_REGION=ap-southeast-2
 export VITE_COG_USER_POOL_ID=$cog_user_pool_id
