@@ -80,26 +80,10 @@ export class ApplicationStack extends Stack {
           value: bucket.bucketName,
           type: BuildEnvironmentVariableType.PLAINTEXT,
         },
-        // CodeBuild is smart enough to give permission to these ssm parameters
-        VITE_HOSTED_ID: {
-          value: '/hosted_zone/umccr/name',
-          type: BuildEnvironmentVariableType.PARAMETER_STORE,
-        },
         VITE_REGION: { value: 'ap-southeast-2', type: BuildEnvironmentVariableType.PLAINTEXT },
-        VITE_COG_USER_POOL_ID: {
-          value: '/data_portal/client/cog_user_pool_id',
-          type: BuildEnvironmentVariableType.PARAMETER_STORE,
-        },
-        VITE_COG_IDENTITY_POOL_ID: {
-          value: '/data_portal/client/cog_identity_pool_id',
-          type: BuildEnvironmentVariableType.PARAMETER_STORE,
-        },
+        // CodeBuild is smart enough to give permission to these ssm parameters
         VITE_COG_APP_CLIENT_ID: {
           value: '/orcaui/cog_app_client_id_stage',
-          type: BuildEnvironmentVariableType.PARAMETER_STORE,
-        },
-        VITE_OAUTH_DOMAIN: {
-          value: '/data_portal/client/oauth_domain',
           type: BuildEnvironmentVariableType.PARAMETER_STORE,
         },
         VITE_OAUTH_REDIRECT_IN: {
@@ -108,6 +92,18 @@ export class ApplicationStack extends Stack {
         },
         VITE_OAUTH_REDIRECT_OUT: {
           value: '/orcaui/oauth_redirect_out_stage',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        VITE_COG_USER_POOL_ID: {
+          value: '/data_portal/client/cog_user_pool_id',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        VITE_COG_IDENTITY_POOL_ID: {
+          value: '/data_portal/client/cog_identity_pool_id',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        VITE_OAUTH_DOMAIN: {
+          value: '/data_portal/client/oauth_domain',
           type: BuildEnvironmentVariableType.PARAMETER_STORE,
         },
         VITE_UNSPLASH_CLIENT_ID: {
@@ -171,7 +167,7 @@ export class ApplicationStack extends Stack {
     const certUse1Arn = StringParameter.valueForStringParameter(this, '/orcaui/certificate_arn');
     const certUse1 = Certificate.fromCertificateArn(this, 'SSLCertificateUSE1', certUse1Arn);
 
-    const cloudFrontOAI = new cloudfront.OriginAccessIdentity(this, 'cloudFrontOAI', {
+    const cloudFrontOAI = new cloudfront.OriginAccessIdentity(this, 'CloudFrontOAI', {
       comment: 'orca-ui OAI',
     });
 
