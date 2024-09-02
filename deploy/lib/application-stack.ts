@@ -167,7 +167,7 @@ export class ApplicationStack extends Stack {
     const certUse1Arn = StringParameter.valueForStringParameter(this, '/orcaui/certificate_arn');
     const certUse1 = Certificate.fromCertificateArn(this, 'SSLCertificateUSE1', certUse1Arn);
 
-    const cloudFrontOAI = new cloudfront.OriginAccessIdentity(this, 'cloudFrontOAI', {
+    const cloudFrontOAI = new cloudfront.OriginAccessIdentity(this, 'CloudFrontOAI', {
       comment: 'orca-ui OAI',
     });
 
