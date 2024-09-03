@@ -13,7 +13,7 @@ export class PipelineStack extends Stack {
 
     // A connection where the pipeline get its source code
     const codeStarArn = StringParameter.valueForStringParameter(this, 'codestar_github_arn');
-    const sourceFile = CodePipelineSource.connection('umccr/orca-ui', 'feature/init-iac', {
+    const sourceFile = CodePipelineSource.connection('umccr/orca-ui', 'main', {
       connectionArn: codeStarArn,
     });
 

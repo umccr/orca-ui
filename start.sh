@@ -42,7 +42,6 @@ command -v jq >/dev/null 2>&1 || {
 }
 
 if [ -n "$1" ] && [ "$1" = "unset" ]; then
-  unset VITE_STAGE
   unset VITE_REGION
   unset VITE_COG_USER_POOL_ID
   unset VITE_COG_IDENTITY_POOL_ID
@@ -60,23 +59,20 @@ if [[ "$cog_user_pool_id" == "" ]]; then
   return 1
 fi
 cog_identity_pool_id=$(aws ssm get-parameter --name '/data_portal/client/cog_identity_pool_id' --with-decryption | jq -r .Parameter.Value)
-cog_app_client_id_local=$(aws ssm get-parameter --name '/data_portal/client/cog_app_client_id_local' --with-decryption | jq -r .Parameter.Value)
 oauth_domain=$(aws ssm get-parameter --name '/data_portal/client/oauth_domain' --with-decryption | jq -r .Parameter.Value)
+unsplash_client_id=$(aws ssm get-parameter --name '/data_portal/unsplash/client_id' --with-decryption | jq -r .Parameter.Value)
+cog_app_client_id_local=$(aws ssm get-parameter --name '/data_portal/client/cog_app_client_id_local' --with-decryption | jq -r .Parameter.Value)
 oauth_redirect_in_local=$(aws ssm get-parameter --name '/data_portal/client/oauth_redirect_in_local' --with-decryption | jq -r .Parameter.Value)
 oauth_redirect_out_local=$(aws ssm get-parameter --name '/data_portal/client/oauth_redirect_out_local' --with-decryption | jq -r .Parameter.Value)
 
-unsplash_client_id=$(aws ssm get-parameter --name '/data_portal/unsplash/client_id' --with-decryption | jq -r .Parameter.Value)
-
-export VITE_STAGE=localhost
 export VITE_REGION=ap-southeast-2
 export VITE_COG_USER_POOL_ID=$cog_user_pool_id
 export VITE_COG_IDENTITY_POOL_ID=$cog_identity_pool_id
-export VITE_COG_APP_CLIENT_ID=$cog_app_client_id_local
 export VITE_OAUTH_DOMAIN=$oauth_domain
+export VITE_UNSPLASH_CLIENT_ID=$unsplash_client_id
+export VITE_COG_APP_CLIENT_ID=$cog_app_client_id_local
 export VITE_OAUTH_REDIRECT_IN=$oauth_redirect_in_local
 export VITE_OAUTH_REDIRECT_OUT=$oauth_redirect_out_local
-export VITE_UNSPLASH_CLIENT_ID=$unsplash_client_id
-
 
 # Backend API URLs
 # https://github.com/umccr/orcabus#running-api-locally

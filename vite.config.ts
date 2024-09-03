@@ -13,8 +13,14 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  optimizeDeps: {
-    include: ['aws-amplify'],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'aws-amplify': ['aws-amplify'],
+        },
+      },
+    },
   },
   server: {
     port: 3000,
