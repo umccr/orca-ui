@@ -1,21 +1,22 @@
 import { lazy, Suspense } from 'react';
 import { useRoutes, Navigate, Outlet } from 'react-router-dom';
-import { useUserContext } from '@/context/UserContext';
+import { useAuthContext } from '@/context/AmplifyauthContext';
 import { AppURLs } from '@/utils/appURLs';
 
 const SignInPage = lazy(() => import('@/modules/auth/SignInPage'));
 const NotFoundPage = lazy(() => import('@/modules/error/NotFoundPage'));
 import MainLayout from '@/components/layouts/MainLayout';
 
+// import all modules routes
 import modulesRouters from './modules';
 
 export default function AppRoutes() {
-  const { isAuth } = useUserContext();
+  const { isAuthenticated } = useAuthContext();
 
   const routes = [
     {
       path: '/',
-      element: isAuth ? (
+      element: isAuthenticated ? (
         <MainLayout>
           <Suspense fallback={<div>Loading...</div>}>
             <Outlet />

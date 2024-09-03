@@ -1,14 +1,9 @@
 import { useState, useEffect } from 'react';
-import { signInWithRedirect } from 'aws-amplify/auth';
 import { Navigate } from 'react-router-dom';
-import { useUserContext } from '@/context/UserContext';
-// import Card from '@mui/material/Card';
+import { useAuthContext } from '@/context/AmplifyAuthContext';
 import { Card } from '@/components/common/cards';
-// import Stack from '@mui/material/Stack';
-// import Button from '@mui/material/Button';
 import { createApi } from 'unsplash-js';
 import { Random } from 'unsplash-js/dist/methods/photos/types';
-// import ProgressBar from '@mui/material/LinearProgress';
 import { Button } from '@/components/common/buttons';
 import { Spinner } from '@/components/common/spinner';
 
@@ -34,12 +29,13 @@ function Copyright() {
 
 function SignInContainer() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { signInWithGoogle } = useAuthContext();
 
   const loggingIn = () => {
     setIsLoading(true);
 
     // signInWithRedirect() will redirect out from page (Not expecting to setIsLoading(false))
-    signInWithRedirect({ provider: 'Google' });
+    signInWithGoogle();
   };
 
   const header = (
@@ -91,6 +87,7 @@ function SignInContainer() {
 }
 
 function SignInPage() {
+  const { isAuthenticated } = useAuthContext();
   const [imageUrl, setImageUrl] = useState<string>('');
   const [imageLink, setImageLink] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
@@ -126,7 +123,7 @@ function SignInPage() {
   }, []);
 
   // Already signedIn, redirect to HomePage
-  if (useUserContext().isAuth) {
+  if (isAuthenticated) {
     return <Navigate replace to='/' />;
   }
 

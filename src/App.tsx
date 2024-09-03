@@ -1,28 +1,16 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Router from '@/router';
-import UserProvider from '@/context/UserContext';
 import { ToastContainer } from 'react-toastify';
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 0,
-      networkMode: 'offlineFirst',
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      staleTime: Infinity,
-    },
-  },
-});
+import { AuthProvider } from '@/context/AmplifyAuthContext';
+import { ReactQueryClientProvider } from '@/context/QueryClientContext';
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <UserProvider>
+    <ReactQueryClientProvider>
+      <AuthProvider>
         <ToastContainer />
         <Router />
-      </UserProvider>
-    </QueryClientProvider>
+      </AuthProvider>
+    </ReactQueryClientProvider>
   );
 }
 
