@@ -11,15 +11,14 @@ import {
 //import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { classNames, getUsername } from '@/utils/commonUtils';
-import { useUserContext } from '@/context/UserContext';
-import { signOut } from 'aws-amplify/auth';
+import { useAuthContext } from '@/context/AmplifyAuthContext';
 import { TokenDialog } from './TokenDialog';
 import { DetailedErrorBoundary } from '@/components/common/error';
 
 export interface HeaderProps {}
 
 const Header = () => {
-  const userInformation = useUserContext().user;
+  const { user: userInformation, logout } = useAuthContext();
   const userName = userInformation?.name || getUsername(userInformation?.email as string);
 
   const [isTokenDialogOpen, setIsTokenDialogOpen] = useState<boolean>(false);
@@ -117,7 +116,7 @@ const Header = () => {
                             disabled ? 'bg-gray-100' : '',
                             'block w-full text-left px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900'
                           )}
-                          onClick={() => signOut()}
+                          onClick={logout}
                         >
                           Sign out
                         </button>
@@ -187,7 +186,7 @@ const Header = () => {
                 <DisclosureButton
                   as='button'
                   className='rounded-lg block w-full text-left px-4 py-2 text-base font-medium text-white hover:bg-gray-100 hover:text-gray-800'
-                  onClick={() => signOut()}
+                  onClick={logout}
                 >
                   Sign out
                 </DisclosureButton>
