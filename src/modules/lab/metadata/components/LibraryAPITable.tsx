@@ -28,7 +28,7 @@ export const LibraryAPITable = () => {
     throw new Error('No subject data found!');
   }
   const tableData = processLibraryFullResults(data.results);
-  return <MetadataTable data={tableData} pagination={data.pagination} />;
+  return <MetadataTable data={tableData} pagination={data.pagination} metadataApiUsed='library' />;
 };
 
 /**
