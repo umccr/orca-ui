@@ -6,7 +6,6 @@ import type { PhenotypeEnum, QualityEnum, TypeEnum, WorkflowEnum } from '@/api/m
 import { Button } from '@/components/common/buttons';
 import { FunnelIcon } from '@heroicons/react/24/outline';
 import { classNames } from '@/utils/commonUtils';
-import { LIBRARY_FILTER_KEY } from './LibraryAPITable';
 
 type FilterType = {
   subjectId?: string[];
@@ -43,6 +42,7 @@ const WORKFLOW_OPTION: WorkflowEnum[] = ['clinical', 'research', 'qc', 'control'
 
 export const MetadataFilterDropdown = () => {
   const [filter, setFilter] = useState<FilterType>({});
+  const [filterCategory, setFilterCategory] = useState<'subject' | 'library'>('subject');
 
   const { setQueryParams, getQueryParams, clearQueryParams } = useQueryParams();
   const filterJsonString = JSON.stringify(getQueryParams());
@@ -84,10 +84,86 @@ export const MetadataFilterDropdown = () => {
     }
   };
 
-  const isSubjectFilterApplied = filter.subjectId ? true : false;
-  const isFilterLibraryApplied = !!Object.keys(filter).find((key) =>
-    LIBRARY_FILTER_KEY.includes(key)
+  const SubjectFilter = () => (
+    <>
+      <div className='font-medium'>{'Subject Id *'}</div>
+      <FilterTextInput
+        keyFilter='subjectId'
+        defaultInput={filter.subjectId ? filter.subjectId : []}
+        handleFilterChange={handleFilterChange}
+      />
+      <div className='border-b-2 mb-2 pb-2 italic text-s	text-gray-700 font-thin	'>
+        {`*Text input support multi value with comma separated value. E.g. "L000001,L000002"`}
+      </div>
+    </>
   );
+
+  const LibraryFilter = () => (
+    <>
+      <FilterTextInput
+        title='Library Id *'
+        keyFilter='libraryId'
+        defaultInput={filter.libraryId ? filter.libraryId : []}
+        handleFilterChange={handleFilterChange}
+      />
+      <FilterTextInput
+        title='Assay *'
+        keyFilter='assay'
+        defaultInput={filter.assay ? filter.assay : []}
+        handleFilterChange={handleFilterChange}
+      />
+      <FilterTextInput
+        title='Project Name *'
+        keyFilter='projectName'
+        defaultInput={filter.projectName ? filter.projectName : []}
+        handleFilterChange={handleFilterChange}
+      />
+      <FilterTextInput
+        title='Project Owner *'
+        keyFilter='projectOwner'
+        defaultInput={filter.projectOwner ? filter.projectOwner : []}
+        handleFilterChange={handleFilterChange}
+      />
+      <div className='border-b-2 mb-2 pb-2 italic text-s	text-gray-700 font-thin	'>
+        {`*Text input support multi value with comma separated value. E.g. "L000001,L000002"`}
+      </div>
+      <CoverageFilter
+        handleFilterChange={handleFilterChange}
+        defaultMaxInput={filter.coverage__lte ? parseInt(filter.coverage__lte) : undefined}
+        defaultMinInput={filter.coverage__gte ? parseInt(filter.coverage__gte) : undefined}
+      />
+
+      <CheckboxGroup
+        title='Phenotype'
+        keyFilter='phenotype'
+        options={PHENOTYPE_OPTION}
+        handleIsCheckedFunc={handleIsCheckedFunc}
+        isCheckedFunc={isCheckedFilterActive}
+      />
+      <CheckboxGroup
+        title='Quality'
+        keyFilter='quality'
+        options={QUALITY_OPTION}
+        handleIsCheckedFunc={handleIsCheckedFunc}
+        isCheckedFunc={isCheckedFilterActive}
+      />
+      <CheckboxGroup
+        title='Type'
+        keyFilter='type'
+        options={TYPE_OPTION}
+        handleIsCheckedFunc={handleIsCheckedFunc}
+        isCheckedFunc={isCheckedFilterActive}
+      />
+      <CheckboxGroup
+        title='Workflow'
+        keyFilter='workflow'
+        options={WORKFLOW_OPTION}
+        handleIsCheckedFunc={handleIsCheckedFunc}
+        isCheckedFunc={isCheckedFilterActive}
+      />
+    </>
+  );
+
   return (
     <PopoverDropdown
       btnChildren={
@@ -98,87 +174,37 @@ export const MetadataFilterDropdown = () => {
       content={
         <div className='z-10 bg-white rounded-lg w-80'>
           <div className='h-[500px] px-3 pb-3 overflow-y-auto text-sm text-gray-700 '>
-            <div>
-              <div className='font-medium'>{`Subject Id*`}</div>
-              <div className='mt-2 italic text-s text-gray-700 font-thin'>{`If subject Id filter is applied, other filters will be disabled`}</div>
-              <FilterTextInput
-                keyFilter='subjectId'
-                defaultInput={filter.subjectId ? filter.subjectId : []}
-                handleFilterChange={handleFilterChange}
-                disabled={isFilterLibraryApplied}
-              />
+            <div className='flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 mb-4'>
+              <div
+                onClick={() => {
+                  setFilterCategory('subject');
+                  setFilter({});
+                }}
+                className={classNames(
+                  'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50',
+                  filterCategory == 'subject'
+                    ? 'active bg-gray-100 text-blue-600'
+                    : 'cursor-pointer	'
+                )}
+              >
+                Subject
+              </div>
+              <div
+                onClick={() => {
+                  setFilterCategory('library');
+                  setFilter({});
+                }}
+                className={classNames(
+                  'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50',
+                  filterCategory == 'library'
+                    ? 'active bg-gray-100 text-blue-600'
+                    : 'cursor-pointer	'
+                )}
+              >
+                Library
+              </div>
             </div>
-
-            <FilterTextInput
-              title='Library Id*'
-              keyFilter='libraryId'
-              defaultInput={filter.libraryId ? filter.libraryId : []}
-              handleFilterChange={handleFilterChange}
-              disabled={isSubjectFilterApplied}
-            />
-            <FilterTextInput
-              title='Assay*'
-              keyFilter='assay'
-              defaultInput={filter.assay ? filter.assay : []}
-              handleFilterChange={handleFilterChange}
-              disabled={isSubjectFilterApplied}
-            />
-            <FilterTextInput
-              title='Project Name*'
-              keyFilter='projectName'
-              defaultInput={filter.projectName ? filter.projectName : []}
-              handleFilterChange={handleFilterChange}
-              disabled={isSubjectFilterApplied}
-            />
-            <FilterTextInput
-              title='Project Owner*'
-              keyFilter='projectOwner'
-              defaultInput={filter.projectOwner ? filter.projectOwner : []}
-              handleFilterChange={handleFilterChange}
-              disabled={isSubjectFilterApplied}
-            />
-            <div className='border-b-2 mb-2 pb-2 italic text-s	text-gray-700 font-thin	'>
-              {`*Text input support multi value with comma separated value. E.g. "L000001,L000002"`}
-            </div>
-            <CoverageFilter
-              handleFilterChange={handleFilterChange}
-              defaultMaxInput={filter.coverage__lte ? parseInt(filter.coverage__lte) : undefined}
-              defaultMinInput={filter.coverage__gte ? parseInt(filter.coverage__gte) : undefined}
-              disabled={isSubjectFilterApplied}
-            />
-
-            <CheckboxGroup
-              title='Phenotype'
-              keyFilter='phenotype'
-              options={PHENOTYPE_OPTION}
-              handleIsCheckedFunc={handleIsCheckedFunc}
-              isCheckedFunc={isCheckedFilterActive}
-              disabled={isSubjectFilterApplied}
-            />
-            <CheckboxGroup
-              title='Quality'
-              keyFilter='quality'
-              options={QUALITY_OPTION}
-              handleIsCheckedFunc={handleIsCheckedFunc}
-              isCheckedFunc={isCheckedFilterActive}
-              disabled={isSubjectFilterApplied}
-            />
-            <CheckboxGroup
-              title='Type'
-              keyFilter='type'
-              options={TYPE_OPTION}
-              handleIsCheckedFunc={handleIsCheckedFunc}
-              isCheckedFunc={isCheckedFilterActive}
-              disabled={isSubjectFilterApplied}
-            />
-            <CheckboxGroup
-              title='Workflow'
-              keyFilter='workflow'
-              options={WORKFLOW_OPTION}
-              handleIsCheckedFunc={handleIsCheckedFunc}
-              isCheckedFunc={isCheckedFilterActive}
-              disabled={isSubjectFilterApplied}
-            />
+            {filterCategory == 'subject' ? <SubjectFilter /> : <LibraryFilter />}
           </div>
           <ClosePopoverWrapper className='mt-4'>
             <Button
@@ -197,7 +223,7 @@ export const MetadataFilterDropdown = () => {
             type='primary'
             onClick={() => {
               // since 2 api can be used for this tables, clearing the ordering
-              setQueryParams({ ...filter, ordering: undefined });
+              setQueryParams({ ...filter, ordering: undefined }, true);
             }}
           >
             Apply
@@ -277,14 +303,12 @@ const CheckboxGroup = ({
   options,
   handleIsCheckedFunc,
   isCheckedFunc,
-  disabled = false,
 }: {
   title: string;
   keyFilter: keyof FilterType;
   options: string[];
   handleIsCheckedFunc: (key: keyof FilterType, value: string) => void;
   isCheckedFunc: (key: keyof FilterType, value: string) => boolean;
-  disabled?: boolean;
 }) => {
   return (
     <>
@@ -294,13 +318,11 @@ const CheckboxGroup = ({
           key={`${keyFilter}-${key}`}
           className='flex items-center ps-2 rounded hover:bg-gray-100 cursor-pointer'
           onClick={() => {
-            if (disabled) return;
             handleIsCheckedFunc(keyFilter, item);
           }}
         >
           <input
             readOnly
-            disabled={disabled}
             checked={isCheckedFunc(keyFilter, item)}
             type='checkbox'
             className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500/50 focus:ring-2 cursor-pointer'
@@ -319,7 +341,6 @@ const FilterTextInput = ({
   keyFilter,
   defaultInput,
   handleFilterChange,
-  disabled = false,
 }: {
   title?: string;
   keyFilter: keyof FilterType;
@@ -341,7 +362,6 @@ const FilterTextInput = ({
       {title && <div className='font-medium'>{title}</div>}
       <div className='pl-2'>
         <input
-          disabled={disabled}
           value={input}
           onChange={(e) => setInput(e.target.value.trim())}
           onBlur={() => {

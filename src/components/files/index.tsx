@@ -12,8 +12,7 @@ export const OTHER_FILETYPE_LIST: string[] = ['json', 'yaml', 'yml'];
 export const IGV_FILETYPE_LIST: string[] = ['bam', 'vcf', 'vcf.gz', 'cram'];
 
 export const DOWNLOADABLE_FILETYPE_LIST: string[] = [
-  'vcf',
-  'gz',
+  'vcf.gz',
   'maf',
   ...IMAGE_FILETYPE_LIST,
   ...IFRAME_FILETYPE_LIST,
@@ -25,26 +24,28 @@ export const DOWNLOADABLE_FILETYPE_LIST: string[] = [
 type Props = { bucket: string; s3Key: string; s3ObjectId: string };
 
 export const FileViewer = (props: Props) => {
-  const splitPath = props.s3Key.split('.');
-  const filetype = splitPath[splitPath.length - 1].toLowerCase();
+  const { s3Key } = props;
 
-  if (IMAGE_FILETYPE_LIST.includes(filetype)) {
+  if (IMAGE_FILETYPE_LIST.find((f) => s3Key.endsWith(f))) {
     return <ImageViewer {...props} />;
   }
 
-  if (IFRAME_FILETYPE_LIST.includes(filetype)) {
+  if (IFRAME_FILETYPE_LIST.find((f) => s3Key.endsWith(f))) {
     return <IFrameViewer {...props} />;
   }
 
-  if (PLAIN_FILETYPE_LIST.includes(filetype) || OTHER_FILETYPE_LIST.includes(filetype)) {
+  if (
+    PLAIN_FILETYPE_LIST.find((f) => s3Key.endsWith(f)) ||
+    OTHER_FILETYPE_LIST.find((f) => s3Key.endsWith(f))
+  ) {
     return <PreViewer {...props} />;
   }
 
-  if (DELIMITER_SEPARATED_VALUE_FILETYPE_LIST.includes(filetype)) {
+  if (DELIMITER_SEPARATED_VALUE_FILETYPE_LIST.find((f) => s3Key.endsWith(f))) {
     return <TableViewer {...props} />;
   }
 
-  if (IGV_FILETYPE_LIST.includes(filetype)) {
+  if (IGV_FILETYPE_LIST.find((f) => s3Key.endsWith(f))) {
     return <IgvViewer {...props} />;
   }
 
@@ -52,17 +53,15 @@ export const FileViewer = (props: Props) => {
 };
 
 export const isFileViewable = (s3Key: string): boolean => {
-  const splitPath = s3Key.split('.');
-  const filetype = splitPath[splitPath.length - 1].toLowerCase();
-
-  return (
-    IMAGE_FILETYPE_LIST.includes(filetype) ||
-    IFRAME_FILETYPE_LIST.includes(filetype) ||
-    PLAIN_FILETYPE_LIST.includes(filetype) ||
-    OTHER_FILETYPE_LIST.includes(filetype) ||
-    DELIMITER_SEPARATED_VALUE_FILETYPE_LIST.includes(filetype) ||
-    IGV_FILETYPE_LIST.includes(filetype)
-  );
+  const filetypeList = [
+    ...IMAGE_FILETYPE_LIST,
+    ...IFRAME_FILETYPE_LIST,
+    ...PLAIN_FILETYPE_LIST,
+    ...OTHER_FILETYPE_LIST,
+    ...DELIMITER_SEPARATED_VALUE_FILETYPE_LIST,
+    ...IGV_FILETYPE_LIST,
+  ];
+  return !!filetypeList.find((f) => s3Key.endsWith(f));
 };
 
 export const isFileSizeAcceptable = (objectSize: number): boolean => {

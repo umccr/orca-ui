@@ -23,7 +23,7 @@ export const MetadataTable = ({ data, pagination }: MetadataTableProps) => {
   const isFilterLibraryApplied = !!Object.keys(queryParam).find((key) =>
     LIBRARY_FILTER_KEY.includes(key)
   );
-  const isSubjectFilterApplied = queryParam.subjectId ? true : false;
+  const isSubjectFilterApplied = queryParam.subjectId || !isFilterLibraryApplied ? true : false;
 
   return (
     <Table

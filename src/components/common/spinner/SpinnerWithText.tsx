@@ -7,7 +7,7 @@ export interface Props {
 
 const SpinnerWithText: FC<Props> = ({ text }) => {
   return (
-    <div className='absolute w-full h-full flex flex-col items-center justify-center'>
+    <div className='w-full h-full flex flex-col items-center justify-center'>
       <Spinner />
       {text && <div style={{ paddingTop: '1rem' }}>{text}</div>}
     </div>

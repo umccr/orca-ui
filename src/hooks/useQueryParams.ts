@@ -16,13 +16,22 @@ export const useQueryParams = (
   }, [onChange, queryParams]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const setQueryParams = (params: Record<string, any>) =>
-    nav(
-      cleanObject({
-        ...wgetQueryParams(queryParams),
-        ...params,
-      })
-    );
+  const setQueryParams = (params: Record<string, any>, isReplace: boolean = false) => {
+    if (isReplace) {
+      nav(
+        cleanObject({
+          ...params,
+        })
+      );
+    } else {
+      nav(
+        cleanObject({
+          ...wgetQueryParams(queryParams),
+          ...params,
+        })
+      );
+    }
+  };
   const clearQueryParams = () => nav({});
   const getQueryParams = () => wgetQueryParams(queryParams);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
