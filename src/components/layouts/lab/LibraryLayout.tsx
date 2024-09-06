@@ -15,7 +15,7 @@ const LibraryLayout = ({ children }: PropsWithChildren) => {
         <div className='flex h-full'>
           <LibrarySideNavBar />
         </div>
-        <div className='flex flex-1 flex-col py-4 px-5 overflow-auto'>
+        <div className='flex flex-1 flex-col py-4 px-5 overflow-auto min-w-[450px] overflow-x-auto'>
           <div className='flex flex-row justify-between space-x-4'>
             <LibraryBreadCrumb />
 
