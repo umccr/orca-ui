@@ -17,7 +17,7 @@ const SideNavbar: FC<SideNavbarProps> = ({ navigation }) => {
   const location = useLocation();
 
   return (
-    <div className=' bg-magpie-light-50 w-[68px] border-r-2 border-magpie-light-75'>
+    <div className='bg-magpie-light-50 border-magpie-light-75'>
       <nav>
         <ul role='list' className='flex flex-1 flex-col items-center w-full'>
           {navigation.map((item) => (

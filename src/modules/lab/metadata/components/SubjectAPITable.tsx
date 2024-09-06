@@ -17,7 +17,7 @@ export const SubjectAPITable = () => {
     throw new Error('No subject data found!');
   }
   const tableData = processSubjectFullResults(data.results);
-  return <MetadataTable data={tableData} pagination={data.pagination} />;
+  return <MetadataTable data={tableData} pagination={data.pagination} metadataApiUsed='subject' />;
 };
 
 /**
