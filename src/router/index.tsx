@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { useRoutes, Navigate, Outlet } from 'react-router-dom';
-import { useAuthContext } from '@/context/AmplifyauthContext';
+import { useAuthContext } from '@/context/AmplifyAuthContext';
 import { AppURLs } from '@/utils/appURLs';
 
 const SignInPage = lazy(() => import('@/modules/auth/SignInPage'));
@@ -9,16 +9,16 @@ import MainLayout from '@/components/layouts/MainLayout';
 
 // import all modules routes
 import modulesRouters from './modules';
+import { SpinnerWithText } from '@/components/common/spinner';
 
 export default function AppRoutes() {
   const { isAuthenticated } = useAuthContext();
-
   const routes = [
     {
       path: '/',
       element: isAuthenticated ? (
         <MainLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<SpinnerWithText text='Loading ...' />}>
             <Outlet />
           </Suspense>
         </MainLayout>
@@ -34,7 +34,11 @@ export default function AppRoutes() {
     // Unauthenticated routes
     {
       path: AppURLs.SignIn,
-      element: <SignInPage />,
+      element: (
+        <Suspense fallback={<SpinnerWithText text='Loading ...' />}>
+          <SignInPage />
+        </Suspense>
+      ),
     },
     {
       path: '*',

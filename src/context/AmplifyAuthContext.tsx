@@ -95,15 +95,18 @@ export const AuthContext = createContext<AuthContextProps>({
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement => {
   const [state, dispatch] = useReducer(reducer, initialAuthState);
-  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
+  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(true);
   const initializeAuth = async () => {
     setIsAuthenticating(true);
     try {
       const user = await fetchUserAttributes();
       dispatch({ type: AuthActionTypes.INIT, payload: { isAuthenticated: true, user } });
     } catch (e) {
-      console.error('initializeAuth Error: ', e);
-      dispatch({ type: AuthActionTypes.INIT, payload: { isAuthenticated: false } });
+      if (e == 'UserUnAuthenticatedException: User needs to be authenticated to call this API.') {
+        console.info('User session is unauthenticated');
+      } else {
+        console.error('initializeAuth Error: ', e);
+      }
     }
     setIsAuthenticating(false);
   };
@@ -126,11 +129,11 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement 
     });
 
     // call initializeAuth to check the current user when the app is loaded
-    //initializeAuth();
+    initializeAuth();
 
     // best practice: stop listening for auth events when the component is unmounted
     // refer: https://docs.amplify.aws/gen1/javascript/build-a-backend/utilities/hub/#stop-listening
-    return unsubscribe;
+    unsubscribe();
   }, []);
 
   //best practice: useCallback ensures that these functions are only recreated when necessary, optimizing performance.
@@ -139,9 +142,8 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement 
       await signInWithRedirect({ provider: 'Google' });
     } catch (e) {
       if (e == 'UserAlreadyAuthenticatedException: There is already a signed in user.') {
-        // if it is not UserAlreadyAuthenticatedException, means google user loded before (localstorage)
+        // if it is not UserAlreadyAuthenticatedException, means google user loaded before (local storage)
         console.log('UserAlreadyAuthenticatedException: There is already a signed in user.');
-        initializeAuth();
       } else {
         console.error('signInWithGoogle Error: ', e);
       }
@@ -159,7 +161,13 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement 
 
   return (
     <AuthContext.Provider value={{ ...state, signInWithGoogle, logout }}>
-      {isAuthenticating ? <SpinnerWithText text='Authenticating...' /> : children}
+      {isAuthenticating ? (
+        <div className='h-screen'>
+          <SpinnerWithText text='Authenticating...' />
+        </div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };
