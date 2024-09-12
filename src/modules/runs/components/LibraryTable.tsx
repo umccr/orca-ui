@@ -6,14 +6,11 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
-import dayjs from '@/utils/dayjs';
+import { dayjs } from '@/utils/dayjs';
 import { Badge } from '@/components/common/badges';
 import { StatusIcon } from '@/components/common/statusIcon';
-import {
-  LibraryType,
-  WorkflowRun,
-  generateMockLibraryRunData,
-} from '@/api/_mock/mockDataGenerator';
+
+import { LibraryType, WorkflowRun, generateMockLibraryRunData } from '@/api/_mock/mockLibraryData';
 import { ContentTabs } from '@/components/navigation/tabs';
 // import TableSearchHeader from './tableSearchHeader';
 import { Button } from '@/components/common/buttons';
@@ -228,10 +225,10 @@ const LibraryRunTable = () => {
   const mockctTSOLibraryRunData = generateMockLibraryRunData(5, LibraryType.ctTSO);
   const mockctDNALibraryRunData = generateMockLibraryRunData(5, LibraryType.ctDNA);
 
-  console.log('mockLibraryData', mockWGSLibraryRunData);
-  console.log('mockWGSWorkflowRunData', mockWTSLibraryRunData);
-  console.log('mockWTSWorkflowRunData', mockctTSOLibraryRunData);
-  console.log('mockLibraryRunData', mockctDNALibraryRunData);
+  // console.log('mockLibraryData', mockWGSLibraryRunData);
+  // console.log('mockWGSWorkflowRunData', mockWTSLibraryRunData);
+  // console.log('mockWTSWorkflowRunData', mockctTSOLibraryRunData);
+  // console.log('mockLibraryRunData', mockctDNALibraryRunData);
 
   const data = {
     pagination: {

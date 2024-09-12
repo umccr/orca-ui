@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
+import { classNames } from '@/utils/commonUtils';
 
-interface SelectItems {
+export interface SelectItems {
   label: string;
   value: string;
+  secondaryLabel?: string;
 }
 
 interface SelectProps {
@@ -26,37 +28,64 @@ export function Select({ value, options, onChange }: SelectProps) {
   };
 
   return (
-    <Listbox value={selected} onChange={handleSelect}>
-      {/* <Label className="block text-sm font-medium leading-6 text-gray-900">Assigned to</Label> */}
-      <div className='relative min-w-66'>
-        <ListboxButton className='relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6'>
-          <span className='block truncate '>{selected.label}</span>
-          <span className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2'>
-            <ChevronUpDownIcon aria-hidden='true' className='h-5 w-5 text-gray-400' />
-          </span>
-        </ListboxButton>
-
-        <ListboxOptions
-          transition
-          className='absolute z-10 mt-1 max-h-60 min-w-10 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in sm:text-sm'
+    <div className='mx-auto min-w-72 '>
+      <Listbox value={selected} onChange={handleSelect}>
+        <ListboxButton
+          className={classNames(
+            'relative block w-full rounded-lg bg-white py-1.5 pr-8 pl-3 text-left text-sm/6 text-gray-900 ',
+            'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 ',
+            'focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6 ',
+            'shadow-sm ring-1 ring-inset ring-gray-300 '
+          )}
         >
-          {options.map((option) => (
+          {selected.label}
+          <ChevronUpDownIcon
+            className='group pointer-events-none absolute top-2.5 right-2.5 size-4 fill-gray-900'
+            aria-hidden='true'
+          />
+        </ListboxButton>
+        <ListboxOptions
+          anchor='bottom'
+          transition
+          className={classNames(
+            'w-[var(--button-width)] rounded-xl border border-white/5 bg-white p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none',
+            'transition duration-200 ease-in-out data-[leave]:data-[closed]:opacity-0',
+            'mt-1 ring-1 ring-black ring-opacity-5'
+          )}
+        >
+          {options.map((option, index) => (
             <ListboxOption
-              key={option.label}
+              key={index}
               value={option}
-              className='group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white'
+              className=' group flex cursor-pointer items-center gap-2 rounded-lg py-1.5 px-3 select-none text-gray-900  data-[focus]:bg-indigo-600 data-[focus]:text-white'
             >
-              <span className='block truncate font-normal group-data-[selected]:font-semibold'>
-                {option.value}
-              </span>
+              <CheckIcon
+                className={classNames(
+                  option.value == selected.value ? ' visible ' : ' invisible ',
+                  ' size-4 fill-gray-900 data-[focus]:text-indigo-600 '
+                )}
+              />
 
-              <span className='absolute inset-y-0 left-0 flex items-center pl-1.5 text-indigo-600 group-data-[focus]:text-white [.group:not([data-selected])_&]:hidden'>
-                <CheckIcon aria-hidden='true' className='h-5 w-5' />
-              </span>
+              <div className='text-sm/6 font-normal group-data-[selected]:font-semibold '>
+                {option.label}
+              </div>
+              {option.secondaryLabel && (
+                <div className='text-sm/6 text-gray-500 group-data-[focus]:text-indigo-200'>
+                  {option.secondaryLabel}
+                </div>
+              )}
+              {/* <div className='flex'>
+                <span className='truncate font-normal group-data-[selected]:font-semibold'>
+                  {option.label}
+                </span>
+                <span className='ml-2 truncate text-gray-500 group-data-[focus]:text-indigo-200'>
+                  {option.label}
+                </span>
+              </div> */}
             </ListboxOption>
           ))}
         </ListboxOptions>
-      </div>
-    </Listbox>
+      </Listbox>
+    </div>
   );
 }

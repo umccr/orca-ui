@@ -1,0 +1,15 @@
+export const workflowTypeData = [
+  { name: 'bcl_convert', value: 1 },
+  { name: 'tso_ctdna_tumor_only', value: 6 },
+  { name: 'wgs_alignment_qc', value: 22 },
+  { name: 'wts_alignment_qc', value: 16 },
+  { name: 'wts_tumor_only', value: 4 },
+  { name: 'wgs_tumor_normal', value: 4 },
+  { name: 'umccrise', value: 4 },
+  { name: 'rnasum', value: 4 },
+  { name: 'star_alignment', value: 4 },
+  { name: 'oncoanalyser_wts', value: 4 },
+  { name: 'oncoanalyser_wgs', value: 4 },
+  { name: 'oncoanalyser_wgts_existing_both', value: 4 },
+  { name: 'sash', value: 4 },
+];

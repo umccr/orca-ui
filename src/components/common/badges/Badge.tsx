@@ -9,24 +9,24 @@ export interface BadgePropsInterface {
 type BadgeProps = RequireAtLeastOne<BadgePropsInterface, 'type' | 'status'>;
 
 const Badge = ({ children, type = 'primary', status, className }: BadgeProps) => {
-  const baseStyles = 'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ';
+  const baseStyles = 'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ';
 
   const badgetype = status ? getBadgeType(status) : type;
   const colorStyles: { [key: string]: string } = {
-    primary: 'text-white bg-blue-700 ',
-    secondary: 'text-blue-700 bg-blue-50 ring-1 ring-inset ring-blue-700/10 ',
-    success: 'text-white bg-green-700 ',
-    fail: 'text-white bg-red-700 ',
-    warning: 'text-white bg-yellow-400 ',
-    abort: 'text-gray-600 bg-gray-300 ',
-    unknown: 'text-white bg-gray-500 ',
-    running: 'text-white bg-blue-500 ',
+    primary: 'text-indigo-700 bg-indigo-100 ring-1 ring-inset ring-indigo-700/10 ',
+    secondary: 'text-sky-700 bg-sky-100 ring-1 ring-inset ring-sky-700/10 ',
+    success: 'text-green-700 bg-green-100 ring-1 ring-inset ring-green-700/10 ',
+    fail: 'text-red-700 bg-red-100 ring-1 ring-inset ring-red-700/10 ',
+    warning: 'text-yellow-700 bg-yellow-100 ring-1 ring-inset ring-yellow-700/10 ',
+    abort: 'text-gray-700 bg-gray-100 ring-1 ring-inset ring-gray-700/10 ',
+    unknown: 'text-gray-700 bg-gray-100 ring-1 ring-inset ring-gray-700/10 ',
+    running: 'text-blue-700 bg-blue-100 ring-1 ring-inset ring-blue-700/10 ',
   };
 
   return <span className={`${baseStyles} ${colorStyles[badgetype]} ${className}`}>{children}</span>;
 };
 
-const getBadgeType = (status: string) => {
+export const getBadgeType = (status: string) => {
   switch (status.toUpperCase()) {
     case 'REQUESTED':
     case 'QUEUED':
@@ -35,6 +35,7 @@ const getBadgeType = (status: string) => {
     case 'INITIALIZING':
     case 'PREPARING_INPUTS':
     case 'IN PROGRESS':
+    case 'READY':
     case 'GENERATING_OUTPUTS':
       return 'running';
 

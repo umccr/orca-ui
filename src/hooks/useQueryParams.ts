@@ -6,7 +6,8 @@ import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 
 export const useQueryParams = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onChange?: (queryParams: URLSearchParams, objectParams?: any) => void
+  onChange?: (queryParams: URLSearchParams, objectParams?: any) => void,
+  defaultPageSize = DEFAULT_PAGE_SIZE
 ) => {
   const [queryParams, nav] = useSearchParams();
   useEffect(() => {
@@ -23,12 +24,19 @@ export const useQueryParams = (
         ...params,
       })
     );
+
+  // const removeQueryParams = (params: string[]) => {
+  //   const newParams = wgetQueryParams(queryParams);
+  //   params.forEach((param) => newParams.delete(param));
+  //   nav(newParams);
+  // };
+
   const clearQueryParams = () => nav({});
   const getQueryParams = () => wgetQueryParams(queryParams);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getPaginationParams = (values: any = {}) => {
     const page = Number(queryParams.get('page')) || 1;
-    const rowsPerPage = Number(queryParams.get('rowsPerPage')) || DEFAULT_PAGE_SIZE;
+    const rowsPerPage = Number(queryParams.get('rowsPerPage')) || defaultPageSize;
     return {
       page: page,
       rowsPerPage: rowsPerPage,

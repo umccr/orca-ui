@@ -7,8 +7,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
-import dayjs from '@/utils/dayjs';
-import { TableCellsIcon, RectangleGroupIcon, ClipboardIcon } from '@heroicons/react/24/outline';
+import { dayjs } from '@/utils/dayjs';
+import { TableCellsIcon, ClipboardIcon } from '@heroicons/react/24/outline';
 import { StatusBadge } from '@/components/common/badges';
 
 const SequenceRunTable = () => {
@@ -30,9 +30,7 @@ const SequenceRunTable = () => {
   }, [getPaginationParams]);
 
   const fullSubjectModel = useSequenceRunListModel({
-    // params: { query: { page: page, rowsPerPage: rowsPerPage, ...dataQueryParams } },
-    // bugs on rows per page of sequence api call
-    params: { query: { page: page, ...dataQueryParams } },
+    params: { query: { page: page, rowsPerPage: rowsPerPage, ...dataQueryParams } },
   });
 
   const data = fullSubjectModel.data;
@@ -104,7 +102,7 @@ const SequenceRunTable = () => {
         setRowsPerPage: (n: number) => {
           setQueryParams({ rowsPerPage: n });
         },
-        countUnit: 'subjects',
+        countUnit: 'runs',
       }}
     />
   );
@@ -138,7 +136,7 @@ const sequenceRunColumn: Column[] = [
       if (!startTime) {
         return <div>-</div>;
       } else {
-        return <div>{dayjs(startTime as string).format('llll')}</div>;
+        return <div>{dayjs(startTime as string).format('YYYY-MM-DD')}</div>;
       }
     },
   },
@@ -149,7 +147,7 @@ const sequenceRunColumn: Column[] = [
       if (!endTime) {
         return <div>-</div>;
       } else {
-        return <div>{dayjs(endTime as string).format('llll')}</div>;
+        return <div>{dayjs(endTime as string).format('YYYY-MM-DD')}</div>;
       }
     },
   },
@@ -157,14 +155,14 @@ const sequenceRunColumn: Column[] = [
     header: 'Sequencing',
     accessor: 'status',
     cell: (status: unknown) => {
-      return <StatusBadge status={(status as string) || 'unkmown'}></StatusBadge>;
+      return <StatusBadge status={(status as string) || 'unkown'}></StatusBadge>;
     },
   },
   {
     header: 'Bcl Convert',
     accessor: 'bclConvertStatus',
     cell: (status: unknown) => {
-      return <StatusBadge status={(status as string) || 'unkmown'}></StatusBadge>;
+      return <StatusBadge status={(status as string) || 'unkown'}></StatusBadge>;
     },
   },
   {
@@ -185,7 +183,7 @@ const sequenceRunColumn: Column[] = [
               <TableCellsIcon className='h-5 w-5 pr-1 shrink-0 text-blue-500' aria-hidden='true' />
               Details
             </Link>
-            <Link
+            {/* <Link
               to={`sequence/${instrumentRunId}/diagram`}
               className={classNames(
                 'flex flex-row items-center ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
@@ -196,7 +194,7 @@ const sequenceRunColumn: Column[] = [
                 aria-hidden='true'
               />
               Diagram
-            </Link>
+            </Link> */}
             <Link
               to={`sequence/${instrumentRunId}/report`}
               className={classNames(
@@ -204,7 +202,7 @@ const sequenceRunColumn: Column[] = [
               )}
             >
               <ClipboardIcon className='h-5 w-5 pr-1 shrink-0 text-blue-500' aria-hidden='true' />
-              Diagram
+              Report
             </Link>
           </div>
         );

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Header from '@/components/navigation/header';
-import { UserContext } from '@/context/UserContext';
+import { AuthContext } from '@/context/AmplifyAuthContext';
 
 const meta: Meta = {
   title: 'Naviagtion/Headers',
@@ -26,17 +26,20 @@ type Story = StoryObj<typeof meta>;
 export const SimpleHeader: Story = {
   render: () => {
     return (
-      <UserContext.Provider
+      <AuthContext.Provider
         value={{
-          isAuth: true,
+          isInitialized: true,
+          isAuthenticated: true,
           user: {
             name: 'John Doe',
             email: 'john.doe@example.com',
           },
+          signInWithGoogle: async () => {},
+          logout: async () => {},
         }}
       >
         <Header />
-      </UserContext.Provider>
+      </AuthContext.Provider>
     );
   },
 };

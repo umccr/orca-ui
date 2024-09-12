@@ -1,12 +1,30 @@
-import React, { ReactNode, useState } from 'react';
+import { ReactNode, useState, FC } from 'react';
+import { Transition } from '@headlessui/react';
+import { classNames } from '@/utils/commonUtils';
 
 interface TooltipProps {
-  text: string;
-  position?: 'top' | 'bottom' | 'left' | 'right';
+  text: string | ReactNode;
+  position?:
+    | 'top'
+    | 'bottom'
+    | 'left'
+    | 'right'
+    | 'top left'
+    | 'top right'
+    | 'bottom left'
+    | 'bottom right';
+  size?: 'small' | 'medium' | 'large';
+  background?: 'gray' | 'white';
   children: ReactNode;
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ text, position = 'top', children }) => {
+const Tooltip: FC<TooltipProps> = ({
+  text,
+  position = 'top',
+  size = 'medium',
+  background = 'gray',
+  children,
+}) => {
   const [isVisible, setIsVisible] = useState(false);
 
   const getPositionClasses = () => {
@@ -39,6 +57,21 @@ const Tooltip: React.FC<TooltipProps> = ({ text, position = 'top', children }) =
     }
   };
 
+  const getSizeClasses = () => {
+    switch (size) {
+      case 'small':
+        return 'text-xs p-2';
+      case 'large':
+        return 'text-base p-2';
+      default:
+        return 'text-sm p-2'; // medium by default
+    }
+  };
+
+  const getBackgroundClasses = () => {
+    return background === 'white' ? 'bg-white text-black' : 'bg-gray-600 text-white';
+  };
+
   return (
     <div
       className='relative flex items-center'
@@ -46,18 +79,30 @@ const Tooltip: React.FC<TooltipProps> = ({ text, position = 'top', children }) =
       onMouseLeave={() => setIsVisible(false)}
     >
       {children}
-      {isVisible && (
+
+      <Transition show={isVisible}>
         <div
-          className={`absolute z-10 p-2 w-max max-w-xs text-sm text-white bg-gray-600 rounded-lg shadow-lg ${getPositionClasses()}`}
+          className={classNames(
+            // Base styles
+            'absolute z-10 w-max max-w-xs rounded-lg shadow-lg border transition ease-in-out',
+            // Shared closed styles
+            'data-[closed]:opacity-0',
+            // Entering styles
+            'data-[enter]:duration-200 ',
+            // Leaving styles
+            'data-[leave]:duration-200 ',
+            // Position classes
+            ` ${getSizeClasses()} ${getBackgroundClasses()} ${getPositionClasses()}`
+          )}
         >
           <div className='relative'>
             {text}
             <div
-              className={`absolute w-3 h-3 bg-gray-600 transform rotate-45 ${getArrowClasses()}`}
+              className={`absolute w-3 h-3 transform rotate-45 ${getBackgroundClasses()} ${getArrowClasses()}`}
             />
           </div>
         </div>
-      )}
+      </Transition>
     </div>
   );
 };

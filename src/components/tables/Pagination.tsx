@@ -7,6 +7,7 @@ import {
   ChevronRightIcon,
 } from '@heroicons/react/16/solid';
 import { useEffect, useState } from 'react';
+import { DEFAULT_PAGE_SIZE_OPTIONS } from '@/utils/constant';
 
 export type PaginationProps = {
   totalCount: number;
@@ -15,6 +16,7 @@ export type PaginationProps = {
   setPage: (newPage: number) => void;
   setRowsPerPage: (newRowsPerPage: number) => void;
   countUnit?: string;
+  pageSizeOptions?: number[];
 };
 
 const PaginationDirectionButton = ({
@@ -52,6 +54,7 @@ export default function Pagination({
   setPage,
   setRowsPerPage,
   currentPage,
+  pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS,
 }: PaginationProps) {
   const [inputPageNumber, setInputPageNumber] = useState(currentPage);
   const [rowsPerPageNumber, setRowsPerPageNumber] = useState(rowsPerPage);
@@ -116,7 +119,7 @@ export default function Pagination({
               setRowsPerPage(parseInt(e.target.value));
             }}
           >
-            {[10, 20, 30, 40, 50].map((size) => (
+            {pageSizeOptions.map((size) => (
               <option key={size} value={size}>
                 {size}
               </option>

@@ -2,56 +2,6 @@ import { Position, Edge, Node } from '@xyflow/react';
 
 export const nodes = [
   {
-    id: '1',
-    type: 'workflow',
-    data: {
-      type: 'Sequencer',
-      title: 'Sequencer',
-      handlers: [
-        {
-          type: 'source',
-          position: Position.Right,
-          id: 'Sequencer-handle-0',
-        },
-      ],
-      detail: {
-        status: 'SUCCEEDED',
-        // description: 'this is a description',
-      },
-    },
-    draggable: true,
-    selectable: true,
-    position: { x: 0, y: 100 },
-  },
-
-  {
-    id: '2',
-    type: 'workflow',
-    data: {
-      type: 'BSSH',
-      title: 'BSSH',
-      handlers: [
-        {
-          type: 'source',
-          position: Position.Right,
-          id: 'BSSH-handle-0',
-        },
-        {
-          type: 'target',
-          position: Position.Left,
-          id: 'BSSH-handle-1',
-        },
-      ],
-      detail: {
-        status: 'SUCCEEDED',
-        // description: 'this is a description',
-      },
-    },
-    draggable: true,
-    selectable: true,
-    position: { x: 250, y: 100 },
-  },
-  {
     id: '3',
     type: 'workflow',
     data: {
@@ -182,12 +132,12 @@ export const nodes = [
         },
         {
           type: 'source',
-          position: Position.Right,
+          position: Position.Left,
           id: 'ONCOANALYSER_WGS-handle-1',
         },
         {
           type: 'source',
-          position: Position.Bottom,
+          position: Position.Right,
           id: 'ONCOANALYSER_WGS-handle-2',
         },
       ],
@@ -210,7 +160,7 @@ export const nodes = [
       handlers: [
         {
           type: 'target',
-          position: Position.Left,
+          position: Position.Right,
           id: 'SASH-handle-0',
         },
       ],
@@ -222,7 +172,7 @@ export const nodes = [
     },
     draggable: true,
     selectable: true,
-    position: { x: 1800, y: 300 },
+    position: { x: 1000, y: 300 },
   },
   {
     id: '9',
@@ -233,7 +183,7 @@ export const nodes = [
       handlers: [
         {
           type: 'target',
-          position: Position.Top,
+          position: Position.Left,
           id: 'ONCOANALYSER_WGTS_EXISTING_BOTH-handle-1',
         },
       ],
@@ -245,30 +195,11 @@ export const nodes = [
     },
     draggable: true,
     selectable: true,
-    position: { x: 1400, y: 500 },
+    position: { x: 1800, y: 300 },
   },
 ] satisfies Node[];
 
 export const edges = [
-  {
-    id: 'e1-2',
-    source: '1',
-    target: '2',
-    type: 'smoothstep',
-    sourceHandle: 'Sequencer-handle-0',
-    animated: true,
-    markerEnd: 'arrow',
-  },
-  {
-    id: 'e2-3',
-    source: '2',
-    target: '3',
-    type: 'smoothstep',
-    sourceHandle: 'BSSH-handle-0',
-    targetHandle: 'BCL_CONVERT-handle-0',
-    animated: true,
-    markerEnd: 'arrow',
-  },
   {
     id: 'e3-4',
     source: '3',

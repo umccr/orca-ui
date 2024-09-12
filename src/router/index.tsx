@@ -1,6 +1,6 @@
-import { lazy, Suspense } from 'react';
+import { lazy } from 'react';
 import { useRoutes, Navigate, Outlet } from 'react-router-dom';
-import { useAuthContext } from '@/context/AmplifyauthContext';
+import { useAuthContext } from '@/context/AmplifyAuthContext';
 import { AppURLs } from '@/utils/appURLs';
 
 const SignInPage = lazy(() => import('@/modules/auth/SignInPage'));
@@ -12,15 +12,12 @@ import modulesRouters from './modules';
 
 export default function AppRoutes() {
   const { isAuthenticated } = useAuthContext();
-
   const routes = [
     {
       path: '/',
       element: isAuthenticated ? (
         <MainLayout>
-          <Suspense fallback={<div>Loading...</div>}>
-            <Outlet />
-          </Suspense>
+          <Outlet />
         </MainLayout>
       ) : (
         <Navigate to='/signIn' replace />

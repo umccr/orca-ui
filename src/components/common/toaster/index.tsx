@@ -10,7 +10,7 @@ export const Msg: FC<MsgProps> = ({ title, message }) => {
   return (
     <div className='flex items-start'>
       <div className='ml-2 w-0 flex-1 '>
-        <p className='text-base font-medium text-white'>{title}</p>
+        <p className='text-lg font-medium text-white'>{title}</p>
         <p className='mt-1 text-sm text-white'>{message}</p>
       </div>
     </div>

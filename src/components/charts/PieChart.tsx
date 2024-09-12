@@ -18,14 +18,14 @@ interface ArcData {
 
 const PieChart: React.FC<PieChartProps> = ({ data, width, height }) => {
   const ref = useRef<SVGSVGElement>(null);
-  function calcTranslate(data: ArcData, move = 4) {
+  function calcTranslate(data: ArcData, move = 5) {
     const moveAngle = data.startAngle + (data.endAngle - data.startAngle) / 2;
     return `translate(${-move * Math.cos(moveAngle + Math.PI / 2)}, ${-move * Math.sin(moveAngle + Math.PI / 2)})`;
   }
   useEffect(() => {
     if (!data) return;
 
-    const radius = height / 2 - 6;
+    const radius = height / 2 - 10;
 
     const svg = d3
       .select(ref.current)
@@ -79,36 +79,59 @@ const PieChart: React.FC<PieChartProps> = ({ data, width, height }) => {
       .attr('fill', (d) => colorScale(d.data.name))
       .attr('d', arc)
       .on('mouseover', (event, v) => {
+        const currentPath = d3.select(ref.current);
+        // Set other arcs to lower opacity
+        currentPath
+          .selectAll('path')
+          .filter((d) => d !== v)
+          .transition()
+          .duration(duration)
+          .style('opacity', 0.2)
+          .attr('transform', 'translate(0, 0)')
+          .attr('stroke', 'white')
+          .attr('stroke-width', 1);
+
         d3.select(event.currentTarget)
           .transition()
           .duration(duration)
-          .attr('transform', calcTranslate(v));
-        d3.select(event.currentTarget)
-          .select('path')
-          .transition()
-          .duration(duration)
+          .attr('transform', calcTranslate(v))
           .attr('stroke', 'rgba(100, 100, 100, 0.2)')
-          .attr('stroke-width', 2);
+          .attr('stroke-width', 2)
+          .style('opacity', 1);
+        // d3.select(event.currentTarget)
+        //   .select('path')
+        //   .transition()
+        //   .duration(duration)
+        //   .attr('stroke', 'rgba(100, 100, 100, 0.2)')
+        //   .attr('stroke-width', 2);
         // d3.select('.card-back text').text(v.data.type);
+
         tooltip.transition().duration(200).style('opacity', 0.9);
         tooltip
           .html(`<div>${v.data.name}: ${v.data.value.toLocaleString()}</div>`)
           .style('background-color', colorScale(v.data.name)) // Set the background color to match the task color
           .style('color', '#fff') // Change the text color to white for better readability
-          .style('left', `${event.pageX + 5}px`)
-          .style('top', `${event.pageY - 28}px`);
+          .style('left', `${event.pageX + 8}px`)
+          .style('top', `${event.pageY - 30}px`);
       })
       .on('mouseout', (event) => {
+        const currentPath = d3.select(ref.current);
+        currentPath.selectAll('path').transition().duration(duration).style('opacity', 1);
         d3.select(event.currentTarget)
           .transition()
           .duration(duration)
-          .attr('transform', 'translate(0, 0)');
-        d3.select(event.currentTarget)
-          .select('path')
-          .transition()
-          .duration(duration)
+          .attr('transform', 'translate(0, 0)')
           .attr('stroke', 'white')
           .attr('stroke-width', 1);
+        // d3.select(event.currentTarget)
+        //   .select('path')
+        //   .transition()
+        //   .duration(duration)
+        //   .attr('stroke', 'white')
+        //   .attr('stroke-width', 1);
+
+        // d3.selectAll('path').transition().duration(duration).style('opacity', 1);
+
         tooltip.transition().duration(500).style('opacity', 0);
       });
 
@@ -144,6 +167,7 @@ const PieChart: React.FC<PieChartProps> = ({ data, width, height }) => {
       .data(pie(data))
       .enter()
       .append('rect')
+      .attr('class', 'legend')
       .attr('y', (_d, i) => i * 20)
       .attr('width', 10)
       .attr('height', 10)

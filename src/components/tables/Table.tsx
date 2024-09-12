@@ -3,7 +3,7 @@ import { classNames } from '@/utils/commonUtils';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import Pagination, { PaginationProps } from './Pagination';
 
-type TableData = Record<string, unknown>;
+export type TableData = Record<string, unknown>;
 
 export type Column = {
   header: string;
@@ -13,7 +13,7 @@ export type Column = {
   sortDirection?: 'asc' | 'desc';
 };
 
-interface TableProps {
+export interface TableProps {
   tableHeader?: ReactNode | string;
   tableDescription?: string;
   columns: Column[];
@@ -30,7 +30,7 @@ const Table: FC<TableProps> = ({
   columns,
   tableData,
   paginationProps,
-  striped = true,
+  striped = false,
   inCard = true,
   stickyHeader = false,
 }) => {
@@ -54,12 +54,12 @@ const Table: FC<TableProps> = ({
               )}
             >
               <table className='min-w-full divide-y divide-gray-300'>
-                <thead className='bg-gray-50'>
+                <thead className={classNames(inCard ? 'bg-gray-50' : '')}>
                   <tr>
                     {columns &&
                       columns.map((column, index) => (
                         <th
-                          key={column.accessor}
+                          key={index}
                           scope='col'
                           className={classNames(
                             'px-3 py-3.5 text-left text-sm font-semibold text-gray-900',
@@ -93,15 +93,26 @@ const Table: FC<TableProps> = ({
                       ))}
                   </tr>
                 </thead>
-                <tbody className='divide-y divide-gray-200 bg-white'>
+                <tbody
+                  className={classNames(
+                    'divide-y divide-gray-200 last:divide-gray-300',
+                    inCard ? 'bg-white' : ' bg-transparent'
+                  )}
+                >
                   {tableData.map((data, index) => (
-                    <tr key={index} className={classNames(striped ? 'even:bg-gray-50' : '')}>
+                    <tr
+                      key={index}
+                      className={classNames(
+                        striped ? 'even:bg-gray-50' : '',
+                        inCard ? 'hover:bg-gray-50' : ' hover:bg-gray-100'
+                      )}
+                    >
                       {columns &&
                         columns.map((column, index) => (
                           <td
-                            key={column.accessor}
+                            key={index}
                             className={classNames(
-                              'whitespace-nowrap py-1 px-3 text-sm font-medium text-gray-900',
+                              'whitespace-nowrap py-2 px-3 text-sm font-medium text-gray-900',
                               index == 0 ? 'pl-4 sm:pl-6' : '',
                               index == columns.length - 1 ? 'pr-4 sm:pr-6' : ''
                             )}
