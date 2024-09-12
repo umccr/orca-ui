@@ -104,7 +104,7 @@ const WorkflowRunTableHeader: FC<WorkflowRunTableHeaderProps> = ({
         />
       </div>
       <div className='pl-20 pr-10'>
-        <Toggle label='only ongoing' onChange={handleOngoingOnlyToggle} checked={isToggleChecked} />
+        <Toggle label='ongoing only' onChange={handleOngoingOnlyToggle} checked={isToggleChecked} />
       </div>
       <div>
         <DateRangePicker

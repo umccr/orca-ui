@@ -6,7 +6,7 @@ import RunsModuleLayout from '@/components/layouts/runs/RunsModuleLayout';
 import { RouteObject } from 'react-router-dom';
 
 const SequenceRunPage = lazy(() => import('@/modules/runs/pages/SequenceRuns'));
-const LibraryRunPage = lazy(() => import('@/modules/runs/Pages/LibraryRuns'));
+const LibraryRunPage = lazy(() => import('@/modules/runs/pages/LibraryRuns'));
 const WorkflowRunPage = lazy(() => import('@/modules/runs/pages/WorkflowRuns'));
 const SequenceRunDetailsPage = lazy(() => import('@/modules/runs/pages/SequenceRunsDetails'));
 
