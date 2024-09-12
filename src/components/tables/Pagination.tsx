@@ -69,7 +69,7 @@ export default function Pagination({
   const to = Math.min((currentPage - 1) * rowsPerPage + rowsPerPage, totalCount);
 
   return (
-    <div className='flex items-center justify-between border-t border-gray-200  pt-4 mt-2'>
+    <div className='flex items-center justify-between pt-4 mt-2'>
       {/* mobile pagination */}
       <div className='flex flex-1 justify-between md:hidden'>
         <Button

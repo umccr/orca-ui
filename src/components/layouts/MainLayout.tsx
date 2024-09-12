@@ -12,7 +12,9 @@ const MainLayout = ({ children }: PropsWithChildren) => {
       <Header />
       <div className='flex flex-1'>
         <SideNavbar navigation={navigation} />
+
         <div className='w-full h-full flex-auto overflow-hidden'>
+
           {/* <Breadcrumb /> */}
           {children || <Outlet />}
         </div>

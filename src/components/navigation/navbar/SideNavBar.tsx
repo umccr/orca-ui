@@ -30,6 +30,7 @@ const SideNavbar: FC<SideNavbarProps> = ({ navigation }) => {
         style={{ transform: `translateY(${activeIndex * 56 + 48}px)` }} // header height 44px + padding 4px
       />
       {/* list of module navigation */}
+
       <nav>
         <ul role='list' className='flex flex-1 flex-col items-center w-full'>
           {navigation.map((item, index) => (

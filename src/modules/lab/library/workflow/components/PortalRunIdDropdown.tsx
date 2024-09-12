@@ -1,14 +1,18 @@
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Dropdown } from '@/components/common/dropdowns';
 import { useWorkflowRunListModel } from '@/api/workflow';
 import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
 
-export const PortalRunIdDropdown = () => {
+export const PortalRunIdDropdown = ({
+  libraryId,
+  portalRunId,
+  workflowType,
+}: {
+  libraryId: string;
+  portalRunId?: string;
+  workflowType?: string;
+}) => {
   const navigate = useNavigate();
-  const { libraryId, portalRunId, workflowType } = useParams();
-  if (!libraryId) {
-    throw new Error('No library id in URL path!');
-  }
 
   const workflowRun = useWorkflowRunListModel({
     params: {

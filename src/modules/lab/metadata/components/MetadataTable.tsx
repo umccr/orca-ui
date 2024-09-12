@@ -6,24 +6,19 @@ import { Link } from 'react-router-dom';
 import { Fragment } from 'react/jsx-runtime';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { MetadataFilterDropdown } from './MetadataFilterDropdown';
-import { LIBRARY_FILTER_KEY } from './LibraryAPITable';
 
 type MetadataTableProps = {
   data: Record<string, unknown>[];
+  metadataApiUsed: 'subject' | 'library';
   pagination:
     | components['schemas']['PaginatedSubjectFullList']['pagination']
     | components['schemas']['PaginatedLibraryFullList']['pagination'];
 };
 
-export const MetadataTable = ({ data, pagination }: MetadataTableProps) => {
+export const MetadataTable = ({ data, pagination, metadataApiUsed }: MetadataTableProps) => {
   const { setQueryParams, getQueryParams, clearQueryParams } = useQueryParams();
 
   const queryParam = getQueryParams();
-
-  const isFilterLibraryApplied = !!Object.keys(queryParam).find((key) =>
-    LIBRARY_FILTER_KEY.includes(key)
-  );
-  const isSubjectFilterApplied = queryParam.subjectId ? true : false;
 
   return (
     <Table
@@ -37,21 +32,23 @@ export const MetadataTable = ({ data, pagination }: MetadataTableProps) => {
       }
       columns={[
         ...getSubjectColumn({
-          setSort: !isFilterLibraryApplied
-            ? (newOrder: string) => {
-                clearQueryParams();
-                setQueryParams({ ordering: newOrder });
-              }
-            : undefined,
+          setSort:
+            metadataApiUsed === 'subject'
+              ? (newOrder: string) => {
+                  clearQueryParams();
+                  setQueryParams({ ordering: newOrder });
+                }
+              : undefined,
           currentSort: queryParam['ordering'],
         }),
         ...getSpecimenColumn(),
         ...getLibraryColumn({
-          setSort: !isSubjectFilterApplied
-            ? (newOrder: string) => {
-                setQueryParams({ ordering: newOrder });
-              }
-            : undefined,
+          setSort:
+            metadataApiUsed === 'library'
+              ? (newOrder: string) => {
+                  setQueryParams({ ordering: newOrder });
+                }
+              : undefined,
           currentSort: queryParam['ordering'],
         }),
       ]}
