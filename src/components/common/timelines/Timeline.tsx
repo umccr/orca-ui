@@ -25,8 +25,6 @@ const Timeline: FC<TimelineProps> = ({ timeline, handldEventClick, selectId }) =
     }
   }, [selectId]);
 
-  console.log('selectedEventPayloadId', selectedEventPayloadId);
-
   return (
     <div>
       <ul role='list' className=''>

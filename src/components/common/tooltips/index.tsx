@@ -69,7 +69,7 @@ const Tooltip: FC<TooltipProps> = ({
   };
 
   const getBackgroundClasses = () => {
-    return background === 'white' ? 'bg-white text-black' : 'bg-gray-600 text-white';
+    return background === 'white' ? 'bg-white text-gray-500' : 'bg-gray-600 text-white';
   };
 
   return (

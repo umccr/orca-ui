@@ -39,7 +39,7 @@ const sideDrawer: FC<DrawerProps> = ({
             >
               <div className='flex-1 overflow-y-scroll h-full bg-white'>
                 {/* Header */}
-                <div className='bg-gray-100 px-4 py-6 sm:px-6'>
+                <div className='bg-gray-100 px-4 pt-6 pb-4 sm:px-6'>
                   <div className='flex items-start justify-between space-x-3'>
                     <div className='space-y-1'>
                       <DialogTitle className='text-base font-semibold leading-6 text-gray-900'>

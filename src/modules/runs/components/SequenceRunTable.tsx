@@ -3,13 +3,13 @@ import { Table } from '@/components/tables';
 import { Column } from '@/components/tables/Table';
 import { classNames } from '@/utils/commonUtils';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { dayjs } from '@/utils/dayjs';
 import { TableCellsIcon, ClipboardIcon } from '@heroicons/react/24/outline';
-import { StatusBadge } from '@/components/common/badges';
+import { Badge } from '@/components/common/badges';
 
 const SequenceRunTable = () => {
   const [page, setPage] = useState<number>(1);
@@ -155,14 +155,18 @@ const sequenceRunColumn: Column[] = [
     header: 'Sequencing',
     accessor: 'status',
     cell: (status: unknown) => {
-      return <StatusBadge status={(status as string) || 'unkown'}></StatusBadge>;
+      return (
+        <Badge status={(status as string) || 'UNKNOWN'}>{(status || 'UNKNOWN') as ReactNode}</Badge>
+      );
     },
   },
   {
     header: 'Bcl Convert',
     accessor: 'bclConvertStatus',
     cell: (status: unknown) => {
-      return <StatusBadge status={(status as string) || 'unkown'}></StatusBadge>;
+      return (
+        <Badge status={(status as string) || 'UNKNOWN'}>{(status || 'UNKNOWN') as ReactNode}</Badge>
+      );
     },
   },
   {

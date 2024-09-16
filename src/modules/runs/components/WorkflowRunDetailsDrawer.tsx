@@ -170,6 +170,7 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
                 handldEventClick={handleTimelineSelect}
                 selectId={selectedPayloadId}
               />
+
               <JsonDisplay selectedPayloadId={selectedPayloadId} />
             </div>
           </div>

@@ -2,7 +2,6 @@ import { FC, useState, useEffect } from 'react';
 import { Table, Column, TableData } from '@/components/tables';
 import { classNames } from '@/utils/commonUtils';
 
-import { WORKFLOW_RUN_PAGE_SIZE_OPTIONS } from '@/utils/constant';
 import { dayjs } from '@/utils/dayjs';
 import { Badge } from '@/components/common/badges';
 
@@ -55,7 +54,7 @@ const WorkflowRunTable: FC<WorkflowRunTableProps> = ({ tableData, pagination, se
               <div
                 // to={`sequence/${portalRunId}/details`}
                 className={classNames(
-                  'cursor-pointer flex flex-row items-center ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+                  'cursor-pointer flex flex-row items-center ml-2 text-sm lowercase font-medium hover:text-blue-700 text-blue-500'
                 )}
                 onClick={() =>
                   setQueryParams({ workflowRunId: workflowRunId as string, openDrawer: true })
@@ -156,7 +155,7 @@ const WorkflowRunTable: FC<WorkflowRunTableProps> = ({ tableData, pagination, se
       <Table
         columns={[...sequenceRunColumn]}
         tableData={workflowRunTableData}
-        inCard={false}
+        inCard={true}
         paginationProps={{
           totalCount: tablePagination.count ?? 0,
           rowsPerPage: tablePagination.rowsPerPage ?? 0,
@@ -168,7 +167,6 @@ const WorkflowRunTable: FC<WorkflowRunTableProps> = ({ tableData, pagination, se
             setQueryParams({ rowsPerPage: n });
           },
           countUnit: 'workflow runs',
-          pageSizeOptions: WORKFLOW_RUN_PAGE_SIZE_OPTIONS,
         }}
       />
     </div>

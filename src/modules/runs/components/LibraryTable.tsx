@@ -49,7 +49,7 @@ const WGSLbraryRunStatuscolumn = [
       console.log((workflowsDetails as any).DRAGEN_WGS_QC);
       const workflowRunData = (workflowsDetails as any).DRAGEN_WGS_QC;
       return (
-        <Badge status={(workflowRunData.end_status as string) || 'unkown'}>
+        <Badge status={(workflowRunData.end_status as string) || 'UNKNOWN'}>
           {workflowRunData.end_status}
         </Badge>
       );
@@ -62,7 +62,7 @@ const WGSLbraryRunStatuscolumn = [
       console.log((workflowsDetails as any).TUMOR_NORMAL);
       const workflowRunData = (workflowsDetails as any).TUMOR_NORMAL;
       return (
-        <Badge status={(workflowRunData.end_status as string) || 'unkown'}>
+        <Badge status={(workflowRunData.end_status as string) || 'UNKNOWN'}>
           {workflowRunData.end_status}
         </Badge>
       );
@@ -75,7 +75,7 @@ const WGSLbraryRunStatuscolumn = [
       console.log((workflowsDetails as any).UMCCRISE);
       const workflowRunData = (workflowsDetails as any).UMCCRISE;
       return (
-        <Badge status={(workflowRunData.end_status as string) || 'unkown'}>
+        <Badge status={(workflowRunData.end_status as string) || 'UNKNOWN'}>
           {workflowRunData.end_status}
         </Badge>
       );
@@ -88,7 +88,7 @@ const WGSLbraryRunStatuscolumn = [
       console.log((workflowsDetails as any).ONCOANALYSER_WGS);
       const workflowRunData = (workflowsDetails as any).ONCOANALYSER_WGS;
       return (
-        <Badge status={(workflowRunData.end_status as string) || 'unkown'}>
+        <Badge status={(workflowRunData.end_status as string) || 'UNKNOWN'}>
           {workflowRunData.end_status}
         </Badge>
       );
@@ -101,7 +101,7 @@ const WGSLbraryRunStatuscolumn = [
       console.log((workflowsDetails as any).SASH);
       const workflowRunData = (workflowsDetails as any).SASH;
       return (
-        <Badge status={(workflowRunData.end_status as string) || 'unkown'}>
+        <Badge status={(workflowRunData.end_status as string) || 'UNKNOWN'}>
           {workflowRunData.end_status}
         </Badge>
       );
@@ -114,7 +114,7 @@ const WGSLbraryRunStatuscolumn = [
       console.log((workflowsDetails as any).ONCOANALYSER_WGTS_BOTH);
       const workflowRunData = (workflowsDetails as any).ONCOANALYSER_WGTS_BOTH;
       return (
-        <Badge status={(workflowRunData.end_status as string) || 'unkown'}>
+        <Badge status={(workflowRunData.end_status as string) || 'UNKNOWN'}>
           {workflowRunData.end_status}
         </Badge>
       );
@@ -127,42 +127,42 @@ const WTSLbraryRunStatuscolumn = [
     header: 'DRAGEN_WTS_QC',
     accessor: 'DRAGEN_WTS_QC',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
   {
     header: 'DRAGEN_WTS',
     accessor: 'DRAGEN_WTS',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
   {
     header: 'RNASUM',
     accessor: 'RNASUM',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
   {
     header: 'STAR_ALIGNMENT',
     accessor: 'STAR_ALIGNMENT',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
   {
     header: 'ONCOANALYSER_WTS',
     accessor: 'ONCOANALYSER_WTS',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
   {
     header: 'ONCOANALYSER_WGTS_BOTH',
     accessor: 'ONCOANALYSER_WGTS_BOTH',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
 ];
@@ -172,14 +172,14 @@ const ctTSOLbraryRunStatuscolumn = [
     header: 'DRAGEN_TSO_CTDNA',
     accessor: 'DRAGEN_TSO_CTDNA',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
   {
     header: 'UMCCRISE',
     accessor: 'UMCCRISE',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
 ];
@@ -189,14 +189,14 @@ const ctDNALbraryRunStatuscolumn = [
     header: 'DRAGEN_TSO_CTDNA',
     accessor: 'DRAGEN_TSO_CTDNA',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
   {
     header: 'UMCCRISE',
     accessor: 'UMCCRISE',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
 ];

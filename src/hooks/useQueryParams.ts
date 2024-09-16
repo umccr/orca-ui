@@ -36,6 +36,7 @@ export const useQueryParams = (
 
   const clearQueryParams = () => nav({});
   const getQueryParams = () => wgetQueryParams(queryParams);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getPaginationParams = (values: any = {}) => {
     const page = Number(queryParams.get('page')) || 1;
@@ -46,6 +47,7 @@ export const useQueryParams = (
       ...values,
     };
   };
+
   return {
     queryParams,
     setQueryParams,

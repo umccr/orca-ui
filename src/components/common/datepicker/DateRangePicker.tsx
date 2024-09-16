@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, useRef } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Flatpickr from 'react-flatpickr';
 import type { DateTimePickerProps } from 'react-flatpickr';
 import { dayjs } from '@/utils/dayjs';
@@ -16,32 +16,37 @@ const DateRangePicker: FC<DateRangePickerProps> = ({
   endDate,
   setQueryParams,
 }) => {
-  const [selectedStartDate, setSelectedStartDate] = useState<string | null>(startDate);
-  const [selectedEndDate, setSelectedEndDate] = useState<string | null>(endDate);
-  const flatpickrRef = useRef<Flatpickr | null>(null);
+  const [selectedStartDate, setSelectedStartDate] = useState<string | null>(
+    dayjs().subtract(1, 'years').format('YYYY-MM-DDTHH:mm:ss[Z]')
+  );
+  const [selectedEndDate, setSelectedEndDate] = useState<string | null>(
+    dayjs().format('YYYY-MM-DDTHH:mm:ss[Z]')
+  );
 
   useEffect(() => {
-    setSelectedStartDate(startDate);
-    setSelectedEndDate(endDate);
+    if (startDate && endDate) {
+      setSelectedStartDate(startDate);
+      setSelectedEndDate(endDate);
+    }
   }, [startDate, endDate]);
 
   const options: Partial<DateTimePickerProps['options']> = {
     mode: 'range',
     static: true,
     monthSelectorType: 'static',
-    dateFormat: 'M j, Y',
-    defaultDate: [new Date().setDate(new Date().getDate() - 7), new Date()],
+    dateFormat: 'j M Y',
+    // defaultDate: `${dayjs().subtract(1, 'month').format('DD/MM/YYYY')} to ${new Date().toLocaleDateString()}`,
     prevArrow:
       '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
     nextArrow:
       '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-    onReady: (selectedDates, dateStr, instance) => {
-      // (instance.element as HTMLInputElement).value = dateStr.replace('to', '-');
+    onReady: (_selectedDates, dateStr, instance) => {
+      (instance.element as HTMLInputElement).value = dateStr.replace('to', '-');
       const customClass = align ? align : '';
       instance.calendarContainer.classList.add(`flatpickr-${customClass}`);
       // console.log('on ready', selectedDates);
     },
-    onValueUpdate: (selectedDates, dateStr, instance) => {
+    onValueUpdate: (_selectedDates, dateStr, instance) => {
       (instance.element as HTMLInputElement).value = dateStr.replace('to', '-');
       // console.log('on value update', selectedDates);
     },
@@ -58,10 +63,9 @@ const DateRangePicker: FC<DateRangePickerProps> = ({
   return (
     <div className='relative'>
       <Flatpickr
-        ref={flatpickrRef}
-        className='form-input pl-9 dark:bg-slate-800  hover:text-slate-600 dark:text-slate-300 dark:hover:text-slate-200 font-medium w-[15.5rem] rounded-lg border-0 bg-white py-1.5 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+        className='form-input !pl-9 dark:bg-slate-800  hover:text-slate-600 dark:text-slate-300 dark:hover:text-slate-200 font-medium w-[15.5rem] rounded-lg border-0 bg-white py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
         options={options}
-        value={selectedStartDate ? `${selectedStartDate} to ${selectedEndDate}` : new Date()}
+        value={`${selectedStartDate} to ${selectedEndDate}`}
       />
       <div className='absolute inset-0 right-auto flex items-center pointer-events-none'>
         <svg
