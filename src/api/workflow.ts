@@ -30,3 +30,6 @@ export const useWorkflowStateModel = createWorkflowFetchingHook(
   '/api/v1/workflowrun/{workflowrunId}/state/'
 );
 export const useWorkflowPayloadModel = createWorkflowFetchingHook('/api/v1/payload/{id}/');
+export const useWorkflowRunStatusCountModel = createWorkflowFetchingHook(
+  '/api/v1/workflowrun/count_by_status/'
+);

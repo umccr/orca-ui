@@ -17,7 +17,9 @@ const WorkflowRunsTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [searchBoxContent, setSearchBoxContent] = useState<string>('');
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
-  const [isOngoingOnly, setIsOngoingOnly] = useState<boolean>(false);
+  const [selectWorkflowStatus, setSelectWorkflowStatus] = useState<
+    'succeeded' | 'failed' | 'aborted' | 'ongoing' | null
+  >(null);
   const [startDate, setStartDate] = useState<string | null>(null);
   const [endDate, setEndDate] = useState<string | null>(null);
 
@@ -31,7 +33,7 @@ const WorkflowRunsTable = () => {
     setRowsPerPage(getPaginationParams().rowsPerPage);
     setOpenDrawer(getQueryParams().openDrawer === 'true');
     setSearchBoxContent(getQueryParams().search as string);
-    setIsOngoingOnly(getQueryParams().ongoingChecked === 'true');
+
     setStartDate(getQueryParams().startDate as string);
     setEndDate(getQueryParams().endDate as string);
 
@@ -43,6 +45,11 @@ const WorkflowRunsTable = () => {
     } else {
       setSelectedWorkflowTypeIdsStr(getQueryParams().workflowTypeId);
     }
+
+    // handle selectedworkflowRunStatus changes
+    setSelectWorkflowStatus(
+      getQueryParams().workflowRunStatus as 'succeeded' | 'failed' | 'aborted' | 'ongoing' | null
+    );
   };
   const { setQueryParams, getPaginationParams, clearQueryParams, getQueryParams, queryParams } =
     useQueryParams(onChangeParams);
@@ -60,7 +67,9 @@ const WorkflowRunsTable = () => {
     }
     // setSelectedWorkflowTypeIdsStr(queryParams.getAll('workflowTypeId').sort().join(','));
     setSearchBoxContent(queryParams.get('search') as string);
-    setIsOngoingOnly(queryParams.get('ongoingChecked') === 'true');
+    setSelectWorkflowStatus(
+      queryParams.get('workflowRunStatus') as 'succeeded' | 'failed' | 'aborted' | 'ongoing' | null
+    );
     setStartDate(queryParams.get('startDate'));
     setEndDate(queryParams.get('endDate'));
   }, [queryParams]);
@@ -83,7 +92,13 @@ const WorkflowRunsTable = () => {
           selectedWorkflowTypeIdsStr === '-1' || !selectedWorkflowTypeIdsStr
             ? undefined
             : selectedWorkflowTypeIdsStr.split(','),
-        is_ongoing: isOngoingOnly || undefined,
+        status:
+          selectWorkflowStatus == 'succeeded' ||
+          selectWorkflowStatus == 'failed' ||
+          selectWorkflowStatus == 'aborted'
+            ? selectWorkflowStatus
+            : undefined,
+        is_ongoing: selectWorkflowStatus == 'ongoing' || undefined,
         start_time: startDate || undefined,
         end_time: endDate || undefined,
       },
@@ -145,7 +160,7 @@ const WorkflowRunsTable = () => {
         clearQueryParams={clearQueryParams}
         queryWorkflowTypeIdsStr={selectedWorkflowTypeIdsStr}
         handleSelectWorkflowType={handleSelectWorkflowType}
-        isOngoingOnly={isOngoingOnly}
+        workflowStatus={selectWorkflowStatus}
         handleOngoingOnlyToggle={handleOngoingOnlyToggle}
         selectedStartDate={startDate}
         selectedEndDate={endDate}

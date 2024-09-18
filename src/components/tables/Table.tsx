@@ -45,7 +45,7 @@ const Table: FC<TableProps> = ({
         </div>
       </div>
 
-      <div className='mt-4 flow-root'>
+      <div className='mt-2 flow-root'>
         <div className='overflow-x-auto '>
           <div className='inline-block min-w-full align-middle'>
             <div

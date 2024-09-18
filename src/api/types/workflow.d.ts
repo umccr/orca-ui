@@ -164,6 +164,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/workflowrun/count_by_status/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Returns the count of records for each status: 'SUCCEEDED', 'ABORTED', 'FAILED', and 'Onging' State. */
+        get: operations["/api/v1/workflowRun/countByStatus/"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/workflowrun/ongoing/": {
         parameters: {
             query?: never;
@@ -310,6 +327,13 @@ export interface components {
             executionEngine: string;
             executionEnginePipelineId: string;
             approvalState: string;
+        };
+        WorkflowRunCountByStatus: {
+            all: number;
+            succeeded: number;
+            aborted: number;
+            failed: number;
+            ongoing: number;
         };
         WorkflowRunModel: {
             readonly id: number;
@@ -582,6 +606,25 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StateModel"];
+                };
+            };
+        };
+    };
+    "/api/v1/workflowRun/countByStatus/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunCountByStatus"];
                 };
             };
         };

@@ -39,10 +39,12 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
     <Menu as='div' className='relative inline-block text-left'>
       <MenuButton
         className={classNames(
-          'flex items-center p-1 rounded-sm text-gray-400',
-          'hover:text-gray-600 hover:bg-magpie-light-50',
-          'data-[open]:bg-magpie-light-50 data-[open]:ring-2 data-[open]:ring-offset-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 focus:ring-offset-gray-100',
-          'shadow-sm transition duration-150 ease-in-out',
+          'inline-flex items-center p-1.5 rounded text-gray-400 shadow-sm border border-slate-200 leading-5 ',
+          'ring-1 ring-offset-0 ring-offset-gray-100 ring-gray-300 ',
+          'hover:text-gray-600 hover:bg-magpie-light-50 ',
+          'data-[open]:bg-magpie-light-50 data-[open]:ring-2 data-[open]:ring-offset-0',
+          'focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-0 focus:ring-offset-gray-100',
+          'transition duration-150 ease-in-out',
           className
         )}
       >

@@ -2,7 +2,6 @@ import { useSequenceRunListModel } from '@/api/sequenceRun';
 import { Table } from '@/components/tables';
 import { Column } from '@/components/tables/Table';
 import { classNames } from '@/utils/commonUtils';
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { useEffect, useState, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useQueryParams } from '@/hooks/useQueryParams';
@@ -10,27 +9,31 @@ import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { dayjs } from '@/utils/dayjs';
 import { TableCellsIcon, ClipboardIcon } from '@heroicons/react/24/outline';
 import { Badge } from '@/components/common/badges';
+import { Search } from '@/components/common/search';
 
 const SequenceRunTable = () => {
   const [page, setPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(DEFAULT_PAGE_SIZE);
   const [searchBox, setSearchBox] = useState<string>('');
-  const [dataQueryParams, setDataQueryParams] = useState<Record<string, string>>({});
+  // const [dataQueryParams, setDataQueryParams] = useState<Record<string, string>>({});
 
   const onChangeParams = async () => {
-    setPage(getPaginationParams().page);
-    setRowsPerPage(getPaginationParams().rowsPerPage);
+    setPage(getPaginationParams().page || 1);
+    setRowsPerPage(getPaginationParams().rowsPerPage || DEFAULT_PAGE_SIZE);
+    setSearchBox(getQueryParams().search as string);
     // console.log('onChangeParams', getQueryParams());
   };
-  const { setQueryParams, getPaginationParams, clearQueryParams } = useQueryParams(onChangeParams);
+  const { setQueryParams, getPaginationParams, getQueryParams, queryParams } =
+    useQueryParams(onChangeParams);
 
   useEffect(() => {
-    setPage(getPaginationParams().page);
-    setRowsPerPage(getPaginationParams().rowsPerPage);
-  }, [getPaginationParams]);
+    setPage(Number(queryParams.get('page')) || 1);
+    setRowsPerPage(Number(queryParams.get('rowsPerPage')) || DEFAULT_PAGE_SIZE);
+    setSearchBox(queryParams.get('search') as string);
+  }, [queryParams]);
 
   const fullSubjectModel = useSequenceRunListModel({
-    params: { query: { page: page, rowsPerPage: rowsPerPage, ...dataQueryParams } },
+    params: { query: { page: page, rowsPerPage: rowsPerPage, search: searchBox || undefined } },
   });
 
   const data = fullSubjectModel.data;
@@ -45,7 +48,7 @@ const SequenceRunTable = () => {
       tableHeader={
         <div className='flex flex-col md:flex-row'>
           <div className='flex flex-1 items-center pt-2'>
-            <div className='w-full max-w-lg md:max-w-xs'>
+            {/* <div className='w-full max-w-lg md:max-w-xs'>
               <label htmlFor='search' className='sr-only'>
                 Search
               </label>
@@ -77,16 +80,8 @@ const SequenceRunTable = () => {
                   type='search'
                 />
               </div>
-            </div>
-            <button
-              onClick={() => {
-                clearQueryParams();
-                setSearchBox('');
-              }}
-              className='ml-2 text-sm text-gray-400 hover:text-gray-600'
-            >
-              reset
-            </button>
+            </div> */}
+            <Search searchBoxContent={searchBox} setQueryParams={setQueryParams} />
           </div>
         </div>
       }
@@ -94,8 +89,8 @@ const SequenceRunTable = () => {
       tableData={tableData}
       paginationProps={{
         totalCount: data.pagination.count ?? 0,
-        rowsPerPage: data.pagination.rowsPerPage ?? 0,
-        currentPage: data.pagination.page ?? 0,
+        rowsPerPage: data.pagination.rowsPerPage ?? 10,
+        currentPage: data.pagination.page ?? 1,
         setPage: (n: number) => {
           setQueryParams({ page: n });
         },
@@ -118,7 +113,7 @@ const sequenceRunColumn: Column[] = [
       } else {
         return (
           <Link
-            to={`detail/${instrumentRunId}`}
+            to={`${instrumentRunId}/details`}
             className={classNames(
               'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
             )}
