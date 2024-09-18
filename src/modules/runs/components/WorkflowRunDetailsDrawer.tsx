@@ -62,7 +62,7 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
   }, [getQueryParams]);
 
   const workflowRunDetailModel = useWorkflowRunDetailModel({
-    params: { path: { id: workflowRunId ? Number(workflowRunId) : 1 } },
+    params: { path: { id: workflowRunId ? Number(workflowRunId) : 75 } },
   });
 
   const workflowRunDetail = workflowRunDetailModel.data;

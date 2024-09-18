@@ -4,7 +4,7 @@ import { SpinnerWithText } from '@/components/common/spinner';
 import MainArea from '@/components/layouts/MainArea';
 import WorkflowTable from '../components/WorkflowRunTable';
 
-const Workflow = () => {
+const WorkflowRuns = () => {
   return (
     <Suspense fallback={<SpinnerWithText text='Loading Workflow Run table ...' />}>
       <DetailedErrorBoundary errorTitle='Unable to load metadata table'>
@@ -17,4 +17,4 @@ const Workflow = () => {
   );
 };
 
-export default Workflow;
+export default WorkflowRuns;
