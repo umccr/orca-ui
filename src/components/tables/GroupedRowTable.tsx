@@ -1,18 +1,18 @@
 import { FC, ReactNode, Fragment } from 'react';
 import { classNames } from '@/utils/commonUtils';
 
-type TableData = {
+export type TableData = {
   groupTitle: string;
   groupData: Record<string, string | number>[];
 };
 
-type Column = {
+export type Column = {
   header: string;
   accessor: string;
   cell?: (data: string | number) => ReactNode;
 };
 
-interface GroupedTableProps {
+export interface GroupedTableProps {
   tableHeader?: string;
   tableDescription?: string;
   columns: Column[];

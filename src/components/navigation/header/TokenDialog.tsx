@@ -3,8 +3,7 @@ import { fetchAuthSession } from 'aws-amplify/auth';
 import { useEffect, useState } from 'react';
 import { SpinnerWithText } from '@/components/common/spinner';
 import toaster from '@/components/common/toaster';
-import dayjs from '@/utils/dayjs';
-import { ToastContainer } from 'react-toastify';
+import { dayjs } from '@/utils/dayjs';
 import { Button } from '@headlessui/react';
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 
@@ -53,7 +52,6 @@ export const TokenDialog = ({ onClose }: Props) => {
           </div>
         ) : (
           <div className='flex flex-col'>
-            <ToastContainer />
             <div className='text-red-600 font-bold	bg-gray-300 p-4 border border-black my-4'>
               WARNING: THIS IS YOUR PERSONAL ACCESS TOKEN (PAT). YOU SHOULD NOT SHARE WITH ANY THIRD
               PARTY!

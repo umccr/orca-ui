@@ -7,7 +7,6 @@ import { Bars3Icon } from '@heroicons/react/24/outline';
 export interface NavigationChildrenItem {
   name: string;
   href: string;
-  isCurrent?: boolean;
 }
 
 export interface NavigationItem {
@@ -28,7 +27,7 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
     <div
       className={classNames(
         'relative flex grow-0 flex-col gap-y-5 overflow-y-auto',
-        isOpen ? 'bg-white min-w-40' : 'bg-white min-w-14'
+        isOpen ? 'bg-magpie-light-25 min-w-40' : 'bg-white min-w-14'
       )}
     >
       {isOpen ? (
@@ -43,26 +42,27 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
             <XMarkIcon aria-hidden='true' className='h-6 w-6' />
           </button>
           <nav className='flex flex-1 flex-col'>
-            <ul role='list' className='flex flex-1 flex-col space-y-1 px-1'>
+            <ul role='list' className='flex flex-1 flex-col space-y-1 px-2'>
               {navigation.map((item, index) => (
-                <li key={index}>
+                <li key={index} className='gap-2'>
                   {item.title ? (
-                    <div className='pt-3 pb-3 pl-5 pr-6 text-xl font-medium'>{item.title}</div>
+                    <div className='pt-10 pb-3 pl-5 pr-6 text-xl font-medium'>{item.title}</div>
                   ) : (
                     <div className='pb-3'></div>
                   )}
 
                   {item.children.map((item) => (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      className={classNames(
-                        'group flex gap-x-3 py-2 px-10 text-sm rounded-md leading-6 font-normal text-magpie-dark-75 hover:bg-magpie-light-25',
-                        item.isCurrent || item.href == location.pathname ? 'bg-magpie-light-25' : ''
-                      )}
-                    >
-                      {item.name}
-                    </Link>
+                    <div key={item.name} className='py-1'>
+                      <Link
+                        to={item.href}
+                        className={classNames(
+                          'group flex py-2 px-10 text-sm rounded-md leading-6 font-normal text-magpie-dark-75 hover:bg-magpie-light-50',
+                          location.pathname.includes(item.href) ? 'bg-magpie-light-50' : ''
+                        )}
+                      >
+                        {item.name}
+                      </Link>
+                    </div>
                   ))}
                 </li>
               ))}

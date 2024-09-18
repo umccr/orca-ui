@@ -553,7 +553,7 @@ export interface operations {
                  *     `?current_state=true` would return only the last `Created` event. */
                 currentState?: boolean | null;
                 params?: {
-                    [key: string]: components["schemas"]["Json"] | undefined;
+                    [key: string]: components["schemas"]["Json"];
                 };
             };
             header?: never;

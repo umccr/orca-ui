@@ -6,8 +6,8 @@ import SequenceRunTable from '../components/SequenceRunTable';
 
 const Workflow = () => {
   return (
-    <Suspense fallback={<SpinnerWithText text='Loading metadata table ...' />}>
-      <DetailedErrorBoundary errorTitle='Unable to load metadata table'>
+    <Suspense fallback={<SpinnerWithText text='Loading Recent sequence run table ...' />}>
+      <DetailedErrorBoundary errorTitle='Unable to load recent sequence run'>
         <MainArea>
           <div className='text-2xl font-bold pb-2'>Sequence</div>
           <SequenceRunTable />

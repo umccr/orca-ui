@@ -22,6 +22,18 @@ export const generateGanttData = (
   return tasks;
 };
 
+export const generateMockGanttData = (
+  tasksData: { name: string; value: number }[]
+): { [key: string]: { startDate: Date; endDate: Date; taskName: string }[] } => {
+  const ganttData: { [key: string]: { startDate: Date; endDate: Date; taskName: string }[] } = {};
+
+  tasksData.forEach((task) => {
+    ganttData[task.name] = generateGanttData(task.value);
+  });
+
+  return ganttData;
+};
+
 // we need generate gannt data for the data, like bcl_convert need 1 gannt data, tso_ctdna_tumor_only need 6 gannt data
 // const data = [
 //   { name: 'bcl_convert', value: 1 },
@@ -39,14 +51,19 @@ export const generateGanttData = (
 //   { name: 'sash', value: 4 },
 // ];
 
-export const generateMockGanttData = (
-  tasksData: { name: string; value: number }[]
-): { [key: string]: { startDate: Date; endDate: Date; taskName: string }[] } => {
-  const ganttData: { [key: string]: { startDate: Date; endDate: Date; taskName: string }[] } = {};
-
-  tasksData.forEach((task) => {
-    ganttData[task.name] = generateGanttData(task.value);
-  });
-
-  return ganttData;
-};
+// example opuput:
+// {
+//   bcl_convert: [
+//     {  startDate: '2022-09-09T14:00:00.000Z', endDate: '2022-09-09T15:00:00.000Z', taskName: 'A Job' }
+//   ],
+//   tso_ctdna_tumor_only: [
+//     { startDate: '2022-09-09T15:00:00.000Z', endDate: '2022-09-09T17:00:00.000Z', taskName: 'B Job' },
+//     { startDate: '2022-09-09T14:00:00.000Z', endDate: '2022-09-09T15:00:00.000Z', taskName: 'A Job' },
+//     { startDate: '2022-09-09T13:00:00.000Z', endDate: '2022-09-09T14:00:00.000Z', taskName: 'Z Job' },
+//     { startDate: '2022-09-09T12:00:00.000Z', endDate: '2022-09-09T13:00:00.000Z', taskName: 'Y Job' },
+//     { startDate: '2022-09-09T11:00:00.000Z', endDate: '2022-09-09T12:00:00.000Z', taskName: 'X Job' },
+//     { startDate: '2022-09-09T10:00:00.000Z', endDate: '2022-09-09T11:00:00.000Z', taskName: 'W Job' }
+//   ],
+//   wgs_alignment_qc: [
+//     { startDate: '2022-09-09T17:00:00.000Z', endDate: '2022-09-09T19:00:00.000Z', taskName: 'C Job' },
+//     { startDate: '2022-09-09T16:00:00.000Z', endDate: '2022-09-09T17:00:00.000Z', taskName: 'B Job' },...

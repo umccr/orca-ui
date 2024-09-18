@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 import { CloseButton, Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { Card } from '../cards';
 

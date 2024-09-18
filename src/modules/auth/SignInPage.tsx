@@ -37,7 +37,6 @@ function SignInContainer() {
     // signInWithRedirect() will redirect out from page (Not expecting to setIsLoading(false))
     signInWithGoogle();
   };
-
   const header = (
     <div className='flex justify-center items-center p-[20px]' style={{ padding: '20px' }}>
       <img
@@ -50,11 +49,7 @@ function SignInContainer() {
 
   const footer = (
     <span>
-      <Button
-        onClick={() => loggingIn()}
-        // style={{ width: '100%', background: '#0E297A' }}
-        className='w-full bg-regal-blue text-center focus:ring-0'
-      >
+      <Button onClick={() => loggingIn()} className='w-full bg-regal-blue text-center focus:ring-0'>
         {isLoading ? (
           <>
             <Spinner />
@@ -69,8 +64,8 @@ function SignInContainer() {
   );
 
   return (
-    <div className='flex justify-center items-center h-full w-full'>
-      <Card className='w-[40rem] shadow-inner-lg bg-opacity-10 bg-white backdrop-blur-lg p-5 border border-transparent  rounded-lg'>
+    <div className='flex justify-center items-center h-full w-full bg-transparent'>
+      <Card className='w-[40rem] shadow-inner-lg bg-opacity-10 bg-white backdrop-blur-sm p-5 border border-transparent  rounded-lg'>
         {header}
         <div style={{ textAlign: 'justify', color: 'white' }}>
           <h1 style={{ fontSize: '2em', textAlign: 'center' }}>UMCCR Orcabus</h1>
@@ -98,7 +93,6 @@ function SignInPage() {
       apiUrl: 'https://api.unsplash.com',
       headers: { Authorization: 'Client-ID ' + clientId },
     });
-
     unsplashApi.photos
       .getRandom({
         collectionIds: ['ce-IsXyySA4'],
@@ -122,7 +116,7 @@ function SignInPage() {
       });
   }, []);
 
-  // Already signedIn, redirect to HomePage
+  // if user Already signedIn, redirect to HomePage, avoid render signIn page
   if (isAuthenticated) {
     return <Navigate replace to='/' />;
   }

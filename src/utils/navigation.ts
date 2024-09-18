@@ -44,7 +44,7 @@ const runsModuleNavigation = [
     title: 'Runs',
     children: [
       { name: 'Sequence', href: AppURLs.RunsSequence },
-      { name: 'Library', href: AppURLs.RunsLibrary },
+      // { name: 'Library', href: AppURLs.RunsLibrary },
       { name: 'Workflow', href: AppURLs.RunsWorkflow },
     ],
   },

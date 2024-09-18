@@ -24,6 +24,30 @@ export const Top: Story = {
   ),
 };
 
+export const TopWithLargeTooltip: Story = {
+  render: () => (
+    <Tooltip text='Tooltip text' position='top' size='large'>
+      <Button type='primary'>Hover me</Button>
+    </Tooltip>
+  ),
+};
+
+export const TopWithSmallTooltip: Story = {
+  render: () => (
+    <Tooltip text='Tooltip text' position='top' size='small'>
+      <Button type='primary'>Hover me</Button>
+    </Tooltip>
+  ),
+};
+
+export const TopWithSmallWhiteTooltip: Story = {
+  render: () => (
+    <Tooltip text='Tooltip text' position='top' size='small' background='white'>
+      <Button type='primary'>Hover me</Button>
+    </Tooltip>
+  ),
+};
+
 export const Bottom: Story = {
   render: () => (
     <Tooltip text='Tooltip text' position='bottom'>
@@ -42,7 +66,7 @@ export const Left: Story = {
 
 export const Right: Story = {
   render: () => (
-    <Tooltip text='Tooltip text' position='right'>
+    <Tooltip text='Tooltip text' position='right' size='small'>
       <Button type='primary'>Hover me</Button>
     </Tooltip>
   ),

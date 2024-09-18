@@ -1,4 +1,4 @@
-import Badge from './Badge';
-import StatusBadge from './StatusBadge';
+import Badge, { getBadgeType } from './Badge';
+import StatusBadge, { statusBackgroundColor, statusTextColor } from './StatusBadge';
 
-export { Badge, StatusBadge };
+export { Badge, StatusBadge, getBadgeType, statusBackgroundColor, statusTextColor };

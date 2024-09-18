@@ -7,13 +7,15 @@ import {
   MenuButton,
   MenuItems,
   MenuItem,
+  MenuSeparator,
 } from '@headlessui/react';
 //import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon, BellIcon } from '@heroicons/react/24/outline';
 import { classNames, getUsername } from '@/utils/commonUtils';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
 import { TokenDialog } from './TokenDialog';
 import { DetailedErrorBoundary } from '@/components/common/error';
+import { Link } from 'react-router-dom';
 
 export interface HeaderProps {}
 
@@ -25,7 +27,7 @@ const Header = () => {
   const openTokenDialogOpen = () => setIsTokenDialogOpen(true);
 
   return (
-    <Disclosure as='nav' className='bg-heritage-blue-100 shadow py-0.5'>
+    <Disclosure as='nav' className='bg-heritage-blue-100 shadow py-0.5 '>
       {({ open }) => (
         <>
           {isTokenDialogOpen && (
@@ -33,16 +35,19 @@ const Header = () => {
               <TokenDialog onClose={() => setIsTokenDialogOpen(false)} />
             </DetailedErrorBoundary>
           )}
-          <div className='mx-auto max-w-8xl sm:px-4 lg:divide-y lg:divide-gray-700 lg:px-8'>
-            <div className='flex h-12 justify-between'>
-              <div className='flex px-2 lg:px-0'>
+          <div className='mx-auto max-w-8xl sm:px-4 md:divide-y md:divide-gray-700 md:px-8'>
+            <div className='flex h-10 justify-between'>
+              <div className='flex px-2 md:px-0'>
                 <div className='flex flex-shrink-0 items-center'>
-                  <div className='text-xl text-white'>UMCCR</div>
+                  <Link to='/'>
+                    <div className='text-xl text-white'>UMCCR</div>
+                  </Link>
                 </div>
               </div>
 
-              {/* <div className='flex flex-1 items-center justify-center px-2 lg:ml-6'>
-                <div className='w-full max-w-lg lg:max-w-xs'>
+              {/* hide global search globally */}
+              {/* <div className='hidden px-2 md:flex md:flex-1 items-center justify-center md:ml-6'>
+                <div className='w-full max-w-lg md:max-w-xs'>
                   <label htmlFor='search' className='sr-only'>
                     Search
                   </label>
@@ -53,7 +58,7 @@ const Header = () => {
                     <input
                       id='search'
                       name='search'
-                      className='block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                      className='block w-full rounded-md border-0 bg-white py-1 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                       placeholder='Search'
                       type='search'
                     />
@@ -62,7 +67,20 @@ const Header = () => {
               </div> */}
 
               {/* mobile mode */}
-              <div className='flex items-center lg:hidden'>
+
+              <div className='flex items-center md:hidden'>
+                {/* <div className='flex flex-1 items-center justify-center px-10'>
+                  <div className='w-full max-w-lg md:max-w-xs'>
+                    <label htmlFor='search' className='sr-only'>
+                      Search
+                    </label>
+                    <div className='relative'>
+                      <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
+                        <MagnifyingGlassIcon className='h-5 w-5 text-white' aria-hidden='true' />
+                      </div>
+                    </div>
+                  </div>
+                </div> */}
                 {/* Mobile menu button */}
                 <DisclosureButton className='relative inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500'>
                   <span className='absolute' />
@@ -74,8 +92,8 @@ const Header = () => {
                   )}
                 </DisclosureButton>
               </div>
-              {/*  */}
-              <div className='hidden lg:ml-4 lg:flex lg:items-center'>
+              {/* Notification */}
+              <div className='hidden md:ml-4 md:flex md:items-center'>
                 {/* <button
                   type='button'
                   className='relative flex-shrink-0 rounded-full bg-heritage-blue-100 p-1 text-white hover:text-gray-500 focus:outline-none '
@@ -95,7 +113,18 @@ const Header = () => {
                     </MenuButton>
                   </div>
 
-                  <MenuItems className='absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-0 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                  <MenuItems
+                    transition
+                    className='absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in'
+                  >
+                    <MenuItem>
+                      <div className='px-4 py-2'>
+                        <div className='text-sm text-gray-500'>Signed in as</div>
+                        <div className='text-sm text-black font-bold'>{userInformation.email}</div>
+                      </div>
+                    </MenuItem>
+                    <MenuSeparator className='my-1 h-px bg-gray-200' />
+
                     <MenuItem>
                       {({ disabled }) => (
                         <button
@@ -128,52 +157,21 @@ const Header = () => {
             </div>
           </div>
 
-          <DisclosurePanel className='lg:hidden'>
-            {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800" */}
-            {/* <div className='space-y-1 pb-3 pt-2'>
-              <DisclosureButton
-                as='a'
-                href='#'
-                className='block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700'
-              >
-                Dashboard
-              </DisclosureButton>
-              <DisclosureButton
-                as='a'
-                href='#'
-                className='block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
-              >
-                Team
-              </DisclosureButton>
-              <DisclosureButton
-                as='a'
-                href='#'
-                className='block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
-              >
-                Projects
-              </DisclosureButton>
-              <DisclosureButton
-                as='a'
-                href='#'
-                className='block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
-              >
-                Calendar
-              </DisclosureButton>
-            </div> */}
+          <DisclosurePanel className='md:hidden'>
             <div className='border-t border-gray-200 pb-3 pt-4'>
               <div className='flex items-center px-4'>
                 <div className='ml-3'>
                   <div className='text-base font-medium text-white'>{userName}</div>
                   <div className='text-sm font-medium text-white'>{userInformation.email}</div>
                 </div>
-                {/* <button
+                <button
                   type='button'
                   className='relative ml-auto flex-shrink-0 rounded-full bg-heritage-blue-75 p-1 text-white hover:bg-gray-100 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
                 >
                   <span className='absolute -inset-1.5' />
                   <span className='sr-only'>View notifications</span>
                   <BellIcon className='h-6 w-6' aria-hidden='true' />
-                </button> */}
+                </button>
               </div>
               <div className='mx-3 mt-3 space-y-1'>
                 <DisclosureButton

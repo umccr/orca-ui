@@ -6,14 +6,11 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
-import dayjs from '@/utils/dayjs';
+import { dayjs } from '@/utils/dayjs';
 import { Badge } from '@/components/common/badges';
 import { StatusIcon } from '@/components/common/statusIcon';
-import {
-  LibraryType,
-  WorkflowRun,
-  generateMockLibraryRunData,
-} from '@/api/_mock/mockDataGenerator';
+
+import { LibraryType, WorkflowRun, generateMockLibraryRunData } from '@/api/_mock/mockLibraryData';
 import { ContentTabs } from '@/components/navigation/tabs';
 // import TableSearchHeader from './tableSearchHeader';
 import { Button } from '@/components/common/buttons';
@@ -52,7 +49,7 @@ const WGSLbraryRunStatuscolumn = [
       console.log((workflowsDetails as any).DRAGEN_WGS_QC);
       const workflowRunData = (workflowsDetails as any).DRAGEN_WGS_QC;
       return (
-        <Badge status={(workflowRunData.end_status as string) || 'unkown'}>
+        <Badge status={(workflowRunData.end_status as string) || 'UNKNOWN'}>
           {workflowRunData.end_status}
         </Badge>
       );
@@ -65,7 +62,7 @@ const WGSLbraryRunStatuscolumn = [
       console.log((workflowsDetails as any).TUMOR_NORMAL);
       const workflowRunData = (workflowsDetails as any).TUMOR_NORMAL;
       return (
-        <Badge status={(workflowRunData.end_status as string) || 'unkown'}>
+        <Badge status={(workflowRunData.end_status as string) || 'UNKNOWN'}>
           {workflowRunData.end_status}
         </Badge>
       );
@@ -78,7 +75,7 @@ const WGSLbraryRunStatuscolumn = [
       console.log((workflowsDetails as any).UMCCRISE);
       const workflowRunData = (workflowsDetails as any).UMCCRISE;
       return (
-        <Badge status={(workflowRunData.end_status as string) || 'unkown'}>
+        <Badge status={(workflowRunData.end_status as string) || 'UNKNOWN'}>
           {workflowRunData.end_status}
         </Badge>
       );
@@ -91,7 +88,7 @@ const WGSLbraryRunStatuscolumn = [
       console.log((workflowsDetails as any).ONCOANALYSER_WGS);
       const workflowRunData = (workflowsDetails as any).ONCOANALYSER_WGS;
       return (
-        <Badge status={(workflowRunData.end_status as string) || 'unkown'}>
+        <Badge status={(workflowRunData.end_status as string) || 'UNKNOWN'}>
           {workflowRunData.end_status}
         </Badge>
       );
@@ -104,7 +101,7 @@ const WGSLbraryRunStatuscolumn = [
       console.log((workflowsDetails as any).SASH);
       const workflowRunData = (workflowsDetails as any).SASH;
       return (
-        <Badge status={(workflowRunData.end_status as string) || 'unkown'}>
+        <Badge status={(workflowRunData.end_status as string) || 'UNKNOWN'}>
           {workflowRunData.end_status}
         </Badge>
       );
@@ -117,7 +114,7 @@ const WGSLbraryRunStatuscolumn = [
       console.log((workflowsDetails as any).ONCOANALYSER_WGTS_BOTH);
       const workflowRunData = (workflowsDetails as any).ONCOANALYSER_WGTS_BOTH;
       return (
-        <Badge status={(workflowRunData.end_status as string) || 'unkown'}>
+        <Badge status={(workflowRunData.end_status as string) || 'UNKNOWN'}>
           {workflowRunData.end_status}
         </Badge>
       );
@@ -130,42 +127,42 @@ const WTSLbraryRunStatuscolumn = [
     header: 'DRAGEN_WTS_QC',
     accessor: 'DRAGEN_WTS_QC',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
   {
     header: 'DRAGEN_WTS',
     accessor: 'DRAGEN_WTS',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
   {
     header: 'RNASUM',
     accessor: 'RNASUM',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
   {
     header: 'STAR_ALIGNMENT',
     accessor: 'STAR_ALIGNMENT',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
   {
     header: 'ONCOANALYSER_WTS',
     accessor: 'ONCOANALYSER_WTS',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
   {
     header: 'ONCOANALYSER_WGTS_BOTH',
     accessor: 'ONCOANALYSER_WGTS_BOTH',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
 ];
@@ -175,14 +172,14 @@ const ctTSOLbraryRunStatuscolumn = [
     header: 'DRAGEN_TSO_CTDNA',
     accessor: 'DRAGEN_TSO_CTDNA',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
   {
     header: 'UMCCRISE',
     accessor: 'UMCCRISE',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
 ];
@@ -192,14 +189,14 @@ const ctDNALbraryRunStatuscolumn = [
     header: 'DRAGEN_TSO_CTDNA',
     accessor: 'DRAGEN_TSO_CTDNA',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
   {
     header: 'UMCCRISE',
     accessor: 'UMCCRISE',
     cell: (workflowRunData: unknown) => {
-      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'unkown'} />;
+      return <StatusIconBadge status={(workflowRunData as WorkflowRun).end_status || 'UNKNOWN'} />;
     },
   },
 ];
@@ -228,10 +225,10 @@ const LibraryRunTable = () => {
   const mockctTSOLibraryRunData = generateMockLibraryRunData(5, LibraryType.ctTSO);
   const mockctDNALibraryRunData = generateMockLibraryRunData(5, LibraryType.ctDNA);
 
-  console.log('mockLibraryData', mockWGSLibraryRunData);
-  console.log('mockWGSWorkflowRunData', mockWTSLibraryRunData);
-  console.log('mockWTSWorkflowRunData', mockctTSOLibraryRunData);
-  console.log('mockLibraryRunData', mockctDNALibraryRunData);
+  // console.log('mockLibraryData', mockWGSLibraryRunData);
+  // console.log('mockWGSWorkflowRunData', mockWTSLibraryRunData);
+  // console.log('mockWTSWorkflowRunData', mockctTSOLibraryRunData);
+  // console.log('mockLibraryRunData', mockctDNALibraryRunData);
 
   const data = {
     pagination: {

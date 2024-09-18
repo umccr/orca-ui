@@ -4,12 +4,12 @@ import { SpinnerWithText } from '@/components/common/spinner';
 import MainArea from '@/components/layouts/MainArea';
 import LibraryTable from '../components/LibraryTable';
 
-const Workflow = () => {
+const LibraryRuns = () => {
   return (
     <Suspense fallback={<SpinnerWithText text='Loading metadata table ...' />}>
       <DetailedErrorBoundary errorTitle='Unable to load metadata table'>
         <MainArea>
-          <div className='text-2xl font-bold'>Workflow</div>
+          <div className='text-2xl font-bold'>LibraryRuns</div>
           <LibraryTable />
         </MainArea>
       </DetailedErrorBoundary>
@@ -17,4 +17,4 @@ const Workflow = () => {
   );
 };
 
-export default Workflow;
+export default LibraryRuns;

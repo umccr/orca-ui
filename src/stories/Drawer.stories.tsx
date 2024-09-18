@@ -1,6 +1,6 @@
 import { Drawer } from '@/components/common/drawers';
-// import { Button } from "@/components/common/buttons";
-// import { useState } from "react";
+import { Button } from '@/components/common/buttons';
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta = {
@@ -18,29 +18,21 @@ type Story = StoryObj<typeof meta>;
 
 export const SimpleDrawer: Story = {
   render: () => {
-    // const [isOpen, setIsOpen] = useState<boolean>(false);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [isOpen, setIsOpen] = useState<boolean>(false);
 
-    // function open() {
-    //     setIsOpen(true);
-    // }
+    function open() {
+      setIsOpen(true);
+    }
 
-    // function close() {
-    //     setIsOpen(false);
-    // }
-
-    // function confirm() {
-    //     setIsOpen(false);
-    //     console.log('confirm');
-    // }
     return (
       <>
-        {/* <Button onClick={open}>Open drawer</Button> */}
+        <Button onClick={open}>Open drawer</Button>
         <Drawer
-        // open={isOpen}
-        // title='Text Drawer'
-        // content='This is a simple alert drawer'
-        // closeBtn={{ label: 'Close', onClick: close }}
-        // confirmBtn={{ label: 'Confirm', onClick: confirm }}
+          isOpen={isOpen}
+          title='Text Drawer'
+          setIsOpen={setIsOpen}
+          content='This is a simple alert drawer'
         ></Drawer>
       </>
     );

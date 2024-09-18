@@ -1,10 +1,8 @@
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { Navigate, Outlet, Route, Routes, RouteObject } from 'react-router-dom';
-// import { RouteObject } from '@/types/routeObject';
 import LibraryLayout from '@/components/layouts/lab/LibraryLayout';
 import MetadataLayout from '@/components/layouts/lab/MetadataLayout';
 import SubjectLayout from '@/components/layouts/lab/SubjectLayout';
-import { path } from 'd3';
 
 const LabPage = lazy(() => import('@/modules/lab/metadata'));
 const SubjectPage = lazy(() => import('@/modules/lab/subject'));
@@ -68,7 +66,9 @@ export const Router: RouteObject = {
       path: '',
       element: (
         <MetadataLayout>
-          <LabPage />
+          <Suspense fallback={<div>Loading...</div>}>
+            <LabPage />
+          </Suspense>
         </MetadataLayout>
       ),
     },

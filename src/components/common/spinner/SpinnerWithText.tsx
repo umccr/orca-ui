@@ -9,7 +9,7 @@ const SpinnerWithText: FC<Props> = ({ text }) => {
   return (
     <div className='w-full h-full flex flex-col items-center justify-center'>
       <Spinner />
-      {text && <div style={{ paddingTop: '1rem' }}>{text}</div>}
+      {text && <div className='pt-4'>{text}</div>}
     </div>
   );
 };

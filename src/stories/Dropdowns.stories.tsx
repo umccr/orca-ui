@@ -82,28 +82,29 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const SimpleDropdown: Story = {
   args: {
-    label: 'Dropdown',
+    floatingLabel: 'Dropdown',
     items: exampleItems,
+    value: 'Item 1',
   },
 };
 
 export const DropdownWithDividers: Story = {
   args: {
-    label: 'Dropdown with Dividers',
+    value: 'Dropdown with Dividers',
     items: exampleItemsWithDivider,
   },
 };
 
 export const DropdownWithDisabledItems: Story = {
   args: {
-    label: 'Dropdown with Disabled Items',
+    value: 'Dropdown with Disabled Items',
     items: exampleItemsWithDisabled,
   },
 };
 
 export const IconDropdownStory: Story = {
   render: () => {
-    return <IconDropdown items={exampleItems} />;
+    return <IconDropdown items={exampleItems} className='!text-white !bg-blue-700' />;
   },
 };
 
@@ -117,12 +118,10 @@ export const IconDropdownWithPlusIcon: Story = {
 export const CheckboxDropdown: Story = {
   render: () => {
     return (
-      <PopoverDropdown>
-        <div className='flex flex-row items-center'>
-          <FunnelIcon className='h-5 w-5 mr-2' />
-          (3)
-        </div>
-      </PopoverDropdown>
+      <PopoverDropdown
+        btnChildren={<FunnelIcon className='h-5 w-5 mr-2' />}
+        content={<div className='flex flex-row items-center'>{3}</div>}
+      ></PopoverDropdown>
     );
   },
 };

@@ -1,43 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
+import JsonToTable from './json-to-table';
+import JsonToList from './json-to-list';
 
-const keyClassName = 'font-bold px-4';
-const valueClassName = 'py-2';
-const rowClassName = 'even:bg-gray-50';
-
-export const JsonToTable = ({ data }: { data: Record<string, any> }) => {
-  const renderValue = (value: any) => {
-    if (!value) {
-      return '-';
-    }
-
-    if (Array.isArray(value)) {
-      return value.length > 0
-        ? value.map((item, idx) => (
-            <div className='py-2' key={idx}>
-              {item}
-            </div>
-          ))
-        : '-';
-    }
-
-    if (typeof value === 'object') {
-      return <JsonToTable data={value} />;
-    }
-
-    return value.toString();
-  };
-
-  return (
-    <table className='w-full border-y border-gray-50'>
-      <tbody>
-        {Object.entries(data).map(([key, value]) => (
-          <tr className={rowClassName} key={key}>
-            <td className={keyClassName}>{key}</td>
-            <td className={valueClassName}>{renderValue(value)}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-};
+export { JsonToTable, JsonToList };
