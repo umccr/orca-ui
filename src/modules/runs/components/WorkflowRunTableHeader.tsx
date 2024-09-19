@@ -1,4 +1,4 @@
-import { useState, useEffect, FC } from 'react';
+import { FC } from 'react';
 import { Button } from '@/components/common/buttons';
 import { SelectItems, IconMultipleSelect } from '@/components/common/select';
 import { DateRangePicker } from '@/components/common/datepicker';
@@ -31,26 +31,11 @@ const WorkflowRunTableHeader: FC<WorkflowRunTableHeaderProps> = ({
   selectedStartDate,
   selectedEndDate,
 }) => {
-  const [searchBox, setSearchBox] = useState<string>('');
-  const [selectWorkflowTypeIdsStr, setSelectWorkflowTypeIdsStr] =
-    useState<string>(queryWorkflowTypeIdsStr);
-  const [workflowTypeOptions, setWorkflowTypeOptions] = useState<SelectItems[]>([]);
-  const [selectedWorkflowRunStatus, setSelectedWorkflowRunStatus] = useState(workflowStatus);
-
-  useEffect(() => {
-    setWorkflowTypeOptions(workflowTypeLists);
-
-    setSelectWorkflowTypeIdsStr(queryWorkflowTypeIdsStr);
-    setSearchBox(searchBoxContent);
-
-    setSelectedWorkflowRunStatus(workflowStatus);
-  }, [workflowTypeLists, queryWorkflowTypeIdsStr, searchBoxContent, workflowStatus]);
-
   return (
     <div>
       <div className='w-full flex flex-row gap-1  md:flex-row items-center  justify-between p-2'>
         <div>
-          <Search setQueryParams={setQueryParams} searchBoxContent={searchBox} hasTooltip />
+          <Search setQueryParams={setQueryParams} searchBoxContent={searchBoxContent} hasTooltip />
         </div>
 
         <div className='flex flex-row items-center gap-2'>
@@ -71,10 +56,10 @@ const WorkflowRunTableHeader: FC<WorkflowRunTableHeaderProps> = ({
         </div> */}
           <div className='px-0'>
             <IconMultipleSelect
-              options={workflowTypeOptions}
-              value={selectWorkflowTypeIdsStr.split(',')}
+              options={workflowTypeLists}
+              value={queryWorkflowTypeIdsStr.split(',')}
               onApply={handleSelectWorkflowType}
-              hasSelected={selectWorkflowTypeIdsStr !== '-1'}
+              hasSelected={queryWorkflowTypeIdsStr !== '-1' && queryWorkflowTypeIdsStr !== ''}
             />
           </div>
 
@@ -93,7 +78,7 @@ const WorkflowRunTableHeader: FC<WorkflowRunTableHeaderProps> = ({
       </div>
       <div>
         <WorkflowRunTableStatusBar
-          selectedWorkflowRunStatus={selectedWorkflowRunStatus}
+          selectedWorkflowRunStatus={workflowStatus}
           setQueryParams={setQueryParams}
         />
       </div>
