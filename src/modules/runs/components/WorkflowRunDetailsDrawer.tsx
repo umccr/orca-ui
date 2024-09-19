@@ -1,47 +1,15 @@
 import { SideDrawer } from '@/components/common/drawers';
 import { sleep } from '@/utils/commonUtils';
-import { FC, useEffect, useState, Suspense, useMemo } from 'react';
+import { FC, useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  useWorkflowRunDetailModel,
-  useWorkflowStateModel,
-  useWorkflowPayloadModel,
-} from '@/api/workflow';
+import { useWorkflowRunDetailModel, useWorkflowStateModel } from '@/api/workflow';
+import StatusTimeline from './StatusTimeline';
 import { JsonToList } from '@/components/common/json-to-table';
 import { Table } from '@/components/tables';
-import { Timeline } from '@/components/common/timelines';
+
 import { classNames } from '@/utils/commonUtils';
 import { getBadgeType, statusBackgroundColor } from '@/components/common/badges';
 import { dayjs } from '@/utils/dayjs';
-
-interface JsonDisplayProps {
-  selectedPayloadId: number | null;
-}
-
-const JsonDisplay: FC<JsonDisplayProps> = ({ selectedPayloadId }) => {
-  const [selectPayloadId, setSelectPayloadId] = useState<number | null>(selectedPayloadId);
-  useEffect(() => {
-    setSelectPayloadId(selectedPayloadId);
-  }, [selectedPayloadId]);
-
-  const workflowPayloadModel = useWorkflowPayloadModel({
-    params: { path: { id: selectPayloadId || 1 } },
-  });
-
-  const selectedWorkflowPayloadData = workflowPayloadModel.data || null;
-
-  return (
-    <Suspense fallback={<div> loading data .... </div>}>
-      <div className='bg-gray-50 border border-gray-300 rounded-md m-2 p-2 shadow-sm overflow-scroll'>
-        {selectedWorkflowPayloadData && (
-          <pre className='whitespace-pre-wrap text-wrap text-xs text-gray-800'>
-            {JSON.stringify(selectedWorkflowPayloadData, null, 2)}
-          </pre>
-        )}
-      </div>
-    </Suspense>
-  );
-};
 
 interface WorkflowRunDetailsDrawerProps {
   selectedWorkflowRunId: string;
@@ -52,7 +20,7 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
   selectedWorkflowRunId,
   onCloseDrawer,
 }) => {
-  const [selectedPayloadId, setSelectedPayloadId] = useState<number | null>(null);
+  // const [selectedPayloadId, setSelectedPayloadId] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -70,12 +38,6 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
   if (!workflowRunDetail) {
     throw new Error('No Data');
   }
-
-  useEffect(() => {
-    if (workflowRunDetail) {
-      setSelectedPayloadId(Number(workflowRunDetail.currentState.payload));
-    }
-  }, [workflowRunDetail]);
 
   const { data: workflowStateData } = useWorkflowStateModel({
     params: { path: { workflowrunId: selectedWorkflowRunId } },
@@ -97,16 +59,6 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
         : [],
     [workflowState]
   );
-
-  // const workflowPayloadModel = useWorkflowPayloadModel({
-  //   params: { path: { id: selectedPayloadId || 1 } },
-  // });
-
-  // const selectedWorkflowPayloadData = workflowPayloadModel.data || null;
-
-  const handleTimelineSelect = (payloadId: number) => {
-    setSelectedPayloadId(payloadId);
-  };
 
   const DrawerContent = () => {
     // format data and disply in the table
@@ -177,15 +129,7 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
         <div className='pt-4'>
           <div className='flex flex-col'>
             <div className='text-base font-semibold pb-4'>Timeline</div>
-            <div className='flex flex-row'>
-              <Timeline
-                timeline={workflowRuntimelineData}
-                handldEventClick={handleTimelineSelect}
-                selectId={selectedPayloadId}
-              />
-
-              <JsonDisplay selectedPayloadId={selectedPayloadId} />
-            </div>
+            <StatusTimeline workflowRuntimelineData={workflowRuntimelineData} />
           </div>
         </div>
       </div>
