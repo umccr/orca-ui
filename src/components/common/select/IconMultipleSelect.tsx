@@ -2,7 +2,9 @@ import { FC, useState, useEffect } from 'react';
 import { Menu, MenuButton, MenuItems, MenuItem, Checkbox, Field, Label } from '@headlessui/react';
 // import { Popover, PopoverButton, PopoverPanel, useClose } from '@headlessui/react';
 import { FunnelIcon } from '@heroicons/react/24/outline';
+import { FunnelIcon as SolidFunnelIcon } from '@heroicons/react/24/solid';
 import { classNames } from '@/utils/commonUtils';
+import { Tooltip } from '@/components/common/tooltips';
 
 export interface SelectItems {
   label: string;
@@ -12,20 +14,24 @@ export interface SelectItems {
 }
 
 interface IconMultipleSelectProps {
-  BtnIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   value: (string | number)[];
   options: SelectItems[];
   onClear?: () => void;
   onApply: (value: (string | number)[]) => void;
   className?: string;
+  hasSelected?: boolean;
+  BtnIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  SelectedBtnIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }
 
 const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
   BtnIcon = FunnelIcon,
+  SelectedBtnIcon = SolidFunnelIcon,
   options,
   value,
   onApply,
   className = '',
+  hasSelected = false,
 }) => {
   const [selected, setSelected] = useState<(string | number)[]>(value);
   const [inputValue, setInputValue] = useState<(string | number)[]>(value);
@@ -35,22 +41,37 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
     setInputValue(value);
   }, [value]);
 
+  const selectedValues = options
+    .filter((option) => selected.includes(option.value))
+    .map((option) => option.label + (option.secondaryLabel ? ` (${option.secondaryLabel})` : ''));
+
   return (
     <Menu as='div' className='relative inline-block text-left'>
-      <MenuButton
-        className={classNames(
-          'inline-flex items-center p-1.5 rounded text-gray-400 shadow-sm border border-slate-200 leading-5 ',
-          'ring-1 ring-offset-0 ring-offset-gray-100 ring-gray-300 ',
-          'hover:text-gray-600 hover:bg-magpie-light-50 ',
-          'data-[open]:bg-magpie-light-50 data-[open]:ring-2 data-[open]:ring-offset-0',
-          'focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-0 focus:ring-offset-gray-100',
-          'transition duration-150 ease-in-out',
-          className
-        )}
+      <Tooltip
+        text={`selected: ${selectedValues ? selectedValues.join(',') : ''}`}
+        position='top'
+        background='white'
+        isShow={selectedValues.length > 0}
       >
-        <span className='sr-only'>Open filter options</span>
-        <BtnIcon className='h-5 w-5 ' />
-      </MenuButton>
+        <MenuButton
+          className={classNames(
+            'inline-flex items-center p-1.5 rounded text-gray-400 shadow-sm border border-slate-200 leading-5 ',
+            'ring-1 ring-offset-0 ring-offset-gray-100 ring-gray-300 ',
+            'hover:text-gray-600 hover:bg-magpie-light-50 ',
+            'data-[open]:bg-magpie-light-50 data-[open]:ring-2 data-[open]:ring-offset-0',
+            'focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-0 focus:ring-offset-gray-100',
+            'transition duration-150 ease-in-out',
+            className
+          )}
+        >
+          <span className='sr-only'>Open filter options</span>
+          {hasSelected ? (
+            <SelectedBtnIcon className='h-5 w-5 fill-blue-700' />
+          ) : (
+            <BtnIcon className='h-5 w-5 ' />
+          )}
+        </MenuButton>
+      </Tooltip>
 
       <MenuItems
         transition

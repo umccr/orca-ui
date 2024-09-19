@@ -74,6 +74,7 @@ const WorkflowRunTableHeader: FC<WorkflowRunTableHeaderProps> = ({
               options={workflowTypeOptions}
               value={selectWorkflowTypeIdsStr.split(',')}
               onApply={handleSelectWorkflowType}
+              hasSelected={selectWorkflowTypeIdsStr !== '-1'}
             />
           </div>
 

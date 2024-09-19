@@ -1,7 +1,7 @@
 import { SideDrawer } from '@/components/common/drawers';
-import { FC, useEffect, useState, Suspense } from 'react';
+import { sleep } from '@/utils/commonUtils';
+import { FC, useEffect, useState, Suspense, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { useQueryParams } from '@/hooks/useQueryParams';
 import {
   useWorkflowRunDetailModel,
   useWorkflowStateModel,
@@ -44,29 +44,29 @@ const JsonDisplay: FC<JsonDisplayProps> = ({ selectedPayloadId }) => {
 };
 
 interface WorkflowRunDetailsDrawerProps {
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
+  selectedWorkflowRunId: string;
+  onCloseDrawer?: () => void;
 }
 
 export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
-  isOpen,
-  setIsOpen,
+  selectedWorkflowRunId,
+  onCloseDrawer,
 }) => {
-  const { getQueryParams } = useQueryParams();
-  const [workflowRunId, setWorkflowRunId] = useState<string | null>(null);
   const [selectedPayloadId, setSelectedPayloadId] = useState<number | null>(null);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    const params = getQueryParams();
-    setWorkflowRunId(params.workflowRunId);
-  }, [getQueryParams]);
+    // setWorkflowRunId(selectedWorkflowRunId);
+    if (selectedWorkflowRunId) {
+      setIsOpen(true);
+    }
+  }, [selectedWorkflowRunId]);
 
-  const workflowRunDetailModel = useWorkflowRunDetailModel({
-    params: { path: { id: workflowRunId ? Number(workflowRunId) : 75 } },
+  const { data: workflowRunDetail } = useWorkflowRunDetailModel({
+    params: { path: { id: Number(selectedWorkflowRunId) } },
   });
 
-  const workflowRunDetail = workflowRunDetailModel.data;
-
+  // need new UI to handle this error
   if (!workflowRunDetail) {
     throw new Error('No Data');
   }
@@ -77,22 +77,26 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
     }
   }, [workflowRunDetail]);
 
-  const workflowStateModel = useWorkflowStateModel({
-    params: { path: { workflowrunId: workflowRunId || '1' } },
+  const { data: workflowStateData } = useWorkflowStateModel({
+    params: { path: { workflowrunId: selectedWorkflowRunId } },
   });
 
-  const workflowState = workflowStateModel.data?.results;
-  const workflowRuntimelineData = workflowState
-    ? workflowState.map((state) => ({
-        id: state.id,
-        content: state.status,
-        datetime: dayjs(state.timestamp).format('YYYY-MM-DD HH:mm:ss'),
-        comment: state.comment || '',
-        // icon: <StatusIcon status={state.status} />,
-        iconBackground: statusBackgroundColor(getBadgeType(state.status)),
-        payloadId: state.payload || 1,
-      }))
-    : [];
+  const workflowState = workflowStateData?.results;
+  const workflowRuntimelineData = useMemo(
+    () =>
+      workflowState
+        ? workflowState.map((state) => ({
+            id: state.id,
+            content: state.status,
+            datetime: dayjs(state.timestamp).format('YYYY-MM-DD HH:mm:ss'),
+            comment: state.comment || '',
+            // icon: <StatusIcon status={state.status} />,
+            iconBackground: statusBackgroundColor(getBadgeType(state.status)),
+            payloadId: state.payload || 1,
+          }))
+        : [],
+    [workflowState]
+  );
 
   // const workflowPayloadModel = useWorkflowPayloadModel({
   //   params: { path: { id: selectedPayloadId || 1 } },
@@ -106,25 +110,34 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
 
   const DrawerContent = () => {
     // format data and disply in the table
-    const detailsData = workflowRunDetail && {
-      portalRunId: workflowRunDetail.portalRunId,
-      executionId: workflowRunDetail.executionId || '-',
-      workflowType:
-        workflowRunDetail.workflow.workflowName + ' v' + workflowRunDetail.workflow.workflowVersion,
-      excutionEngine: workflowRunDetail.workflow.executionEngine,
-      approvalState: workflowRunDetail.workflow.approvalState,
-      currentState: (workflowRunDetail.currentState.status as string) || '-',
-      timestamp: (workflowRunDetail.currentState.timestamp as string) || '-',
-      comments: workflowRunDetail.comment || '-',
-    };
+    const detailsData = useMemo(
+      () =>
+        workflowRunDetail && {
+          portalRunId: workflowRunDetail.portalRunId,
+          executionId: workflowRunDetail.executionId || '-',
+          workflowType:
+            workflowRunDetail.workflow.workflowName +
+            ' v' +
+            workflowRunDetail.workflow.workflowVersion,
+          excutionEngine: workflowRunDetail.workflow.executionEngine,
+          approvalState: workflowRunDetail.workflow.approvalState,
+          currentState: (workflowRunDetail.currentState.status as string) || '-',
+          timestamp: (workflowRunDetail.currentState.timestamp as string) || '-',
+          comments: workflowRunDetail.comment || '-',
+        },
+      []
+    );
 
-    const librariesTableData =
-      workflowRunDetail && workflowRunDetail.libraries.length > 0
-        ? workflowRunDetail.libraries.map((library) => ({
-            libraryId: library.libraryId,
-            orcabusId: library.orcabusId,
-          }))
-        : [];
+    const librariesTableData = useMemo(
+      () =>
+        workflowRunDetail && workflowRunDetail.libraries.length > 0
+          ? workflowRunDetail.libraries.map((library) => ({
+              libraryId: library.libraryId,
+              orcabusId: library.orcabusId,
+            }))
+          : [],
+      []
+    );
 
     const librariesTableColumns = [
       {
@@ -179,15 +192,20 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
     );
   };
 
+  const handleCloseDrawer = () => {
+    setIsOpen(false);
+    sleep(300).then(() => {
+      onCloseDrawer && onCloseDrawer();
+    });
+  };
+
   return (
-    <Suspense fallback={<div> loading data</div>}>
-      <SideDrawer
-        title='Workflow Run Details'
-        subtitle={workflowRunDetail?.workflowRunName || ''}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        content={DrawerContent()}
-      ></SideDrawer>
-    </Suspense>
+    <SideDrawer
+      title='Workflow Run Details'
+      subtitle={workflowRunDetail?.workflowRunName || ''}
+      isOpen={isOpen}
+      onClose={handleCloseDrawer}
+      content={<DrawerContent />}
+    ></SideDrawer>
   );
 };

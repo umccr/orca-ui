@@ -4,7 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { classNames } from '@/utils/commonUtils';
 type DrawerProps = {
   isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
+  onClose: () => void;
   title: string;
   subtitle?: string;
   dialogPanelClassName?: string;
@@ -13,14 +13,14 @@ type DrawerProps = {
 
 const sideDrawer: FC<DrawerProps> = ({
   isOpen,
-  setIsOpen,
+  onClose,
   title,
   subtitle,
   dialogPanelClassName,
   content,
 }) => {
   return (
-    <Dialog open={isOpen} onClose={setIsOpen} className='relative z-10'>
+    <Dialog open={isOpen} onClose={onClose} className='relative z-10'>
       <DialogBackdrop
         transition
         className='fixed inset-0 bg-magpie-light-75 bg-opacity-75 transition-opacity duration-200 ease-in-out data-[closed]:opacity-0'
@@ -50,7 +50,7 @@ const sideDrawer: FC<DrawerProps> = ({
                     <div className='flex h-7 items-center'>
                       <button
                         type='button'
-                        onClick={() => setIsOpen(false)}
+                        onClick={onClose}
                         className='relative text-gray-400 hover:text-gray-500'
                       >
                         <span className='absolute -inset-2.5' />
