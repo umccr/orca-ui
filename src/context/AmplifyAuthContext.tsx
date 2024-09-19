@@ -165,7 +165,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement 
   return (
     <>
       {isAuthenticating ? (
-        <SpinnerWithText text='Authenticating...' />
+        <div className='h-screen'>
+          <SpinnerWithText text='Authenticating...' />
+        </div>
       ) : (
         <AuthContext.Provider value={{ ...state, signInWithGoogle, logout }}>
           {children}

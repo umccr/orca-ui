@@ -60,3 +60,7 @@ export function cleanObject(obj: Record<string, any>) {
 export const getFilenameFromKey = (key: string): string => {
   return key.split('/').pop() || '';
 };
+
+/* a sleep functon to pause the execution for a while */
+export const sleep = (timeout?: number) =>
+  new Promise((resolve) => setTimeout(resolve, timeout || 0));

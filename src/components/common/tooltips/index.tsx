@@ -1,4 +1,4 @@
-import { ReactNode, useState, FC } from 'react';
+import { ReactNode, useState, FC, useEffect } from 'react';
 import { Transition } from '@headlessui/react';
 import { classNames } from '@/utils/commonUtils';
 
@@ -16,6 +16,7 @@ interface TooltipProps {
   size?: 'small' | 'medium' | 'large';
   background?: 'gray' | 'white';
   children: ReactNode;
+  isShow?: boolean;
 }
 
 const Tooltip: FC<TooltipProps> = ({
@@ -24,8 +25,14 @@ const Tooltip: FC<TooltipProps> = ({
   size = 'medium',
   background = 'gray',
   children,
+  isShow = true,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isShowTooltips, setIsShowTooltips] = useState(true);
+
+  useEffect(() => {
+    setIsShowTooltips(isShow);
+  }, [isShow]);
 
   const getPositionClasses = () => {
     switch (position) {
@@ -80,7 +87,7 @@ const Tooltip: FC<TooltipProps> = ({
     >
       {children}
 
-      <Transition show={isVisible}>
+      <Transition show={isVisible && isShowTooltips}>
         <div
           className={classNames(
             // Base styles

@@ -16,9 +16,8 @@ const DateRangePicker: FC<DateRangePickerProps> = ({
   endDate,
   setQueryParams,
 }) => {
-  const [selectedStartDate, setSelectedStartDate] = useState<string | null>(
-    dayjs().subtract(1, 'years').format('YYYY-MM-DDTHH:mm:ss[Z]')
-  );
+  const [selectedStartDate, setSelectedStartDate] = useState<string | null>();
+  // dayjs().subtract(1, 'years').format('YYYY-MM-DDTHH:mm:ss[Z]')
   const [selectedEndDate, setSelectedEndDate] = useState<string | null>(
     dayjs().format('YYYY-MM-DDTHH:mm:ss[Z]')
   );
@@ -65,7 +64,7 @@ const DateRangePicker: FC<DateRangePickerProps> = ({
       <Flatpickr
         className='form-input !pl-9 dark:bg-slate-800  hover:text-slate-600 hover:bg-magpie-light-25 dark:text-slate-300 dark:hover:text-slate-200 font-medium w-[15.5rem] rounded-lg border-0 bg-white py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
         options={options}
-        value={`${selectedStartDate} to ${selectedEndDate}`}
+        value={selectedStartDate ? `${selectedStartDate} to ${selectedEndDate}` : new Date()}
       />
       <div className='absolute inset-0 right-auto flex items-center pointer-events-none'>
         <svg

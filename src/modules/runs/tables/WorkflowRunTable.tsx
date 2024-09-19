@@ -56,9 +56,7 @@ const WorkflowRunTable: FC<WorkflowRunTableProps> = ({ tableData, pagination, se
                 className={classNames(
                   'cursor-pointer flex flex-row items-center ml-2 text-sm lowercase font-medium hover:text-blue-700 text-blue-500'
                 )}
-                onClick={() =>
-                  setQueryParams({ workflowRunId: workflowRunId as string, openDrawer: true })
-                }
+                onClick={() => setQueryParams({ workflowRunId: workflowRunId as string })}
               >
                 {(workflowRunName as string).toLocaleLowerCase()}
               </div>
