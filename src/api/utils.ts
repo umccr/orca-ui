@@ -9,14 +9,22 @@ export const authMiddleware: Middleware = {
   },
 };
 
-export type UseQueryOptions<T> = ParamsOption<T> &
-  RequestBodyOption<T> & {
-    // add your custom options here
-    reactQuery?: {
-      // Note: React Query type’s inference is difficult to apply automatically, hence manual option passing here
-      // add other React Query options as needed
-    };
+export type UseQueryOptions<T> = RequestBodyOption<T> & {
+  // add your custom options here
+  reactQuery?: {
+    // Note: React Query type’s inference is difficult to apply automatically, hence manual option passing here
+    // add other React Query options as needed
+    enabled?: boolean; //  disable a query from automatically running, eg: enabled: !!filter,
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    placeholderData?: any; // placeholderData is not in the OpenAPI schema, eg: "keepPreviousData" form import { keepPreviousData } from '@tanstack/react-query'
   };
+  // Some of query attribute (e.g. django query style, file-manager attribute linking) is not in the OpenAPI schema
+  params: Omit<ParamsOption<T>['params'], 'query'> & {
+    query?: Record<string, unknown>;
+  };
+  headers?: Record<string, string>;
+};
 
 export type UseSuspenseQueryOptions<T> = RequestBodyOption<T> & {
   // add your custom options here

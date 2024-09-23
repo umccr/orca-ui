@@ -22,6 +22,8 @@ interface IconMultipleSelectProps {
   hasSelected?: boolean;
   BtnIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   SelectedBtnIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  selectAllOptionValue?: string | number;
+  hasSelectAllOption?: boolean;
 }
 
 const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
@@ -32,6 +34,8 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
   onApply,
   className = '',
   hasSelected = false,
+  hasSelectAllOption = false,
+  selectAllOptionValue = '-1',
 }) => {
   const [selected, setSelected] = useState<(string | number)[]>(value);
   const [inputValue, setInputValue] = useState<(string | number)[]>(value);
@@ -90,13 +94,32 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
             )}
           >
             {option.label && (
-              <Field className={classNames('flex items-center w-full')}>
+              <Field className={classNames('flex items-center w-full', 'hover:bg-gray-100')}>
                 <Checkbox
                   as='button'
                   checked={selected.some((item) => item === option.value)}
                   onChange={(checked) => {
                     if (checked) {
-                      setSelected([...selected, option.value]);
+                      const isSelectAll = option.value === selectAllOptionValue;
+                      const hasSelectAll = selected.includes(selectAllOptionValue);
+
+                      if (hasSelectAllOption) {
+                        if (hasSelectAll) {
+                          // 1. when select ietem other than remove select all value, and add option value
+                          setSelected([
+                            ...selected.filter((item) => item !== selectAllOptionValue),
+                            option.value,
+                          ]);
+                        } else if (isSelectAll) {
+                          // 2. when select all option is selected, remove all selected items, just add select all option
+                          setSelected([selectAllOptionValue]);
+                        } else {
+                          // 3. when select all option is not selected, add option value
+                          setSelected([...selected, option.value]);
+                        }
+                      } else {
+                        setSelected([...selected, option.value]);
+                      }
                     } else {
                       setSelected(selected.filter((item) => item !== option.value));
                     }

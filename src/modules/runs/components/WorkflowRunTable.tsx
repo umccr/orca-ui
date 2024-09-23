@@ -3,6 +3,8 @@ import { useEffect, useState, useMemo, Suspense } from 'react';
 
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
+import { BackdropWithText } from '@/components/common/backdrop';
+import { keepPreviousData } from '@tanstack/react-query';
 
 // import { SelectItems } from '@/components/common/select';
 import { WorkflowRunDetailsDrawer } from './WorkflowRunDetailsDrawer';
@@ -62,7 +64,13 @@ const WorkflowRunsTable = () => {
   // }
 
   // Api call to get workflow runs
-  const { data: workflowRunsData } = useWorkflowRunListModel({
+  const {
+    data: workflowRunsData,
+    isPending,
+    isError,
+    isFetching,
+    isLoading,
+  } = useWorkflowRunListModel({
     params: {
       query: {
         page: getQueryParams().page || 1,
@@ -77,6 +85,10 @@ const WorkflowRunsTable = () => {
         end_time: getQueryParams().endDate || undefined,
       },
     },
+    reactQuery: {
+      enabled: true,
+      placeholderData: keepPreviousData,
+    },
   });
 
   const { data: workflowData } = useWorkflowModel({
@@ -85,23 +97,27 @@ const WorkflowRunsTable = () => {
     },
   });
 
-  if (!workflowRunsData) {
-    throw new Error('No workflow Run Data');
-  }
+  // if (!workflowRunsData) {
+  //   throw new Error('No workflow Run Data');
+  // }
 
   if (!workflowData) {
-    throw new Error('No workflow Data');
+    console.log('No workflow Data');
   }
 
   const workflowTypeOptions = useMemo(
-    () => [
-      { value: '-1', label: 'All workflow', secondaryLabel: '' },
-      ...workflowData.results.map((workflowType: WorkflowModel) => ({
-        value: workflowType.id.toString(),
-        label: workflowType.workflowName,
-        secondaryLabel: 'v' + workflowType.workflowVersion,
-      })),
-    ],
+    () =>
+      workflowData
+        ? [
+            { value: '-1', label: 'All workflow', secondaryLabel: '' },
+
+            ...workflowData.results.map((workflowType: WorkflowModel) => ({
+              value: workflowType.id.toString(),
+              label: workflowType.workflowName,
+              secondaryLabel: 'v' + workflowType.workflowVersion,
+            })),
+          ]
+        : [],
     [workflowData]
   );
 
@@ -144,6 +160,10 @@ const WorkflowRunsTable = () => {
   // const handleCloseDrawer = useCallback(() => {
   //   setQueryParams({ workflowRunId: null });
   // }, [setQueryParams]);
+  console.log('33333', isPending, isError, isFetching, isLoading, workflowRunsData);
+  // if (isFetching) {
+  //   return <BackdropWithText text='Loading data...' isVisible={true} />;
+  // }
 
   return (
     <div className='w-full'>
@@ -159,7 +179,10 @@ const WorkflowRunsTable = () => {
         selectedStartDate={startDate}
         selectedEndDate={endDate}
       />
-      <Suspense fallback={<div>loading data</div>}>
+
+      {isFetching ? <BackdropWithText text='Loading data...' isVisible={true} /> : null}
+
+      {workflowRunsData && (
         <WorkflowRunTable
           tableData={workflowRunsData.results}
           setQueryParams={setQueryParams}
@@ -169,13 +192,15 @@ const WorkflowRunsTable = () => {
             count: workflowRunsData.pagination?.count ?? 0,
           }}
         />
-      </Suspense>
+      )}
 
       {selectedWorkflowRunId && (
-        <WorkflowRunDetailsDrawer
-          selectedWorkflowRunId={selectedWorkflowRunId}
-          onCloseDrawer={closeDrawer}
-        />
+        <Suspense fallback={<BackdropWithText text='Loading drawer data...' isVisible={true} />}>
+          <WorkflowRunDetailsDrawer
+            selectedWorkflowRunId={selectedWorkflowRunId}
+            onCloseDrawer={closeDrawer}
+          />
+        </Suspense>
       )}
     </div>
   );

@@ -26,8 +26,21 @@ export const SelectStory: Story = {
   render: () => {
     return (
       <Select
-        value={{ label: '1', value: 'Wade Cooper' }}
+        value={{ label: 'Wade Cooper', value: '1', secondaryLabel: 'Lead Developer' }}
         options={people}
+        onChange={(value) => console.log(value)}
+      />
+    );
+  },
+};
+
+export const SelectWithGroupLabelStory: Story = {
+  render: () => {
+    return (
+      <Select
+        value={{ label: 'Wade Cooper', value: '1', secondaryLabel: 'Lead Developer' }}
+        options={people}
+        groupLabel='Select Label'
         onChange={(value) => console.log(value)}
       />
     );

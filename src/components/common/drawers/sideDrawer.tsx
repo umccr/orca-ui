@@ -8,7 +8,8 @@ type DrawerProps = {
   title: string;
   subtitle?: string;
   dialogPanelClassName?: string;
-  content: ReactNode;
+  // content: ReactNode;
+  children: ReactNode;
 };
 
 const sideDrawer: FC<DrawerProps> = ({
@@ -17,13 +18,13 @@ const sideDrawer: FC<DrawerProps> = ({
   title,
   subtitle,
   dialogPanelClassName,
-  content,
+  children,
 }) => {
   return (
     <Dialog open={isOpen} onClose={onClose} className='relative z-10'>
       <DialogBackdrop
         transition
-        className='fixed inset-0 bg-magpie-light-75 bg-opacity-75 transition-opacity duration-200 ease-in-out data-[closed]:opacity-0'
+        className='fixed inset-0 bg-magpie-light-75 bg-opacity-75 data-[closed]:opacity-0' //transition-opacity duration-200 ease-in-out
       />
       <div className='fixed inset-0' />
 
@@ -65,7 +66,7 @@ const sideDrawer: FC<DrawerProps> = ({
                 <div className='bg-white space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0'>
                   <div className='px-4 sm:px-6'>
                     {/* Content */}
-                    <div className='space-y-6 sm:space-y-5'>{content}</div>
+                    <div className='space-y-6 sm:space-y-5'>{children}</div>
                   </div>
                 </div>
               </div>

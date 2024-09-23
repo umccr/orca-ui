@@ -60,6 +60,8 @@ const WorkflowRunTableHeader: FC<WorkflowRunTableHeaderProps> = ({
               value={queryWorkflowTypeIdsStr.split(',')}
               onApply={handleSelectWorkflowType}
               hasSelected={queryWorkflowTypeIdsStr !== '-1' && queryWorkflowTypeIdsStr !== ''}
+              hasSelectAllOption={true}
+              selectAllOptionValue='-1'
             />
           </div>
 

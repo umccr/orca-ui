@@ -1,6 +1,6 @@
 import { SideDrawer } from '@/components/common/drawers';
 import { sleep } from '@/utils/commonUtils';
-import { FC, useEffect, useState, useMemo } from 'react';
+import { FC, useEffect, useState, useMemo, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { useWorkflowRunDetailModel, useWorkflowStateModel } from '@/api/workflow';
 import StatusTimeline from './StatusTimeline';
@@ -118,6 +118,7 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
     return (
       <div className='h-full'>
         <JsonToList title='Details' data={detailsData} />
+
         <div className='pt-4'>
           <Table
             tableHeader='Libraries'
@@ -129,7 +130,9 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
         <div className='pt-4'>
           <div className='flex flex-col'>
             <div className='text-base font-semibold pb-4'>Timeline</div>
-            <StatusTimeline workflowRuntimelineData={workflowRuntimelineData} />
+            <Suspense fallback={<div>Loading drawer data...</div>}>
+              <StatusTimeline workflowRuntimelineData={workflowRuntimelineData} />
+            </Suspense>
           </div>
         </div>
       </div>
@@ -146,10 +149,18 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
   return (
     <SideDrawer
       title='Workflow Run Details'
-      subtitle={workflowRunDetail?.workflowRunName || ''}
+      // subtitle={workflowRunDetail?.workflowRunName || ''}
       isOpen={isOpen}
       onClose={handleCloseDrawer}
-      content={<DrawerContent />}
-    ></SideDrawer>
+      // content={
+      //   <Suspense fallback={<div>Loading drawer data...</div>}>
+      //     <DrawerContent />
+      //   </Suspense>
+      // }
+    >
+      <Suspense fallback={<div>Loading drawer data...</div>}>
+        <DrawerContent />
+      </Suspense>
+    </SideDrawer>
   );
 };
