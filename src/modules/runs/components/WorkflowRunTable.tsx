@@ -157,14 +157,6 @@ const WorkflowRunsTable = () => {
     }
   };
 
-  // const handleCloseDrawer = useCallback(() => {
-  //   setQueryParams({ workflowRunId: null });
-  // }, [setQueryParams]);
-  console.log('33333', isPending, isError, isFetching, isLoading, workflowRunsData);
-  // if (isFetching) {
-  //   return <BackdropWithText text='Loading data...' isVisible={true} />;
-  // }
-
   return (
     <div className='w-full'>
       <WorkflowRunTableHeader

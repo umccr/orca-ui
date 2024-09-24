@@ -2,7 +2,7 @@ import { SideDrawer } from '@/components/common/drawers';
 import { sleep } from '@/utils/commonUtils';
 import { FC, useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { useWorkflowStateModel, WorkflowRunModel } from '@/api/workflow';
+import { useWorkflowStateModel, useWorkflowRunDetailModel, WorkflowRunModel } from '@/api/workflow';
 import StatusTimeline from './StatusTimeline';
 import { JsonToList } from '@/components/common/json-to-table';
 import { Table } from '@/components/tables';
@@ -13,12 +13,14 @@ import { dayjs } from '@/utils/dayjs';
 import { BackdropWithText } from '@/components/common/backdrop';
 
 interface WorkflowRunDetailsDrawerProps {
-  selectedWorkflowRun: WorkflowRunModel;
+  selectedWorkflowRunData: WorkflowRunModel | null;
+  selectedWorkflowRunId: string;
   onCloseDrawer?: () => void;
 }
 
 export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
-  selectedWorkflowRun,
+  selectedWorkflowRunData,
+  selectedWorkflowRunId,
   onCloseDrawer,
 }) => {
   // const [selectedPayloadId, setSelectedPayloadId] = useState<number | null>(null);
@@ -26,13 +28,21 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
 
   useEffect(() => {
     // setWorkflowRunId(selectedWorkflowRunId);
-    if (selectedWorkflowRun) {
+    if (selectedWorkflowRunId) {
       setIsOpen(true);
     }
-  }, [selectedWorkflowRun]);
+  }, [selectedWorkflowRunId]);
+
+  const { data: workflowRunDetail, isFetching: isFetchingWorkflowRunDetail } =
+    useWorkflowRunDetailModel({
+      params: { path: { id: Number(selectedWorkflowRunId) } },
+      reactQuery: {
+        enabled: !!selectedWorkflowRunId && !selectedWorkflowRunData,
+      },
+    });
 
   const { data: workflowStateData, isFetching } = useWorkflowStateModel({
-    params: { path: { workflowrunId: selectedWorkflowRun.id.toString() } },
+    params: { path: { workflowrunId: selectedWorkflowRunId } },
   });
 
   const workflowState = workflowStateData?.results;
@@ -52,22 +62,26 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
     [workflowState]
   );
 
+  const selectedWorkflowRun = selectedWorkflowRunData || workflowRunDetail;
+
   // format data and disply in the table
   const detailsData = useMemo(
     () =>
-      selectedWorkflowRun && {
-        portalRunId: selectedWorkflowRun.portalRunId,
-        executionId: selectedWorkflowRun.executionId || '-',
-        workflowType:
-          selectedWorkflowRun.workflow.workflowName +
-          ' v' +
-          selectedWorkflowRun.workflow.workflowVersion,
-        excutionEngine: selectedWorkflowRun.workflow.executionEngine,
-        approvalState: selectedWorkflowRun.workflow.approvalState,
-        currentState: (selectedWorkflowRun.currentState.status as string) || '-',
-        timestamp: (selectedWorkflowRun.currentState.timestamp as string) || '-',
-        comments: selectedWorkflowRun.comment || '-',
-      },
+      selectedWorkflowRun
+        ? {
+            portalRunId: selectedWorkflowRun.portalRunId,
+            executionId: selectedWorkflowRun.executionId || '-',
+            workflowType:
+              selectedWorkflowRun.workflow.workflowName +
+              ' v' +
+              selectedWorkflowRun.workflow.workflowVersion,
+            excutionEngine: selectedWorkflowRun.workflow.executionEngine,
+            approvalState: selectedWorkflowRun.workflow.approvalState,
+            currentState: (selectedWorkflowRun.currentState.status as string) || '-',
+            timestamp: (selectedWorkflowRun.currentState.timestamp as string) || '-',
+            comments: selectedWorkflowRun.comment || '-',
+          }
+        : null,
     [selectedWorkflowRun]
   );
 
@@ -82,31 +96,35 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
     [selectedWorkflowRun]
   );
 
-  const librariesTableColumns = [
-    {
-      header: 'Library ID',
-      accessor: 'libraryId',
-      cell: (libraryId: unknown) => {
-        if (!libraryId) {
-          return <div>-</div>;
-        } else {
-          return (
-            <Link
-              to={`/lab/library/${libraryId}`}
-              className={classNames(
-                'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
-              )}
-            >
-              {libraryId as string}
-            </Link>
-          );
-        }
+  const librariesTableColumns = useMemo(
+    () => [
+      {
+        header: 'Library ID',
+        accessor: 'libraryId',
+        cell: (libraryId: unknown) => {
+          if (!libraryId) {
+            return <div>-</div>;
+          } else {
+            return (
+              <Link
+                to={`/lab/library/${libraryId}`}
+                className={classNames(
+                  'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+                )}
+              >
+                {libraryId as string}
+              </Link>
+            );
+          }
+        },
       },
-    },
-    { header: 'Orcabus ID', accessor: 'orcabusId' },
-  ];
+      { header: 'Orcabus ID', accessor: 'orcabusId' },
+    ],
+    []
+  );
 
   const handleCloseDrawer = () => {
+    // call onCloseDrawer func after close drawer closed
     setIsOpen(false);
     sleep(300).then(() => {
       onCloseDrawer && onCloseDrawer();
@@ -119,21 +137,21 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
       subtitle={selectedWorkflowRun?.workflowRunName || ''}
       isOpen={isOpen}
       onClose={handleCloseDrawer}
-      // content={
-      //   <Suspense fallback={<div>Loading drawer data...</div>}>
-      //     <DrawerContent />
-      //   </Suspense>
-      // }
     >
       <div className='h-full'>
-        {detailsData && <JsonToList title='Details' data={detailsData} />}
+        <JsonToList
+          title='Details'
+          data={detailsData}
+          isFetchingData={isFetchingWorkflowRunDetail}
+        />
 
         <div className='pt-4'>
           <Table
             tableHeader='Libraries'
-            inCard={false}
+            inCard={true}
             columns={librariesTableColumns}
             tableData={librariesTableData}
+            isFetchingData={isFetchingWorkflowRunDetail}
           />
         </div>
         <div className='pt-4'>

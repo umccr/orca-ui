@@ -8,8 +8,9 @@ const WorkflowRuns = () => {
     <DetailedErrorBoundary errorTitle='Unable to load workflow runs data'>
       <MainArea>
         <div className='text-2xl font-bold'>Workflow</div>
+        {/* workflow run filter header */}
         <WorkflowRunFilterHeader />
-
+        {/* workflow run table */}
         <WorkflowRunTable />
       </MainArea>
     </DetailedErrorBoundary>

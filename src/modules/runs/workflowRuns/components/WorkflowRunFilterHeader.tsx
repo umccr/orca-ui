@@ -10,51 +10,26 @@ import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
 
 const WorkflowRunFilterHeader = () => {
-  const [searchBoxContent, setSearchBoxContent] = useState<string>('');
-  const [startDate, setStartDate] = useState<string | null>(null);
-  const [endDate, setEndDate] = useState<string | null>(null);
-  const [selectWorkflowStatus, setSelectWorkflowStatus] = useState<
-    'succeeded' | 'failed' | 'aborted' | 'ongoing' | null
-  >(null);
-
   // bugfix: if set array object to state, it will be refresh the page continuously as the object is always new
   // Convert selectedWorkflowTypeIds to selectedWorkflowTypeIdsStr: selectedWorkflowTypeIds.sort().join(',')
   const [selectedWorkflowTypeIdsStr, setSelectedWorkflowTypeIdsStr] = useState<string>('');
 
   // handle query params changes
   const onChangeParams = () => {
-    setSearchBoxContent(queryParams.get('search') as string);
-    setStartDate(queryParams.get('startDate'));
-    setEndDate(queryParams.get('endDate'));
-
     // handle selectedWorkflowTypeIds changes
     const workflowTypeIds = queryParams.getAll('workflowTypeId');
     setSelectedWorkflowTypeIdsStr(
       workflowTypeIds.length === 0 ? '-1' : workflowTypeIds.sort().join(',')
-    );
-
-    // handle selectedworkflowRunStatus changes
-    setSearchBoxContent(queryParams.get('search') as string);
-    setSelectWorkflowStatus(
-      queryParams.get('workflowRunStatus') as 'succeeded' | 'failed' | 'aborted' | 'ongoing' | null
     );
   };
-  const { setQueryParams, clearQueryParams, queryParams } = useQueryParams(onChangeParams);
+  const { setQueryParams, clearQueryParams, queryParams, getQueryParams } =
+    useQueryParams(onChangeParams);
 
   useEffect(() => {
-    setSearchBoxContent(queryParams.get('search') as string);
-    setStartDate(queryParams.get('startDate'));
-    setEndDate(queryParams.get('endDate'));
-
     // handle selectedWorkflowTypeIds changes
     const workflowTypeIds = queryParams.getAll('workflowTypeId');
     setSelectedWorkflowTypeIdsStr(
       workflowTypeIds.length === 0 ? '-1' : workflowTypeIds.sort().join(',')
-    );
-
-    // setSelectedWorkflowTypeIdsStr(queryParams.getAll('workflowTypeId');
-    setSelectWorkflowStatus(
-      queryParams.get('workflowRunStatus') as 'succeeded' | 'failed' | 'aborted' | 'ongoing' | null
     );
   }, [queryParams]);
 
@@ -125,7 +100,7 @@ const WorkflowRunFilterHeader = () => {
         <div>
           <Search
             onSearch={(searchContent) => setQueryParams({ search: searchContent })}
-            searchBoxContent={searchBoxContent}
+            searchBoxContent={getQueryParams().search || ''}
             hasTooltip
           />
         </div>
@@ -134,8 +109,8 @@ const WorkflowRunFilterHeader = () => {
           <div className='flex-none'>
             <DateRangePicker
               align='left'
-              startDate={startDate}
-              endDate={endDate}
+              startDate={getQueryParams().startDate}
+              endDate={getQueryParams().endDate}
               onTimeChange={handleTimeChange}
             />
           </div>
@@ -172,7 +147,7 @@ const WorkflowRunFilterHeader = () => {
       <div>
         <ButtonGroup
           buttonItems={workflowRunStatusOptions}
-          selectedItemLabel={selectWorkflowStatus || 'all'}
+          selectedItemLabel={queryParams.get('workflowRunStatus') || 'all'}
         />
       </div>
     </>

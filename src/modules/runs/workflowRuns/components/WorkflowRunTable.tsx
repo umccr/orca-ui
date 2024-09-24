@@ -11,7 +11,9 @@ import { useWorkflowRunListModel, WorkflowRunModel } from '@/api/workflow';
 
 const WorkflowRunTable = () => {
   const [selectedWorkflowRun, setSelectedWorkflowRun] = useState<WorkflowRunModel | null>(null);
+
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
+
   // Api call to get workflow runs
   const {
     data: workflowRunsData,
@@ -38,7 +40,6 @@ const WorkflowRunTable = () => {
       placeholderData: keepPreviousData,
     },
   });
-  // console.log('4444 form test table', isPending, isError, isFetching, isLoading, workflowRunsData);
 
   if (isError) {
     throw error;
@@ -46,6 +47,7 @@ const WorkflowRunTable = () => {
 
   const onCloseDrawer = () => {
     setSelectedWorkflowRun(null);
+    setQueryParams({ workflowRunId: null });
   };
   const workflowRunColumn: Column[] = useMemo(
     () => [
@@ -62,7 +64,10 @@ const WorkflowRunTable = () => {
                   className={classNames(
                     'cursor-pointer flex flex-row items-center ml-2 text-sm lowercase font-medium hover:text-blue-700 text-blue-500'
                   )}
-                  onClick={() => setSelectedWorkflowRun(workflowRunRowData as WorkflowRunModel)}
+                  onClick={() => {
+                    setSelectedWorkflowRun(workflowRunRowData as WorkflowRunModel);
+                    setQueryParams({ workflowRunId: workflowRunRowData.id });
+                  }}
                 >
                   {(workflowRunName as string).toLocaleLowerCase()}
                 </div>
@@ -153,11 +158,11 @@ const WorkflowRunTable = () => {
       //   },
       // },
     ],
-    []
+    [setQueryParams]
   );
 
   return (
-    <div className='relative'>
+    <div>
       <Table
         columns={[...workflowRunColumn]}
         tableData={workflowRunsData?.results ?? []}
@@ -176,9 +181,10 @@ const WorkflowRunTable = () => {
           countUnit: 'workflow runs',
         }}
       />
-      {selectedWorkflowRun && (
+      {(getQueryParams().workflowRunId || selectedWorkflowRun) && (
         <WorkflowRunDetailsDrawer
-          selectedWorkflowRun={selectedWorkflowRun}
+          selectedWorkflowRunData={selectedWorkflowRun}
+          selectedWorkflowRunId={getQueryParams().workflowRunId}
           onCloseDrawer={onCloseDrawer}
         />
       )}
