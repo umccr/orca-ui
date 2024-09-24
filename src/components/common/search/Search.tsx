@@ -3,14 +3,12 @@ import { Tooltip } from '@/components/common/tooltips';
 import { useState, useEffect, FC } from 'react';
 
 interface SearchProps {
-  setQueryParams: (
-    params: Record<string, string | number | boolean | (string | number)[] | null>
-  ) => void;
   searchBoxContent?: string;
   hasTooltip?: boolean;
+  onSearch: (search: string | null) => void;
 }
 
-const Search: FC<SearchProps> = ({ setQueryParams, searchBoxContent, hasTooltip }) => {
+const Search: FC<SearchProps> = ({ onSearch, searchBoxContent, hasTooltip }) => {
   const [searchBox, setSearchBox] = useState<string>('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -40,11 +38,7 @@ const Search: FC<SearchProps> = ({ setQueryParams, searchBoxContent, hasTooltip 
           <input
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                if (searchBox) {
-                  setQueryParams({ search: searchBox });
-                } else {
-                  setQueryParams({ search: null });
-                }
+                onSearch(searchBox);
               }
             }}
             onChange={(e) => {
@@ -64,7 +58,7 @@ const Search: FC<SearchProps> = ({ setQueryParams, searchBoxContent, hasTooltip 
               className='pointer-events-auto cursor-pointer absolute inset-y-0 right-0 flex items-center pr-3 z-50'
               onClick={() => {
                 setSearchBox('');
-                setQueryParams({ search: null });
+                onSearch(null);
               }}
             >
               <XMarkIcon className='h-5 w-5 text-gray-400' aria-hidden='true' />

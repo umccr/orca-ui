@@ -8,6 +8,7 @@ import './styles/main.css';
 import 'react-toastify/dist/ReactToastify.css';
 import '@xyflow/react/dist/style.css';
 import 'flatpickr/dist/flatpickr.min.css';
+import 'react-loading-skeleton/dist/skeleton.css';
 import './styles/additional-styles/utility-patterns.css';
 import './styles/additional-styles/flatpickr.css';
 

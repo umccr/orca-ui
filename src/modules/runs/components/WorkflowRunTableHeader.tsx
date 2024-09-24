@@ -35,7 +35,11 @@ const WorkflowRunTableHeader: FC<WorkflowRunTableHeaderProps> = ({
     <div>
       <div className='w-full flex flex-row gap-1  md:flex-row items-center  justify-between p-2'>
         <div>
-          <Search setQueryParams={setQueryParams} searchBoxContent={searchBoxContent} hasTooltip />
+          <Search
+            onSearch={(searchContent) => setQueryParams({ search: searchContent })}
+            searchBoxContent={searchBoxContent}
+            hasTooltip
+          />
         </div>
 
         <div className='flex flex-row items-center gap-2'>
@@ -57,9 +61,8 @@ const WorkflowRunTableHeader: FC<WorkflowRunTableHeaderProps> = ({
           <div className='px-0'>
             <IconMultipleSelect
               options={workflowTypeLists}
-              value={queryWorkflowTypeIdsStr.split(',')}
+              selectedItemValues={queryWorkflowTypeIdsStr.split(',')}
               onApply={handleSelectWorkflowType}
-              hasSelected={queryWorkflowTypeIdsStr !== '-1' && queryWorkflowTypeIdsStr !== ''}
               hasSelectAllOption={true}
               selectAllOptionValue='-1'
             />

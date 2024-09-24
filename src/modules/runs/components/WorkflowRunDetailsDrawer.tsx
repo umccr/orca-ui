@@ -36,7 +36,7 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
 
   // need new UI to handle this error
   if (!workflowRunDetail) {
-    throw new Error('No Data');
+    console.log('No Data');
   }
 
   const { data: workflowStateData } = useWorkflowStateModel({
@@ -54,7 +54,7 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
             comment: state.comment || '',
             // icon: <StatusIcon status={state.status} />,
             iconBackground: statusBackgroundColor(getBadgeType(state.status)),
-            payloadId: state.payload || 1,
+            payloadId: state?.payload || 1,
           }))
         : [],
     [workflowState]
@@ -117,7 +117,7 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
 
     return (
       <div className='h-full'>
-        <JsonToList title='Details' data={detailsData} />
+        {detailsData && <JsonToList title='Details' data={detailsData} />}
 
         <div className='pt-4'>
           <Table

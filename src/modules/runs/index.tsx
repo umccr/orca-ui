@@ -7,9 +7,11 @@ import { RouteObject } from 'react-router-dom';
 
 const SequenceRunPage = lazy(() => import('@/modules/runs/pages/SequenceRuns'));
 // const LibraryRunPage = lazy(() => import('@/modules/runs/pages/LibraryRuns'));
-const WorkflowRunPage = lazy(() => import('@/modules/runs/pages/WorkflowRuns'));
+// const WorkflowRunPage = lazy(() => import('@/modules/runs/pages/WorkflowRuns'));
 // const SequenceRunDetailsPage = lazy(() => import('@/modules/runs/pages/SequenceRunsDetails'));
 const DevelopmentPage = lazy(() => import('@/modules/error/DevelopmentPage'));
+
+const WorkflowRunPage = lazy(() => import('@/modules/runs/workflowRuns/pages/WorkflowRuns'));
 
 export const Router: RouteObject = {
   path: 'runs',
@@ -26,6 +28,7 @@ export const Router: RouteObject = {
     // { path: 'library', element: <LibraryRunPage /> },
     { path: 'library', element: <DevelopmentPage /> },
     { path: 'workflow', element: <WorkflowRunPage /> },
+
     // {
     //   path: 'sequence/:id',
     //   element: <SequenceRunDetailsPage />,

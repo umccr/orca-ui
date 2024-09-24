@@ -12,18 +12,15 @@ const JsonDisplay: FC<JsonDisplayProps> = ({ selectedPayloadId }) => {
     setSelectPayloadId(selectedPayloadId);
   }, [selectedPayloadId]);
 
-  const workflowPayloadModel = useWorkflowPayloadModel({
+  const { data: selectedWorkflowPayloadData } = useWorkflowPayloadModel({
     params: { path: { id: selectPayloadId || 1 } },
   });
-
-  const selectedWorkflowPayloadData = workflowPayloadModel.data || null;
-
   return (
     <Suspense fallback={<div> loading data .... </div>}>
       <div className='bg-gray-50 border border-gray-300 rounded-md m-2 p-2 shadow-sm overflow-scroll'>
         {selectedWorkflowPayloadData && (
           <pre className='whitespace-pre-wrap text-wrap text-xs text-gray-800'>
-            {JSON.stringify(selectedWorkflowPayloadData, null, 2)}
+            {JSON.stringify(selectedWorkflowPayloadData || {}, null, 2)}
           </pre>
         )}
       </div>
@@ -44,7 +41,7 @@ interface StatusTimelineProps {
 
 const StatusTimeline: FC<StatusTimelineProps> = ({ workflowRuntimelineData }) => {
   const [selectedPayloadId, setSelectedPayloadId] = useState<number | null>(
-    workflowRuntimelineData[0].payloadId || null
+    workflowRuntimelineData[0]?.payloadId || null
   );
 
   const handleTimelineSelect = (payloadId: number) => {
@@ -59,7 +56,7 @@ const StatusTimeline: FC<StatusTimelineProps> = ({ workflowRuntimelineData }) =>
         selectId={selectedPayloadId}
       />
 
-      <JsonDisplay selectedPayloadId={selectedPayloadId} />
+      {selectedPayloadId && <JsonDisplay selectedPayloadId={selectedPayloadId} />}
     </div>
   );
 };

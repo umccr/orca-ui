@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useMemo } from 'react';
 import { Menu, MenuButton, MenuItems, MenuItem, Checkbox, Field, Label } from '@headlessui/react';
 // import { Popover, PopoverButton, PopoverPanel, useClose } from '@headlessui/react';
 import { FunnelIcon } from '@heroicons/react/24/outline';
@@ -14,12 +14,11 @@ export interface SelectItems {
 }
 
 interface IconMultipleSelectProps {
-  value: (string | number)[];
+  selectedItemValues: (string | number)[];
   options: SelectItems[];
   onClear?: () => void;
   onApply: (value: (string | number)[]) => void;
   className?: string;
-  hasSelected?: boolean;
   BtnIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   SelectedBtnIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   selectAllOptionValue?: string | number;
@@ -30,24 +29,34 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
   BtnIcon = FunnelIcon,
   SelectedBtnIcon = SolidFunnelIcon,
   options,
-  value,
+  selectedItemValues,
   onApply,
   className = '',
-  hasSelected = false,
   hasSelectAllOption = false,
   selectAllOptionValue = '-1',
 }) => {
-  const [selected, setSelected] = useState<(string | number)[]>(value);
-  const [inputValue, setInputValue] = useState<(string | number)[]>(value);
+  const [selected, setSelected] = useState<(string | number)[]>(selectedItemValues);
+  const [inputValue, setInputValue] = useState<(string | number)[]>(selectedItemValues);
 
   useEffect(() => {
-    setSelected(value);
-    setInputValue(value);
-  }, [value]);
+    setSelected(selectedItemValues);
+    setInputValue(selectedItemValues);
+  }, [selectedItemValues]);
 
-  const selectedValues = options
-    .filter((option) => selected.includes(option.value))
-    .map((option) => option.label + (option.secondaryLabel ? ` (${option.secondaryLabel})` : ''));
+  const hasSelected = useMemo(
+    () => selected.length > 0 && selected.some((item) => item !== selectAllOptionValue),
+    [selected, selectAllOptionValue]
+  );
+
+  const selectedValues = useMemo(
+    () =>
+      options
+        .filter((option) => selected.includes(option.value))
+        .map(
+          (option) => option.label + (option.secondaryLabel ? ` (${option.secondaryLabel})` : '')
+        ),
+    [options, selected]
+  );
 
   return (
     <Menu as='div' className='relative inline-block text-left'>

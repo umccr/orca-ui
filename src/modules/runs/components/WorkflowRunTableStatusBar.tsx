@@ -18,13 +18,13 @@ const WorkflowRunTableStatusBar: FC<WorkflowRunTableStatusBarProps> = ({
       setSelectWorkflowRunStatus(selectedWorkflowRunStatus);
   }, [selectWorkflowRunStatus, selectedWorkflowRunStatus]);
 
-  const workflowRunStatusCountModel = useWorkflowRunStatusCountModel({
+  const { data: workflowRunStatusCountData } = useWorkflowRunStatusCountModel({
     params: {},
   });
 
-  const workflowRunStatusCountData = workflowRunStatusCountModel.data;
+  // const workflowRunStatusCountData = workflowRunStatusCountModel.data;
   if (!workflowRunStatusCountData) {
-    throw new Error('No workflow status count Data');
+    console.log('No workflow status count Data');
   }
 
   const baseClassName =
@@ -57,7 +57,7 @@ const WorkflowRunTableStatusBar: FC<WorkflowRunTableStatusBarProps> = ({
                 : 'text-slate-400 dark:text-slate-500'
             )}
           >
-            {workflowRunStatusCountData.all}
+            {workflowRunStatusCountData?.all}
           </span>
         </button>
       </li>
@@ -81,7 +81,7 @@ const WorkflowRunTableStatusBar: FC<WorkflowRunTableStatusBarProps> = ({
                 : 'text-slate-400 dark:text-slate-500'
             )}
           >
-            {workflowRunStatusCountData.succeeded}
+            {workflowRunStatusCountData?.succeeded}
           </span>
         </button>
       </li>
@@ -104,7 +104,7 @@ const WorkflowRunTableStatusBar: FC<WorkflowRunTableStatusBarProps> = ({
                 : 'text-slate-400 dark:text-slate-500'
             )}
           >
-            {workflowRunStatusCountData.failed}
+            {workflowRunStatusCountData?.failed}
           </span>
         </button>
       </li>
@@ -127,7 +127,7 @@ const WorkflowRunTableStatusBar: FC<WorkflowRunTableStatusBarProps> = ({
                 : 'text-slate-400 dark:text-slate-500'
             )}
           >
-            {workflowRunStatusCountData.aborted}
+            {workflowRunStatusCountData?.aborted}
           </span>
         </button>
       </li>
@@ -150,7 +150,7 @@ const WorkflowRunTableStatusBar: FC<WorkflowRunTableStatusBarProps> = ({
                 : 'text-slate-400 dark:text-slate-500'
             )}
           >
-            {workflowRunStatusCountData.ongoing}
+            {workflowRunStatusCountData?.ongoing}
           </span>
         </button>
       </li>
