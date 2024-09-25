@@ -114,13 +114,7 @@ const WorkflowRunFilterHeader = () => {
               onTimeChange={handleTimeChange}
             />
           </div>
-          {/* <div className='w-fit px-2 flex-none'>
-          <Toggle
-            label='ongoing only'
-            onChange={handleOngoingOnlyToggle}
-            checked={isToggleChecked}
-          />
-        </div> */}
+
           <div className='px-0'>
             <IconMultipleSelect
               options={workflowTypeOptions}

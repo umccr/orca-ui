@@ -39,18 +39,18 @@ const Table: FC<TableProps> = ({
   isFetchingData = false,
 }) => {
   return (
-    <div className=''>
+    <div>
       <div className='sm:flex sm:items-center'>
         <div className='sm:flex-auto'>
           {tableHeader && (
-            <h1 className='text-base font-semibold leading-6 text-gray-900'>{tableHeader}</h1>
+            <h1 className='text-base font-semibold leading-7 text-gray-900'>{tableHeader}</h1>
           )}
           {tableDescription && <p className='mt-2 text-sm text-gray-700'>{tableDescription}</p>}
         </div>
       </div>
 
-      <div className='mt-2 flow-root'>
-        <div className='overflow-x-auto '>
+      <div className='pt-2 flow-root'>
+        <div className={classNames(tableData.length > 0 ? ' overflow-x-auto ' : '')}>
           <div className='inline-block min-w-full align-middle'>
             <div
               className={classNames(
@@ -66,7 +66,7 @@ const Table: FC<TableProps> = ({
                           key={`idx-${index}-${column.accessor}`}
                           scope='col'
                           className={classNames(
-                            'px-3 py-3.5 text-left text-sm font-semibold text-gray-900',
+                            'px-3 py-3 text-left text-sm font-semibold text-gray-900',
                             index == 0 ? 'pl-4 sm:pl-6 lg:pl-8' : '',
                             index == columns.length - 1 ? 'pr-4 sm:pr-6 lg:pr-8' : '',
                             stickyHeader
@@ -131,7 +131,7 @@ const Table: FC<TableProps> = ({
                                 )}
                               >
                                 {column.cell
-                                  ? column.cell(data[column.accessor], data)
+                                  ? column.cell(data[column.accessor], data) // pass cell data and row data to cell renderer
                                   : (data[column.accessor] as ReactNode)}
                               </td>
                             ))}

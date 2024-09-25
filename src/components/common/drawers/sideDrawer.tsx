@@ -9,6 +9,12 @@ type DrawerProps = {
   subtitle?: string;
   dialogPanelClassName?: string;
   children: ReactNode;
+  size?: 'small' | 'medium' | 'large';
+};
+const sizeToWidth = {
+  small: 'max-w-md',
+  medium: 'max-w-2xl',
+  large: 'max-w-4xl',
 };
 
 const sideDrawer: FC<DrawerProps> = ({
@@ -18,6 +24,7 @@ const sideDrawer: FC<DrawerProps> = ({
   subtitle,
   dialogPanelClassName,
   children,
+  size = 'medium',
 }) => {
   return (
     <Dialog open={isOpen} onClose={onClose} className='relative z-10'>
@@ -30,7 +37,8 @@ const sideDrawer: FC<DrawerProps> = ({
         <DialogPanel
           transition
           className={classNames(
-            'pointer-events-auto w-screen max-w-2xl transform transition duration-200 ease-in-out data-[closed]:translate-x-full sm:duration-300',
+            'pointer-events-auto w-screen transform transition duration-200 ease-in-out data-[closed]:translate-x-full sm:duration-300',
+            sizeToWidth[size],
             dialogPanelClassName ? dialogPanelClassName : ''
           )}
         >

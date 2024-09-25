@@ -49,15 +49,17 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
   const workflowRuntimelineData = useMemo(
     () =>
       workflowState
-        ? workflowState.map((state) => ({
-            id: state.id,
-            content: state.status,
-            datetime: dayjs(state.timestamp).format('YYYY-MM-DD HH:mm:ss'),
-            comment: state.comment || '',
-            // icon: <StatusIcon status={state.status} />,
-            iconBackground: statusBackgroundColor(getBadgeType(state.status)),
-            payloadId: state?.payload || 1,
-          }))
+        ? workflowState
+            .map((state) => ({
+              id: state.id,
+              content: state.status,
+              datetime: dayjs(state.timestamp).format('YYYY-MM-DD HH:mm'),
+              comment: state.comment || '',
+              // icon: <StatusIcon status={state.status} />,
+              iconBackground: statusBackgroundColor(getBadgeType(state.status)),
+              payloadId: state?.payload || 1,
+            }))
+            .sort((a, b) => a.id - b.id)
         : [],
     [workflowState]
   );
@@ -137,22 +139,26 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
       subtitle={selectedWorkflowRun?.workflowRunName || ''}
       isOpen={isOpen}
       onClose={handleCloseDrawer}
+      size='large'
     >
       <div className='h-full'>
-        <JsonToList
-          title='Details'
-          data={detailsData}
-          isFetchingData={isFetchingWorkflowRunDetail}
-        />
-
-        <div className='pt-4'>
-          <Table
-            tableHeader='Libraries'
-            inCard={true}
-            columns={librariesTableColumns}
-            tableData={librariesTableData}
-            isFetchingData={isFetchingWorkflowRunDetail}
-          />
+        <div className='pt-4 w-full flex flex-row gap-2'>
+          <div className='w-1/2'>
+            <JsonToList
+              title='Details'
+              data={detailsData}
+              isFetchingData={isFetchingWorkflowRunDetail}
+            />
+          </div>
+          <div className='w-1/2'>
+            <Table
+              tableHeader='Libraries'
+              inCard={true}
+              columns={librariesTableColumns}
+              tableData={librariesTableData}
+              isFetchingData={isFetchingWorkflowRunDetail}
+            />
+          </div>
         </div>
         <div className='pt-4'>
           <div className='relative flex flex-col'>

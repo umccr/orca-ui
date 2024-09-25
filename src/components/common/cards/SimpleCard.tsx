@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import { classNames } from '@/utils/commonUtils';
 
 export type CardProps = {
   className?: string;
-  header?: React.ReactNode;
-  children: React.ReactNode;
-  footer?: React.ReactNode;
+  header?: ReactNode;
+  children: ReactNode;
+  footer?: ReactNode;
 };
 
 const SimpleCard: FC<CardProps> = ({ className, header, children, footer }) => {

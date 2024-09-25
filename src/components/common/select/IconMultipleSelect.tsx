@@ -91,7 +91,7 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
         className='absolute right-0 z-10 mt-2 w-72 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] data-[closed]:scale-95 data-[closed]:opacity-0'
         anchor='bottom end'
       >
-        <div className='text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-2 pb-2 px-3'>
+        <div className='text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-2 pb-2 px-3 bg-gray-50 border-b border-gray-200'>
           Filters
         </div>
         {options.map((option, key) => (
