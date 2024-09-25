@@ -4,7 +4,7 @@ import { FC, useState, useEffect } from 'react';
 interface BackdropWithTextProps {
   text?: string;
   className?: string;
-  isVisible: boolean;
+  isVisible?: boolean;
 }
 const BackdropWithText: FC<BackdropWithTextProps> = ({
   text = 'Loading data ...',

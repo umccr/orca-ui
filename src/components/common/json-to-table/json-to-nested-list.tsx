@@ -2,6 +2,7 @@
 import { FC, useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { classNames } from '@/utils/commonUtils';
+import { BackdropWithText } from '@/components/common/backdrop';
 
 interface JsonToNestedListProps {
   title?: string;
@@ -26,7 +27,7 @@ const JsonToNestedList: FC<JsonToNestedListProps> = ({
   const renderValue = (value: any) => {
     if (Array.isArray(value)) {
       return (
-        <ul className='list-disc pl-5'>
+        <ul className='list-disc pl-4'>
           {value.map((item, index) => (
             <li key={index}>{renderValue(item)}</li>
           ))}
@@ -36,11 +37,11 @@ const JsonToNestedList: FC<JsonToNestedListProps> = ({
       return (
         <dl className='divide-y divide-gray-100'>
           {Object.entries(value).map(([key, val], index) => (
-            <div key={index} className='px-4 py-0 sm:grid sm:grid-cols-5 sm:gap-4 sm:px-0'>
+            <div key={index} className='px-4 py-1 sm:grid sm:grid-cols-4 sm:gap-1 sm:px-0'>
               <dt className='mt-1 text-sm font-medium leading-6 text-gray-900 text-pretty break-words'>
                 {key}
               </dt>
-              <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-4 text-pretty break-words'>
+              <dd className='mt-1 text-sm leading-6 text-gray-600 break-words sm:col-span-3 '>
                 {renderValue(val)}
               </dd>
             </div>
@@ -52,7 +53,7 @@ const JsonToNestedList: FC<JsonToNestedListProps> = ({
     }
   };
 
-  if (isFetchingData) {
+  if (!listData && isFetchingData) {
     return (
       <div>
         <div className='px-4 sm:px-0'>
@@ -73,9 +74,13 @@ const JsonToNestedList: FC<JsonToNestedListProps> = ({
       </div>
       <div
         className={classNames(
+          'relative',
           inCard ? 'overflow-hidden border-2 border-black border-opacity-5 sm:rounded-lg' : ''
         )}
       >
+        {listData && isFetchingData ? (
+          <BackdropWithText text='Loading data...' isVisible={true} />
+        ) : null}
         <div className={classNames('px-4', inCard ? '' : 'sm:px-0 border-t border-gray-100')}>
           {listData ? (
             renderValue(listData)

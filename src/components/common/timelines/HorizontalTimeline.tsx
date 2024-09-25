@@ -34,12 +34,12 @@ const HorizontalTimeline: FC<TimelineProps> = ({ timeline, handldEventClick, sel
   }, []);
 
   useEffect(() => {
-    if (timelineRef.current && selectId) {
+    if (timelineRef.current && selectId && selectId === timeline[timeline.length - 1].payloadId) {
       calculateInitialPosition();
       window.addEventListener('resize', calculateInitialPosition);
       return () => window.removeEventListener('resize', calculateInitialPosition);
     }
-  }, [calculateInitialPosition, timelineRef, selectId]);
+  }, [calculateInitialPosition, timelineRef, timeline, selectId]);
 
   useEffect(() => {
     if (selectId) {
@@ -72,11 +72,11 @@ const HorizontalTimeline: FC<TimelineProps> = ({ timeline, handldEventClick, sel
         <ul
           ref={timelineRef}
           role='list'
-          className='flex space-x-2 py-4 px-4 transition-transform duration-300 ease-in-out'
+          className='flex space-x-2 py-2 px-4 transition-transform duration-300 ease-in-out'
           style={{ transform: `translateX(${translateX}px)` }}
         >
           {timeline.map((event, eventIdx) => (
-            <li key={event.id} className='relative flex-shrink-0' style={{ width: '200px' }}>
+            <li key={event.id} className='relative flex-shrink-0 px-4 '>
               {eventIdx !== timeline.length - 1 ? (
                 <span
                   aria-hidden='true'
@@ -95,8 +95,7 @@ const HorizontalTimeline: FC<TimelineProps> = ({ timeline, handldEventClick, sel
                   <div
                     className={classNames(
                       event.iconBackground,
-                      'flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white',
-                      selectedEventPayloadId === event.payloadId ? 'border-2 border-indigo-500' : ''
+                      'flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white '
                     )}
                   >
                     {event.icon ? (
@@ -106,7 +105,14 @@ const HorizontalTimeline: FC<TimelineProps> = ({ timeline, handldEventClick, sel
                     )}
                   </div>
                 </div>
-                <div className='flex flex-col items-center'>
+                <div
+                  className={classNames(
+                    'flex flex-col items-center ',
+                    selectedEventPayloadId === event.payloadId
+                      ? 'border-b-2 border-indigo-500'
+                      : 'hover:border-b-2 hover:border-indigo-200'
+                  )}
+                >
                   <Badge
                     status={event.content}
                     className={

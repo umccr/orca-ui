@@ -139,31 +139,31 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
       subtitle={selectedWorkflowRun?.workflowRunName || ''}
       isOpen={isOpen}
       onClose={handleCloseDrawer}
-      size='large'
+      size='medium'
     >
       <div className='h-full'>
-        <div className='pt-4 w-full flex flex-row gap-2'>
-          <div className='w-1/2'>
-            <JsonToList
-              title='Details'
-              data={detailsData}
-              isFetchingData={isFetchingWorkflowRunDetail}
-            />
-          </div>
-          <div className='w-1/2'>
-            <Table
-              tableHeader='Libraries'
-              inCard={true}
-              columns={librariesTableColumns}
-              tableData={librariesTableData}
-              isFetchingData={isFetchingWorkflowRunDetail}
-            />
-          </div>
+        {/* <div className='pt-4 w-full flex flex-row gap-2'> */}
+        <div className=''>
+          <JsonToList
+            title='Details'
+            data={detailsData}
+            isFetchingData={isFetchingWorkflowRunDetail}
+          />
         </div>
+        <div className='pt-4'>
+          <Table
+            tableHeader='Libraries'
+            inCard={true}
+            columns={librariesTableColumns}
+            tableData={librariesTableData}
+            isFetchingData={isFetchingWorkflowRunDetail}
+          />
+        </div>
+        {/* </div> */}
         <div className='pt-4'>
           <div className='relative flex flex-col'>
             <div className='text-base font-semibold pb-4'>Timeline</div>
-            {isFetching && <BackdropWithText text='Loading Status data...' isVisible={true} />}
+            {isFetching && <BackdropWithText text='Loading Status data...' />}
             <StatusTimeline workflowRuntimelineData={workflowRuntimelineData} />
           </div>
         </div>

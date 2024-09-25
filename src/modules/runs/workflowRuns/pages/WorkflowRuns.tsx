@@ -7,7 +7,7 @@ const WorkflowRuns = () => {
   return (
     <DetailedErrorBoundary errorTitle='Unable to load workflow runs data'>
       <MainArea>
-        <div className='text-2xl font-bold'>Workflow</div>
+        <div className='text-2xl font-bold py-2'>Workflow</div>
         {/* workflow run filter header */}
         <WorkflowRunFilterHeader />
         {/* workflow run table */}

@@ -5,7 +5,7 @@ import { keepPreviousData } from '@tanstack/react-query';
 import { dayjs } from '@/utils/dayjs';
 import { Badge } from '@/components/common/badges';
 import { WorkflowRunDetailsDrawer } from './WorkflowRunDetailsDrawer';
-
+import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { useWorkflowRunListModel, WorkflowRunModel } from '@/api/workflow';
 
@@ -24,7 +24,7 @@ const WorkflowRunTable = () => {
     params: {
       query: {
         page: getQueryParams().page || 1,
-        rowsPerPage: getPaginationParams().rowsPerPage || 10,
+        rowsPerPage: getPaginationParams().rowsPerPage || DEFAULT_PAGE_SIZE,
         search: getQueryParams().search || undefined,
         workflow__id: getQueryParams().workflowTypeId || undefined,
         status: ['succeeded', 'failed', 'aborted'].includes(getQueryParams().workflowRunStatus)
@@ -170,7 +170,7 @@ const WorkflowRunTable = () => {
         isFetchingData={isFetching}
         paginationProps={{
           totalCount: workflowRunsData?.pagination.count ?? 0,
-          rowsPerPage: workflowRunsData?.pagination.rowsPerPage ?? 10,
+          rowsPerPage: workflowRunsData?.pagination.rowsPerPage ?? DEFAULT_PAGE_SIZE,
           currentPage: workflowRunsData?.pagination.page ?? 0,
           setPage: (n: number) => {
             setQueryParams({ page: n });

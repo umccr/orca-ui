@@ -55,7 +55,7 @@ const Search: FC<SearchProps> = ({ onSearch, searchBoxContent, hasTooltip }) => 
           />
           {showXMark && (
             <div
-              className='pointer-events-auto cursor-pointer absolute inset-y-0 right-0 flex items-center pr-3 z-50'
+              className='pointer-events-auto cursor-pointer absolute inset-y-0 right-0 flex items-center pr-3 z-10'
               onClick={() => {
                 setSearchBox('');
                 onSearch(null);

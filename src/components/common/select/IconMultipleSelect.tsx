@@ -61,10 +61,9 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
   return (
     <Menu as='div' className='relative inline-block text-left'>
       <Tooltip
-        text={`${selectedValues ? selectedValues.join(', ') : ''}`}
+        text={`${selectedValues ? `Filter by: ${selectedValues.join(', ')}` : ''}`}
         position='top'
         background='white'
-        isShow={hasSelected}
       >
         <MenuButton
           className={classNames(
