@@ -17,7 +17,7 @@ const sizeToWidth = {
   large: 'max-w-4xl',
 };
 
-const sideDrawer: FC<DrawerProps> = ({
+const SideDrawer: FC<DrawerProps> = ({
   isOpen,
   onClose,
   title,
@@ -77,4 +77,4 @@ const sideDrawer: FC<DrawerProps> = ({
   );
 };
 
-export default sideDrawer;
+export default SideDrawer;
