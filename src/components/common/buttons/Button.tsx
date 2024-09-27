@@ -1,11 +1,11 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, MouseEventHandler } from 'react';
 
 export interface ButtonProps {
   type?: 'primary' | 'secondary' | 'light' | 'green' | 'red' | 'yellow' | 'gray';
   size?: 'sm' | 'md' | 'lg';
   rounded?: boolean;
   children: ReactNode;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   className?: string;
   disabled?: boolean;
 }

@@ -1,12 +1,12 @@
 import { Link, useLocation } from 'react-router-dom';
 import { classNames } from '@/utils/commonUtils';
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, FunctionComponent, SVGProps } from 'react';
 
 export interface NavigationItem {
   name: string;
   href: string;
-  icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-  solidIcon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  icon: FunctionComponent<SVGProps<SVGSVGElement>>;
+  solidIcon: FunctionComponent<SVGProps<SVGSVGElement>>;
 }
 
 export interface SideNavbarProps {

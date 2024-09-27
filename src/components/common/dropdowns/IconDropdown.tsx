@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, FunctionComponent, SVGProps } from 'react';
 import { Menu, MenuButton, MenuItems, MenuItem, MenuSeparator } from '@headlessui/react';
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 import { classNames } from '@/utils/commonUtils';
@@ -11,7 +11,7 @@ export interface DropdownItemProps {
 }
 
 export interface IconDropdownProps {
-  BtnIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  BtnIcon?: FunctionComponent<SVGProps<SVGSVGElement>>;
   className?: string;
   items: DropdownItemProps[];
 }

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, FunctionComponent, SVGProps } from 'react';
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/20/solid';
 import { classNames } from '@/utils/commonUtils';
 
@@ -7,7 +7,7 @@ export interface StatsCardsProps {
   items: {
     name: string;
     stat: string;
-    icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+    icon: FunctionComponent<SVGProps<SVGSVGElement>>;
     changeType?: 'increase' | 'decrease';
     change?: string;
   }[];

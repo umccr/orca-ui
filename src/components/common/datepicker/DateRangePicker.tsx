@@ -7,26 +7,18 @@ interface DateRangePickerProps {
   align?: string;
   startDate: string | null;
   endDate: string | null;
-  setQueryParams: (params: Record<string, string | number | boolean | null>) => void;
+  onTimeChange: (startDate: string | null, endDate: string | null) => void;
 }
 
-const DateRangePicker: FC<DateRangePickerProps> = ({
-  align,
-  startDate,
-  endDate,
-  setQueryParams,
-}) => {
-  const [selectedStartDate, setSelectedStartDate] = useState<string | null>();
+const DateRangePicker: FC<DateRangePickerProps> = ({ align, startDate, endDate, onTimeChange }) => {
+  const [selectedStartDate, setSelectedStartDate] = useState<string | null>(startDate);
   // dayjs().subtract(1, 'years').format('YYYY-MM-DDTHH:mm:ss[Z]')
-  const [selectedEndDate, setSelectedEndDate] = useState<string | null>(
-    dayjs().format('YYYY-MM-DDTHH:mm:ss[Z]')
-  );
+  const [selectedEndDate, setSelectedEndDate] = useState<string | null>(endDate);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (startDate && endDate) {
-      setSelectedStartDate(startDate);
-      setSelectedEndDate(endDate);
-    }
+    setSelectedStartDate(startDate);
+    setSelectedEndDate(endDate);
   }, [startDate, endDate]);
 
   const options: Partial<DateTimePickerProps['options']> = {
@@ -51,10 +43,10 @@ const DateRangePicker: FC<DateRangePickerProps> = ({
     },
     onChange: (selectedDates) => {
       if (selectedDates.length === 2) {
-        setQueryParams({
-          startDate: dayjs(selectedDates[0]).utc(true).format(),
-          endDate: dayjs(selectedDates[1]).utc(true).format(),
-        });
+        onTimeChange(
+          dayjs(selectedDates[0]).utc(true).format(),
+          dayjs(selectedDates[1]).utc(true).format()
+        );
       }
     },
   };
@@ -64,7 +56,15 @@ const DateRangePicker: FC<DateRangePickerProps> = ({
       <Flatpickr
         className='form-input !pl-9 dark:bg-slate-800  hover:text-slate-600 hover:bg-magpie-light-25 dark:text-slate-300 dark:hover:text-slate-200 font-medium w-[15.5rem] rounded-lg border-0 bg-white py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
         options={options}
-        value={selectedStartDate ? `${selectedStartDate} to ${selectedEndDate}` : new Date()}
+        value={
+          selectedStartDate
+            ? `${selectedStartDate} to ${selectedEndDate}`
+            : isOpen
+              ? ''
+              : new Date()
+        }
+        onOpen={() => setIsOpen(true)}
+        onClose={() => setIsOpen(false)}
       />
       <div className='absolute inset-0 right-auto flex items-center pointer-events-none'>
         <svg

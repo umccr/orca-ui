@@ -1,4 +1,4 @@
 import Drawer from './InfoDrawers';
-import SideDrawer from './sideDrawer';
+import SideDrawer from './SideDrawer';
 
 export { Drawer, SideDrawer };
