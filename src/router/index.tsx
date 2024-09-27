@@ -6,7 +6,7 @@ import { SpinnerWithText } from '@/components/common/spinner';
 
 const SignInPage = lazy(() => import('@/modules/auth/SignInPage'));
 const NotFoundPage = lazy(() => import('@/modules/error/NotFoundPage'));
-import MainLayout from '@/components/layouts/MainLayout';
+const MainLayout = lazy(() => import('@/components/layouts/MainLayout'));
 
 // import all modules routes
 import modulesRouters from './modules';

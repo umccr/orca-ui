@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef, FC } from 'react';
 import * as d3 from 'd3';
 import { dayjs } from '@/utils/dayjs';
 
@@ -21,7 +21,7 @@ interface GanttChartProps {
   height: number;
 }
 
-const GanttChart: React.FC<GanttChartProps> = ({ tasks, width, height }) => {
+const GanttChart: FC<GanttChartProps> = ({ tasks, width, height }) => {
   const ref = useRef<SVGSVGElement>(null);
   const taskHeight = 5;
 

@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, FunctionComponent, SVGProps } from 'react';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { classNames } from '@/utils/commonUtils';
@@ -9,7 +9,7 @@ export interface DialogButtonProps {
   className?: string;
 }
 export interface DialogProps {
-  TitleIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  TitleIcon?: FunctionComponent<SVGProps<SVGSVGElement>>;
   title: string;
   content?: string | ReactNode;
   open: boolean;

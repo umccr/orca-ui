@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef, FC } from 'react';
 import * as d3 from 'd3';
 
 interface DataItem {
@@ -10,7 +10,7 @@ interface StackedBarChartProps {
   width: number;
 }
 
-const StackedBarChart: React.FC<StackedBarChartProps> = ({ data, width }) => {
+const StackedBarChart: FC<StackedBarChartProps> = ({ data, width }) => {
   const ref = useRef<SVGSVGElement>(null);
 
   useEffect(() => {

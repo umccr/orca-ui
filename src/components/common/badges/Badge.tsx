@@ -1,6 +1,7 @@
 import { RequireAtLeastOne } from 'type-fest';
+import { ReactNode } from 'react';
 export interface BadgePropsInterface {
-  children: React.ReactNode;
+  children: ReactNode;
   type: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'abort' | 'unknown' | 'runing';
   status: string;
   className?: string;

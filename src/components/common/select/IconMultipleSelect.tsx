@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useMemo } from 'react';
+import { FC, useState, useEffect, useMemo, FunctionComponent, SVGProps } from 'react';
 import { Menu, MenuButton, MenuItems, MenuItem, Checkbox, Field, Label } from '@headlessui/react';
 // import { Popover, PopoverButton, PopoverPanel, useClose } from '@headlessui/react';
 import { FunnelIcon } from '@heroicons/react/24/outline';
@@ -19,8 +19,8 @@ interface IconMultipleSelectProps {
   onClear?: () => void;
   onApply: (value: (string | number)[]) => void;
   className?: string;
-  BtnIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-  SelectedBtnIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  BtnIcon?: FunctionComponent<SVGProps<SVGSVGElement>>;
+  SelectedBtnIcon?: FunctionComponent<SVGProps<SVGSVGElement>>;
   selectAllOptionValue?: string | number;
   hasSelectAllOption?: boolean;
 }

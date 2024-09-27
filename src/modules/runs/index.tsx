@@ -8,7 +8,9 @@ import { RouteObject } from 'react-router-dom';
 // const SequenceRunPage = lazy(() => import('@/modules/runs/pages/SequenceRuns'));
 const LibraryRunPage = lazy(() => import('@/modules/runs/libraryRuns/pages/LibraryRuns'));
 // const WorkflowRunPage = lazy(() => import('@/modules/runs/pages/WorkflowRuns'));
-const SequenceRunDetailsPage = lazy(() => import('@/modules/runs/pages/SequenceRunsDetails'));
+const SequenceRunDetailsPage = lazy(
+  () => import('@/modules/runs/sequenceRuns/pages/SequenceRunsDetails')
+);
 // const DevelopmentPage = lazy(() => import('@/modules/error/DevelopmentPage'));
 const SequenceRunPage = lazy(() => import('@/modules/runs/sequenceRuns/pages/SequenceRuns'));
 const WorkflowRunPage = lazy(() => import('@/modules/runs/workflowRuns/pages/WorkflowRuns'));

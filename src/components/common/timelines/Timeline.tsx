@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, FunctionComponent, SVGProps } from 'react';
 import { classNames } from '@/utils/commonUtils';
 import { Tooltip } from '../tooltips';
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
@@ -11,7 +11,7 @@ interface TimelineEvent {
   datetime: string;
   iconBackground: string;
   payloadId: number;
-  icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  icon?: FunctionComponent<SVGProps<SVGSVGElement>>;
 }
 
 interface TimelineProps {

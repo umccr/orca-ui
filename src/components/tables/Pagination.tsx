@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { classNames } from '@/utils/commonUtils';
 import { Button } from '@/components/common/buttons';
 import {
@@ -27,7 +28,7 @@ const PaginationDirectionButton = ({
 }: {
   disabled: boolean;
   onClick: () => void;
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }) => {
   return (

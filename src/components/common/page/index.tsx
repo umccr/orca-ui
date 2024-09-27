@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import { useEffect, ReactNode } from 'react';
 
 type Props = {
   title?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 };
 const Page = ({ title, children }: Props) => {
   useEffect(() => {
