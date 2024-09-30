@@ -1,6 +1,6 @@
 import config from '@/config';
 import createClient from 'openapi-fetch';
-import type { paths, components } from './types/metadata';
+import type { paths, components, operations } from './types/metadata';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { authMiddleware, UseSuspenseQueryOptions } from './utils';
 
@@ -26,5 +26,8 @@ export type QualityEnum = components['schemas']['QualityEnum'];
 export type TypeEnum = components['schemas']['TypeEnum'];
 export type WorkflowEnum = components['schemas']['WorkflowEnum'];
 
-export const useMetadataFullSubjectModel = createMetadataFetchingHook('/api/v1/subject/full/');
-export const useMetadataFullLibraryModel = createMetadataFetchingHook('/api/v1/library/full/');
+export type LibraryListQueryParams = operations['apiV1LibraryList']['parameters']['query'];
+export type SubjectListQueryParams = operations['apiV1SubjectList']['parameters']['query'];
+
+export const useMetadataSubjectModel = createMetadataFetchingHook('/api/v1/subject/');
+export const useMetadataLibraryModel = createMetadataFetchingHook('/api/v1/library/');

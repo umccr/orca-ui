@@ -1,4 +1,4 @@
-import { useMetadataFullLibraryModel } from '@/api/metadata';
+import { useMetadataLibraryModel } from '@/api/metadata';
 import { JsonToTable } from '@/components/common/json-to-table';
 import { useParams } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ export const LibraryTableDetails = () => {
   if (!libraryId) {
     throw new Error('No library id in URL path!');
   }
-  const fullLibraryModel = useMetadataFullLibraryModel({
+  const fullLibraryModel = useMetadataLibraryModel({
     params: { query: { libraryId: libraryId } },
   }).data;
 
@@ -20,9 +20,10 @@ export const LibraryTableDetails = () => {
   return (
     <JsonToTable
       data={{
-        subjectId: library.specimen.subject.subjectId ?? '-',
-        specimenId: library.specimen.specimenId ?? '-',
-        specimenSource: library.specimen.source ?? '-',
+        subjectId: library.subject.subjectId ?? '-',
+        sampleId: library.sample.sampleId ?? '-',
+        externalSampleId: library.sample.externalSampleId ?? '-',
+        sampleSource: library.sample.source ?? '-',
         libraryId: library.libraryId ?? '-',
         phenotype: library.phenotype ?? '-',
         workflow: library.workflow ?? '-',

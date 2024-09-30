@@ -7,8 +7,10 @@ export type TableData = Record<string, unknown>;
 
 export type Column = {
   header: string;
+  headerClassName?: string;
   accessor: string;
   cell?: (data: unknown) => ReactNode;
+  cellClassName?: string;
   onSort?: () => void;
   sortDirection?: 'asc' | 'desc';
 };
@@ -67,7 +69,8 @@ const Table: FC<TableProps> = ({
                             index == columns.length - 1 ? 'pr-4 sm:pr-6 lg:pr-8' : '',
                             stickyHeader
                               ? 'sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75'
-                              : ''
+                              : '',
+                            column.headerClassName ? column.headerClassName : ''
                           )}
                           onClick={() => column.onSort && column.onSort()}
                         >
@@ -114,7 +117,8 @@ const Table: FC<TableProps> = ({
                             className={classNames(
                               'whitespace-nowrap py-2 px-3 text-sm font-medium text-gray-900',
                               index == 0 ? 'pl-4 sm:pl-6' : '',
-                              index == columns.length - 1 ? 'pr-4 sm:pr-6' : ''
+                              index == columns.length - 1 ? 'pr-4 sm:pr-6' : '',
+                              column.cellClassName ? column.cellClassName : ''
                             )}
                           >
                             {column.cell
@@ -158,4 +162,36 @@ export const handleSort = ({
     return 0;
   });
   return sorted;
+};
+
+export const getCurrentSortDirection = (currentSort: string | undefined, key: string) => {
+  if (!currentSort || !currentSort.endsWith(key)) {
+    return undefined;
+  }
+
+  if (currentSort?.startsWith('-')) {
+    return 'desc';
+  }
+
+  return 'asc';
+};
+
+export const getSetSortValue = (currentSort: string | undefined, key: string) => {
+  const currentSortDirection = getCurrentSortDirection(currentSort, key);
+
+  // Going the opposite here from the current sort direction
+  return `${currentSortDirection === 'desc' ? '' : '-'}${key}`;
+};
+
+export const multiRowCel = (p: unknown) => {
+  const data = p as string[];
+  return (
+    <>
+      {data.map((item, idx) => (
+        <div className='py-2' key={idx}>
+          {item}
+        </div>
+      ))}
+    </>
+  );
 };

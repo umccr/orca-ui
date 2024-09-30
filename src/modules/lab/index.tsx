@@ -1,62 +1,32 @@
 import { lazy, Suspense } from 'react';
-import { Navigate, Outlet, Route, Routes, RouteObject } from 'react-router-dom';
+import { Navigate, Outlet, RouteObject } from 'react-router-dom';
 import LibraryLayout from '@/components/layouts/lab/LibraryLayout';
 import MetadataLayout from '@/components/layouts/lab/MetadataLayout';
-import SubjectLayout from '@/components/layouts/lab/SubjectLayout';
+// import SubjectLayout from '@/components/layouts/lab/SubjectLayout';
 
-const LabPage = lazy(() => import('@/modules/lab/metadata'));
-const SubjectPage = lazy(() => import('@/modules/lab/subject'));
-const LibraryOverviewPage = lazy(() => import('@/modules/lab/library/overview'));
-const LibraryWorkflowPage = lazy(() => import('@/modules/lab/library/workflow'));
+const MetadataPage = lazy(() => import('@/modules/lab/pages/Metadata'));
+// const SubjectPage = lazy(() => import('@/modules/lab/subject'));
+const LibraryOverviewPage = lazy(() => import('@/modules/lab/pages/library/LibraryOverview'));
+const LibraryWorkflowPage = lazy(() => import('@/modules/lab/pages/library/LibraryWorkflow'));
 
-// export const LabRouter = () => {
-//   return (
-//     <Routes>
-//       <Route
-//         index
-//         element={
-//           <MetadataLayout>
-//             <LabPage />
-//           </MetadataLayout>
-//         }
-//       />
-//       <Route path='subject/*' element={<SubjectRoute />} />
-//       <Route path='library/*' element={<LibraryRoute />} />
-
-//       <Route path='*' element={<Navigate to='/' />} />
-//     </Routes>
-//   );
+// const subjectRoute = {
+//   path: 'subject',
+//   element: (
+//     <SubjectLayout>
+//       <Outlet />
+//     </SubjectLayout>
+//   ),
+//   children: [
+//     {
+//       path: '',
+//       element: <Navigate to='/lab' replace />,
+//     },
+//     {
+//       path: ':subjectId',
+//       element: <SubjectPage />,
+//     },
+//   ],
 // };
-
-// const SubjectRoute = () => (
-//   <Routes>
-//     <Route element={<SubjectLayout />}>
-//       <Route index element={<Navigate to='../' />} />
-//       <Route path=':subjectId' element={<SubjectPage />} />
-//     </Route>
-//   </Routes>
-// );
-
-// const LibraryRoute = () => (
-//   <Routes>
-//     <Route
-//       element={
-//         <LibraryLayout>
-//           <Outlet />
-//         </LibraryLayout>
-//       }
-//     >
-//       <Route index element={<Navigate to='../' />} />
-//       <Route path=':libraryId'>
-//         <Route index element={<LibraryOverviewPage />} />
-//         <Route path=':workflowType'>
-//           <Route index element={<LibraryWorkflowPage />} />
-//           <Route path=':portalRunId' element={<LibraryWorkflowPage />} />
-//         </Route>
-//       </Route>
-//     </Route>
-//   </Routes>
-// );
 
 export const Router: RouteObject = {
   path: 'lab',
@@ -67,29 +37,12 @@ export const Router: RouteObject = {
       element: (
         <MetadataLayout>
           <Suspense fallback={<div>Loading...</div>}>
-            <LabPage />
+            <MetadataPage />
           </Suspense>
         </MetadataLayout>
       ),
     },
-    {
-      path: 'subject',
-      element: (
-        <SubjectLayout>
-          <Outlet />
-        </SubjectLayout>
-      ),
-      children: [
-        {
-          path: '',
-          element: <Navigate to='/lab' replace />,
-        },
-        {
-          path: ':subjectId',
-          element: <SubjectPage />,
-        },
-      ],
-    },
+    // subjectRoute,
     {
       path: 'library',
       element: (

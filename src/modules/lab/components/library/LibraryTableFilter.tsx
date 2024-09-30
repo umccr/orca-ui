@@ -8,7 +8,6 @@ import { FunnelIcon } from '@heroicons/react/24/outline';
 import { classNames } from '@/utils/commonUtils';
 
 type FilterType = {
-  subjectId?: string[];
   libraryId?: string[];
   assay?: string[];
   coverage__gte?: string;
@@ -40,9 +39,8 @@ const TYPE_OPTION: TypeEnum[] = [
 ];
 const WORKFLOW_OPTION: WorkflowEnum[] = ['clinical', 'research', 'qc', 'control', 'bcl', 'manual'];
 
-export const MetadataFilterDropdown = () => {
+export const LibraryTableFilter = () => {
   const [filter, setFilter] = useState<FilterType>({});
-  const [filterCategory, setFilterCategory] = useState<'subject' | 'library'>('subject');
 
   const { setQueryParams, getQueryParams, clearQueryParams } = useQueryParams();
   const filterJsonString = JSON.stringify(getQueryParams());
@@ -76,27 +74,8 @@ export const MetadataFilterDropdown = () => {
   };
 
   const handleFilterChange = (key: keyof FilterType, value: string[]) => {
-    // subjectId is a special case, if subjectId uses subject endpoint so other filter must be cleared
-    if (key == 'subjectId') {
-      setFilter(() => ({ [key]: value }));
-    } else {
-      setFilter((prev) => ({ ...prev, [key]: value, subjectId: undefined }));
-    }
+    setFilter((prev) => ({ ...prev, [key]: value }));
   };
-
-  const SubjectFilter = () => (
-    <>
-      <div className='font-medium'>{'Subject Id *'}</div>
-      <FilterTextInput
-        keyFilter='subjectId'
-        defaultInput={filter.subjectId ? filter.subjectId : []}
-        handleFilterChange={handleFilterChange}
-      />
-      <div className='border-b-2 mb-2 pb-2 italic text-s	text-gray-700 font-thin	'>
-        {`*Text input support multi value with comma separated value. E.g. "L000001,L000002"`}
-      </div>
-    </>
-  );
 
   const LibraryFilter = () => (
     <>
@@ -167,44 +146,18 @@ export const MetadataFilterDropdown = () => {
   return (
     <PopoverDropdown
       btnChildren={
-        <Button type='green' className='w-full justify-center'>
+        <Button
+          type='gray'
+          size='sm'
+          className='w-full justify-center rounded-md ring-gray-300 ring-1'
+        >
           <FunnelIcon className='h-5 w-5' />
         </Button>
       }
       content={
         <div className='z-10 bg-white rounded-lg w-80'>
-          <div className='h-[500px] px-3 pb-3 overflow-y-auto text-sm text-gray-700 '>
-            <div className='flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 mb-4'>
-              <div
-                onClick={() => {
-                  setFilterCategory('subject');
-                  setFilter({});
-                }}
-                className={classNames(
-                  'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50',
-                  filterCategory == 'subject'
-                    ? 'active bg-gray-100 text-blue-600'
-                    : 'cursor-pointer	'
-                )}
-              >
-                Subject
-              </div>
-              <div
-                onClick={() => {
-                  setFilterCategory('library');
-                  setFilter({});
-                }}
-                className={classNames(
-                  'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50',
-                  filterCategory == 'library'
-                    ? 'active bg-gray-100 text-blue-600'
-                    : 'cursor-pointer	'
-                )}
-              >
-                Library
-              </div>
-            </div>
-            {filterCategory == 'subject' ? <SubjectFilter /> : <LibraryFilter />}
+          <div className='max-h-[500px] px-3 pb-3 overflow-y-auto text-sm text-gray-700 '>
+            <LibraryFilter />
           </div>
           <ClosePopoverWrapper className='mt-4'>
             <Button
@@ -222,8 +175,7 @@ export const MetadataFilterDropdown = () => {
             className='w-full justify-center mt-2'
             type='primary'
             onClick={() => {
-              // since 2 api can be used for this tables, clearing the ordering
-              setQueryParams({ ...filter, ordering: undefined }, true);
+              setQueryParams({ ...filter }, true);
             }}
           >
             Apply
