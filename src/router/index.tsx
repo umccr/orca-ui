@@ -26,7 +26,7 @@ export default function AppRoutes() {
         <Navigate to='/signIn' replace />
       ),
       children: [
-        { path: '', element: <Navigate to='lab' replace /> },
+        { path: '', element: <Navigate to='runs' replace /> },
         ...modulesRouters,
         { path: '*', element: <NotFoundPage /> },
       ],
