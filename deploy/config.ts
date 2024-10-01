@@ -1,5 +1,3 @@
-import { ApplicationStackProps } from './lib/application-stack';
-
 export enum AppStage {
   BETA = 'beta',
   GAMMA = 'gamma',
@@ -22,7 +20,7 @@ export const cloudFrontBucketNameConfig: Record<AppStage, string> = {
   [AppStage.PROD]: 'orcaui-cloudfront-472057503814',
 };
 
-export const getAppStackConfig = (appStage: AppStage): ApplicationStackProps => {
+export const getAppStackConfig = (appStage: AppStage) => {
   switch (appStage) {
     case AppStage.BETA:
       return {

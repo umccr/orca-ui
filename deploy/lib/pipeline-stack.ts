@@ -53,7 +53,7 @@ export class PipelineStack extends Stack {
     /**
      * Deployment to Beta (Dev) account
      */
-    const betaConfig = getAppStackConfig(AppStage.BETA);
+    const betaConfig = { ...getAppStackConfig(AppStage.BETA), sourceFile };
     pipeline.addStage(
       new DeploymentStage(
         this,
@@ -69,7 +69,7 @@ export class PipelineStack extends Stack {
     /**
      * Deployment to Gamma (Staging) account
      */
-    const gammaConfig = getAppStackConfig(AppStage.GAMMA);
+    const gammaConfig = { ...getAppStackConfig(AppStage.GAMMA), sourceFile };
     pipeline.addStage(
       new DeploymentStage(
         this,
@@ -88,7 +88,7 @@ export class PipelineStack extends Stack {
     /**
      * Deployment to Prod (Production) account
      */
-    const prodConfig = getAppStackConfig(AppStage.PROD);
+    const prodConfig = { ...getAppStackConfig(AppStage.PROD), sourceFile };
     pipeline.addStage(
       new DeploymentStage(
         this,
