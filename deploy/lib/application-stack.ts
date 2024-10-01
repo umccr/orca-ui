@@ -1,5 +1,13 @@
 import * as path from 'path';
-import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+import {
+  OriginAccessIdentity,
+  Distribution,
+  ViewerProtocolPolicy,
+  PriceClass,
+  SecurityPolicyProtocol,
+  SSLMethod,
+} from 'aws-cdk-lib/aws-cloudfront';
+import { S3BucketOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Duration, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
@@ -167,42 +175,48 @@ export class ApplicationStack extends Stack {
     const certUse1Arn = StringParameter.valueForStringParameter(this, '/orcaui/certificate_arn');
     const certUse1 = Certificate.fromCertificateArn(this, 'SSLCertificateUSE1', certUse1Arn);
 
-    const cloudFrontOAI = new cloudfront.OriginAccessIdentity(this, 'CloudFrontOAI', {
+    const cloudFrontOAI = new OriginAccessIdentity(this, 'CloudFrontOAI', {
       comment: 'orca-ui OAI',
     });
 
-    const originConfigs: cloudfront.SourceConfiguration = {
-      s3OriginSource: {
-        s3BucketSource: s3Bucket,
-        originAccessIdentity: cloudFrontOAI,
-      },
-      behaviors: [{ isDefaultBehavior: true }],
-    };
+    // const originConfigs: cloudfront.SourceConfiguration = {
+    //   s3OriginSource: {
+    //     s3BucketSource: s3Bucket,
+    //     originAccessIdentity: cloudFrontOAI,
+    //   },
+    //   behaviors: [{ isDefaultBehavior: true }],
+    // };
 
-    const errorPageConfiguration: cloudfront.CfnDistribution.CustomErrorResponseProperty = {
-      errorCode: 403,
-      errorCachingMinTtl: 60,
-      responseCode: 200,
-      responsePagePath: '/index.html',
-    };
+    // const errorPageConfiguration: cloudfront.CfnDistribution.CustomErrorResponseProperty = {
+    //   errorCode: 403,
+    //   errorCachingMinTtl: 60,
+    //   responseCode: 200,
+    //   responsePagePath: '/index.html',
+    // };
 
-    const cloudFrontDistribution = new cloudfront.CloudFrontWebDistribution(
-      this,
-      'CloudFrontDistribution',
-      {
-        originConfigs: [originConfigs],
-        errorConfigurations: [errorPageConfiguration],
-        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        defaultRootObject: 'index.html',
-        priceClass: cloudfront.PriceClass.PRICE_CLASS_ALL,
-        enableIpV6: false,
-        viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(certUse1, {
-          aliases: aliasDomainName,
-          securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
-          sslMethod: cloudfront.SSLMethod.SNI,
+    const cloudFrontDistribution = new Distribution(this, 'CloudFrontDistribution', {
+      defaultBehavior: {
+        origin: S3BucketOrigin.withOriginAccessIdentity(s3Bucket, {
+          originAccessIdentity: cloudFrontOAI,
         }),
-      }
-    );
+        viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+      },
+      errorResponses: [
+        {
+          httpStatus: 403,
+          responseHttpStatus: 200,
+          responsePagePath: '/index.html',
+          ttl: Duration.minutes(1),
+        },
+      ],
+      defaultRootObject: 'index.html',
+      priceClass: PriceClass.PRICE_CLASS_ALL,
+      enableIpv6: false,
+      certificate: certUse1,
+      domainNames: aliasDomainName,
+      minimumProtocolVersion: SecurityPolicyProtocol.TLS_V1_2_2021,
+      sslSupportMethod: SSLMethod.SNI,
+    });
 
     new ARecord(this, 'CustomDomainAlias', {
       target: RecordTarget.fromAlias(new CloudFrontTarget(cloudFrontDistribution)),
