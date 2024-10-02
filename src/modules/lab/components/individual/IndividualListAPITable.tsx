@@ -36,7 +36,7 @@ export const IndividualListAPITable = ({
         <div className='flex flex-col md:flex-row'>
           <div className='flex items-center justify-center'>{'Individual Table'}</div>
           <div className='flex flex-1 items-center justify-end pt-2'>
-            <Search onSearch={(s) => setQueryParams({ search: s }, true)} />
+            <Search onSearch={(s) => setQueryParams({ search: s })} />
             <div className='ml-2'>
               <IndividualTableFilter />
             </div>

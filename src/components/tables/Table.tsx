@@ -157,7 +157,8 @@ const Table: FC<TableProps> = ({
                                 className={classNames(
                                   'whitespace-nowrap py-2 px-3 text-sm font-medium text-gray-900',
                                   index == 0 ? 'pl-4 sm:pl-6' : '',
-                                  index == columns.length - 1 ? 'pr-4 sm:pr-6' : ''
+                                  index == columns.length - 1 ? 'pr-4 sm:pr-6' : '',
+                                  column.cellClassName ? column.cellClassName : ''
                                 )}
                               >
                                 {column.cell
