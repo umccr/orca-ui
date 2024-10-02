@@ -9,7 +9,7 @@ const PopoverDropdown: FC<Props> = ({ btnChildren, content }) => {
     <Popover className='relative h-full flex'>
       <PopoverButton as='div'>{btnChildren}</PopoverButton>
       <PopoverPanel anchor='bottom end' className='flex flex-col'>
-        <Card className='border border-gray-400 mt-2'>{content}</Card>
+        <Card className='border border-gray-400 mt-2 !overflow-auto'>{content}</Card>
       </PopoverPanel>
     </Popover>
   );

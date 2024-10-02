@@ -1,9 +1,9 @@
 import React, { Suspense } from 'react';
-import { PortalRunIdDropdown } from './components/PortalRunIdDropdown';
+import { PortalRunIdDropdown } from '../../components/library/PortalRunIdDropdown';
 import { useParams } from 'react-router-dom';
-import { FileTable } from './components/FileTable';
+import { FileTable } from '../../components/file/FileTable';
 import { SpinnerWithText } from '@/components/common/spinner';
-import { WorkflowVersion } from './components/WorkflowVersion';
+import { WorkflowVersion } from '../../components/library/WorkflowVersion';
 
 export default function LibraryWorkflowPage() {
   const { libraryId, portalRunId, workflowType } = useParams();
