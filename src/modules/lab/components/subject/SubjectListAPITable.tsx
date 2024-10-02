@@ -4,7 +4,7 @@ import { useQueryParams } from '@/hooks/useQueryParams';
 import { Column } from '@/components/tables';
 import Table, {
   getCurrentSortDirection,
-  getSetSortValue,
+  getSortValue,
   multiRowCel,
 } from '@/components/tables/Table';
 import { Link } from 'react-router-dom';
@@ -27,6 +27,7 @@ export const SubjectListAPITable = ({ queryParams }: { queryParams: SubjectListQ
   const pagination = data.pagination;
   return (
     <Table
+      inCard={false}
       tableHeader={
         <div className='flex flex-col md:flex-row'>
           <div className='flex items-center justify-center'>{'Subject Table'}</div>
@@ -43,9 +44,10 @@ export const SubjectListAPITable = ({ queryParams }: { queryParams: SubjectListQ
         {
           header: 'Subject Id',
           accessor: 'subjectIds',
+          headerGroup: { colSpan: 1 },
           onSort: () =>
             setQueryParams({
-              ordering: getSetSortValue(queryParams?.ordering, 'subject_id'),
+              ordering: getSortValue(queryParams?.ordering, 'subject_id'),
             }),
           sortDirection: getCurrentSortDirection(queryParams?.ordering, 'subject_id'),
           cell: (p: unknown) => {
@@ -62,8 +64,8 @@ export const SubjectListAPITable = ({ queryParams }: { queryParams: SubjectListQ
             );
           },
         },
-        ...individualTableColumn,
-        ...libraryTableColumn,
+        ...individualTableColumn(),
+        ...getLibraryTableColumn(),
       ]}
       tableData={tableData}
       paginationProps={{
@@ -137,83 +139,114 @@ const processSubjectResult = (data: components['schemas']['SubjectDetail'][]) =>
 /**
  * Library column properties
  */
-export const libraryTableColumn: Column[] = [
-  {
-    header: 'Library Id',
-    accessor: 'libraryIds',
-    cell: (p: unknown) => {
-      const data = p as { libraryId: string; libraryOrcabusId: string }[];
-      return (
-        <Fragment>
-          {data.map((lib, idx) => {
-            if (!lib.libraryId) {
-              return <div key={idx}>-</div>;
-            }
-            return (
-              <div className='py-2' key={idx}>
-                <Link
-                  to={`library/${lib.libraryId}`}
-                  className={classNames(
-                    'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
-                  )}
-                >
-                  {lib.libraryId}
-                </Link>
-              </div>
-            );
-          })}
-        </Fragment>
-      );
+export const getLibraryTableColumn = (): Column[] => {
+  const cellColor = {
+    headerClassName: 'bg-red-100',
+    cellClassName: 'bg-red-50',
+  };
+  return [
+    {
+      header: 'Library Id',
+      headerClassName: cellColor.headerClassName,
+      headerGroup: { label: 'Library', colSpan: 7, additionalClassName: cellColor.headerClassName },
+      accessor: 'libraryIds',
+      cell: (p: unknown) => {
+        const data = p as { libraryId: string; libraryOrcabusId: string }[];
+        return (
+          <Fragment>
+            {data.map((lib, idx) => {
+              if (!lib.libraryId) {
+                return <div key={idx}>-</div>;
+              }
+              return (
+                <div className='py-2' key={idx}>
+                  <Link
+                    to={`library/${lib.libraryOrcabusId}`}
+                    className={classNames(
+                      'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+                    )}
+                  >
+                    {lib.libraryId}
+                  </Link>
+                </div>
+              );
+            })}
+          </Fragment>
+        );
+      },
+      cellClassName: cellColor.cellClassName,
     },
-  },
-  {
-    header: 'Phenotype',
-    accessor: 'phenotype',
-    cell: multiRowCel,
-  },
-  {
-    header: 'Workflow',
-    accessor: 'workflow',
-    cell: multiRowCel,
-  },
-  {
-    header: 'Quality',
-    accessor: 'quality',
-    cell: multiRowCel,
-  },
-  {
-    header: 'Type',
-    accessor: 'type',
-    cell: multiRowCel,
-  },
-  {
-    header: 'Assay',
-    accessor: 'assay',
-    cell: multiRowCel,
-  },
-  {
-    header: 'Coverage',
-    accessor: 'coverage',
-    cell: multiRowCel,
-  },
-];
+    {
+      header: 'Phenotype',
+      headerClassName: cellColor.headerClassName,
+      accessor: 'phenotype',
+      cell: multiRowCel,
+      cellClassName: cellColor.cellClassName,
+    },
+    {
+      header: 'Workflow',
+      headerClassName: cellColor.headerClassName,
+      accessor: 'workflow',
+      cell: multiRowCel,
+      cellClassName: cellColor.cellClassName,
+    },
+    {
+      header: 'Quality',
+      headerClassName: cellColor.headerClassName,
+      accessor: 'quality',
+      cell: multiRowCel,
+      cellClassName: cellColor.cellClassName,
+    },
+    {
+      header: 'Type',
+      headerClassName: cellColor.headerClassName,
+      accessor: 'type',
+      cell: multiRowCel,
+      cellClassName: cellColor.cellClassName,
+    },
+    {
+      header: 'Assay',
+      headerClassName: cellColor.headerClassName,
+      accessor: 'assay',
+      cell: multiRowCel,
+      cellClassName: cellColor.cellClassName,
+    },
+    {
+      header: 'Coverage',
+      headerClassName: cellColor.headerClassName,
+      accessor: 'coverage',
+      cell: multiRowCel,
+      cellClassName: cellColor.cellClassName,
+    },
+  ];
+};
 
-export const individualTableColumn: Column[] = [
-  {
-    header: 'Individual Id',
-    accessor: 'individualIds',
-    cell: (p: unknown) => {
-      const data = p as { individualId: string; individualOrcabusId: string }[];
-      return (
-        <Fragment>
-          {data.map((idv, idx) => {
-            if (!idv.individualId) {
-              return <div key={idx}>-</div>;
-            }
-            return (
-              <div className='py-2' key={idx}>
-                {idv.individualId}
-                {/* <Link
+export const individualTableColumn = (): Column[] => {
+  const cellColor = {
+    headerClassName: 'bg-orange-100',
+    cellClassName: 'bg-orange-50',
+  };
+  return [
+    {
+      header: 'Individual Id',
+      accessor: 'individualIds',
+      headerGroup: {
+        label: 'Individual',
+        colSpan: 2,
+        additionalClassName: cellColor.headerClassName,
+      },
+      cell: (p: unknown) => {
+        const data = p as { individualId: string; individualOrcabusId: string }[];
+        return (
+          <Fragment>
+            {data.map((idv, idx) => {
+              if (!idv.individualId) {
+                return <div key={idx}>-</div>;
+              }
+              return (
+                <div className='py-2' key={idx}>
+                  {idv.individualId}
+                  {/* <Link
                   to={`individual/${idv.individualId}`}
                   className={classNames(
                     'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
@@ -221,16 +254,21 @@ export const individualTableColumn: Column[] = [
                 >
                   {idv.individualId}
                 </Link> */}
-              </div>
-            );
-          })}
-        </Fragment>
-      );
+                </div>
+              );
+            })}
+          </Fragment>
+        );
+      },
+      headerClassName: cellColor.headerClassName,
+      cellClassName: cellColor.cellClassName,
     },
-  },
-  {
-    header: 'Individual Record Source',
-    accessor: 'individualSource',
-    cell: multiRowCel,
-  },
-];
+    {
+      header: 'Individual Record Source',
+      accessor: 'individualSource',
+      cell: multiRowCel,
+      headerClassName: cellColor.headerClassName,
+      cellClassName: cellColor.cellClassName,
+    },
+  ];
+};

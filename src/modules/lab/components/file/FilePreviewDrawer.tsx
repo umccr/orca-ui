@@ -21,7 +21,7 @@ export const FilePreviewDrawer = ({ s3Record }: { s3Record: S3Record }) => {
   return (
     <>
       {isFileAllowed && isFileSizeAllowed ? (
-        <Suspense fallback={<Spinner />}>
+        <>
           <Drawer
             title={getFilenameFromKey(s3Key)}
             isOpen={isFilePreview}
@@ -31,7 +31,9 @@ export const FilePreviewDrawer = ({ s3Record }: { s3Record: S3Record }) => {
             dialogPanelClassName='!max-w-full'
             content={
               <DetailedErrorBoundary errorTitle='Unable to open file viewer'>
-                <FileViewer bucket={bucket} s3Key={s3Key} s3ObjectId={s3ObjectId} />
+                <Suspense fallback={<Spinner />}>
+                  <FileViewer bucket={bucket} s3Key={s3Key} s3ObjectId={s3ObjectId} />
+                </Suspense>
               </DetailedErrorBoundary>
             }
           />
@@ -47,7 +49,7 @@ export const FilePreviewDrawer = ({ s3Record }: { s3Record: S3Record }) => {
           >
             <EyeIcon className='size-4' />
           </Button>
-        </Suspense>
+        </>
       ) : (
         <div className='relative group'>
           <span className='invisible absolute rounded shadow-lg p-1 bg-gray-100 text-red-500 -mt-8 group-hover:visible group-hover:z-50'>

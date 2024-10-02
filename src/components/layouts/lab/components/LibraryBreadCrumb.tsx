@@ -27,7 +27,7 @@ export const LibraryBreadCrumb: FC = () => {
     { name: 'LIBRARY', href: '/lab', isCurrent: false },
     {
       name: library.libraryId,
-      href: `/lab/library/${library.libraryId}`,
+      href: `/lab/library/${library.orcabusId}`,
       isCurrent: library.libraryId ? pathname.endsWith(library.libraryId) : false,
     },
   ];

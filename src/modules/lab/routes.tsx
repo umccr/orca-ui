@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Navigate, Outlet, RouteObject } from 'react-router-dom';
 import LibraryLayout from '@/components/layouts/lab/LibraryLayout';
 import MetadataLayout from '@/components/layouts/lab/MetadataLayout';
+import { DetailedErrorBoundary } from '@/components/common/error';
 // import SubjectLayout from '@/components/layouts/lab/SubjectLayout';
 
 const MetadataPage = lazy(() => import('@/modules/lab/pages/Metadata'));
@@ -30,7 +31,11 @@ const LibraryWorkflowPage = lazy(() => import('@/modules/lab/pages/library/Libra
 
 export const Router: RouteObject = {
   path: 'lab',
-  element: <Outlet />,
+  element: (
+    <DetailedErrorBoundary>
+      <Outlet />
+    </DetailedErrorBoundary>
+  ),
   children: [
     {
       path: '',
@@ -46,9 +51,11 @@ export const Router: RouteObject = {
     {
       path: 'library',
       element: (
-        <LibraryLayout>
-          <Outlet />
-        </LibraryLayout>
+        <DetailedErrorBoundary errorTitle='Unable to load library'>
+          <LibraryLayout>
+            <Outlet />
+          </LibraryLayout>
+        </DetailedErrorBoundary>
       ),
       children: [
         {

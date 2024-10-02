@@ -5,7 +5,7 @@ import { components } from '@/api/types/metadata';
 import { Column, Table } from '@/components/tables';
 import { classNames } from '@/utils/commonUtils';
 import { Link } from 'react-router-dom';
-import { getCurrentSortDirection, getSetSortValue } from '@/components/tables/Table';
+import { getCurrentSortDirection, getSortValue } from '@/components/tables/Table';
 import { LibraryTableFilter } from '@/modules/lab/components/library/LibraryTableFilter';
 import { Search } from '@/components/common/search';
 
@@ -25,6 +25,7 @@ export const LibraryListAPITable = ({ queryParams }: { queryParams: LibraryListQ
   const pagination = data.pagination;
   return (
     <Table
+      inCard={false}
       tableHeader={
         <div className='flex flex-col md:flex-row'>
           <div className='flex items-center justify-center'>{'Library Table'}</div>
@@ -70,9 +71,12 @@ export const LibraryListAPITable = ({ queryParams }: { queryParams: LibraryListQ
  */
 const processLibraryResults = (data: components['schemas']['LibraryDetail'][]) => {
   return data.map((library) => {
-    const rec: Record<string, null | string> = {
+    const rec: Record<string, unknown> = {
       // Library Model
-      libraryId: '-',
+      libraryIds: {
+        orcabusId: library.orcabusId,
+        libraryId: library.libraryId,
+      },
       phenotype: '-',
       workflow: '-',
       quality: '-',
@@ -123,23 +127,24 @@ export const getLibraryTableColumn = ({
 }): Column[] => [
   {
     header: 'Library Id',
-    accessor: 'libraryId',
+    headerGroup: { colSpan: 7 },
+    accessor: 'libraryIds',
     onSort: setSort
       ? () => {
-          setSort(getSetSortValue(currentSort, 'library_id'));
+          setSort(getSortValue(currentSort, 'library_id'));
         }
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'library_id'),
     cell: (p: unknown) => {
-      const libId = p as string[];
+      const ids = p as { orcabusId: string; libraryId: string };
       return (
         <Link
-          to={`/lab/library/${libId}`}
+          to={`/lab/library/${ids.libraryId}`}
           className={classNames(
             'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
           )}
         >
-          {libId}
+          {ids.libraryId}
         </Link>
       );
     },
@@ -149,7 +154,7 @@ export const getLibraryTableColumn = ({
     accessor: 'phenotype',
     onSort: setSort
       ? () => {
-          setSort(getSetSortValue(currentSort, 'phenotype '));
+          setSort(getSortValue(currentSort, 'phenotype '));
         }
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'phenotype'),
@@ -159,7 +164,7 @@ export const getLibraryTableColumn = ({
     accessor: 'workflow',
     onSort: setSort
       ? () => {
-          setSort(getSetSortValue(currentSort, 'workflow'));
+          setSort(getSortValue(currentSort, 'workflow'));
         }
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'workflow'),
@@ -169,7 +174,7 @@ export const getLibraryTableColumn = ({
     accessor: 'quality',
     onSort: setSort
       ? () => {
-          setSort(getSetSortValue(currentSort, 'quality'));
+          setSort(getSortValue(currentSort, 'quality'));
         }
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'quality'),
@@ -179,7 +184,7 @@ export const getLibraryTableColumn = ({
     accessor: 'type',
     onSort: setSort
       ? () => {
-          setSort(getSetSortValue(currentSort, 'type'));
+          setSort(getSortValue(currentSort, 'type'));
         }
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'type'),
@@ -189,7 +194,7 @@ export const getLibraryTableColumn = ({
     accessor: 'assay',
     onSort: setSort
       ? () => {
-          setSort(getSetSortValue(currentSort, 'assay'));
+          setSort(getSortValue(currentSort, 'assay'));
         }
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'assay'),
@@ -199,7 +204,7 @@ export const getLibraryTableColumn = ({
     accessor: 'coverage',
     onSort: setSort
       ? () => {
-          setSort(getSetSortValue(currentSort, 'coverage'));
+          setSort(getSortValue(currentSort, 'coverage'));
         }
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'coverage'),
@@ -214,12 +219,13 @@ const getSampleColumn = (): Column[] => {
   return [
     {
       header: 'Sample Id',
+      headerGroup: { label: 'Sample', colSpan: 3, additionalClassName: cellColor.headerClassName },
       accessor: 'sampleId',
       headerClassName: cellColor.headerClassName,
       cellClassName: cellColor.cellClassName,
     },
     {
-      header: 'ExternalSampleId',
+      header: 'External Sample Id',
       accessor: 'externalSampleId',
       headerClassName: cellColor.headerClassName,
       cellClassName: cellColor.cellClassName,
@@ -243,6 +249,7 @@ const getSubjectColumn = (): Column[] => {
     {
       header: 'Subject Id',
       headerClassName: cellColor.headerClassName,
+      headerGroup: { label: 'Subject', colSpan: 1, additionalClassName: cellColor.headerClassName },
       accessor: 'subjectId',
       cell: (data: unknown) => {
         const subjectId = data as string[];

@@ -41,7 +41,7 @@ export const SubjectTableFilter = () => {
     <PopoverDropdown
       btnChildren={
         <Button
-          type='green'
+          type='gray'
           size='sm'
           className='w-full justify-center rounded-md ring-gray-300 ring-1'
         >

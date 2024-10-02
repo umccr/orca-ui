@@ -13,6 +13,7 @@ export default function MetadataPage() {
   const { getQueryParams, setQueryParams } = useQueryParams();
 
   const queryParams = getQueryParams();
+
   const currentTabSelection = queryParams.tab ?? 'library';
 
   // sanitise to remove tab from query params

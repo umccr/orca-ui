@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { FC, Fragment, ReactNode } from 'react';
 import { classNames } from '@/utils/commonUtils';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import Pagination, { PaginationProps } from './Pagination';
@@ -8,6 +8,7 @@ export type TableData = Record<string, unknown>;
 export type Column = {
   header: string;
   headerClassName?: string;
+  headerGroup?: { label?: string; colSpan: number; additionalClassName?: string };
   accessor: string;
   cell?: (data: unknown) => ReactNode;
   cellClassName?: string;
@@ -56,7 +57,33 @@ const Table: FC<TableProps> = ({
               )}
             >
               <table className='min-w-full divide-y divide-gray-300'>
-                <thead className={classNames(inCard ? 'bg-gray-50' : '')}>
+                {/* Experiment additional <thead /> to group column description */}
+                <thead>
+                  {columns.find((c) => !!c.headerGroup) && (
+                    <tr>
+                      {columns.map((columnProp, index) => {
+                        const group = columnProp.headerGroup;
+                        if (!group) {
+                          return <Fragment key={`subheader-${index}`} />;
+                        }
+
+                        return (
+                          <th
+                            key={`subheader-${index}`}
+                            colSpan={group.colSpan}
+                            className={classNames(
+                              'px-3 py-3.5 text-center text-sm font-semibold rounded-t-lg',
+                              group.additionalClassName ? group.additionalClassName : ''
+                            )}
+                          >
+                            {group.label}
+                          </th>
+                        );
+                      })}
+                    </tr>
+                  )}
+                </thead>
+                <thead className={classNames('bg-gray-50')}>
                   <tr>
                     {columns &&
                       columns.map((column, index) => (
@@ -176,7 +203,7 @@ export const getCurrentSortDirection = (currentSort: string | undefined, key: st
   return 'asc';
 };
 
-export const getSetSortValue = (currentSort: string | undefined, key: string) => {
+export const getSortValue = (currentSort: string | undefined, key: string) => {
   const currentSortDirection = getCurrentSortDirection(currentSort, key);
 
   // Going the opposite here from the current sort direction
