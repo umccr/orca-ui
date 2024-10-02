@@ -71,11 +71,11 @@ export const SampleListAPITable = ({ queryParams }: { queryParams: SampleListQue
 const processDataResults = (data: components['schemas']['SampleDetail'][]) => {
   return data.map((smp) => {
     const rec = {
-      // Library Model
       sampleIds: {
         orcabusId: smp.orcabusId,
         sampleId: smp.sampleId,
       },
+      externalSampleId: smp.externalSampleId ?? '-',
       source: smp.source ?? '-',
 
       // libraries

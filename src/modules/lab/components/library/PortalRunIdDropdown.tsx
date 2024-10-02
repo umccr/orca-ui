@@ -1,6 +1,6 @@
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Dropdown } from '@/components/common/dropdowns';
-import { useWorkflowRunListModel } from '@/api/workflow';
+import { useSuspenseWorkflowRunListModel } from '@/api/workflow';
 import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
 
 export const PortalRunIdDropdown = ({
@@ -14,7 +14,7 @@ export const PortalRunIdDropdown = ({
 }) => {
   const navigate = useNavigate();
 
-  const workflowRun = useWorkflowRunListModel({
+  const workflowRun = useSuspenseWorkflowRunListModel({
     params: {
       query: {
         libraries__libraryId: libraryId,
@@ -26,7 +26,6 @@ export const PortalRunIdDropdown = ({
   }).data;
 
   const workflowRunResults = workflowRun?.results;
-
   if (!workflowRunResults?.length) {
     throw new Error('No workflow run found!');
   }
