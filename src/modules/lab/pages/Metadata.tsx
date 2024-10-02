@@ -5,6 +5,7 @@ import { SpinnerWithText } from '@/components/common/spinner';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { IndividualListAPITable } from '../components/individual/IndividualListAPITable';
 import { SampleListAPITable } from '../components/sample/SampleListAPITable';
+import { Navigate } from 'react-router-dom';
 
 const selectedClassName =
   'inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500';
@@ -17,6 +18,10 @@ export default function MetadataPage() {
   const queryParams = getQueryParams();
 
   const currentTabSelection = queryParams.tab;
+
+  if (!currentTabSelection) {
+    return <Navigate to='/lab?tab=library' replace />;
+  }
 
   // sanitise to remove tab from query params
   const passInQueryParams = { ...queryParams };
