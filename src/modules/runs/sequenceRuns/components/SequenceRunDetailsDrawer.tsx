@@ -29,16 +29,18 @@ const SequenceRunDetailsDrawer: FC<SequenceRunDetailsDrawerProps> = ({
     }
   }, [selectedSequenceRunId]);
 
+  const selectedSequenceRun = selectedSequenceRunData || sequenceRunDetail;
+
   const sequenceRunDetailData = useMemo(() => {
-    return selectedSequenceRunData
+    return selectedSequenceRun
       ? Object.fromEntries(
-          Object.entries(selectedSequenceRunData).map(([key, value]) => [
+          Object.entries(selectedSequenceRun).map(([key, value]) => [
             key,
             value?.toString() ?? null,
           ])
         )
       : null;
-  }, [selectedSequenceRunData]);
+  }, [selectedSequenceRun]);
 
   const handleCloseDrawer = () => {
     // call onCloseDrawer func after close drawer closed
@@ -48,7 +50,6 @@ const SequenceRunDetailsDrawer: FC<SequenceRunDetailsDrawerProps> = ({
     });
   };
 
-  console.log('11111', sequenceRunDetail, sequenceRunDetailData);
   return (
     <SideDrawer
       title='Sequence Run Details'
