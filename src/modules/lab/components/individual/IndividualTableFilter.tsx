@@ -7,10 +7,10 @@ import { FunnelIcon } from '@heroicons/react/24/outline';
 
 type FilterType = {
   orcabusId?: string[];
-  subjectId?: string[];
+  individualId?: string[];
 };
 
-export const SubjectTableFilter = () => {
+export const IndividualTableFilter = () => {
   const [filter, setFilter] = useState<FilterType>({});
 
   const { setQueryParams, getQueryParams, clearQueryParams } = useQueryParams();
@@ -24,7 +24,7 @@ export const SubjectTableFilter = () => {
     setFilter((prev) => ({ ...prev, [key]: value }));
   };
 
-  const SubjectFilter = () => (
+  const IndividualFilter = () => (
     <>
       <FilterTextInput
         title='Orcabus Id *'
@@ -33,9 +33,9 @@ export const SubjectTableFilter = () => {
         handleFilterChange={handleFilterChange}
       />
       <FilterTextInput
-        title='Subject Id *'
-        keyFilter='subjectId'
-        defaultInput={filter.subjectId ? filter.subjectId : []}
+        title='Individual Id *'
+        keyFilter='individualId'
+        defaultInput={filter.individualId ? filter.individualId : []}
         handleFilterChange={handleFilterChange}
       />
       <div className='border-b-2 mb-2 pb-2 italic text-s	text-gray-700 font-thin	'>
@@ -58,7 +58,7 @@ export const SubjectTableFilter = () => {
       content={
         <div className='z-10 bg-white rounded-lg w-80'>
           <div className='max-h-[250px] px-3 pb-3 overflow-y-auto text-sm text-gray-700 '>
-            <SubjectFilter />
+            <IndividualFilter />
           </div>
           <ClosePopoverWrapper className='mt-4'>
             <Button

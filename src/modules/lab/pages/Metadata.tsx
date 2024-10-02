@@ -3,6 +3,8 @@ import { SubjectListAPITable } from '../components/subject/SubjectListAPITable';
 import { Suspense } from 'react';
 import { SpinnerWithText } from '@/components/common/spinner';
 import { useQueryParams } from '@/hooks/useQueryParams';
+import { IndividualListAPITable } from '../components/individual/IndividualListAPITable';
+import { SampleListAPITable } from '../components/sample/SampleListAPITable';
 
 const selectedClassName =
   'inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500';
@@ -28,6 +30,20 @@ export default function MetadataPage() {
     {
       label: 'subject',
       content: <SubjectListAPITable queryParams={passInQueryParams} />,
+    },
+    {
+      label: 'individual',
+      content: <IndividualListAPITable queryParams={passInQueryParams} />,
+    },
+    {
+      label: 'sample',
+      content: <SampleListAPITable queryParams={passInQueryParams} />,
+    },
+    {
+      label: 'MODEL',
+      content: (
+        <img src='https://raw.githubusercontent.com/umccr/orcabus/refs/heads/main/lib/workload/stateless/stacks/metadata-manager/docs/schema.drawio.svg' />
+      ),
     },
   ];
 

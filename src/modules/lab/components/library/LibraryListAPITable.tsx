@@ -8,15 +8,17 @@ import { Link } from 'react-router-dom';
 import { getCurrentSortDirection, getSortValue } from '@/components/tables/Table';
 import { LibraryTableFilter } from '@/modules/lab/components/library/LibraryTableFilter';
 import { Search } from '@/components/common/search';
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import { Tooltip } from '@/components/common/tooltips';
 
 export const LibraryListAPITable = ({ queryParams }: { queryParams: LibraryListQueryParams }) => {
   const { setQueryParams, getPaginationParams } = useQueryParams();
 
-  const fullLibraryModel = useMetadataLibraryModel({
+  const libraryModel = useMetadataLibraryModel({
     params: { query: { ...queryParams, ...getPaginationParams() } },
   });
 
-  const data = fullLibraryModel.data;
+  const data = libraryModel.data;
   if (!data) {
     throw new Error('No subject data found!');
   }
@@ -46,6 +48,7 @@ export const LibraryListAPITable = ({ queryParams }: { queryParams: LibraryListQ
         }),
         ...getSubjectColumn(),
         ...getSampleColumn(),
+        ...getProjectColumn(),
       ]}
       tableData={flatData}
       paginationProps={{
@@ -77,37 +80,34 @@ const processLibraryResults = (data: components['schemas']['LibraryDetail'][]) =
         orcabusId: library.orcabusId,
         libraryId: library.libraryId,
       },
-      phenotype: '-',
-      workflow: '-',
-      quality: '-',
-      type: '-',
-      assay: '-',
-      coverage: '-',
+      libraryId: library.libraryId ?? '-',
+      phenotype: library.phenotype ?? '-',
+      workflow: library.workflow ?? '-',
+      quality: library.quality ?? '-',
+      type: library.type ?? '-',
+      assay: library.assay ?? '-',
+      coverage: library.coverage?.toString() ?? '-',
 
       // Sample Model
-      sampleId: '-',
-      externalSampleId: '-',
-      source: '-',
+      sampleIds: {
+        orcabusId: library.sample.orcabusId,
+        sampleId: library.sample.sampleId,
+      },
+      sampleExternalId: library.sample.externalSampleId ?? '-',
+      sampleSource: library.sample.source ?? '-',
 
       // Subject Model
-      subjectId: '-',
+      subjectIds: {
+        orcabusId: library.subject.orcabusId,
+        subjectId: library.subject.subjectId,
+      },
+
+      // Project Model
+      projectIds: library.projectSet.map((project) => ({
+        orcabusId: project.orcabusId,
+        projectId: project.projectId,
+      })),
     };
-
-    rec.libraryId = library.libraryId ?? '-';
-    rec.phenotype = library.phenotype ?? '-';
-    rec.workflow = library.workflow ?? '-';
-    rec.quality = library.quality ?? '-';
-    rec.type = library.type ?? '-';
-    rec.assay = library.assay ?? '-';
-    rec.coverage = library.coverage?.toString() ?? '-';
-
-    const sample = library.sample;
-    rec.sampleId = sample.sampleId ?? '-';
-    rec.externalSampleId = sample.externalSampleId ?? '-';
-    rec.source = sample.source ?? '-';
-
-    const subject = library.subject;
-    rec.subjectId = subject.subjectId ?? '-';
 
     return rec;
   });
@@ -220,19 +220,32 @@ const getSampleColumn = (): Column[] => {
     {
       header: 'Sample Id',
       headerGroup: { label: 'Sample', colSpan: 3, additionalClassName: cellColor.headerClassName },
-      accessor: 'sampleId',
+      accessor: 'sampleIds',
       headerClassName: cellColor.headerClassName,
+      cell: (data: unknown) => {
+        const ids = data as { orcabusId: string; sampleId: string };
+        return (
+          <Link
+            to={`/lab/?tab=sample&orcabusId=${ids.orcabusId}`}
+            className={classNames(
+              'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+            )}
+          >
+            {ids.sampleId ?? '-'}
+          </Link>
+        );
+      },
       cellClassName: cellColor.cellClassName,
     },
     {
       header: 'External Sample Id',
-      accessor: 'externalSampleId',
+      accessor: 'sampleExternalId',
       headerClassName: cellColor.headerClassName,
       cellClassName: cellColor.cellClassName,
     },
     {
       header: 'Source',
-      accessor: 'source',
+      accessor: 'sampleSource',
       headerClassName: cellColor.headerClassName,
       cellClassName: cellColor.cellClassName,
     },
@@ -247,21 +260,71 @@ const getSubjectColumn = (): Column[] => {
 
   return [
     {
-      header: 'Subject Id',
+      header: (
+        <div className='flex flex-row items-center'>
+          <div>Subject Id</div>
+          <Tooltip
+            text={`This is now the 'ExternalSubjectID' from the tracking sheet`}
+            position='top'
+          >
+            <InformationCircleIcon className='h-4	ml-2' />
+          </Tooltip>
+        </div>
+      ),
       headerClassName: cellColor.headerClassName,
       headerGroup: { label: 'Subject', colSpan: 1, additionalClassName: cellColor.headerClassName },
-      accessor: 'subjectId',
+      accessor: 'subjectIds',
       cell: (data: unknown) => {
-        const subjectId = data as string[];
+        const subjectIds = data as { orcabusId: string; subjectId: string };
         return (
           <Link
-            to={`/lab/subject/${subjectId}`}
+            to={`/lab/?tab=subject&orcabusId=${subjectIds.orcabusId}`}
             className={classNames(
               'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
             )}
           >
-            {subjectId}
+            {subjectIds.subjectId ?? '-'}
           </Link>
+        );
+      },
+      cellClassName: cellColor.cellClassName,
+    },
+  ];
+};
+
+const getProjectColumn = (): Column[] => {
+  const cellColor = {
+    headerClassName: 'bg-indigo-100',
+    cellClassName: 'bg-indigo-50',
+  };
+
+  return [
+    {
+      header: 'Project Id',
+      headerClassName: cellColor.headerClassName,
+      headerGroup: { label: 'Project', colSpan: 1, additionalClassName: cellColor.headerClassName },
+      accessor: 'projectIds',
+      cell: (p: unknown) => {
+        const data = p as { projectId: string; orcabusId: string }[];
+        return (
+          <>
+            {data.map((projectIds, idx) => {
+              return (
+                <div className='py-2' key={idx}>
+                  {projectIds.projectId ?? '-'}
+                  {/* 
+                  <Link
+                    to={`lab/?tab=project&orcabusId=${projectIds.orcabusId}`}
+                    className={classNames(
+                      'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+                    )}
+                  >
+                    {projectIds.projectId ?? '-'}
+                  </Link> */}
+                </div>
+              );
+            })}
+          </>
         );
       },
       cellClassName: cellColor.cellClassName,

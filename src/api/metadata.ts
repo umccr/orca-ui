@@ -28,6 +28,14 @@ export type WorkflowEnum = components['schemas']['WorkflowEnum'];
 
 export type LibraryListQueryParams = operations['apiV1LibraryList']['parameters']['query'];
 export type SubjectListQueryParams = operations['apiV1SubjectList']['parameters']['query'];
+export type IndividualListQueryParams = operations['apiV1IndividualList']['parameters']['query'];
+export type SampleListQueryParams = operations['apiV1SampleList']['parameters']['query'];
+export type ContactListQueryParams = operations['apiV1ContactList']['parameters']['query'];
+export type ProjectListQueryParams = operations['apiV1ProjectList']['parameters']['query'];
 
 export const useMetadataSubjectModel = createMetadataFetchingHook('/api/v1/subject/');
 export const useMetadataLibraryModel = createMetadataFetchingHook('/api/v1/library/');
+export const useMetadataIndividualModel = createMetadataFetchingHook('/api/v1/individual/');
+export const useMetadataSampleModel = createMetadataFetchingHook('/api/v1/sample/');
+export const useMetadataContactModel = createMetadataFetchingHook('/api/v1/contact/');
+export const useMetadataProjectModel = createMetadataFetchingHook('/api/v1/project/');

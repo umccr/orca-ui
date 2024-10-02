@@ -6,7 +6,7 @@ import Pagination, { PaginationProps } from './Pagination';
 export type TableData = Record<string, unknown>;
 
 export type Column = {
-  header: string;
+  header: ReactNode;
   headerClassName?: string;
   headerGroup?: { label?: string; colSpan: number; additionalClassName?: string };
   accessor: string;
@@ -210,7 +210,7 @@ export const getSortValue = (currentSort: string | undefined, key: string) => {
   return `${currentSortDirection === 'desc' ? '' : '-'}${key}`;
 };
 
-export const multiRowCel = (p: unknown) => {
+export const multiRowCell = (p: unknown) => {
   const data = p as string[];
   return (
     <>

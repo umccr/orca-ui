@@ -246,7 +246,6 @@ export interface components {
             assay?: string | null;
             /** Format: double */
             coverage?: number | null;
-            sample?: string | null;
             subject?: string | null;
         };
         LibraryDetail: {
@@ -345,7 +344,7 @@ export interface components {
             };
             results: components["schemas"]["ProjectDetail"][];
         };
-        PaginatedSampleList: {
+        PaginatedSampleDetailList: {
             links: {
                 /**
                  * Format: uri
@@ -363,7 +362,7 @@ export interface components {
                 page?: number;
                 rowsPerPage?: number;
             };
-            results: components["schemas"]["Sample"][];
+            results: components["schemas"]["SampleDetail"][];
         };
         PaginatedSubjectDetailList: {
             links: {
@@ -415,6 +414,13 @@ export interface components {
         QualityEnum: "very-poor" | "poor" | "good" | "borderline";
         Sample: {
             readonly orcabusId: string;
+            sampleId?: string | null;
+            externalSampleId?: string | null;
+            source?: (components["schemas"]["SourceEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+        };
+        SampleDetail: {
+            readonly orcabusId: string;
+            readonly librarySet: components["schemas"]["Library"][];
             sampleId?: string | null;
             externalSampleId?: string | null;
             source?: (components["schemas"]["SourceEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
@@ -619,7 +625,6 @@ export interface operations {
                 quality?: "very-poor" | "poor" | "good" | "borderline" | "" | null;
                 /** @description Number of results to return per page. */
                 rowsPerPage?: number;
-                sample?: string | null;
                 /** @description A search term. */
                 search?: string;
                 subject?: string | null;
@@ -783,7 +788,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedSampleList"];
+                    "application/json": components["schemas"]["PaginatedSampleDetailList"];
                 };
             };
         };
@@ -805,7 +810,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Sample"];
+                    "application/json": components["schemas"]["SampleDetail"];
                 };
             };
         };

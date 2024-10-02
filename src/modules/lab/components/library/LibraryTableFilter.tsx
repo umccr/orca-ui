@@ -8,6 +8,7 @@ import { FunnelIcon } from '@heroicons/react/24/outline';
 import { classNames } from '@/utils/commonUtils';
 
 type FilterType = {
+  orcabusId?: string[];
   libraryId?: string[];
   assay?: string[];
   coverage__gte?: string;
@@ -79,6 +80,12 @@ export const LibraryTableFilter = () => {
 
   const LibraryFilter = () => (
     <>
+      <FilterTextInput
+        title='Orcabus Id *'
+        keyFilter='orcabusId'
+        defaultInput={filter.orcabusId ? filter.orcabusId : []}
+        handleFilterChange={handleFilterChange}
+      />
       <FilterTextInput
         title='Library Id *'
         keyFilter='libraryId'
