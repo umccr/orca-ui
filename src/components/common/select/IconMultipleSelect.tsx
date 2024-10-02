@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useMemo, FunctionComponent, SVGProps } from 'react';
 import { Menu, MenuButton, MenuItems, MenuItem, Checkbox, Field, Label } from '@headlessui/react';
 // import { Popover, PopoverButton, PopoverPanel, useClose } from '@headlessui/react';
 import { FunnelIcon } from '@heroicons/react/24/outline';
@@ -14,44 +14,56 @@ export interface SelectItems {
 }
 
 interface IconMultipleSelectProps {
-  value: (string | number)[];
+  selectedItemValues: (string | number)[];
   options: SelectItems[];
   onClear?: () => void;
   onApply: (value: (string | number)[]) => void;
   className?: string;
-  hasSelected?: boolean;
-  BtnIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-  SelectedBtnIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  BtnIcon?: FunctionComponent<SVGProps<SVGSVGElement>>;
+  SelectedBtnIcon?: FunctionComponent<SVGProps<SVGSVGElement>>;
+  selectAllOptionValue?: string | number;
+  hasSelectAllOption?: boolean;
 }
 
 const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
   BtnIcon = FunnelIcon,
   SelectedBtnIcon = SolidFunnelIcon,
   options,
-  value,
+  selectedItemValues,
   onApply,
   className = '',
-  hasSelected = false,
+  hasSelectAllOption = false,
+  selectAllOptionValue = '-1',
 }) => {
-  const [selected, setSelected] = useState<(string | number)[]>(value);
-  const [inputValue, setInputValue] = useState<(string | number)[]>(value);
+  const [selected, setSelected] = useState<(string | number)[]>(selectedItemValues);
+  const [inputValue, setInputValue] = useState<(string | number)[]>(selectedItemValues);
 
   useEffect(() => {
-    setSelected(value);
-    setInputValue(value);
-  }, [value]);
+    setSelected(selectedItemValues);
+    setInputValue(selectedItemValues);
+  }, [selectedItemValues]);
 
-  const selectedValues = options
-    .filter((option) => selected.includes(option.value))
-    .map((option) => option.label + (option.secondaryLabel ? ` (${option.secondaryLabel})` : ''));
+  const hasSelected = useMemo(
+    () => selected.length > 0 && selected.some((item) => item !== selectAllOptionValue),
+    [selected, selectAllOptionValue]
+  );
+
+  const selectedValues = useMemo(
+    () =>
+      options
+        .filter((option) => selected.includes(option.value))
+        .map(
+          (option) => option.label + (option.secondaryLabel ? ` (${option.secondaryLabel})` : '')
+        ),
+    [options, selected]
+  );
 
   return (
     <Menu as='div' className='relative inline-block text-left'>
       <Tooltip
-        text={`${selectedValues ? selectedValues.join(', ') : ''}`}
+        text={`${selectedValues ? `Filter by: ${selectedValues.join(', ')}` : ''}`}
         position='top'
         background='white'
-        isShow={hasSelected}
       >
         <MenuButton
           className={classNames(
@@ -78,7 +90,7 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
         className='absolute right-0 z-10 mt-2 w-72 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] data-[closed]:scale-95 data-[closed]:opacity-0'
         anchor='bottom end'
       >
-        <div className='text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-2 pb-2 px-3'>
+        <div className='text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-2 pb-2 px-3 bg-gray-50 border-b border-gray-200'>
           Filters
         </div>
         {options.map((option, key) => (
@@ -90,13 +102,32 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
             )}
           >
             {option.label && (
-              <Field className={classNames('flex items-center w-full')}>
+              <Field className={classNames('flex items-center w-full', 'hover:bg-gray-100')}>
                 <Checkbox
                   as='button'
                   checked={selected.some((item) => item === option.value)}
                   onChange={(checked) => {
                     if (checked) {
-                      setSelected([...selected, option.value]);
+                      const isSelectAll = option.value === selectAllOptionValue;
+                      const hasSelectAll = selected.includes(selectAllOptionValue);
+
+                      if (hasSelectAllOption) {
+                        if (hasSelectAll) {
+                          // 1. when select ietem other than remove select all value, and add option value
+                          setSelected([
+                            ...selected.filter((item) => item !== selectAllOptionValue),
+                            option.value,
+                          ]);
+                        } else if (isSelectAll) {
+                          // 2. when select all option is selected, remove all selected items, just add select all option
+                          setSelected([selectAllOptionValue]);
+                        } else {
+                          // 3. when select all option is not selected, add option value
+                          setSelected([...selected, option.value]);
+                        }
+                      } else {
+                        setSelected([...selected, option.value]);
+                      }
                     } else {
                       setSelected(selected.filter((item) => item !== option.value));
                     }

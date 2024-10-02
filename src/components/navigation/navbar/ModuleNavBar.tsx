@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { classNames } from '@/utils/commonUtils';
-import { FC, useState } from 'react';
+import { FC, useState, ReactNode } from 'react';
 import { XMarkIcon } from '@heroicons/react/16/solid';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 
@@ -16,7 +16,7 @@ export interface NavigationItem {
 
 export interface ModuleNavbarProps {
   navigation: NavigationItem[];
-  footer?: React.ReactNode;
+  footer?: ReactNode;
 }
 
 const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {

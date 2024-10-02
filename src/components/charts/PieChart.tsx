@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef, FC } from 'react';
 import * as d3 from 'd3';
 
 interface PieChartProps {
@@ -16,7 +16,7 @@ interface ArcData {
   endAngle: number;
 }
 
-const PieChart: React.FC<PieChartProps> = ({ data, width, height }) => {
+const PieChart: FC<PieChartProps> = ({ data, width, height }) => {
   const ref = useRef<SVGSVGElement>(null);
   function calcTranslate(data: ArcData, move = 5) {
     const moveAngle = data.startAngle + (data.endAngle - data.startAngle) / 2;

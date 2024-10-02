@@ -1,6 +1,8 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, FunctionComponent, SVGProps } from 'react';
 import { classNames } from '@/utils/commonUtils';
 import { Tooltip } from '../tooltips';
+import { CheckCircleIcon } from '@heroicons/react/24/outline';
+import { Badge } from '@/components/common/badges';
 
 interface TimelineEvent {
   id: number;
@@ -9,6 +11,7 @@ interface TimelineEvent {
   datetime: string;
   iconBackground: string;
   payloadId: number;
+  icon?: FunctionComponent<SVGProps<SVGSVGElement>>;
 }
 
 interface TimelineProps {
@@ -26,11 +29,11 @@ const Timeline: FC<TimelineProps> = ({ timeline, handldEventClick, selectId }) =
   }, [selectId]);
 
   return (
-    <div>
-      <ul role='list' className=''>
+    <div className='flow-root'>
+      <ul role='list' className='-mb-8'>
         {timeline.map((event, eventIdx) => (
           <li key={event.id}>
-            <div className='relative pb-8 flex items-center'>
+            <div className='relative pb-8'>
               {eventIdx !== timeline.length - 1 ? (
                 <span
                   aria-hidden='true'
@@ -49,30 +52,46 @@ const Timeline: FC<TimelineProps> = ({ timeline, handldEventClick, selectId }) =
                 size='small'
                 background='gray'
               >
-                <div className='relative flex space-x-3'>
+                <div
+                  className={classNames('relative flex space-x-3', 'cursor-pointer')}
+                  onClick={() => handldEventClick(event.payloadId)}
+                >
                   <div>
                     <div
                       className={classNames(
                         event.iconBackground,
-                        'flex h-8  items-center justify-center rounded-full',
-                        'cursor-pointer',
-                        selectedEventPayloadId === event.payloadId ? 'ring-2 ring-indigo-500' : ''
+                        'flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white'
                       )}
-                      onClick={() => handldEventClick(event.payloadId)}
                     >
-                      {/* <event.icon aria-hidden='true' className='h-5 w-5 text-white' /> */}
+                      {event.icon ? (
+                        <event.icon aria-hidden='true' className='h-5 w-5 text-white' />
+                      ) : (
+                        <CheckCircleIcon aria-hidden='true' className='h-5 w-5 text-green-500' />
+                      )}
                       {/* {event.icon} */}
-                      <p className='text-sm text-gray-500 px-4 py-2'>{event.content} </p>
+                      {/* <p className='text-sm text-gray-500 px-4 py-2'>{event.content} </p> */}
                     </div>{' '}
                   </div>
-                  {/* <div className='flex min-w-0 flex-1 justify-between space-x-4 pt-1.5'>
-                  <div>
-                    <p className='text-sm text-gray-500'>{event.content} </p>
+                  <div className='flex flex-col min-w-0 flex-1 justify-between py-0.5'>
+                    <div>
+                      <Badge
+                        status={event.content}
+                        className={
+                          selectedEventPayloadId === event.payloadId ? 'ring-2 ring-indigo-500' : ''
+                        }
+                      >
+                        {event.content}{' '}
+                      </Badge>
+                      {/* <div className='text-sm text-gray-500'>{event.content} </div> */}
+                    </div>
+                    <div className='whitespace-nowrap text-left text-sm text-gray-500'>
+                      <time dateTime={event.datetime}>{event.datetime}</time>
+                    </div>
+
+                    <div className='whitespace-nowrap text-left text-sm text-gray-500'>
+                      {event.comment}
+                    </div>
                   </div>
-                  <div className='whitespace-nowrap text-right text-sm text-gray-500'>
-                    <time dateTime={event.datetime}>{event.datetime}</time>
-                  </div>
-                </div> */}
                 </div>
               </Tooltip>
             </div>

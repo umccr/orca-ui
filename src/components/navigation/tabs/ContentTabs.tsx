@@ -43,7 +43,7 @@ export const Tabs: FC<TabsProps> = ({ tabs }) => {
           </TabList>
           <TabPanels className='mt-3'>
             {tabs.map(({ content }, index) => (
-              <TabPanel key={index} className='rounded-xl p-3'>
+              <TabPanel key={index} className='rounded-xl p-2'>
                 {content}
               </TabPanel>
             ))}

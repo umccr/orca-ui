@@ -5,6 +5,7 @@ import '@xyflow/react/dist/style.css';
 import 'flatpickr/dist/flatpickr.min.css';
 import '../src/styles/additional-styles/utility-patterns.css';
 import '../src/styles/additional-styles/flatpickr.css';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const preview: Preview = {
   parameters: {

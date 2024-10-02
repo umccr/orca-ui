@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef, FC } from 'react';
 import * as d3 from 'd3';
 
 interface DataItem {
@@ -12,7 +12,7 @@ interface ScatterplotMatrixProps {
   height: number;
 }
 
-const ScatterplotMatrix: React.FC<ScatterplotMatrixProps> = ({ data, width, height }) => {
+const ScatterplotMatrix: FC<ScatterplotMatrixProps> = ({ data, width, height }) => {
   const ref = useRef<SVGSVGElement>(null);
 
   useEffect(() => {

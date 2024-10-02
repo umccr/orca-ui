@@ -2,6 +2,8 @@ import { FC, Fragment, ReactNode } from 'react';
 import { classNames } from '@/utils/commonUtils';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import Pagination, { PaginationProps } from './Pagination';
+import { BackdropWithText } from '@/components/common/backdrop';
+import Skeleton from 'react-loading-skeleton';
 
 export type TableData = Record<string, unknown>;
 
@@ -10,8 +12,8 @@ export type Column = {
   headerClassName?: string;
   headerGroup?: { label?: string; colSpan: number; additionalClassName?: string };
   accessor: string;
-  cell?: (data: unknown) => ReactNode;
   cellClassName?: string;
+  cell?: (cellData: unknown, rowData: TableData) => ReactNode;
   onSort?: () => void;
   sortDirection?: 'asc' | 'desc';
 };
@@ -25,6 +27,7 @@ export interface TableProps {
   inCard?: boolean;
   stickyHeader?: boolean;
   paginationProps?: PaginationProps;
+  isFetchingData?: boolean;
 }
 
 const Table: FC<TableProps> = ({
@@ -36,20 +39,21 @@ const Table: FC<TableProps> = ({
   striped = false,
   inCard = true,
   stickyHeader = false,
+  isFetchingData = false,
 }) => {
   return (
-    <div className=''>
+    <div>
       <div className='sm:flex sm:items-center'>
         <div className='sm:flex-auto'>
           {tableHeader && (
-            <h1 className='text-base font-semibold leading-6 text-gray-900'>{tableHeader}</h1>
+            <h1 className='text-base font-semibold leading-7 text-gray-900'>{tableHeader}</h1>
           )}
           {tableDescription && <p className='mt-2 text-sm text-gray-700'>{tableDescription}</p>}
         </div>
       </div>
 
-      <div className='mt-2 flow-root'>
-        <div className='overflow-x-auto '>
+      <div className='pt-2 flow-root'>
+        <div className={classNames(tableData.length > 0 ? ' overflow-x-auto ' : '')}>
           <div className='inline-block min-w-full align-middle'>
             <div
               className={classNames(
@@ -91,7 +95,7 @@ const Table: FC<TableProps> = ({
                           key={`idx-${index}-${column.accessor}`}
                           scope='col'
                           className={classNames(
-                            'px-3 py-3.5 text-left text-sm font-semibold text-gray-900',
+                            'px-3 py-3 text-left text-sm font-semibold text-gray-900',
                             index == 0 ? 'pl-4 sm:pl-6 lg:pl-8' : '',
                             index == columns.length - 1 ? 'pr-4 sm:pr-6 lg:pr-8' : '',
                             stickyHeader
@@ -123,44 +127,68 @@ const Table: FC<TableProps> = ({
                       ))}
                   </tr>
                 </thead>
+
                 <tbody
                   className={classNames(
-                    'divide-y divide-gray-200 last:divide-gray-300',
+                    'relative min-h-10 divide-y divide-gray-200 last:divide-gray-300',
                     inCard ? 'bg-white' : ' bg-transparent'
                   )}
                 >
-                  {tableData.map((data, index) => (
-                    <tr
-                      key={index}
-                      className={classNames(
-                        striped ? 'even:bg-gray-50' : '',
-                        inCard ? 'hover:bg-gray-50' : ' hover:bg-gray-100'
-                      )}
-                    >
-                      {columns &&
-                        columns.map((column, index) => (
-                          <td
-                            key={index}
-                            className={classNames(
-                              'whitespace-nowrap py-2 px-3 text-sm font-medium text-gray-900',
-                              index == 0 ? 'pl-4 sm:pl-6' : '',
-                              index == columns.length - 1 ? 'pr-4 sm:pr-6' : '',
-                              column.cellClassName ? column.cellClassName : ''
-                            )}
-                          >
-                            {column.cell
-                              ? column.cell(data[column.accessor])
-                              : (data[column.accessor] as ReactNode)}
-                          </td>
-                        ))}
+                  {tableData.length > 0 && isFetchingData && (
+                    <tr>
+                      <td>
+                        <BackdropWithText text='Loading data...' isVisible={true} />
+                      </td>
                     </tr>
-                  ))}
+                  )}
+                  {tableData.length > 0
+                    ? tableData.map((data, index) => (
+                        <tr
+                          key={index}
+                          className={classNames(
+                            striped ? 'even:bg-gray-50' : '',
+                            inCard ? 'hover:bg-gray-50' : ' hover:bg-gray-100'
+                          )}
+                        >
+                          {columns &&
+                            columns.map((column, index) => (
+                              <td
+                                key={index}
+                                className={classNames(
+                                  'whitespace-nowrap py-2 px-3 text-sm font-medium text-gray-900',
+                                  index == 0 ? 'pl-4 sm:pl-6' : '',
+                                  index == columns.length - 1 ? 'pr-4 sm:pr-6' : ''
+                                )}
+                              >
+                                {column.cell
+                                  ? column.cell(data[column.accessor], data) // pass cell data and row data to cell renderer
+                                  : (data[column.accessor] as ReactNode)}
+                              </td>
+                            ))}
+                        </tr>
+                      ))
+                    : isFetchingData &&
+                      [...Array(10)].map((_, index) => (
+                        <tr key={index}>
+                          {columns.map((_column, index) => (
+                            <td
+                              key={index}
+                              className='whitespace-nowrap py-2 px-3 text-sm font-medium text-gray-900'
+                            >
+                              <Skeleton />
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
+      {tableData.length == 0 && !isFetchingData && (
+        <div className='flex justify-center'>No data found</div>
+      )}
 
       {paginationProps && <Pagination {...paginationProps} />}
     </div>

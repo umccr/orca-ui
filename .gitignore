@@ -36,3 +36,6 @@ dist-ssr
 !.yarn/versions
 
 *storybook.log
+
+# ignore Vite visualizer
+stats.html
