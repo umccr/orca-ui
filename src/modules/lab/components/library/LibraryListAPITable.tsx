@@ -32,7 +32,7 @@ export const LibraryListAPITable = ({ queryParams }: { queryParams: LibraryListQ
         <div className='flex flex-col md:flex-row'>
           <div className='flex items-center justify-center'>{'Library Table'}</div>
           <div className='flex flex-1 items-center justify-end pt-2'>
-            <Search setQueryParams={setQueryParams} />
+            <Search onSearch={(s) => setQueryParams({ search: s }, true)} />
             <div className='ml-2'>
               <LibraryTableFilter />
             </div>

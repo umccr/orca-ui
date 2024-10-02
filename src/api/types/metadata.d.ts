@@ -246,6 +246,7 @@ export interface components {
             assay?: string | null;
             /** Format: double */
             coverage?: number | null;
+            sample?: string | null;
             subject?: string | null;
         };
         LibraryDetail: {
@@ -400,6 +401,7 @@ export interface components {
         ProjectDetail: {
             readonly orcabusId: string;
             readonly contactSet: components["schemas"]["Contact"][];
+            readonly librarySet: components["schemas"]["Library"][];
             projectId?: string | null;
             name?: string | null;
             description?: string | null;
@@ -625,6 +627,7 @@ export interface operations {
                 quality?: "very-poor" | "poor" | "good" | "borderline" | "" | null;
                 /** @description Number of results to return per page. */
                 rowsPerPage?: number;
+                sample?: string | null;
                 /** @description A search term. */
                 search?: string;
                 subject?: string | null;
