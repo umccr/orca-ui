@@ -22,11 +22,12 @@ import {
   LinuxArmBuildImage,
   PipelineProject,
 } from 'aws-cdk-lib/aws-codebuild';
-import { AwsCliLayer } from 'aws-cdk-lib/lambda-layer-awscli';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
-
-import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
-import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
+import { Pipeline, Artifact } from 'aws-cdk-lib/aws-codepipeline';
+import {
+  CodeStarConnectionsSourceAction,
+  CodeBuildAction,
+} from 'aws-cdk-lib/aws-codepipeline-actions';
 import { Trigger } from 'aws-cdk-lib/triggers';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Function } from 'aws-cdk-lib/aws-lambda';
@@ -61,8 +62,8 @@ export class ApplicationStack extends Stack {
   ) {
     const codeStarArn = StringParameter.valueForStringParameter(this, 'codestar_github_arn');
 
-    const sourceOutput = new codepipeline.Artifact();
-    const buildOutput = new codepipeline.Artifact();
+    const sourceOutput = new Artifact();
+    const buildOutput = new Artifact();
 
     const buildProject = new PipelineProject(this, 'ReactBuildCodeBuildProject', {
       buildSpec: BuildSpec.fromObject({
@@ -118,14 +119,14 @@ export class ApplicationStack extends Stack {
       },
     });
 
-    const pipeline = new codepipeline.Pipeline(this, 'ReactBuildPipeline', {
+    const pipeline = new Pipeline(this, 'ReactBuildPipeline', {
       pipelineName: 'ReactBuildPipeline',
       crossAccountKeys: false,
       stages: [
         {
           stageName: 'Source',
           actions: [
-            new codepipeline_actions.CodeStarConnectionsSourceAction({
+            new CodeStarConnectionsSourceAction({
               actionName: 'Source',
               owner: 'umccr',
               repo: 'orca-ui',
@@ -137,10 +138,10 @@ export class ApplicationStack extends Stack {
           ],
         },
         {
-          stageName: 'Build And Deploy',
+          stageName: 'BuildAndDeploy',
           actions: [
-            new codepipeline_actions.CodeBuildAction({
-              actionName: 'Build And Deploy',
+            new CodeBuildAction({
+              actionName: 'BuildAndDeploy',
               project: buildProject,
               input: sourceOutput,
               outputs: [buildOutput],
@@ -154,7 +155,7 @@ export class ApplicationStack extends Stack {
     distribution.grantCreateInvalidation(buildProject);
 
     const triggerFunction = new Function(this, 'TriggerCodeBuildLambda', {
-      code: Code.fromAsset(path.join(__dirname, '..', 'lambda/start_build.py')),
+      code: Code.fromAsset(path.join(__dirname, '..', 'lambda')),
       timeout: Duration.minutes(10),
       handler: 'start_build.handler',
       logRetention: RetentionDays.ONE_WEEK,
@@ -164,7 +165,7 @@ export class ApplicationStack extends Stack {
       environment: {
         CODEPIPELINE_NAME: pipeline.pipelineName,
       },
-      layers: [new AwsCliLayer(this, 'AwsCliLayer')],
+
       initialPolicy: [
         new PolicyStatement({
           actions: ['codepipeline:StartPipelineExecution'],
