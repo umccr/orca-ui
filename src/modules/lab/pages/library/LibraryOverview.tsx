@@ -1,4 +1,4 @@
-import { LibraryTableDetails } from './components/LibraryTableDetails';
+import { LibraryTableDetails } from '../../components/library/LibraryTableDetails';
 
 export default function LibraryOverviewPage() {
   return (

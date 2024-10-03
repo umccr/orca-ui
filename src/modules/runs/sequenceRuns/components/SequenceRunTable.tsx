@@ -54,7 +54,6 @@ const SequenceRunTable = () => {
                   'cursor-pointer flex flex-row items-center ml-2 text-sm uppercase font-medium hover:text-blue-700 text-blue-500'
                 )}
                 onClick={() => {
-                  console.log('22222', instrumentRunId, sequenceRunRowData);
                   setSelectedSequenceRun(sequenceRunRowData as SequenceRunModel);
                   setQueryParams({ sequenceRunId: sequenceRunRowData.id });
                 }}

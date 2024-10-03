@@ -48,3 +48,7 @@ export const useWorkflowPayloadModel = createWorkflowQueryHook('/api/v1/payload/
 export const useWorkflowRunStatusCountModel = createWorkflowQueryHook(
   '/api/v1/workflowrun/count_by_status/'
 );
+
+// Use suspenseQuery hook for fetching data
+export const useSuspenseWorkflowRunListModel = createWorkflowFetchingHook('/api/v1/workflowrun/');
+export const useSuspenseWorkflowModel = createWorkflowFetchingHook('/api/v1/workflow/');

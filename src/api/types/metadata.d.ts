@@ -345,7 +345,7 @@ export interface components {
             };
             results: components["schemas"]["ProjectDetail"][];
         };
-        PaginatedSampleList: {
+        PaginatedSampleDetailList: {
             links: {
                 /**
                  * Format: uri
@@ -363,7 +363,7 @@ export interface components {
                 page?: number;
                 rowsPerPage?: number;
             };
-            results: components["schemas"]["Sample"][];
+            results: components["schemas"]["SampleDetail"][];
         };
         PaginatedSubjectDetailList: {
             links: {
@@ -401,6 +401,7 @@ export interface components {
         ProjectDetail: {
             readonly orcabusId: string;
             readonly contactSet: components["schemas"]["Contact"][];
+            readonly librarySet: components["schemas"]["Library"][];
             projectId?: string | null;
             name?: string | null;
             description?: string | null;
@@ -415,6 +416,13 @@ export interface components {
         QualityEnum: "very-poor" | "poor" | "good" | "borderline";
         Sample: {
             readonly orcabusId: string;
+            sampleId?: string | null;
+            externalSampleId?: string | null;
+            source?: (components["schemas"]["SourceEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+        };
+        SampleDetail: {
+            readonly orcabusId: string;
+            readonly librarySet: components["schemas"]["Library"][];
             sampleId?: string | null;
             externalSampleId?: string | null;
             source?: (components["schemas"]["SourceEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
@@ -783,7 +791,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedSampleList"];
+                    "application/json": components["schemas"]["PaginatedSampleDetailList"];
                 };
             };
         };
@@ -805,7 +813,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Sample"];
+                    "application/json": components["schemas"]["SampleDetail"];
                 };
             };
         };
