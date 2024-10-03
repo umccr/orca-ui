@@ -60,10 +60,6 @@ export class ApplicationStack extends Stack {
     distribution: Distribution
   ) {
     const codeStarArn = StringParameter.valueForStringParameter(this, 'codestar_github_arn');
-    // const sourceFile = CodePipelineSource.connection('umccr/orca-ui', 'main', {
-    //   connectionArn: codeStarArn,
-    //   triggerOnPush: false,
-    // });
 
     const sourceOutput = new codepipeline.Artifact();
     const buildOutput = new codepipeline.Artifact();
@@ -177,12 +173,8 @@ export class ApplicationStack extends Stack {
       ],
     });
 
-    // Ths Lambda function upload file to S3 and trigger the CodeBuild project
-    // If lambda gets to big, we can use the s3_deployment construct to upload the file to S3
-    // new TriggerFunction(this, 'TriggerCodeBuildLambda', {
-    //   function: triggerFunction,
-    //   executeAfter: [pipeline],
-    // });
+    // Ths Lambda function trigger the CodeBuild project
+
     new Trigger(this, 'TriggerCodeBuildTrigger', {
       handler: triggerFunction,
 
@@ -272,42 +264,3 @@ export class ApplicationStack extends Stack {
     };
   }
 }
-
-/**
- * Currently is not used!
- * If we decide the build to be in the toolchain (instead of individual) account, this might be handy to put at the post
- * step of each stage account
- */
-// export class ReactCodeBuildStep extends CodeBuildStep {
-//   constructor(id: string, props: { bucketName: string; input: IFileSetProducer }) {
-//     super(id, {
-//       installCommands: ['node -v', 'corepack enable', 'yarn install --immutable'],
-//       commands: [
-//         'env | grep VITE',
-//         'yarn build',
-//         'aws s3 rm s3://${VITE_BUCKET_NAME}/ --recursive && aws s3 cp ./dist s3://${VITE_BUCKET_NAME}/ --recursive',
-//       ],
-//       buildEnvironment: {
-//         buildImage: LinuxArmBuildImage.AMAZON_LINUX_2_STANDARD_3_0,
-//         environmentVariables: {
-//           VITE_BUCKET_NAME: {
-//             value: props.bucketName,
-//             type: BuildEnvironmentVariableType.PLAINTEXT,
-//           },
-//         },
-//       },
-//       input: props.input,
-//       rolePolicyStatements: [
-//         new PolicyStatement({
-//           actions: ['sts:AssumeRole'],
-//           resources: ['*'],
-//           conditions: {
-//             StringEquals: {
-//               'iam:ResourceTag/aws-cdk:bootstrap-role': 'deploy',
-//             },
-//           },
-//         }),
-//       ],
-//     });
-//   }
-// }
