@@ -142,6 +142,7 @@ export class ApplicationStack extends Stack {
       },
     });
     bucket.grantReadWrite(project);
+    distribution.grantCreateInvalidation(project);
 
     // Ths Lambda function upload file to S3 and trigger the CodeBuild project
     // If lambda gets to big, we can use the s3_deployment construct to upload the file to S3
