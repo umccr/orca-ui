@@ -4,10 +4,10 @@ import dayjsUtc from 'dayjs/plugin/utc';
 // import isToday from 'dayjs/plugin/isToday';
 // import timezone from 'dayjs/plugin/timezone';
 // import relativeTime from 'dayjs/plugin/relativeTime';
-// import localizedFormat from 'dayjs/plugin/localizedFormat';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 
 dayjs.extend(dayjsUtc);
-// dayjs.extend(localizedFormat);
+dayjs.extend(localizedFormat);
 // dayjs.extend(dayjsWeekday);
 // dayjs.extend(isToday);
 // dayjs.extend(timezone);

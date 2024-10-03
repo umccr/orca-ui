@@ -24,6 +24,9 @@ export enum AppURLs {
   RunsLibrary = '/runs/library',
   RunsWorkflow = '/runs/workflow',
 
+  // Files
+  Files = '/files',
+
   // sscheck
   Sscheck = '/sscheck',
 

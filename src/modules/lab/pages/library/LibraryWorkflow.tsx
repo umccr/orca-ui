@@ -1,9 +1,9 @@
 import React, { Suspense } from 'react';
 import { PortalRunIdDropdown } from '../../components/library/PortalRunIdDropdown';
 import { useParams } from 'react-router-dom';
-import { FileTable } from '../../components/file/FileTable';
 import { SpinnerWithText } from '@/components/common/spinner';
 import { WorkflowVersion } from '../../components/library/WorkflowVersion';
+import { FileAPITable, getTableColumn } from '@/modules/files/components/FileAPITable';
 
 export default function LibraryWorkflowPage() {
   const { libraryId, portalRunId, workflowType } = useParams();
@@ -29,7 +29,10 @@ export default function LibraryWorkflowPage() {
       {/* Body */}
       {portalRunId && (
         <Suspense fallback={<SpinnerWithText text='Fetching related files ...' />}>
-          <FileTable portalRunId={portalRunId} />
+          <FileAPITable
+            portalRunId={portalRunId}
+            tableColumn={getTableColumn({ isHideKeyPrefix: true })}
+          />
         </Suspense>
       )}
     </div>

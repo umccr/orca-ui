@@ -6,24 +6,30 @@ import { Bars3Icon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import dayjs from 'dayjs';
 import { IconDropdown } from '@/components/common/dropdowns';
 import toaster from '@/components/common/toaster';
-import { getFilenameFromKey } from '@/utils/commonUtils';
 import { FilePreviewDrawer } from './FilePreviewDrawer';
 import { Dialog } from '@/components/dialogs';
 import { JsonToTable } from '@/components/common/json-to-table';
 import { FileDownloadButton } from './FileDownloadButton';
 import { DOWNLOADABLE_FILETYPE_LIST } from '@/components/files';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
+import { getFilenameFromKey } from '@/utils/commonUtils';
 
-export const FileTable = ({ portalRunId }: { portalRunId: string }) => {
+export const FileAPITable = ({
+  additionalQueryParam,
+  tableColumn = getTableColumn({}),
+  portalRunId,
+}: {
+  tableColumn?: Column[];
+  portalRunId?: string;
+  additionalQueryParam?: Record<string, string>;
+}) => {
   const [page, setPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_PAGE_SIZE);
-  const [searchBox, setSearchBox] = useState<string>('');
-  const [dataQueryParams, setDataQueryParams] = useState<Record<string, string>>({});
 
   const data = useFileObject({
     params: {
       query: {
-        ...dataQueryParams,
+        ...additionalQueryParam,
         page: page,
         rowsPerPage: rowsPerPage,
         currentState: true,
@@ -37,44 +43,6 @@ export const FileTable = ({ portalRunId }: { portalRunId: string }) => {
   return (
     <Table
       columns={tableColumn}
-      tableHeader={
-        <div className='flex flex-col md:flex-row'>
-          <div className='flex flex-1 items-center justify-start pt-2'>
-            <div className='w-full'>
-              <label htmlFor='search' className='sr-only'>
-                Search
-              </label>
-              <div className='relative'>
-                <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
-                  <MagnifyingGlassIcon className='h-5 w-5 text-gray-400' aria-hidden='true' />
-                </div>
-                <input
-                  onBlur={() => {
-                    setDataQueryParams({ key: searchBox });
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      setDataQueryParams({ key: searchBox });
-                    }
-                  }}
-                  onChange={(e) => {
-                    setSearchBox(e.target.value.trim());
-                    if (!e.target.value) {
-                      setDataQueryParams({});
-                    }
-                  }}
-                  value={searchBox}
-                  id='search'
-                  name='search'
-                  className='block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-                  placeholder='Search (Object key)'
-                  type='search'
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      }
       tableData={data.results.map((item) => ({
         lastModifiedDate: item.lastModifiedDate,
         size: item.size,
@@ -93,6 +61,55 @@ export const FileTable = ({ portalRunId }: { portalRunId: string }) => {
         },
       }}
     />
+  );
+};
+
+export const SearchBox = ({
+  placeholder = 'Search',
+  onSearch,
+}: {
+  placeholder?: string;
+  onSearch: (s: string) => void;
+}) => {
+  const [searchBox, setSearchBox] = useState<string>('');
+
+  return (
+    <div className='flex flex-col md:flex-row'>
+      <div className='flex flex-1 items-center justify-start pt-2'>
+        <div className='w-full'>
+          <label htmlFor='search' className='sr-only'>
+            Search
+          </label>
+          <div className='relative'>
+            <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
+              <MagnifyingGlassIcon className='h-5 w-5 text-gray-400' aria-hidden='true' />
+            </div>
+            <input
+              onBlur={() => {
+                onSearch(searchBox);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  onSearch(searchBox);
+                }
+              }}
+              onChange={(e) => {
+                setSearchBox(e.target.value.trim());
+                if (!e.target.value) {
+                  onSearch('');
+                }
+              }}
+              value={searchBox}
+              id='search'
+              name='search'
+              className='block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+              placeholder={placeholder}
+              type='search'
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -123,57 +140,84 @@ const humanFileSize = (bytes: number): string => {
 
 /**
  * Table Columns Properties
+ * @param isHideKeyPrefix Show filename as one of the column, else it shows the S3 key
+ * @returns
  */
-const tableColumn: Column[] = [
-  {
-    header: 'Filename',
-    accessor: 'fileRecord',
-    cell: (data: unknown) => {
-      const { key } = data as { key: string };
-      return <div>{getFilenameFromKey(key)}</div>;
-    },
-  },
-  {
-    header: '',
-    accessor: 'fileRecord',
-    cell: (data: unknown) => {
-      const { key: s3Key } = data as S3Record;
+export const getTableColumn = ({
+  isHideKeyPrefix = true,
+}: {
+  isHideKeyPrefix?: boolean;
+}): Column[] => {
+  const col = [
+    {
+      header: '',
+      accessor: 'fileRecord',
+      cell: (data: unknown) => {
+        const { key: s3Key } = data as S3Record;
 
-      const splitPath = s3Key.split('.');
-      const filetype = splitPath[splitPath.length - 1].toLowerCase();
-      const isDownloadable = DOWNLOADABLE_FILETYPE_LIST.includes(filetype);
+        const splitPath = s3Key.split('.');
+        const filetype = splitPath[splitPath.length - 1].toLowerCase();
+        const isDownloadable = DOWNLOADABLE_FILETYPE_LIST.includes(filetype);
 
-      return (
-        <div className='flex flex-row justify-end'>
-          {isDownloadable && <FileDownloadButton s3Record={data as S3Record} />}
-          <FilePreviewDrawer s3Record={data as S3Record} />
-        </div>
-      );
+        return (
+          <div className='flex flex-row justify-end'>
+            {isDownloadable && <FileDownloadButton s3Record={data as S3Record} />}
+            <FilePreviewDrawer s3Record={data as S3Record} />
+          </div>
+        );
+      },
     },
-  },
-  {
-    header: 'Action button',
-    accessor: 'fileRecord',
-    cell: (data: unknown) => {
-      return <DataActionButton fileRecord={data as S3Record} />;
+    {
+      header: 'Action button',
+      accessor: 'fileRecord',
+      cell: (data: unknown) => {
+        return <DataActionButton fileRecord={data as S3Record} />;
+      },
     },
-  },
-  {
-    header: 'Size',
-    accessor: 'size',
-    cell: (data: unknown) => {
-      return <div>{data ? humanFileSize(data as number) : '-'}</div>;
+    {
+      header: 'Size',
+      accessor: 'size',
+      cell: (data: unknown) => {
+        return <div>{data ? humanFileSize(data as number) : '-'}</div>;
+      },
     },
-  },
-  {
-    header: 'Last Modified Date ',
-    accessor: 'lastModifiedDate',
-    cell: (data: unknown) => {
-      return <div className=''>{data ? dayjs(data as string).format('lll Z') : '-'}</div>;
+    {
+      header: 'Last Modified Date ',
+      accessor: 'lastModifiedDate',
+      cell: (data: unknown) => {
+        return <div className=''>{data ? dayjs(data as string).format('lll Z') : '-'}</div>;
+      },
     },
-  },
-];
+  ];
 
+  if (isHideKeyPrefix) {
+    col.unshift({
+      header: 'Filename',
+      accessor: 'fileRecord',
+      cell: (data: unknown) => {
+        const { key } = data as { key: string };
+        return <div>{getFilenameFromKey(key)}</div>;
+      },
+    });
+  } else {
+    col.unshift({
+      header: 'Key',
+      accessor: 'fileRecord',
+      cell: (data: unknown) => {
+        const { key } = data as { key: string };
+        return <div>{key}</div>;
+      },
+    });
+  }
+
+  return col;
+};
+
+/**
+ * The action button for each row in the table
+ * @param param0
+ * @returns
+ */
 const DataActionButton = ({ fileRecord }: { fileRecord: S3Record }) => {
   const { key: s3Key, bucket, s3ObjectId } = fileRecord;
 
