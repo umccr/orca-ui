@@ -78,7 +78,7 @@ export class ApplicationStack extends Stack {
               'yarn build',
               'aws s3 rm s3://${VITE_BUCKET_NAME}/ --recursive && aws s3 sync ./dist s3://${VITE_BUCKET_NAME}',
               // invalidate the cloudfront cache
-              'aws cloudfront create-invalidation --distribution-id ${VITE_CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"',
+              'aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"',
             ],
           },
         },
@@ -94,7 +94,7 @@ export class ApplicationStack extends Stack {
           value: bucket.bucketName,
           type: BuildEnvironmentVariableType.PLAINTEXT,
         },
-        VITE_CLOUDFRONT_DISTRIBUTION_ID: {
+        CLOUDFRONT_DISTRIBUTION_ID: {
           value: distribution.distributionId,
           type: BuildEnvironmentVariableType.PLAINTEXT,
         },
