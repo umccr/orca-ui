@@ -49,11 +49,15 @@ export class ApplicationStack extends Stack {
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
     });
 
-    this.setupS3CloudFrontIntegration(clientBucket, props.aliasDomainName);
-    this.buildReactApp(clientBucket, props.reactBuildEnvVariables);
+    const distribution = this.setupS3CloudFrontIntegration(clientBucket, props.aliasDomainName);
+    this.buildReactApp(clientBucket, props.reactBuildEnvVariables, distribution);
   }
 
-  private buildReactApp(bucket: IBucket, reactBuildEnvVariables: Record<string, string>) {
+  private buildReactApp(
+    bucket: IBucket,
+    reactBuildEnvVariables: Record<string, string>,
+    distribution: Distribution
+  ) {
     const artifactBucketPrefix = 'artifact-source';
 
     // This CodeBuild responsible for building the React app and publish the assets to S3
@@ -73,6 +77,8 @@ export class ApplicationStack extends Stack {
               'env | grep VITE',
               'yarn build',
               'aws s3 rm s3://${VITE_BUCKET_NAME}/ --recursive && aws s3 sync ./dist s3://${VITE_BUCKET_NAME}',
+              // invalidate the cloudfront cache
+              'aws cloudfront create-invalidation --distribution-id ${VITE_CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"',
             ],
           },
         },
@@ -86,6 +92,10 @@ export class ApplicationStack extends Stack {
       environmentVariables: {
         VITE_BUCKET_NAME: {
           value: bucket.bucketName,
+          type: BuildEnvironmentVariableType.PLAINTEXT,
+        },
+        VITE_CLOUDFRONT_DISTRIBUTION_ID: {
+          value: distribution.distributionId,
           type: BuildEnvironmentVariableType.PLAINTEXT,
         },
         VITE_REGION: { value: 'ap-southeast-2', type: BuildEnvironmentVariableType.PLAINTEXT },
@@ -163,7 +173,7 @@ export class ApplicationStack extends Stack {
     bucket.grantReadWrite(triggerCodeBuildLambda);
   }
 
-  private setupS3CloudFrontIntegration(s3Bucket: IBucket, aliasDomainName: string[]) {
+  private setupS3CloudFrontIntegration(s3Bucket: IBucket, aliasDomainName: string[]): Distribution {
     const hostedZoneName = StringParameter.valueForStringParameter(this, '/hosted_zone/umccr/name');
     const hostedZoneId = StringParameter.valueForStringParameter(this, '/hosted_zone/umccr/id');
 
@@ -223,6 +233,8 @@ export class ApplicationStack extends Stack {
       zone: hostedZone,
       recordName: 'orcaui',
     });
+
+    return cloudFrontDistribution;
   }
 }
 
