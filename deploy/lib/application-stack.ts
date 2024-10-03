@@ -1,4 +1,4 @@
-// import * as path from 'path';
+import * as path from 'path';
 import {
   OriginAccessIdentity,
   Distribution,
@@ -15,27 +15,24 @@ import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { BlockPublicAccess, Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
-// import { Architecture, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Architecture, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
 import {
   BuildEnvironmentVariableType,
   BuildSpec,
   LinuxArmBuildImage,
-  // Project,
-  // Source,
+  Project,
+  Source,
 } from 'aws-cdk-lib/aws-codebuild';
-// import { AwsCliLayer } from 'aws-cdk-lib/lambda-layer-awscli';
+import { AwsCliLayer } from 'aws-cdk-lib/lambda-layer-awscli';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { CodeBuildStep, IFileSetProducer } from 'aws-cdk-lib/pipelines';
-// import { TriggerFunction } from 'aws-cdk-lib/triggers';
-// import { RetentionDays } from 'aws-cdk-lib/aws-logs';
-import { CodePipelineSource } from 'aws-cdk-lib/pipelines';
-import { BucketDeployment, Source as S3DeploySource } from 'aws-cdk-lib/aws-s3-deployment';
+import { TriggerFunction } from 'aws-cdk-lib/triggers';
+import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 
 export type ApplicationStackProps = {
   cloudFrontBucketName: string;
   aliasDomainName: string[];
   reactBuildEnvVariables: Record<string, string>;
-  sourceFile: CodePipelineSource;
 };
 
 export class ApplicationStack extends Stack {
@@ -52,31 +49,121 @@ export class ApplicationStack extends Stack {
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
     });
 
-    const distribution = this.setupS3CloudFrontIntegration(clientBucket, props.aliasDomainName);
-    this.buildReactApp(clientBucket, distribution, props.reactBuildEnvVariables, props.sourceFile);
+    this.setupS3CloudFrontIntegration(clientBucket, props.aliasDomainName);
+    this.buildReactApp(clientBucket, props.reactBuildEnvVariables);
   }
 
-  private buildReactApp(
-    bucket: IBucket,
-    distribution: Distribution,
-    reactBuildEnvVariables: Record<string, string>,
-    sourceFile: CodePipelineSource
-  ) {
-    const buildStep = new ReactCodeBuildStep('BuildReactApp', {
-      bucketName: bucket.bucketName,
-      input: sourceFile,
-      reactBuildEnvVariables: reactBuildEnvVariables,
-    });
+  private buildReactApp(bucket: IBucket, reactBuildEnvVariables: Record<string, string>) {
+    const artifactBucketPrefix = 'artifact-source';
 
-    new BucketDeployment(this, 'DeployReactApp', {
-      sources: [S3DeploySource.bucket(bucket, buildStep.projectName || 'ReactBuildCodeBuildStep')],
-      destinationBucket: bucket,
-      distribution,
-      distributionPaths: ['/*'],
+    // This CodeBuild responsible for building the React app and publish the assets to S3
+    const project = new Project(this, 'ReactBuildCodeBuildProject', {
+      buildSpec: BuildSpec.fromObject({
+        version: 0.2,
+        phases: {
+          install: {
+            'runtime-versions': {
+              nodejs: 20,
+            },
+            commands: ['node -v', 'corepack enable', 'yarn --version', 'yarn install --immutable'],
+          },
+          build: {
+            commands: [
+              'set -eu',
+              'env | grep VITE',
+              'yarn build',
+              'aws s3 rm s3://${VITE_BUCKET_NAME}/ --recursive && aws s3 sync ./dist s3://${VITE_BUCKET_NAME}',
+            ],
+          },
+        },
+      }),
+      source: Source.s3({
+        bucket: bucket,
+        path: `${artifactBucketPrefix}/`,
+      }),
+      description: 'Build react app and publish assets to S3',
+      environment: { buildImage: LinuxArmBuildImage.AMAZON_LINUX_2_STANDARD_3_0 },
+      environmentVariables: {
+        VITE_BUCKET_NAME: {
+          value: bucket.bucketName,
+          type: BuildEnvironmentVariableType.PLAINTEXT,
+        },
+        VITE_REGION: { value: 'ap-southeast-2', type: BuildEnvironmentVariableType.PLAINTEXT },
+        // CodeBuild is smart enough to give permission to these ssm parameters
+        VITE_COG_APP_CLIENT_ID: {
+          value: '/orcaui/cog_app_client_id_stage',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        VITE_OAUTH_REDIRECT_IN: {
+          value: '/orcaui/oauth_redirect_in_stage',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        VITE_OAUTH_REDIRECT_OUT: {
+          value: '/orcaui/oauth_redirect_out_stage',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        VITE_COG_USER_POOL_ID: {
+          value: '/data_portal/client/cog_user_pool_id',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        VITE_COG_IDENTITY_POOL_ID: {
+          value: '/data_portal/client/cog_identity_pool_id',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        VITE_OAUTH_DOMAIN: {
+          value: '/data_portal/client/oauth_domain',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        VITE_UNSPLASH_CLIENT_ID: {
+          value: '/data_portal/unsplash/client_id',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        // spread the reactBuildEnvironmentVariables
+        ...Object.entries(reactBuildEnvVariables).reduce(
+          (acc, [key, value]) => {
+            acc[key] = {
+              value: value,
+              type: BuildEnvironmentVariableType.PLAINTEXT,
+            };
+            return acc;
+          },
+          {} as Record<string, Record<string, string>>
+        ),
+      },
     });
+    bucket.grantReadWrite(project);
+
+    // Ths Lambda function upload file to S3 and trigger the CodeBuild project
+    // If lambda gets to big, we can use the s3_deployment construct to upload the file to S3
+    const triggerCodeBuildLambda = new TriggerFunction(this, 'TriggerCodeBuildLambda', {
+      code: Code.fromDockerBuild(path.join(__dirname, '..', '..'), {
+        file: 'deploy/lambda/Dockerfile',
+        imagePath: 'app/output',
+      }),
+      timeout: Duration.minutes(10),
+      handler: 'start_build.handler',
+      logRetention: RetentionDays.ONE_WEEK,
+      runtime: Runtime.PYTHON_3_12,
+      architecture: Architecture.ARM_64,
+      memorySize: 1024,
+      environment: {
+        CODEBUILD_PROJECT_NAME: project.projectName,
+        ARTIFACT_SOURCE_PREFIX: artifactBucketPrefix,
+        TARGET_BUCKET: bucket.bucketName,
+      },
+      layers: [new AwsCliLayer(this, 'AwsCliLayer')],
+      initialPolicy: [
+        new PolicyStatement({
+          actions: ['codebuild:StartBuild'],
+          resources: [project.projectArn],
+        }),
+      ],
+      executeAfter: [project],
+    });
+    bucket.grantReadWrite(triggerCodeBuildLambda);
   }
 
-  private setupS3CloudFrontIntegration(s3Bucket: IBucket, aliasDomainName: string[]): Distribution {
+  private setupS3CloudFrontIntegration(s3Bucket: IBucket, aliasDomainName: string[]) {
     const hostedZoneName = StringParameter.valueForStringParameter(this, '/hosted_zone/umccr/name');
     const hostedZoneId = StringParameter.valueForStringParameter(this, '/hosted_zone/umccr/id');
 
@@ -91,6 +178,21 @@ export class ApplicationStack extends Stack {
     const cloudFrontOAI = new OriginAccessIdentity(this, 'CloudFrontOAI', {
       comment: 'orca-ui OAI',
     });
+
+    // const originConfigs: cloudfront.SourceConfiguration = {
+    //   s3OriginSource: {
+    //     s3BucketSource: s3Bucket,
+    //     originAccessIdentity: cloudFrontOAI,
+    //   },
+    //   behaviors: [{ isDefaultBehavior: true }],
+    // };
+
+    // const errorPageConfiguration: cloudfront.CfnDistribution.CustomErrorResponseProperty = {
+    //   errorCode: 403,
+    //   errorCachingMinTtl: 60,
+    //   responseCode: 200,
+    //   responsePagePath: '/index.html',
+    // };
 
     const cloudFrontDistribution = new Distribution(this, 'CloudFrontDistribution', {
       defaultBehavior: {
@@ -121,8 +223,6 @@ export class ApplicationStack extends Stack {
       zone: hostedZone,
       recordName: 'orcaui',
     });
-
-    return cloudFrontDistribution;
   }
 }
 
@@ -132,28 +232,9 @@ export class ApplicationStack extends Stack {
  * step of each stage account
  */
 export class ReactCodeBuildStep extends CodeBuildStep {
-  constructor(
-    id: string,
-    props: {
-      bucketName: string;
-      input: IFileSetProducer;
-      reactBuildEnvVariables: Record<string, string>;
-    }
-  ) {
+  constructor(id: string, props: { bucketName: string; input: IFileSetProducer }) {
     super(id, {
-      projectName: 'ReactBuildCodeBuildStep',
-      // TODO: remove this once we have a proper runtime for the build
-      partialBuildSpec: BuildSpec.fromObject({
-        version: 0.2,
-        phases: {
-          install: {
-            'runtime-versions': {
-              nodejs: 20,
-            },
-            commands: ['node -v', 'corepack enable', 'yarn --version', 'yarn install --immutable'],
-          },
-        },
-      }),
+      installCommands: ['node -v', 'corepack enable', 'yarn install --immutable'],
       commands: [
         'env | grep VITE',
         'yarn build',
@@ -166,18 +247,6 @@ export class ReactCodeBuildStep extends CodeBuildStep {
             value: props.bucketName,
             type: BuildEnvironmentVariableType.PLAINTEXT,
           },
-          VITE_REGION: { value: 'ap-southeast-2', type: BuildEnvironmentVariableType.PLAINTEXT },
-          ...getSSMEnvironmentVariables(),
-          ...Object.entries(props.reactBuildEnvVariables).reduce(
-            (acc, [key, value]) => {
-              acc[key] = {
-                value: value,
-                type: BuildEnvironmentVariableType.PLAINTEXT,
-              };
-              return acc;
-            },
-            {} as Record<string, Record<string, string>>
-          ),
         },
       },
       input: props.input,
@@ -195,36 +264,3 @@ export class ReactCodeBuildStep extends CodeBuildStep {
     });
   }
 }
-
-const getSSMEnvironmentVariables = () => {
-  return {
-    VITE_COG_APP_CLIENT_ID: {
-      value: '/orcaui/cog_app_client_id_stage',
-      type: BuildEnvironmentVariableType.PARAMETER_STORE,
-    },
-    VITE_OAUTH_REDIRECT_IN: {
-      value: '/orcaui/oauth_redirect_in_stage',
-      type: BuildEnvironmentVariableType.PARAMETER_STORE,
-    },
-    VITE_OAUTH_REDIRECT_OUT: {
-      value: '/orcaui/oauth_redirect_out_stage',
-      type: BuildEnvironmentVariableType.PARAMETER_STORE,
-    },
-    VITE_COG_USER_POOL_ID: {
-      value: '/data_portal/client/cog_user_pool_id',
-      type: BuildEnvironmentVariableType.PARAMETER_STORE,
-    },
-    VITE_COG_IDENTITY_POOL_ID: {
-      value: '/data_portal/client/cog_identity_pool_id',
-      type: BuildEnvironmentVariableType.PARAMETER_STORE,
-    },
-    VITE_OAUTH_DOMAIN: {
-      value: '/data_portal/client/oauth_domain',
-      type: BuildEnvironmentVariableType.PARAMETER_STORE,
-    },
-    VITE_UNSPLASH_CLIENT_ID: {
-      value: '/data_portal/unsplash/client_id',
-      type: BuildEnvironmentVariableType.PARAMETER_STORE,
-    },
-  };
-};
