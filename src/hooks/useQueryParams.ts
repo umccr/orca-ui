@@ -18,6 +18,14 @@ export const useQueryParams = (
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const setQueryParams = (params: Record<string, any>, isReplace: boolean = false) => {
+    // bugfix: if set array object to state, it will be refresh the page continuously as the object is always new
+    const paginationKeys = ['page', 'rowsPerPage'];
+    const isPaginationParams = Object.keys(params).some((key) => paginationKeys.includes(key));
+    if (!isPaginationParams) {
+      params.page = undefined;
+      params.rowsPerPage = undefined;
+    }
+
     if (isReplace) {
       nav(
         cleanObject({
