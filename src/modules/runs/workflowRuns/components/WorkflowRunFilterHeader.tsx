@@ -78,7 +78,43 @@ const WorkflowRunFilterHeader = () => {
               },
             })),
           ]
-        : [],
+        : [
+            {
+              label: 'All',
+              subLabel: '',
+              onClick: () => {
+                setQueryParams({ workflowRunStatus: null });
+              },
+            },
+            {
+              label: 'Succeeded',
+              subLabel: '',
+              onClick: () => {
+                setQueryParams({ workflowRunStatus: 'succeeded' });
+              },
+            },
+            {
+              label: 'Aborted',
+              subLabel: '',
+              onClick: () => {
+                setQueryParams({ workflowRunStatus: 'aborted' });
+              },
+            },
+            {
+              label: 'Failed',
+              subLabel: '',
+              onClick: () => {
+                setQueryParams({ workflowRunStatus: 'failed' });
+              },
+            },
+            {
+              label: 'Ongoing',
+              subLabel: '',
+              onClick: () => {
+                setQueryParams({ workflowRunStatus: 'ongoing' });
+              },
+            },
+          ],
     [setQueryParams, workflowRunStatusCountData]
   );
 

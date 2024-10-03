@@ -1,6 +1,6 @@
 import { ModuleNavbar } from '@/components/navigation/navbar';
 import { useLocation, useParams } from 'react-router-dom';
-import { useWorkflowModel } from '@/api/workflow';
+import { useSuspenseWorkflowModel } from '@/api/workflow';
 import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
 
 export const LibrarySideNavBar = () => {
@@ -13,7 +13,7 @@ export const LibrarySideNavBar = () => {
 
   const baseHref = `/lab/library/${libraryId}`;
 
-  const workflow = useWorkflowModel({
+  const workflow = useSuspenseWorkflowModel({
     params: {
       query: {
         workflowrun__libraries__libraryId: libraryId,

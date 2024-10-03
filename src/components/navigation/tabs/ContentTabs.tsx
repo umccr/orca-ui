@@ -1,6 +1,7 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { FC, ReactNode, useState } from 'react';
 import { useQueryParams } from '@/hooks/useQueryParams';
+import { ErrorBoundary } from 'react-error-boundary';
 
 interface TabItemProps {
   label: string;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useWorkflowModel } from '@/api/workflow';
+import { useSuspenseWorkflowModel } from '@/api/workflow';
 import { JsonToTable } from '@/components/common/json-to-table';
 import { Dialog } from '@/components/dialogs';
 
@@ -12,7 +12,7 @@ export const WorkflowVersion = ({
 }) => {
   const [isOpenWorkflowDetails, setIsOpenWorkflowDetails] = useState(false);
 
-  const workflow = useWorkflowModel({
+  const workflow = useSuspenseWorkflowModel({
     params: {
       query: {
         workflowrun__portalRunId: portalRunId,
