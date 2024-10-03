@@ -4,18 +4,12 @@ import os
 
 
 def handler(event, context):
-
-    project_name = os.environ['CODEBUILD_PROJECT_NAME']
-    target_bucket = os.environ['TARGET_BUCKET']
-    prefix_source = os.environ['ARTIFACT_SOURCE_PREFIX']
+    pipeline_name = os.environ['CODEPIPELINE_NAME']
 
     try:
-
         run_cmd(
-            f"/opt/awscli/aws s3 sync ./artifact-source s3://{target_bucket}/{prefix_source}/ --exclude 'deploy/*'")
+            f"/opt/awscli/aws codepipeline start-pipeline-execution --name {pipeline_name}")
 
-        run_cmd(
-            f"/opt/awscli/aws codebuild start-build --project-name {project_name}")
         return {
             'statusCode': 200,
             'body': json.dumps('CodeBuild project triggered successfully.')
