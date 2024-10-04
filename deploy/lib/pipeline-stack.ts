@@ -1,7 +1,12 @@
 import { Environment, Stack, StackProps, Stage } from 'aws-cdk-lib';
 import { ComputeType, LinuxArmBuildImage } from 'aws-cdk-lib/aws-codebuild';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
-import { CodeBuildStep, CodePipeline, CodePipelineSource } from 'aws-cdk-lib/pipelines';
+import {
+  CodeBuildStep,
+  CodePipeline,
+  CodePipelineSource,
+  ManualApprovalStep,
+} from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
 import { ApplicationStack, ApplicationStackProps } from './application-stack';
 import { accountIdAlias, AppStage, getAppStackConfig, REGION } from '../config';
@@ -74,10 +79,10 @@ export class PipelineStack extends Stack {
           region: REGION,
         },
         gammaConfig
-      )
-      // {
-      //   pre: [new ManualApprovalStep('Promote to Gamma (Staging)')],
-      // }
+      ),
+      {
+        pre: [new ManualApprovalStep('Promote to Gamma (Staging)')],
+      }
     );
 
     /**
@@ -93,10 +98,10 @@ export class PipelineStack extends Stack {
           region: REGION,
         },
         prodConfig
-      )
-      // {
-      //   pre: [new ManualApprovalStep('Promote to Prod (Production)')],
-      // }
+      ),
+      {
+        pre: [new ManualApprovalStep('Promote to Prod (Production)')],
+      }
     );
   }
 }

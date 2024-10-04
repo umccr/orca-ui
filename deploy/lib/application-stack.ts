@@ -175,10 +175,8 @@ export class ApplicationStack extends Stack {
     });
 
     // Ths Lambda function trigger the CodeBuild project
-
     new Trigger(this, 'TriggerCodeBuildTrigger', {
       handler: triggerFunction,
-
       executeAfter: [pipeline],
     });
   }
