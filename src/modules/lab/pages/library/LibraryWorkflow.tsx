@@ -30,7 +30,8 @@ export default function LibraryWorkflowPage() {
       {portalRunId && (
         <Suspense fallback={<SpinnerWithText text='Fetching related files ...' />}>
           <FileAPITable
-            portalRunId={portalRunId}
+            isSearchBoxKey={true}
+            additionalQueryParam={{ 'attributes[portalRunId]': portalRunId }}
             tableColumn={getTableColumn({ isHideKeyPrefix: true })}
           />
         </Suspense>

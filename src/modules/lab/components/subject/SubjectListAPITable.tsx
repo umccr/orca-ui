@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { SubjectListQueryParams, useMetadataSubjectModel } from '@/api/metadata';
+import { SubjectListQueryParams, useSuspenseMetadataSubjectModel } from '@/api/metadata';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { Column } from '@/components/tables';
 import Table, {
@@ -18,7 +18,7 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline';
 export const SubjectListAPITable = ({ queryParams }: { queryParams: SubjectListQueryParams }) => {
   const { setQueryParams, getPaginationParams } = useQueryParams();
 
-  const fullLibraryModel = useMetadataSubjectModel({
+  const fullLibraryModel = useSuspenseMetadataSubjectModel({
     params: { query: { ...queryParams, ...getPaginationParams() } },
   });
   const data = fullLibraryModel.data;

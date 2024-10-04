@@ -17,23 +17,24 @@ import { getFilenameFromKey } from '@/utils/commonUtils';
 export const FileAPITable = ({
   additionalQueryParam,
   tableColumn = getTableColumn({}),
-  portalRunId,
+  isSearchBoxKey,
 }: {
+  isSearchBoxKey?: boolean;
   tableColumn?: Column[];
-  portalRunId?: string;
   additionalQueryParam?: Record<string, string>;
 }) => {
   const [page, setPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_PAGE_SIZE);
+  const [searchBox, setSearchBox] = useState('');
 
   const data = useFileObject({
     params: {
       query: {
         ...additionalQueryParam,
+        key: searchBox,
         page: page,
         rowsPerPage: rowsPerPage,
         currentState: true,
-        'attributes[portalRunId]': portalRunId,
       },
     },
   }).data;
@@ -43,6 +44,7 @@ export const FileAPITable = ({
   return (
     <Table
       columns={tableColumn}
+      tableHeader={isSearchBoxKey && <SearchBox onSearch={(s) => setSearchBox(s)} />}
       tableData={data.results.map((item) => ({
         lastModifiedDate: item.lastModifiedDate,
         size: item.size,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { IndividualListQueryParams, useMetadataIndividualModel } from '@/api/metadata';
+import { IndividualListQueryParams, useSuspenseMetadataIndividualModel } from '@/api/metadata';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { components } from '@/api/types/metadata';
 import { Column, Table } from '@/components/tables';
@@ -18,7 +18,7 @@ export const IndividualListAPITable = ({
 }) => {
   const { setQueryParams, getPaginationParams } = useQueryParams();
 
-  const individualModel = useMetadataIndividualModel({
+  const individualModel = useSuspenseMetadataIndividualModel({
     params: { query: { ...queryParams, ...getPaginationParams() } },
   });
 

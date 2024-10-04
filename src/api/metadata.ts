@@ -33,9 +33,9 @@ export type SampleListQueryParams = operations['apiV1SampleList']['parameters'][
 export type ContactListQueryParams = operations['apiV1ContactList']['parameters']['query'];
 export type ProjectListQueryParams = operations['apiV1ProjectList']['parameters']['query'];
 
-export const useMetadataSubjectModel = createMetadataFetchingHook('/api/v1/subject/');
-export const useMetadataLibraryModel = createMetadataFetchingHook('/api/v1/library/');
-export const useMetadataIndividualModel = createMetadataFetchingHook('/api/v1/individual/');
-export const useMetadataSampleModel = createMetadataFetchingHook('/api/v1/sample/');
-export const useMetadataContactModel = createMetadataFetchingHook('/api/v1/contact/');
-export const useMetadataProjectModel = createMetadataFetchingHook('/api/v1/project/');
+export const useSuspenseMetadataSubjectModel = createMetadataFetchingHook('/api/v1/subject/');
+export const useSuspenseMetadataLibraryModel = createMetadataFetchingHook('/api/v1/library/');
+export const useSuspenseMetadataIndividualModel = createMetadataFetchingHook('/api/v1/individual/');
+export const useSuspenseMetadataSampleModel = createMetadataFetchingHook('/api/v1/sample/');
+export const useSuspenseMetadataContactModel = createMetadataFetchingHook('/api/v1/contact/');
+export const useSuspenseMetadataProjectModel = createMetadataFetchingHook('/api/v1/project/');

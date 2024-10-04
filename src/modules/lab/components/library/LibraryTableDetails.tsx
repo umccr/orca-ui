@@ -1,4 +1,4 @@
-import { useMetadataLibraryModel } from '@/api/metadata';
+import { useSuspenseMetadataLibraryModel } from '@/api/metadata';
 import { JsonToTable } from '@/components/common/json-to-table';
 import { useParams } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ export const LibraryTableDetails = () => {
   if (!libraryId) {
     throw new Error('No library id in URL path!');
   }
-  const fullLibraryModel = useMetadataLibraryModel({
+  const fullLibraryModel = useSuspenseMetadataLibraryModel({
     params: { query: { libraryId: libraryId } },
   }).data;
 
