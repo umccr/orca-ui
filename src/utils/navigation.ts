@@ -1,18 +1,22 @@
 import {
   CircleStackIcon,
   ChartBarIcon,
-  // CloudArrowUpIcon
+  // CloudArrowUpIcon,
+  FolderIcon,
 } from '@heroicons/react/24/outline';
 import {
   CircleStackIcon as SolidCircleStackIcon,
   // CloudArrowUpIcon as SolidCloudArrowUpIcon,
   ChartBarIcon as SolidChartBarIcon,
+  FolderIcon as SolidFolderIcon,
 } from '@heroicons/react/20/solid';
 import { AppURLs } from './appURLs';
 
 const sideNavigation = [
   { name: 'Lab', icon: CircleStackIcon, solidIcon: SolidCircleStackIcon, href: AppURLs.Lab },
   { name: 'Runs', icon: ChartBarIcon, solidIcon: SolidChartBarIcon, href: AppURLs.Runs },
+  { name: 'Files', icon: FolderIcon, solidIcon: SolidFolderIcon, href: AppURLs.Files },
+
   // {
   //   name: 'sscheck',
   //   icon: CloudArrowUpIcon,

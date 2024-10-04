@@ -24,6 +24,8 @@ export const TokenDialog = ({ onClose }: Props) => {
       if (!exp) throw new Error('Cannot get JWT expiration time!');
 
       if (cancel) return;
+
+      console.log(' dayjs.unix(parseInt(exp))', dayjs.unix(parseInt(exp)).format('DD/MM/YYYY'));
       setJWTData({
         token: token.toString(),
         expires: dayjs.unix(parseInt(exp)).format('llll Z'),
@@ -40,6 +42,7 @@ export const TokenDialog = ({ onClose }: Props) => {
     navigator.clipboard.writeText(jwtData.token);
     toaster.success({ title: 'Copied!', message: 'JWT copied to clipboard' });
   };
+
   return (
     <Dialog
       open={true}

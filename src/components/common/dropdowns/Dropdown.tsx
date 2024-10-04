@@ -31,7 +31,7 @@ const Dropdown: FC<DropdownProps> = ({
         {floatingLabel && (
           <label
             className={classNames(
-              'absolute text-sm text-gray-500 -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 start-1',
+              'absolute text-sm text-gray-500 -translate-y-4 scale-75 top-2 z-2 origin-[0] bg-white px-2 start-1',
               floatingLabelClassName ? floatingLabelClassName : ''
             )}
           >

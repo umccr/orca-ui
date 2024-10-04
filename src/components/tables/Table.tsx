@@ -60,8 +60,8 @@ const Table: FC<TableProps> = ({
                 inCard ? 'overflow-hidden border-2 border-black border-opacity-5 sm:rounded-lg' : ''
               )}
             >
-              <table className='min-w-full divide-y divide-gray-300'>
-                {/* Experiment additional <thead /> to group column description */}
+              <table className='min-w-full'>
+                {/* Experiment additional <thead /> to group column w/ description */}
                 <thead>
                   {columns.find((c) => !!c.headerGroup) && (
                     <tr>
