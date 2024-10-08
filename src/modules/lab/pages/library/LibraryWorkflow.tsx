@@ -7,8 +7,8 @@ import { FileAPITable, getTableColumn } from '@/modules/files/components/FileAPI
 
 export default function LibraryWorkflowPage() {
   const { libraryId, portalRunId, workflowType } = useParams();
-  if (!libraryId) {
-    throw new Error('No library id in URL path!');
+  if (!libraryId || !workflowType) {
+    throw new Error('Invalid URL!');
   }
 
   return (

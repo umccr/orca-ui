@@ -27,7 +27,7 @@ const JsonToTable = ({ data }: { data: Record<string, any> }) => {
   };
 
   return (
-    <table className='w-full border-y border-gray-50'>
+    <table className='w-full border-2 border-gray-100'>
       <tbody>
         {Object.entries(data).map(([key, value]) => (
           <tr className={rowClassName} key={key}>

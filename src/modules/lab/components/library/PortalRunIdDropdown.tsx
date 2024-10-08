@@ -1,7 +1,7 @@
-import { Navigate, useNavigate } from 'react-router-dom';
 import { Dropdown } from '@/components/common/dropdowns';
 import { useSuspenseWorkflowRunListModel } from '@/api/workflow';
 import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export const PortalRunIdDropdown = ({
   libraryId,
@@ -9,11 +9,10 @@ export const PortalRunIdDropdown = ({
   workflowType,
 }: {
   libraryId: string;
+  workflowType: string;
   portalRunId?: string;
-  workflowType?: string;
 }) => {
   const navigate = useNavigate();
-
   const workflowRun = useSuspenseWorkflowRunListModel({
     params: {
       query: {
