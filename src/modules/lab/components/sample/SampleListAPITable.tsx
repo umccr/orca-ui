@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { SampleListQueryParams, useMetadataSampleModel } from '@/api/metadata';
+import { SampleListQueryParams, useSuspenseMetadataSampleModel } from '@/api/metadata';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { components } from '@/api/types/metadata';
 import { Column, Table } from '@/components/tables';
@@ -12,7 +12,7 @@ import { SampleTableFilter } from './SampleTableFilter';
 export const SampleListAPITable = ({ queryParams }: { queryParams: SampleListQueryParams }) => {
   const { setQueryParams, getPaginationParams } = useQueryParams();
 
-  const sampleModel = useMetadataSampleModel({
+  const sampleModel = useSuspenseMetadataSampleModel({
     params: { query: { ...queryParams, ...getPaginationParams() } },
   });
 

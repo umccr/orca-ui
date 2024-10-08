@@ -7,7 +7,7 @@ type ErrorBoundaryProps = PropsWithChildren & { errorTitle?: string; onCloseErro
 const DetailedErrorBoundary = ({ children, errorTitle, onCloseError }: ErrorBoundaryProps) => {
   function Fallback({ error, resetErrorBoundary }: FallbackProps) {
     return (
-      <div className='relative p-4 rounded-md bg-gray-50'>
+      <div className='my-4 relative p-4 rounded-md bg-gray-50'>
         <div className='flex justify-between w-full'>
           <pre className='font-bold	inline'>{errorTitle ?? `Something went wrong`}</pre>
           <button

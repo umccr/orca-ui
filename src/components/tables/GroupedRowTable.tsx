@@ -3,17 +3,17 @@ import { classNames } from '@/utils/commonUtils';
 
 export type TableData = {
   groupTitle: string;
-  groupData: Record<string, string | number>[];
+  groupData: Record<string, unknown>[];
 };
 
 export type Column = {
-  header: string;
+  header: ReactNode;
   accessor: string;
-  cell?: (data: string | number) => ReactNode;
+  cell?: (data: unknown) => ReactNode;
 };
 
 export interface GroupedTableProps {
-  tableHeader?: string;
+  tableHeader?: ReactNode;
   tableDescription?: string;
   columns: Column[];
   tableData: TableData[];
@@ -32,8 +32,8 @@ const GroupedTable: FC<GroupedTableProps> = ({
   stickyHeader = false,
 }) => {
   return (
-    <div className='px-4 sm:px-6 lg:px-8'>
-      <div className='sm:flex sm:items-center'>
+    <div>
+      <div className='sm:flex sm:items-center mb-4'>
         <div className='sm:flex-auto'>
           {tableHeader && (
             <h1 className='text-base font-semibold leading-6 text-gray-900'>{tableHeader}</h1>
@@ -41,7 +41,7 @@ const GroupedTable: FC<GroupedTableProps> = ({
           {tableDescription && <p className='mt-2 text-sm text-gray-700'>{tableDescription}</p>}
         </div>
       </div>
-      <div className='mt-8 flow-root'>
+      <div className='flow-root'>
         <div className='-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
           <div className='inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8'>
             <div
@@ -57,7 +57,7 @@ const GroupedTable: FC<GroupedTableProps> = ({
                     {columns &&
                       columns.map((column, index) => (
                         <th
-                          key={column.accessor}
+                          key={index}
                           scope='col'
                           className={classNames(
                             'px-3 py-3.5 text-left text-sm font-semibold text-gray-900',
@@ -97,7 +97,7 @@ const GroupedTable: FC<GroupedTableProps> = ({
                           {columns &&
                             columns.map((column, index) => (
                               <td
-                                key={column.accessor}
+                                key={index}
                                 className={classNames(
                                   'whitespace-nowrap py-4 px-3 text-sm font-medium text-gray-900',
                                   index === 0 ? 'pl-4 sm:pl-6' : '',
@@ -106,7 +106,7 @@ const GroupedTable: FC<GroupedTableProps> = ({
                               >
                                 {column.cell
                                   ? column.cell(data[column.accessor])
-                                  : data[column.accessor]}
+                                  : (data[column.accessor] as ReactNode)}
                               </td>
                             ))}
                         </tr>

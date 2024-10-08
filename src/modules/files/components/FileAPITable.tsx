@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { S3Record, useFileObject, useQueryPresignedFileObjectId } from '@/api/file';
+import { S3Record, useSuspenseFileObject, useQueryPresignedFileObjectId } from '@/api/file';
 import { Table } from '@/components/tables';
 import { Column } from '@/components/tables/Table';
 import { Bars3Icon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
@@ -17,23 +17,24 @@ import { getFilenameFromKey } from '@/utils/commonUtils';
 export const FileAPITable = ({
   additionalQueryParam,
   tableColumn = getTableColumn({}),
-  portalRunId,
+  isSearchBoxKey,
 }: {
+  isSearchBoxKey?: boolean;
   tableColumn?: Column[];
-  portalRunId?: string;
   additionalQueryParam?: Record<string, string>;
 }) => {
   const [page, setPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_PAGE_SIZE);
+  const [searchBox, setSearchBox] = useState('');
 
-  const data = useFileObject({
+  const data = useSuspenseFileObject({
     params: {
       query: {
-        ...additionalQueryParam,
+        key: searchBox == '' ? undefined : searchBox,
         page: page,
         rowsPerPage: rowsPerPage,
         currentState: true,
-        'attributes[portalRunId]': portalRunId,
+        ...additionalQueryParam,
       },
     },
   }).data;
@@ -43,6 +44,7 @@ export const FileAPITable = ({
   return (
     <Table
       columns={tableColumn}
+      tableHeader={isSearchBoxKey && <SearchBox onSearch={(s) => setSearchBox(s)} />}
       tableData={data.results.map((item) => ({
         lastModifiedDate: item.lastModifiedDate,
         size: item.size,
@@ -247,6 +249,7 @@ const DataActionButton = ({ fileRecord }: { fileRecord: S3Record }) => {
     {
       label: 'Copy S3 URI',
       onClick: () => {
+        navigator.clipboard.writeText(s3Uri);
         toaster.success({ title: 'S3 URI Copied!' });
       },
     },
@@ -257,7 +260,7 @@ const DataActionButton = ({ fileRecord }: { fileRecord: S3Record }) => {
       label: 'Generate download link',
       onClick: () => {
         if (url) {
-          navigator.clipboard.writeText(s3Uri);
+          navigator.clipboard.writeText(url);
           toaster.success({ title: 'Presigned URL copied!' });
         } else {
           setIsGenerateDownloadableLink(true);

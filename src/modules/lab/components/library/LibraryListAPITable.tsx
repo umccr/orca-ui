@@ -1,5 +1,5 @@
 import React from 'react';
-import { LibraryListQueryParams, useMetadataLibraryModel } from '@/api/metadata';
+import { LibraryListQueryParams, useSuspenseMetadataLibraryModel } from '@/api/metadata';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { components } from '@/api/types/metadata';
 import { Column, Table } from '@/components/tables';
@@ -14,7 +14,7 @@ import { Tooltip } from '@/components/common/tooltips';
 export const LibraryListAPITable = ({ queryParams }: { queryParams: LibraryListQueryParams }) => {
   const { setQueryParams, getPaginationParams } = useQueryParams();
 
-  const libraryModel = useMetadataLibraryModel({
+  const libraryModel = useSuspenseMetadataLibraryModel({
     params: { query: { ...queryParams, ...getPaginationParams() } },
   });
 
@@ -29,7 +29,7 @@ export const LibraryListAPITable = ({ queryParams }: { queryParams: LibraryListQ
     <Table
       inCard={false}
       tableHeader={
-        <div className='flex flex-col md:flex-row'>
+        <div className='flex flex-col'>
           <div className='flex items-center justify-center'>{'Library Table'}</div>
           <div className='flex flex-1 items-center justify-end pt-2'>
             <Search onSearch={(s) => setQueryParams({ search: s })} />

@@ -2,7 +2,7 @@ import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { classNames } from '@/utils/commonUtils';
 import { FC } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { useMetadataLibraryModel } from '@/api/metadata';
+import { useSuspenseMetadataLibraryModel } from '@/api/metadata';
 
 export const LibraryBreadCrumb: FC = () => {
   const { pathname } = useLocation();
@@ -11,7 +11,7 @@ export const LibraryBreadCrumb: FC = () => {
     throw new Error('No library id in URL path!');
   }
 
-  const fullLibraryModel = useMetadataLibraryModel({
+  const fullLibraryModel = useSuspenseMetadataLibraryModel({
     params: { query: { libraryId: libraryId } },
   }).data;
 
@@ -27,7 +27,7 @@ export const LibraryBreadCrumb: FC = () => {
     { name: 'LIBRARY', href: '/lab', isCurrent: false },
     {
       name: library.libraryId,
-      href: `/lab/library/${library.orcabusId}`,
+      href: `/lab/library/${library.libraryId}`,
       isCurrent: library.libraryId ? pathname.endsWith(library.libraryId) : false,
     },
   ];
