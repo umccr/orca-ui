@@ -22,7 +22,7 @@ export default function LibraryOverviewPage() {
       <div className='w-full 2xl:w-96'>
         <LibraryTableDetails libraryDetail={libraryDetail} />
       </div>
-      <div className='w-full 2xl:ml-10 2xl:pl-10 2xl:border-l-2 border-gray-100'>
+      <div className='w-full mt-4 2xl:mt-0 2xl:ml-10 2xl:pl-10 2xl:border-l-2 2xl:border-gray-100'>
         <LibraryAnalysisReportTable libraryDetail={libraryDetail} />
       </div>
     </div>

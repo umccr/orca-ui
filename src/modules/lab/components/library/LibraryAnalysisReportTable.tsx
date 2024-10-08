@@ -169,7 +169,9 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
             keyPatterns={WORKFLOW_ANALYSIS_TABLE['cttsov2']['keyPatterns']}
             getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['cttsov2']['getTableData']}
           />
-        ) : null}
+        ) : (
+          <pre>No file highlights available for this library</pre>
+        )}
       </Suspense>
     </DetailedErrorBoundary>
   );
