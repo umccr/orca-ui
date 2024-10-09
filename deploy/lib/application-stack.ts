@@ -98,7 +98,7 @@ export class ApplicationStack extends Stack {
               'env | grep VITE',
               'yarn build',
               // deploy the react app to s3
-              'aws s3 sync ./dist s3://${VITE_BUCKET_NAME}',
+              'aws s3 sync ./dist s3://${VITE_BUCKET_NAME}/dist',
               // invalidate the cloudfront cache
               'aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"',
             ],
@@ -197,6 +197,7 @@ export class ApplicationStack extends Stack {
       defaultBehavior: {
         origin: S3BucketOrigin.withOriginAccessIdentity(s3Bucket, {
           originAccessIdentity: cloudFrontOAI,
+          originPath: '/dist',
         }),
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
