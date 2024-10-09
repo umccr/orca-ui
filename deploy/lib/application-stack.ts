@@ -20,17 +20,15 @@ import {
   BuildEnvironmentVariableType,
   BuildSpec,
   LinuxArmBuildImage,
-  PipelineProject,
+  Project,
+  Source,
 } from 'aws-cdk-lib/aws-codebuild';
-import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { Pipeline, Artifact } from 'aws-cdk-lib/aws-codepipeline';
-import {
-  CodeStarConnectionsSourceAction,
-  CodeBuildAction,
-} from 'aws-cdk-lib/aws-codepipeline-actions';
+import { AccountPrincipal, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Trigger } from 'aws-cdk-lib/triggers';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Function } from 'aws-cdk-lib/aws-lambda';
+import { SOURCE_BUCKET_ARTIFACT_PATH } from '../config';
+
 export type ApplicationStackProps = {
   cloudFrontBucketName: string;
   aliasDomainName: string[];
@@ -38,7 +36,12 @@ export type ApplicationStackProps = {
 };
 
 export class ApplicationStack extends Stack {
-  constructor(scope: Construct, id: string, props: ApplicationStackProps & StackProps) {
+  constructor(
+    scope: Construct,
+    id: string,
+    props: ApplicationStackProps &
+      StackProps & { sourceBucketName: string; destinationAccountId?: string }
+  ) {
     super(scope, id, props);
 
     const clientBucket = new Bucket(this, 'OrcaUIAssetCloudFrontBucket', {
@@ -51,21 +54,28 @@ export class ApplicationStack extends Stack {
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
     });
 
+    if (props.destinationAccountId) {
+      clientBucket.grantRead(new AccountPrincipal(props.destinationAccountId));
+    }
+
     const distribution = this.setupS3CloudFrontIntegration(clientBucket, props.aliasDomainName);
-    this.buildReactApp(clientBucket, props.reactBuildEnvVariables, distribution);
+    this.buildReactApp(
+      clientBucket,
+      props.reactBuildEnvVariables,
+      distribution,
+      props.sourceBucketName
+    );
   }
 
   private buildReactApp(
     bucket: IBucket,
     reactBuildEnvVariables: Record<string, string>,
-    distribution: Distribution
+    distribution: Distribution,
+    sourceBucketName: string
   ) {
-    const codeStarArn = StringParameter.valueForStringParameter(this, 'codestar_github_arn');
+    const sourceBucket = Bucket.fromBucketName(this, 'SourceBucket', sourceBucketName);
 
-    const sourceOutput = new Artifact();
-    const buildOutput = new Artifact();
-
-    const buildProject = new PipelineProject(this, 'ReactBuildCodeBuildProject', {
+    const project = new Project(this, 'ReactBuildCodeBuildProject', {
       buildSpec: BuildSpec.fromObject({
         version: 0.2,
         phases: {
@@ -73,7 +83,14 @@ export class ApplicationStack extends Stack {
             'runtime-versions': {
               nodejs: 20,
             },
-            commands: ['node -v', 'corepack enable', 'yarn --version', 'yarn install --immutable'],
+            commands: [
+              'aws s3 rm s3://${VITE_BUCKET_NAME}/ --recursive',
+              'aws s3 sync ./ s3://${VITE_BUCKET_NAME}/${SOURCE_BUCKET_ARTIFACT_PATH} --dryrun',
+              'node -v',
+              'corepack enable',
+              'yarn --version',
+              'yarn install --immutable',
+            ],
           },
           build: {
             commands: [
@@ -81,18 +98,23 @@ export class ApplicationStack extends Stack {
               'env | grep VITE',
               'yarn build',
               // deploy the react app to s3
-              'aws s3 rm s3://${VITE_BUCKET_NAME}/ --recursive && aws s3 sync ./dist s3://${VITE_BUCKET_NAME}',
+              'aws s3 sync ./dist s3://${VITE_BUCKET_NAME}',
               // invalidate the cloudfront cache
               'aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"',
             ],
           },
         },
       }),
+      source: Source.s3({ bucket: sourceBucket, path: SOURCE_BUCKET_ARTIFACT_PATH }),
       description: 'Build react app and publish assets to S3',
       environment: { buildImage: LinuxArmBuildImage.AMAZON_LINUX_2_STANDARD_3_0 },
       environmentVariables: {
         VITE_BUCKET_NAME: {
           value: bucket.bucketName,
+          type: BuildEnvironmentVariableType.PLAINTEXT,
+        },
+        SOURCE_BUCKET_ARTIFACT_PATH: {
+          value: SOURCE_BUCKET_ARTIFACT_PATH,
           type: BuildEnvironmentVariableType.PLAINTEXT,
         },
         CLOUDFRONT_DISTRIBUTION_ID: {
@@ -119,40 +141,8 @@ export class ApplicationStack extends Stack {
       },
     });
 
-    const pipeline = new Pipeline(this, 'ReactBuildPipeline', {
-      pipelineName: 'ReactBuildPipeline',
-      crossAccountKeys: false,
-      stages: [
-        {
-          stageName: 'Source',
-          actions: [
-            new CodeStarConnectionsSourceAction({
-              actionName: 'Source',
-              owner: 'umccr',
-              repo: 'orca-ui',
-              branch: 'main',
-              connectionArn: codeStarArn,
-              output: sourceOutput,
-              triggerOnPush: false, // disable trigger on push as we need to trigger the pipeline from the lambda
-            }),
-          ],
-        },
-        {
-          stageName: 'BuildAndDeploy',
-          actions: [
-            new CodeBuildAction({
-              actionName: 'BuildAndDeploy',
-              project: buildProject,
-              input: sourceOutput,
-              outputs: [buildOutput],
-            }),
-          ],
-        },
-      ],
-    });
-
-    bucket.grantReadWrite(buildProject);
-    distribution.grantCreateInvalidation(buildProject);
+    bucket.grantReadWrite(project);
+    distribution.grantCreateInvalidation(project);
 
     const triggerFunction = new Function(this, 'TriggerCodeBuildLambda', {
       code: Code.fromAsset(path.join(__dirname, '..', 'lambda')),
@@ -163,13 +153,13 @@ export class ApplicationStack extends Stack {
       architecture: Architecture.ARM_64,
       memorySize: 1024,
       environment: {
-        CODEPIPELINE_NAME: pipeline.pipelineName,
+        CODEBUILD_PROJECT_NAME: project.projectName,
       },
 
       initialPolicy: [
         new PolicyStatement({
-          actions: ['codepipeline:StartPipelineExecution'],
-          resources: [pipeline.pipelineArn],
+          actions: ['codebuild:StartBuild'],
+          resources: [project.projectArn],
         }),
       ],
     });
@@ -177,7 +167,7 @@ export class ApplicationStack extends Stack {
     // Ths Lambda function trigger the CodeBuild project
     new Trigger(this, 'TriggerCodeBuildTrigger', {
       handler: triggerFunction,
-      executeAfter: [pipeline],
+      executeAfter: [project],
     });
   }
 

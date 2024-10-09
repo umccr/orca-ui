@@ -22,6 +22,8 @@ export const cloudFrontBucketNameConfig: Record<AppStage, string> = {
   [AppStage.PROD]: 'orcaui-cloudfront-472057503814',
 };
 
+export const SOURCE_BUCKET_ARTIFACT_PATH = 'artifact-source';
+
 export const getAppStackConfig = (appStage: AppStage): ApplicationStackProps => {
   switch (appStage) {
     case AppStage.BETA:
