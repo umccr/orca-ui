@@ -33,12 +33,20 @@ export class PipelineStack extends Stack {
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
     });
 
-    sourceBucket.grantRead(new AccountPrincipal(accountIdAlias.beta));
+    sourceBucket.addToResourcePolicy(
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: ['s3:Get*', 's3:List*'],
+        principals: [new AccountPrincipal(accountIdAlias.beta)],
+        resources: [sourceBucket.arnForObjects('*')],
+      })
+    );
 
     const pipeline = new CodePipeline(this, 'Pipeline', {
       synth: new CodeBuildStep('CdkSynthAndCodeCopy', {
         installCommands: ['node -v', 'corepack enable'],
         commands: [
+          `aws s3 rm s3://${sourceBucket.bucketName}/${SOURCE_BUCKET_ARTIFACT_PATH} --recursive --dryrun`,
           `aws s3 sync ./ s3://${sourceBucket.bucketName}/${SOURCE_BUCKET_ARTIFACT_PATH} --dryrun`,
           'cd deploy',
           'yarn install --immutable',

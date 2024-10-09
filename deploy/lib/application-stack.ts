@@ -23,7 +23,7 @@ import {
   Project,
   Source,
 } from 'aws-cdk-lib/aws-codebuild';
-import { AccountPrincipal, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { AccountPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Trigger } from 'aws-cdk-lib/triggers';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Function } from 'aws-cdk-lib/aws-lambda';
@@ -140,6 +140,13 @@ export class ApplicationStack extends Stack {
         ),
       },
     });
+    project.addToRolePolicy(
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: ['s3:Get*', 's3:List*'],
+        resources: [`arn:aws:s3:::${sourceBucketName}`, `arn:aws:s3:::${sourceBucketName}/*`],
+      })
+    );
 
     bucket.grantReadWrite(project);
     distribution.grantCreateInvalidation(project);
@@ -155,7 +162,6 @@ export class ApplicationStack extends Stack {
       environment: {
         CODEBUILD_PROJECT_NAME: project.projectName,
       },
-
       initialPolicy: [
         new PolicyStatement({
           actions: ['codebuild:StartBuild'],
