@@ -10,6 +10,7 @@ import {
   getAppStackConfig,
   REGION,
   SOURCE_BUCKET_ARTIFACT_PATH,
+  bastionSourceBucketName,
 } from '../config';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { BlockPublicAccess, Bucket } from 'aws-cdk-lib/aws-s3';
@@ -26,7 +27,7 @@ export class PipelineStack extends Stack {
     });
 
     const sourceBucket = new Bucket(this, 'SourceCodeBucket', {
-      bucketName: 'bastion-orca-ui-source',
+      bucketName: bastionSourceBucketName,
       autoDeleteObjects: true,
       enforceSSL: true,
       removalPolicy: RemovalPolicy.DESTROY,
@@ -91,7 +92,7 @@ export class PipelineStack extends Stack {
       'OrcaUIBeta',
       accountIdAlias.beta,
       betaConfig,
-      sourceBucket.bucketName,
+      bastionSourceBucketName,
       accountIdAlias.gamma
     );
 

@@ -7,6 +7,8 @@ export enum AppStage {
 }
 
 export const TOOLCHAIN_ACCOUNT_ID = '383856791668'; // umccr_bastion
+export const bastionSourceBucketName = 'orcaui-source-artifact-383856791668';
+export const SOURCE_BUCKET_ARTIFACT_PATH = 'artifact-source';
 
 export const accountIdAlias: Record<AppStage, string> = {
   [AppStage.BETA]: '843407916570', // umccr_development
@@ -21,8 +23,6 @@ export const cloudFrontBucketNameConfig: Record<AppStage, string> = {
   [AppStage.GAMMA]: 'orcaui-cloudfront-455634345446',
   [AppStage.PROD]: 'orcaui-cloudfront-472057503814',
 };
-
-export const SOURCE_BUCKET_ARTIFACT_PATH = 'artifact-source';
 
 export const getAppStackConfig = (appStage: AppStage): ApplicationStackProps => {
   switch (appStage) {
