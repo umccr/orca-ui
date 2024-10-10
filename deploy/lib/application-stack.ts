@@ -85,7 +85,7 @@ export class ApplicationStack extends Stack {
             },
             commands: [
               'aws s3 rm s3://${VITE_BUCKET_NAME}/ --recursive',
-              'aws s3 sync ./ s3://${VITE_BUCKET_NAME}/${SOURCE_BUCKET_ARTIFACT_PATH} --dryrun',
+              'aws s3 sync ./ s3://${VITE_BUCKET_NAME}/${SOURCE_BUCKET_ARTIFACT_PATH} ',
               'node -v',
               'corepack enable',
               'yarn --version',
