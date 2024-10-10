@@ -13,37 +13,43 @@ import { SpinnerWithText } from '@/components/common/spinner';
 
 const WORKFLOW_ANALYSIS_TABLE = {
   umccrise: {
-    keyPatterns: [
-      '*.html',
-      '*circos*.png',
-      '*work*small_variants*.vcf.gz',
-      '*work*small_variants*.maf',
-    ],
+    keyPatterns: ['*.html', '*circos*.png', '*somatic-PASS.vcf.gz', '*predispose_genes.vcf.gz'],
     getTableData: (data: ({ key: string } & Record<string, unknown>)[]): TableData[] => {
       return [
         {
-          groupTitle: 'Cancer Report',
+          groupTitle: 'CANCER',
           groupData: data.filter((r) => r.key.endsWith('cancer_report.html')),
         },
         {
-          groupTitle: 'PCGR Report',
+          groupTitle: 'PCGR',
           groupData: data.filter((r) => r.key.endsWith('pcgr.html')),
         },
         {
-          groupTitle: 'CPSR Report',
+          groupTitle: 'CPSR',
           groupData: data.filter((r) => r.key.endsWith('cpsr.html')),
         },
         {
-          groupTitle: 'QC Report',
+          groupTitle: 'MULTIQC',
           groupData: data.filter((r) => r.key.includes('multiqc')),
         },
         {
-          groupTitle: 'CIRCOS Plot',
+          groupTitle: 'CIRCOS',
           groupData: data.filter((r) => r.key.endsWith('.png')),
         },
         {
           groupTitle: 'VCF',
-          groupData: data.filter((r) => r.key.endsWith('.vcf.gz') || r.key.endsWith('.maf')),
+          groupData: data.filter((r) => r.key.endsWith('.vcf.gz')),
+        },
+      ];
+    },
+  },
+  tumor_normal: {
+    keyPatterns: ['*.bam'],
+    getTableData: (data: ({ key: string } & Record<string, unknown>)[]): TableData[] => {
+      return [
+        {
+          groupTitle: 'bam',
+          groupData: data.filter((r) => r.key.endsWith('.bam')),
         },
       ];
     },
@@ -53,11 +59,11 @@ const WORKFLOW_ANALYSIS_TABLE = {
     getTableData: (data: ({ key: string } & Record<string, unknown>)[]): TableData[] => {
       return [
         {
-          groupTitle: 'QC Report',
+          groupTitle: 'MULTIQC',
           groupData: data.filter((r) => r.key.includes('multiqc')),
         },
         {
-          groupTitle: 'FUSIONS Report',
+          groupTitle: 'FUSIONS',
           groupData: data.filter((r) => r.key.includes('fusions')),
         },
         {
@@ -68,12 +74,12 @@ const WORKFLOW_ANALYSIS_TABLE = {
     },
   },
   rnasum: {
-    keyPatterns: ['*RNAseq_report.html'],
+    keyPatterns: ['*RNAseq_report.html', '*/genes.expr.perc.html', '*/genes.expr.z.html'],
     getTableData: (data: ({ key: string } & Record<string, unknown>)[]): TableData[] => {
       return [
         {
-          groupTitle: 'RNASUM Report',
-          groupData: data.filter((r) => r.key.endsWith('RNAseq_report.html')),
+          groupTitle: 'HTML',
+          groupData: data.filter((r) => r.key.endsWith('.html')),
         },
       ];
     },
@@ -81,10 +87,11 @@ const WORKFLOW_ANALYSIS_TABLE = {
   cttsov2: {
     keyPatterns: [
       '*.bam',
-      '*.tmb.metrics.csv',
-      '*/Results/*.tsv',
+      '*/Results/*/*.csv',
+      '*/Results/*/*.tsv',
       '*/Results/*.vcf.gz',
-      '*/Results/*.json',
+      '*/Results/*.gvcf.gz',
+      '*/Results/*.tmb.msaf.csv',
     ],
     getTableData: (data: ({ key: string } & Record<string, unknown>)[]): TableData[] => {
       return [
@@ -130,9 +137,9 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
    * Ideally this could be viewable in a case-view to show relevant reports
    *
    * Notes:
-   * WGS library type = "UMCCRISE" workflow type html reports
-   * WTS library type = "wts" && "rnasum" workflow type pdf/html reports
-   * ctDNA library type && "ctTSO" assay = "cttsov2" workflow pdf/html reports
+   * WGS library type => "UMCCRISE" && "tumor_normal" workflow type html reports
+   * WTS library type => "wts" && "rnasum" workflow type pdf/html reports
+   * ctDNA library type && "ctTSO" assay => "cttsov2" workflow pdf/html reports
    */
 
   return (
@@ -140,12 +147,20 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
       <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
         <div className='font-bold py-3 text-lg'>Workflow Results</div>
         {libraryDetail.type === 'WGS' ? (
-          <AnalysisTable
-            libraryId={libraryId}
-            workflowType='umccrise'
-            keyPatterns={WORKFLOW_ANALYSIS_TABLE['umccrise']['keyPatterns']}
-            getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['umccrise']['getTableData']}
-          />
+          <>
+            <AnalysisTable
+              libraryId={libraryId}
+              workflowType='umccrise'
+              keyPatterns={WORKFLOW_ANALYSIS_TABLE['umccrise']['keyPatterns']}
+              getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['umccrise']['getTableData']}
+            />
+            <AnalysisTable
+              libraryId={libraryId}
+              workflowType='tumor_normal'
+              keyPatterns={WORKFLOW_ANALYSIS_TABLE['umccrise']['keyPatterns']}
+              getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['umccrise']['getTableData']}
+            />
+          </>
         ) : libraryDetail.type === 'WTS' ? (
           <>
             <AnalysisTable
