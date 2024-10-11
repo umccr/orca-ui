@@ -48,7 +48,7 @@ const WORKFLOW_ANALYSIS_TABLE = {
     getTableData: (data: ({ key: string } & Record<string, unknown>)[]): TableData[] => {
       return [
         {
-          groupTitle: 'bam',
+          groupTitle: 'BAM',
           groupData: data.filter((r) => r.key.endsWith('.bam')),
         },
       ];
@@ -87,11 +87,11 @@ const WORKFLOW_ANALYSIS_TABLE = {
   cttsov2: {
     keyPatterns: [
       '*.bam',
+      '*.tmb.msaf.csv',
       '*/Results/*/*.csv',
       '*/Results/*/*.tsv',
       '*/Results/*.vcf.gz',
       '*/Results/*.gvcf.gz',
-      '*/Results/*.tmb.msaf.csv',
     ],
     getTableData: (data: ({ key: string } & Record<string, unknown>)[]): TableData[] => {
       return [
@@ -143,52 +143,61 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
    */
 
   return (
-    <DetailedErrorBoundary errorTitle='Unable to load analysis report files'>
-      <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
-        <div className='font-bold py-3 text-lg'>Workflow Results</div>
-        {libraryDetail.type === 'WGS' ? (
-          <>
+    <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
+      <div className='font-bold py-3 text-lg'>Workflow Results</div>
+      {libraryDetail.type === 'WGS' ? (
+        <>
+          <DetailedErrorBoundary errorTitle={`Unable to load 'umccrise' report files`}>
             <AnalysisTable
               libraryId={libraryId}
               workflowType='umccrise'
               keyPatterns={WORKFLOW_ANALYSIS_TABLE['umccrise']['keyPatterns']}
               getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['umccrise']['getTableData']}
             />
+          </DetailedErrorBoundary>
+          <div className='py-4'></div>
+          <DetailedErrorBoundary errorTitle={`Unable to load 'tumor_normal' report files`}>
             <AnalysisTable
               libraryId={libraryId}
               workflowType='tumor_normal'
-              keyPatterns={WORKFLOW_ANALYSIS_TABLE['umccrise']['keyPatterns']}
-              getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['umccrise']['getTableData']}
+              keyPatterns={WORKFLOW_ANALYSIS_TABLE['tumor_normal']['keyPatterns']}
+              getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['tumor_normal']['getTableData']}
             />
-          </>
-        ) : libraryDetail.type === 'WTS' ? (
-          <>
+          </DetailedErrorBoundary>
+        </>
+      ) : libraryDetail.type === 'WTS' ? (
+        <>
+          <DetailedErrorBoundary errorTitle={`Unable to load 'wts' report files`}>
             <AnalysisTable
               libraryId={libraryId}
               workflowType='wts'
               keyPatterns={WORKFLOW_ANALYSIS_TABLE['wts']['keyPatterns']}
               getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['wts']['getTableData']}
             />
-            <div className='py-4'></div>
+          </DetailedErrorBoundary>
+          <div className='py-4'></div>
+          <DetailedErrorBoundary errorTitle={`Unable to load 'rnasum' report files`}>
             <AnalysisTable
               libraryId={libraryId}
               workflowType='rnasum'
               keyPatterns={WORKFLOW_ANALYSIS_TABLE['rnasum']['keyPatterns']}
               getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['rnasum']['getTableData']}
             />
-          </>
-        ) : libraryDetail.type === 'ctDNA' && libraryDetail.assay === 'ctTSO' ? (
+          </DetailedErrorBoundary>
+        </>
+      ) : libraryDetail.type === 'ctDNA' && libraryDetail.assay === 'ctTSO' ? (
+        <DetailedErrorBoundary errorTitle={`Unable to load 'cttsov2' report files`}>
           <AnalysisTable
             libraryId={libraryId}
             workflowType='cttsov2'
             keyPatterns={WORKFLOW_ANALYSIS_TABLE['cttsov2']['keyPatterns']}
             getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['cttsov2']['getTableData']}
           />
-        ) : (
-          <pre>No file highlights available for this library</pre>
-        )}
-      </Suspense>
-    </DetailedErrorBoundary>
+        </DetailedErrorBoundary>
+      ) : (
+        <pre>No file highlights available for this library</pre>
+      )}
+    </Suspense>
   );
 };
 
