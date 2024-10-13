@@ -6,6 +6,8 @@ import { BackdropWithText } from '@/components/common/backdrop';
 import Skeleton from 'react-loading-skeleton';
 import { JsonToNestedList } from '@/components/common/json-to-table';
 import { ContentTabs } from '@/components/navigation/tabs';
+import { Link } from 'react-router-dom';
+import { classNames } from '@/utils/commonUtils';
 interface JsonDisplayProps {
   selectedPayloadId?: number | null;
 }
@@ -60,8 +62,31 @@ const JsonToListDisplay: FC<JsonToListDisplayProps> = ({ selectedPayloadId }) =>
     },
   });
 
+  /**
+   * This is an EXPERIMENTAL approach where want to be able to redirect to the `/files` page
+   * with filter to a specific key prefix if an s3 uri path is found as the value
+   */
+  const cellValueFormat = {
+    condition: (value: unknown) => typeof value === 'string' && value.startsWith('s3://'),
+    cell: (value: string) => {
+      const s3Bucket = value.split('s3://')[1].split('/')[0];
+      const s3Key = value.split(`s3://${s3Bucket}/`)[1];
+
+      return (
+        <Link
+          // asterisk (*) is added to the end of the key to filter the path prefix
+          to={`/files?key=${encodeURIComponent(s3Key)}*`}
+          className={classNames('text-sm capitalize font-medium hover:text-blue-700 text-blue-500')}
+        >
+          {value}
+        </Link>
+      );
+    },
+  };
+
   return (
     <JsonToNestedList
+      cellValueFormat={cellValueFormat}
       data={selectedWorkflowPayloadData?.data as Record<string, unknown>}
       isFetchingData={isFetching}
     />

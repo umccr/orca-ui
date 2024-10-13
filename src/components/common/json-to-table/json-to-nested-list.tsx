@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { FC, useEffect, useState } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { classNames } from '@/utils/commonUtils';
 import { BackdropWithText } from '@/components/common/backdrop';
@@ -10,6 +10,10 @@ interface JsonToNestedListProps {
   data: Record<string, any> | null;
   isFetchingData: boolean;
   inCard?: boolean;
+  cellValueFormat?: {
+    condition: (value: string) => boolean;
+    cell: (value: string) => ReactNode;
+  };
 }
 
 const JsonToNestedList: FC<JsonToNestedListProps> = ({
@@ -18,6 +22,7 @@ const JsonToNestedList: FC<JsonToNestedListProps> = ({
   data,
   isFetchingData,
   inCard = true,
+  cellValueFormat,
 }) => {
   const [listData, setListData] = useState<Record<string, any> | null>(data);
   useEffect(() => {
@@ -48,6 +53,8 @@ const JsonToNestedList: FC<JsonToNestedListProps> = ({
           ))}
         </dl>
       );
+    } else if (cellValueFormat && cellValueFormat.condition(value)) {
+      return cellValueFormat.cell(value);
     } else {
       return <span className='break-words'>{value}</span>;
     }

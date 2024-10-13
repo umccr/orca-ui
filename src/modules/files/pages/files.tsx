@@ -1,24 +1,30 @@
 import { SpinnerWithText } from '@/components/common/spinner';
-import { Suspense, useState } from 'react';
+import { Suspense } from 'react';
 import { FileAPITable, getTableColumn, SearchBox } from '../components/FileAPITable';
+import { useQueryParams } from '@/hooks/useQueryParams';
 
 export default function FilesPage() {
-  const [queryParams, setQueryParams] = useState<Record<string, string>>({});
+  const { setQueryParams, getQueryParams } = useQueryParams();
+
+  const searchKey = getQueryParams().key;
 
   return (
     <>
       <SearchBox
+        initValue={searchKey}
         placeholder='Object key search (support wildcard)'
         onSearch={(s) => {
-          setQueryParams((p) => ({ ...p, key: s }));
+          setQueryParams({ key: s });
         }}
       />
 
       {/* Only show the table if the key filter exist! */}
-      {!!queryParams?.key && (
+      {searchKey && (
         <Suspense fallback={<SpinnerWithText className='mt-4' text='Fetching related files ...' />}>
           <FileAPITable
-            additionalQueryParam={queryParams}
+            additionalQueryParam={{
+              key: searchKey,
+            }}
             tableColumn={getTableColumn({ isHideKeyPrefix: false })}
           />
         </Suspense>
