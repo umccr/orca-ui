@@ -5,10 +5,10 @@ import { Dialog } from '@/components/dialogs';
 
 export const WorkflowVersion = ({
   portalRunId,
-  libraryId,
+  libraryOrcabusId,
 }: {
   portalRunId: string;
-  libraryId: string;
+  libraryOrcabusId: string;
 }) => {
   const [isOpenWorkflowDetails, setIsOpenWorkflowDetails] = useState(false);
 
@@ -17,7 +17,7 @@ export const WorkflowVersion = ({
       query: {
         workflowrun__portalRunId: portalRunId,
         // Ensure the portalRunId belongs to the library
-        workflowrun__libraries__libraryId: libraryId,
+        workflowrun__libraries__orcabusId: libraryOrcabusId,
       },
     },
   }).data?.results;
