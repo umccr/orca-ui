@@ -37,6 +37,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/contact/{orcabusId}/history/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Retrieve the history of this model */
+        get: operations["apiV1ContactHistoryList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/individual/": {
         parameters: {
             query?: never;
@@ -62,6 +79,23 @@ export interface paths {
         };
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["apiV1IndividualRetrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/individual/{orcabusId}/history/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Retrieve the history of this model */
+        get: operations["apiV1IndividualHistoryList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -103,6 +137,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/library/{orcabusId}/history/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Retrieve the history of this model */
+        get: operations["apiV1LibraryHistoryList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/project/": {
         parameters: {
             query?: never;
@@ -128,6 +179,23 @@ export interface paths {
         };
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["apiV1ProjectRetrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/project/{orcabusId}/history/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Retrieve the history of this model */
+        get: operations["apiV1ProjectHistoryList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -169,6 +237,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/sample/{orcabusId}/history/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Retrieve the history of this model */
+        get: operations["apiV1SampleHistoryList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/subject/": {
         parameters: {
             query?: never;
@@ -202,6 +287,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/subject/{orcabusId}/history/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Retrieve the history of this model */
+        get: operations["apiV1SubjectHistoryList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -225,6 +327,27 @@ export interface components {
             /** Format: email */
             email?: string | null;
         };
+        ContactHistory: {
+            readonly historyId: number;
+            readonly orcabusId: string;
+            contactId?: string | null;
+            name?: string | null;
+            description?: string | null;
+            /** Format: email */
+            email?: string | null;
+            /** Format: date-time */
+            historyDate: string;
+            historyChangeReason?: string | null;
+            historyType: components["schemas"]["HistoryTypeEnum"];
+            historyUser?: number | null;
+        };
+        /**
+         * @description * `+` - Created
+         *     * `~` - Changed
+         *     * `-` - Deleted
+         * @enum {string}
+         */
+        HistoryTypeEnum: "+" | "~" | "-";
         Individual: {
             readonly orcabusId: string;
             individualId?: string | null;
@@ -235,6 +358,17 @@ export interface components {
             readonly subjectSet: components["schemas"]["Subject"][];
             individualId?: string | null;
             source?: string | null;
+        };
+        IndividualHistory: {
+            readonly historyId: number;
+            readonly orcabusId: string;
+            individualId?: string | null;
+            source?: string | null;
+            /** Format: date-time */
+            historyDate: string;
+            historyChangeReason?: string | null;
+            historyType: components["schemas"]["HistoryTypeEnum"];
+            historyUser?: number | null;
         };
         Library: {
             readonly orcabusId: string;
@@ -263,6 +397,26 @@ export interface components {
             /** Format: double */
             coverage?: number | null;
         };
+        LibraryHistory: {
+            readonly historyId: number;
+            readonly projectSet: string[];
+            readonly orcabusId: string;
+            libraryId?: string | null;
+            phenotype?: (components["schemas"]["PhenotypeEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+            workflow?: (components["schemas"]["WorkflowEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+            quality?: (components["schemas"]["QualityEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+            type?: (components["schemas"]["TypeEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+            assay?: string | null;
+            /** Format: double */
+            coverage?: number | null;
+            /** Format: date-time */
+            historyDate: string;
+            historyChangeReason?: string | null;
+            historyType: components["schemas"]["HistoryTypeEnum"];
+            sample?: string | null;
+            subject?: string | null;
+            historyUser?: number | null;
+        };
         /** @enum {unknown} */
         NullEnum: null;
         PaginatedContactDetailList: {
@@ -285,6 +439,26 @@ export interface components {
             };
             results: components["schemas"]["ContactDetail"][];
         };
+        PaginatedContactHistoryList: {
+            links: {
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=4
+                 */
+                next?: string | null;
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=2
+                 */
+                previous?: string | null;
+            };
+            pagination: {
+                count?: number;
+                page?: number;
+                rowsPerPage?: number;
+            };
+            results: components["schemas"]["ContactHistory"][];
+        };
         PaginatedIndividualDetailList: {
             links: {
                 /**
@@ -304,6 +478,26 @@ export interface components {
                 rowsPerPage?: number;
             };
             results: components["schemas"]["IndividualDetail"][];
+        };
+        PaginatedIndividualHistoryList: {
+            links: {
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=4
+                 */
+                next?: string | null;
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=2
+                 */
+                previous?: string | null;
+            };
+            pagination: {
+                count?: number;
+                page?: number;
+                rowsPerPage?: number;
+            };
+            results: components["schemas"]["IndividualHistory"][];
         };
         PaginatedLibraryDetailList: {
             links: {
@@ -325,6 +519,26 @@ export interface components {
             };
             results: components["schemas"]["LibraryDetail"][];
         };
+        PaginatedLibraryHistoryList: {
+            links: {
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=4
+                 */
+                next?: string | null;
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=2
+                 */
+                previous?: string | null;
+            };
+            pagination: {
+                count?: number;
+                page?: number;
+                rowsPerPage?: number;
+            };
+            results: components["schemas"]["LibraryHistory"][];
+        };
         PaginatedProjectDetailList: {
             links: {
                 /**
@@ -344,6 +558,26 @@ export interface components {
                 rowsPerPage?: number;
             };
             results: components["schemas"]["ProjectDetail"][];
+        };
+        PaginatedProjectHistoryList: {
+            links: {
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=4
+                 */
+                next?: string | null;
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=2
+                 */
+                previous?: string | null;
+            };
+            pagination: {
+                count?: number;
+                page?: number;
+                rowsPerPage?: number;
+            };
+            results: components["schemas"]["ProjectHistory"][];
         };
         PaginatedSampleDetailList: {
             links: {
@@ -365,6 +599,26 @@ export interface components {
             };
             results: components["schemas"]["SampleDetail"][];
         };
+        PaginatedSampleHistoryList: {
+            links: {
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=4
+                 */
+                next?: string | null;
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=2
+                 */
+                previous?: string | null;
+            };
+            pagination: {
+                count?: number;
+                page?: number;
+                rowsPerPage?: number;
+            };
+            results: components["schemas"]["SampleHistory"][];
+        };
         PaginatedSubjectDetailList: {
             links: {
                 /**
@@ -384,6 +638,26 @@ export interface components {
                 rowsPerPage?: number;
             };
             results: components["schemas"]["SubjectDetail"][];
+        };
+        PaginatedSubjectHistoryList: {
+            links: {
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=4
+                 */
+                next?: string | null;
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=2
+                 */
+                previous?: string | null;
+            };
+            pagination: {
+                count?: number;
+                page?: number;
+                rowsPerPage?: number;
+            };
+            results: components["schemas"]["SubjectHistory"][];
         };
         /**
          * @description * `normal` - Normal
@@ -406,6 +680,19 @@ export interface components {
             name?: string | null;
             description?: string | null;
         };
+        ProjectHistory: {
+            readonly historyId: number;
+            readonly contactSet: string[];
+            readonly orcabusId: string;
+            projectId?: string | null;
+            name?: string | null;
+            description?: string | null;
+            /** Format: date-time */
+            historyDate: string;
+            historyChangeReason?: string | null;
+            historyType: components["schemas"]["HistoryTypeEnum"];
+            historyUser?: number | null;
+        };
         /**
          * @description * `very-poor` - VeryPoor
          *     * `poor` - Poor
@@ -426,6 +713,18 @@ export interface components {
             sampleId?: string | null;
             externalSampleId?: string | null;
             source?: (components["schemas"]["SourceEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+        };
+        SampleHistory: {
+            readonly historyId: number;
+            readonly orcabusId: string;
+            sampleId?: string | null;
+            externalSampleId?: string | null;
+            source?: (components["schemas"]["SourceEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+            /** Format: date-time */
+            historyDate: string;
+            historyChangeReason?: string | null;
+            historyType: components["schemas"]["HistoryTypeEnum"];
+            historyUser?: number | null;
         };
         /**
          * @description * `ascites` - Ascites
@@ -459,6 +758,17 @@ export interface components {
             readonly individualSet: components["schemas"]["Individual"][];
             readonly librarySet: components["schemas"]["Library"][];
             subjectId?: string | null;
+        };
+        SubjectHistory: {
+            readonly historyId: number;
+            readonly individualSet: string[];
+            readonly orcabusId: string;
+            subjectId?: string | null;
+            /** Format: date-time */
+            historyDate: string;
+            historyChangeReason?: string | null;
+            historyType: components["schemas"]["HistoryTypeEnum"];
+            historyUser?: number | null;
         };
         /**
          * @description * `10X` - Ten X
@@ -551,6 +861,37 @@ export interface operations {
             };
         };
     };
+    apiV1ContactHistoryList: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description Number of results to return per page. */
+                rowsPerPage?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path: {
+                /** @description A unique value identifying this contact. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedContactHistoryList"];
+                };
+            };
+        };
+    };
     apiV1IndividualList: {
         parameters: {
             query?: {
@@ -601,6 +942,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["IndividualDetail"];
+                };
+            };
+        };
+    };
+    apiV1IndividualHistoryList: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description Number of results to return per page. */
+                rowsPerPage?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path: {
+                /** @description A unique value identifying this individual. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedIndividualHistoryList"];
                 };
             };
         };
@@ -691,6 +1063,37 @@ export interface operations {
             };
         };
     };
+    apiV1LibraryHistoryList: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description Number of results to return per page. */
+                rowsPerPage?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path: {
+                /** @description A unique value identifying this library. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedLibraryHistoryList"];
+                };
+            };
+        };
+    };
     apiV1ProjectList: {
         parameters: {
             query?: {
@@ -741,6 +1144,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProjectDetail"];
+                };
+            };
+        };
+    };
+    apiV1ProjectHistoryList: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description Number of results to return per page. */
+                rowsPerPage?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path: {
+                /** @description A unique value identifying this project. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedProjectHistoryList"];
                 };
             };
         };
@@ -818,6 +1252,37 @@ export interface operations {
             };
         };
     };
+    apiV1SampleHistoryList: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description Number of results to return per page. */
+                rowsPerPage?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path: {
+                /** @description A unique value identifying this sample. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedSampleHistoryList"];
+                };
+            };
+        };
+    };
     apiV1SubjectList: {
         parameters: {
             query?: {
@@ -870,6 +1335,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SubjectDetail"];
+                };
+            };
+        };
+    };
+    apiV1SubjectHistoryList: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description Number of results to return per page. */
+                rowsPerPage?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path: {
+                /** @description A unique value identifying this subject. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedSubjectHistoryList"];
                 };
             };
         };

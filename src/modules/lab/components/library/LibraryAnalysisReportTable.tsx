@@ -180,7 +180,9 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
             />
           </DetailedErrorBoundary>
         </>
-      ) : libraryDetail.type === 'ctDNA' && libraryDetail.assay === 'ctTSO' ? (
+      ) : libraryDetail.type === 'ctDNA' &&
+        (libraryDetail.assay?.toLowerCase() === 'cttso' ||
+          libraryDetail.assay?.toLowerCase() == 'cttsov2') ? (
         <DetailedErrorBoundary errorTitle={`Unable to load 'cttsov2' report files`}>
           <AnalysisTable
             libraryOrcabusId={libraryDetail.orcabusId}
@@ -210,7 +212,11 @@ export const AnalysisTable = ({
   const workflowRun = useSuspenseWorkflowRunListModel({
     params: {
       query: {
-        libraries__orcabusId: libraryOrcabusId,
+        // WFM-FIXME: Library Orcabus Prefix
+        libraries__orcabusId:
+          libraryOrcabusId.split('.').length > 1
+            ? libraryOrcabusId.split('.')[1]
+            : libraryOrcabusId.split('.')[0],
         workflow__workflowName: workflowType,
         ordering: '-portalRunId',
         rowsPerPage: DEFAULT_NON_PAGINATE_PAGE_SIZE,

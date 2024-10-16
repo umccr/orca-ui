@@ -113,7 +113,7 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
           } else {
             return (
               <Link
-                to={`/lab/library/${orcabusId}`}
+                to={`/lab/library/${orcabusId}/overview`}
                 className={classNames(
                   'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
                 )}

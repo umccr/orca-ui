@@ -262,6 +262,8 @@ export interface components {
             eTag?: string | null;
             eventTime?: components["schemas"]["DateTimeWithTimeZone"] | null;
             eventType: components["schemas"]["EventType"];
+            /** Format: uuid */
+            ingestId?: string | null;
             isDeleteMarker: boolean;
             key: string;
             lastModifiedDate?: components["schemas"]["DateTimeWithTimeZone"] | null;
@@ -362,29 +364,41 @@ export interface operations {
                  *     For example, consider that there are three events for a given bucket, key and version_id
                  *     in the following order: `Created` -> `Deleted` -> `Created`. Then setting
                  *     `?current_state=true` would return only the last `Created` event. */
-                currentState?: boolean | null;
+                currentState?: boolean;
                 /** @description Query by event type. */
                 eventType?: components["schemas"]["EventType"] | null;
-                /** @description Query by bucket. Supports wildcards. */
-                bucket?: components["schemas"]["Wildcard"] | null;
-                /** @description Query by key. Supports wildcards. */
-                key?: components["schemas"]["Wildcard"] | null;
-                /** @description Query by version_id. Supports wildcards. */
-                versionId?: components["schemas"]["Wildcard"] | null;
-                /** @description Query by event_time. Supports wildcards. */
+                /** @description Query by bucket. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
+                bucket?: components["schemas"]["Wildcard"][];
+                /** @description Query by key. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
+                key?: components["schemas"]["Wildcard"][];
+                /** @description Query by version_id. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
+                versionId?: components["schemas"]["Wildcard"][];
+                /** @description Query by event_time. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
                 eventTime?: components["schemas"]["Wildcard"];
-                /** @description Query by size. */
-                size?: number | null;
-                /** @description Query by the sha256 checksum. */
-                sha256?: string | null;
-                /** @description Query by the last modified date. Supports wildcards. */
+                /** @description Query by size.
+                 *     Repeated parameters are joined with an `or` condition. */
+                size?: number[];
+                /** @description Query by the sha256 checksum.
+                 *     Repeated parameters are joined with an `or` condition. */
+                sha256?: string[];
+                /** @description Query by the last modified date. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
                 lastModifiedDate?: components["schemas"]["Wildcard"];
-                /** @description Query by the e_tag. */
-                eTag?: string | null;
-                /** @description Query by the storage class. Supports wildcards. */
-                storageClass?: components["schemas"]["StorageClass"] | null;
+                /** @description Query by the e_tag.
+                 *     Repeated parameters are joined with an `or` condition. */
+                eTag?: string[];
+                /** @description Query by the storage class.
+                 *     Repeated parameters are joined with an `or` condition. */
+                storageClass?: components["schemas"]["StorageClass"][];
                 /** @description Query by the object delete marker. */
                 isDeleteMarker?: boolean | null;
+                /** @description Query by the ingest id that objects get tagged with.
+                 *     Repeated parameters are joined with an `or` condition. */
+                ingestId?: string[];
                 /** @description Query by JSON attributes. Supports nested syntax to access inner
                  *     fields, e.g. `attributes[attribute_id]=...`. This only deserializes
                  *     into string fields, and does not support other JSON types. E.g.
@@ -451,29 +465,41 @@ export interface operations {
                  *     For example, consider that there are three events for a given bucket, key and version_id
                  *     in the following order: `Created` -> `Deleted` -> `Created`. Then setting
                  *     `?current_state=true` would return only the last `Created` event. */
-                currentState?: boolean | null;
+                currentState?: boolean;
                 /** @description Query by event type. */
                 eventType?: components["schemas"]["EventType"] | null;
-                /** @description Query by bucket. Supports wildcards. */
-                bucket?: components["schemas"]["Wildcard"] | null;
-                /** @description Query by key. Supports wildcards. */
-                key?: components["schemas"]["Wildcard"] | null;
-                /** @description Query by version_id. Supports wildcards. */
-                versionId?: components["schemas"]["Wildcard"] | null;
-                /** @description Query by event_time. Supports wildcards. */
+                /** @description Query by bucket. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
+                bucket?: components["schemas"]["Wildcard"][];
+                /** @description Query by key. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
+                key?: components["schemas"]["Wildcard"][];
+                /** @description Query by version_id. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
+                versionId?: components["schemas"]["Wildcard"][];
+                /** @description Query by event_time. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
                 eventTime?: components["schemas"]["Wildcard"];
-                /** @description Query by size. */
-                size?: number | null;
-                /** @description Query by the sha256 checksum. */
-                sha256?: string | null;
-                /** @description Query by the last modified date. Supports wildcards. */
+                /** @description Query by size.
+                 *     Repeated parameters are joined with an `or` condition. */
+                size?: number[];
+                /** @description Query by the sha256 checksum.
+                 *     Repeated parameters are joined with an `or` condition. */
+                sha256?: string[];
+                /** @description Query by the last modified date. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
                 lastModifiedDate?: components["schemas"]["Wildcard"];
-                /** @description Query by the e_tag. */
-                eTag?: string | null;
-                /** @description Query by the storage class. Supports wildcards. */
-                storageClass?: components["schemas"]["StorageClass"] | null;
+                /** @description Query by the e_tag.
+                 *     Repeated parameters are joined with an `or` condition. */
+                eTag?: string[];
+                /** @description Query by the storage class.
+                 *     Repeated parameters are joined with an `or` condition. */
+                storageClass?: components["schemas"]["StorageClass"][];
                 /** @description Query by the object delete marker. */
                 isDeleteMarker?: boolean | null;
+                /** @description Query by the ingest id that objects get tagged with.
+                 *     Repeated parameters are joined with an `or` condition. */
+                ingestId?: string[];
                 /** @description Query by JSON attributes. Supports nested syntax to access inner
                  *     fields, e.g. `attributes[attribute_id]=...`. This only deserializes
                  *     into string fields, and does not support other JSON types. E.g.
@@ -551,7 +577,7 @@ export interface operations {
                  *     For example, consider that there are three events for a given bucket, key and version_id
                  *     in the following order: `Created` -> `Deleted` -> `Created`. Then setting
                  *     `?current_state=true` would return only the last `Created` event. */
-                currentState?: boolean | null;
+                currentState?: boolean;
                 params?: {
                     [key: string]: components["schemas"]["Json"];
                 };
@@ -615,29 +641,41 @@ export interface operations {
                  *     For example, consider that there are three events for a given bucket, key and version_id
                  *     in the following order: `Created` -> `Deleted` -> `Created`. Then setting
                  *     `?current_state=true` would return only the last `Created` event. */
-                currentState?: boolean | null;
+                currentState?: boolean;
                 /** @description Query by event type. */
                 eventType?: components["schemas"]["EventType"] | null;
-                /** @description Query by bucket. Supports wildcards. */
-                bucket?: components["schemas"]["Wildcard"] | null;
-                /** @description Query by key. Supports wildcards. */
-                key?: components["schemas"]["Wildcard"] | null;
-                /** @description Query by version_id. Supports wildcards. */
-                versionId?: components["schemas"]["Wildcard"] | null;
-                /** @description Query by event_time. Supports wildcards. */
+                /** @description Query by bucket. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
+                bucket?: components["schemas"]["Wildcard"][];
+                /** @description Query by key. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
+                key?: components["schemas"]["Wildcard"][];
+                /** @description Query by version_id. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
+                versionId?: components["schemas"]["Wildcard"][];
+                /** @description Query by event_time. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
                 eventTime?: components["schemas"]["Wildcard"];
-                /** @description Query by size. */
-                size?: number | null;
-                /** @description Query by the sha256 checksum. */
-                sha256?: string | null;
-                /** @description Query by the last modified date. Supports wildcards. */
+                /** @description Query by size.
+                 *     Repeated parameters are joined with an `or` condition. */
+                size?: number[];
+                /** @description Query by the sha256 checksum.
+                 *     Repeated parameters are joined with an `or` condition. */
+                sha256?: string[];
+                /** @description Query by the last modified date. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
                 lastModifiedDate?: components["schemas"]["Wildcard"];
-                /** @description Query by the e_tag. */
-                eTag?: string | null;
-                /** @description Query by the storage class. Supports wildcards. */
-                storageClass?: components["schemas"]["StorageClass"] | null;
+                /** @description Query by the e_tag.
+                 *     Repeated parameters are joined with an `or` condition. */
+                eTag?: string[];
+                /** @description Query by the storage class.
+                 *     Repeated parameters are joined with an `or` condition. */
+                storageClass?: components["schemas"]["StorageClass"][];
                 /** @description Query by the object delete marker. */
                 isDeleteMarker?: boolean | null;
+                /** @description Query by the ingest id that objects get tagged with.
+                 *     Repeated parameters are joined with an `or` condition. */
+                ingestId?: string[];
                 /** @description Query by JSON attributes. Supports nested syntax to access inner
                  *     fields, e.g. `attributes[attribute_id]=...`. This only deserializes
                  *     into string fields, and does not support other JSON types. E.g.
@@ -708,26 +746,38 @@ export interface operations {
                 responseContentDisposition?: components["schemas"]["ContentDisposition"];
                 /** @description Query by event type. */
                 eventType?: components["schemas"]["EventType"] | null;
-                /** @description Query by bucket. Supports wildcards. */
-                bucket?: components["schemas"]["Wildcard"] | null;
-                /** @description Query by key. Supports wildcards. */
-                key?: components["schemas"]["Wildcard"] | null;
-                /** @description Query by version_id. Supports wildcards. */
-                versionId?: components["schemas"]["Wildcard"] | null;
-                /** @description Query by event_time. Supports wildcards. */
+                /** @description Query by bucket. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
+                bucket?: components["schemas"]["Wildcard"][];
+                /** @description Query by key. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
+                key?: components["schemas"]["Wildcard"][];
+                /** @description Query by version_id. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
+                versionId?: components["schemas"]["Wildcard"][];
+                /** @description Query by event_time. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
                 eventTime?: components["schemas"]["Wildcard"];
-                /** @description Query by size. */
-                size?: number | null;
-                /** @description Query by the sha256 checksum. */
-                sha256?: string | null;
-                /** @description Query by the last modified date. Supports wildcards. */
+                /** @description Query by size.
+                 *     Repeated parameters are joined with an `or` condition. */
+                size?: number[];
+                /** @description Query by the sha256 checksum.
+                 *     Repeated parameters are joined with an `or` condition. */
+                sha256?: string[];
+                /** @description Query by the last modified date. Supports wildcards.
+                 *     Repeated parameters are joined with an `or` condition. */
                 lastModifiedDate?: components["schemas"]["Wildcard"];
-                /** @description Query by the e_tag. */
-                eTag?: string | null;
-                /** @description Query by the storage class. Supports wildcards. */
-                storageClass?: components["schemas"]["StorageClass"] | null;
+                /** @description Query by the e_tag.
+                 *     Repeated parameters are joined with an `or` condition. */
+                eTag?: string[];
+                /** @description Query by the storage class.
+                 *     Repeated parameters are joined with an `or` condition. */
+                storageClass?: components["schemas"]["StorageClass"][];
                 /** @description Query by the object delete marker. */
                 isDeleteMarker?: boolean | null;
+                /** @description Query by the ingest id that objects get tagged with.
+                 *     Repeated parameters are joined with an `or` condition. */
+                ingestId?: string[];
                 /** @description Query by JSON attributes. Supports nested syntax to access inner
                  *     fields, e.g. `attributes[attribute_id]=...`. This only deserializes
                  *     into string fields, and does not support other JSON types. E.g.

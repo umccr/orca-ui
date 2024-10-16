@@ -139,7 +139,7 @@ export const getLibraryTableColumn = ({
       const ids = p as { orcabusId: string; libraryId: string };
       return (
         <Link
-          to={`/lab/library/${ids.orcabusId}`}
+          to={`/lab/library/${ids.orcabusId}/overview`}
           className={classNames(
             'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
           )}

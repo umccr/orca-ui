@@ -16,8 +16,13 @@ export const WorkflowVersion = ({
     params: {
       query: {
         workflowrun__portalRunId: portalRunId,
-        // Ensure the portalRunId belongs to the library
-        workflowrun__libraries__orcabusId: libraryOrcabusId,
+
+        // The following query filter to ensure the portalRunId belongs to the library
+        // WFM-FIXME: Library Orcabus Prefix
+        workflowrun__libraries__orcabusId:
+          libraryOrcabusId.split('.').length > 1
+            ? libraryOrcabusId.split('.')[1]
+            : libraryOrcabusId.split('.')[0],
       },
     },
   }).data?.results;

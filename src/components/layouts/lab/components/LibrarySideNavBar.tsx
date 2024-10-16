@@ -12,11 +12,14 @@ export const LibrarySideNavBar = () => {
   }
 
   const baseHref = `/lab/library/${libraryOrcabusId}`;
-
   const workflow = useSuspenseWorkflowModel({
     params: {
       query: {
-        workflowrun__libraries__orcabusId: libraryOrcabusId,
+        // WFM-FIXME: Library Orcabus Prefix
+        workflowrun__libraries__orcabusId:
+          libraryOrcabusId.split('.').length > 1
+            ? libraryOrcabusId.split('.')[1]
+            : libraryOrcabusId.split('.')[0],
         ordering: 'id',
         rowsPerPage: DEFAULT_NON_PAGINATE_PAGE_SIZE,
       },
@@ -31,7 +34,10 @@ export const LibrarySideNavBar = () => {
       navigation={[
         {
           title: 'Library',
-          children: [{ name: 'Overview', href: `${baseHref}` }],
+          children: [
+            { name: 'Overview', href: `${baseHref}/overview` },
+            { name: 'History', href: `${baseHref}/history` },
+          ],
         },
         {
           title: 'Workflows',

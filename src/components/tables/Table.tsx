@@ -240,14 +240,18 @@ export const getSortValue = (currentSort: string | undefined, key: string) => {
 };
 
 export const multiRowCell = (p: unknown) => {
-  const data = p as string[];
+  const data = p as string[] | string;
   return (
     <>
-      {data.map((item, idx) => (
-        <div className='py-2' key={idx}>
-          {item}
-        </div>
-      ))}
+      {Array.isArray(data) ? (
+        data.map((item, idx) => (
+          <div className='py-2' key={idx}>
+            {item}
+          </div>
+        ))
+      ) : (
+        <div className='py-2'>{data}</div>
+      )}
     </>
   );
 };

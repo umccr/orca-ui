@@ -52,6 +52,24 @@ export const LibraryBreadCrumb: FC = () => {
     }
   }
 
+  const isOverviewPage = pathname.endsWith('overview');
+  if (isOverviewPage) {
+    libraryBreadCrumbProps.push({
+      name: 'OVERVIEW',
+      href: `/lab/library/${library.orcabusId}/overview`,
+      isCurrent: !!isOverviewPage,
+    });
+  }
+
+  const isHistoryPage = pathname.endsWith('history');
+  if (isHistoryPage) {
+    libraryBreadCrumbProps.push({
+      name: 'HISTORY',
+      href: `/lab/library/${library.orcabusId}/history`,
+      isCurrent: !!isHistoryPage,
+    });
+  }
+
   return (
     <nav className='flex overflow-auto' aria-label='Breadcrumb'>
       <ol role='list' className='flex items-center space-x-2 -ml-2'>

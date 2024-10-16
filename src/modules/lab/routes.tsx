@@ -7,6 +7,7 @@ import { DetailedErrorBoundary } from '@/components/common/error';
 const MetadataPage = lazy(() => import('@/modules/lab/pages/Metadata'));
 const LibraryOverviewPage = lazy(() => import('@/modules/lab/pages/library/LibraryOverview'));
 const LibraryWorkflowPage = lazy(() => import('@/modules/lab/pages/library/LibraryWorkflow'));
+const LibraryHistoryPage = lazy(() => import('@/modules/lab/pages/library/LibraryHistory'));
 
 export const Router: RouteObject = {
   path: 'lab',
@@ -26,16 +27,8 @@ export const Router: RouteObject = {
         </MetadataLayout>
       ),
     },
-    // subjectRoute,
     {
       path: 'library',
-      element: (
-        <DetailedErrorBoundary errorTitle='Unable to load library'>
-          <LibraryLayout>
-            <Outlet />
-          </LibraryLayout>
-        </DetailedErrorBoundary>
-      ),
       children: [
         {
           path: '',
@@ -43,10 +36,25 @@ export const Router: RouteObject = {
         },
         {
           path: ':libraryOrcabusId',
+          element: (
+            <DetailedErrorBoundary errorTitle='Unable to load library'>
+              <LibraryLayout>
+                <Outlet />
+              </LibraryLayout>
+            </DetailedErrorBoundary>
+          ),
           children: [
             {
               path: '',
+              element: <Navigate to={'overview'} />,
+            },
+            {
+              path: 'overview',
               element: <LibraryOverviewPage />,
+            },
+            {
+              path: 'history',
+              element: <LibraryHistoryPage />,
             },
             {
               path: ':workflowType',
