@@ -16,32 +16,21 @@ import { BlockPublicAccess, Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { Architecture, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
-import {
-  BuildEnvironmentVariableType,
-  BuildSpec,
-  LinuxArmBuildImage,
-  Project,
-  Source,
-} from 'aws-cdk-lib/aws-codebuild';
-import { AccountPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { Trigger } from 'aws-cdk-lib/triggers';
+import { BuildEnvironmentVariableType } from 'aws-cdk-lib/aws-codebuild';
+import { AccountPrincipal, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Function } from 'aws-cdk-lib/aws-lambda';
-import { SOURCE_BUCKET_ARTIFACT_PATH } from '../config';
+import { TOOLCHAIN_ACCOUNT_ID } from '../config';
 
 export type ApplicationStackProps = {
   cloudFrontBucketName: string;
+  configLambdaName: string;
   aliasDomainName: string[];
   reactBuildEnvVariables: Record<string, string>;
 };
 
 export class ApplicationStack extends Stack {
-  constructor(
-    scope: Construct,
-    id: string,
-    props: ApplicationStackProps &
-      StackProps & { sourceBucketName: string; destinationAccountId?: string }
-  ) {
+  constructor(scope: Construct, id: string, props: ApplicationStackProps & StackProps) {
     super(scope, id, props);
 
     const clientBucket = new Bucket(this, 'OrcaUIAssetCloudFrontBucket', {
@@ -54,104 +43,17 @@ export class ApplicationStack extends Stack {
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
     });
 
-    if (props.destinationAccountId) {
-      clientBucket.grantRead(new AccountPrincipal(props.destinationAccountId));
-    }
-
     const distribution = this.setupS3CloudFrontIntegration(clientBucket, props.aliasDomainName);
-    this.buildReactApp(
-      clientBucket,
-      props.reactBuildEnvVariables,
-      distribution,
-      props.sourceBucketName
-    );
-  }
 
-  private buildReactApp(
-    bucket: IBucket,
-    reactBuildEnvVariables: Record<string, string>,
-    distribution: Distribution,
-    sourceBucketName: string
-  ) {
-    const sourceBucket = Bucket.fromBucketName(this, 'SourceBucket', sourceBucketName);
-
-    const project = new Project(this, 'ReactBuildCodeBuildProject', {
-      buildSpec: BuildSpec.fromObject({
-        version: 0.2,
-        phases: {
-          install: {
-            'runtime-versions': {
-              nodejs: 20,
-            },
-            commands: [
-              'aws s3 rm s3://${VITE_BUCKET_NAME}/ --recursive',
-              'aws s3 sync ./ s3://${VITE_BUCKET_NAME}/${SOURCE_BUCKET_ARTIFACT_PATH} ',
-              'node -v',
-              'corepack enable',
-              'yarn --version',
-              'yarn install --immutable',
-            ],
-          },
-          build: {
-            commands: [
-              'set -eu',
-              'env | grep VITE',
-              'yarn build',
-              // deploy the react app to s3
-              'aws s3 sync ./dist s3://${VITE_BUCKET_NAME}/dist',
-              // invalidate the cloudfront cache
-              'aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"',
-            ],
-          },
-        },
-      }),
-      source: Source.s3({ bucket: sourceBucket, path: SOURCE_BUCKET_ARTIFACT_PATH }),
-      description: 'Build react app and publish assets to S3',
-      environment: { buildImage: LinuxArmBuildImage.AMAZON_LINUX_2_STANDARD_3_0 },
-      environmentVariables: {
-        VITE_BUCKET_NAME: {
-          value: bucket.bucketName,
-          type: BuildEnvironmentVariableType.PLAINTEXT,
-        },
-        SOURCE_BUCKET_ARTIFACT_PATH: {
-          value: SOURCE_BUCKET_ARTIFACT_PATH,
-          type: BuildEnvironmentVariableType.PLAINTEXT,
-        },
-        CLOUDFRONT_DISTRIBUTION_ID: {
-          value: distribution.distributionId,
-          type: BuildEnvironmentVariableType.PLAINTEXT,
-        },
-        VITE_REGION: {
-          value: 'ap-southeast-2',
-          type: BuildEnvironmentVariableType.PLAINTEXT,
-        },
-        // CodeBuild is smart enough to give permission to these ssm parameters
-        ...this.getSSMEnvironmentVariables(),
-        // spread the reactBuildEnvironmentVariables
-        ...Object.entries(reactBuildEnvVariables).reduce(
-          (acc, [key, value]) => {
-            acc[key] = {
-              value: value,
-              type: BuildEnvironmentVariableType.PLAINTEXT,
-            };
-            return acc;
-          },
-          {} as Record<string, Record<string, string>>
-        ),
-      },
-    });
-    project.addToRolePolicy(
-      new PolicyStatement({
-        effect: Effect.ALLOW,
-        actions: ['s3:Get*', 's3:List*'],
-        resources: [`arn:aws:s3:::${sourceBucketName}`, `arn:aws:s3:::${sourceBucketName}/*`],
-      })
-    );
-
-    bucket.grantReadWrite(project);
-    distribution.grantCreateInvalidation(project);
-
-    const triggerFunction = new Function(this, 'TriggerCodeBuildLambda', {
+    /*
+      Trigger CodeBuild pipeline to build and deploy the react app
+      This lambda function has 3 stages:
+      1. read all env variables from SSM parameter store
+      2. write into env.js, upload to the S3 bucket
+      3. invalidate the CloudFront cache
+    */
+    const configLambda = new Function(this, 'TriggerCodeBuildLambda', {
+      functionName: props.configLambdaName,
       code: Code.fromAsset(path.join(__dirname, '..', 'lambda')),
       timeout: Duration.minutes(10),
       handler: 'start_build.handler',
@@ -160,21 +62,33 @@ export class ApplicationStack extends Stack {
       architecture: Architecture.ARM_64,
       memorySize: 1024,
       environment: {
-        CODEBUILD_PROJECT_NAME: project.projectName,
+        BUCKET_NAME: clientBucket.bucketName,
+        CLOUDFRONT_DISTRIBUTION_ID: distribution.distributionId,
+        ...props.reactBuildEnvVariables,
+        ...Object.fromEntries(
+          Object.entries(this.getSSMEnvironmentVariables()).map(([key, value]) => [
+            key,
+            StringParameter.valueForStringParameter(this, value.value),
+          ])
+        ),
       },
+
       initialPolicy: [
         new PolicyStatement({
-          actions: ['codebuild:StartBuild'],
-          resources: [project.projectArn],
+          actions: ['ssm:GetParameter'],
+          resources: Object.values(this.getSSMEnvironmentVariables()).map((value) => value.value),
         }),
       ],
     });
+    clientBucket.grantReadWrite(configLambda);
+    distribution.grantCreateInvalidation(configLambda);
 
-    // Ths Lambda function trigger the CodeBuild project
-    new Trigger(this, 'TriggerCodeBuildTrigger', {
-      handler: triggerFunction,
-      executeAfter: [project],
-    });
+    /*
+      Grant the toolchain account access to the S3 bucket and lambda function
+      so that it can invoke the lambda function to trigger the CodeBuild pipeline
+    */
+    clientBucket.grantReadWrite(new AccountPrincipal(TOOLCHAIN_ACCOUNT_ID));
+    configLambda.grantInvoke(new AccountPrincipal(TOOLCHAIN_ACCOUNT_ID));
   }
 
   private setupS3CloudFrontIntegration(s3Bucket: IBucket, aliasDomainName: string[]): Distribution {
@@ -197,7 +111,6 @@ export class ApplicationStack extends Stack {
       defaultBehavior: {
         origin: S3BucketOrigin.withOriginAccessIdentity(s3Bucket, {
           originAccessIdentity: cloudFrontOAI,
-          originPath: '/dist',
         }),
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },

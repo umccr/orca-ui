@@ -16,3 +16,5 @@ new PipelineStack(app, 'OrcaUIPipeline', {
     'umccr-org:Product': 'OrcaUI',
   },
 });
+
+app.synth();

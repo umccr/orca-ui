@@ -1,5 +1,10 @@
-import { Environment, Stack, StackProps, Stage, RemovalPolicy } from 'aws-cdk-lib';
-import { ComputeType, LinuxArmBuildImage } from 'aws-cdk-lib/aws-codebuild';
+import { Environment, Stack, StackProps, Stage } from 'aws-cdk-lib';
+import {
+  BuildSpec,
+  ComputeType,
+  LinuxArmBuildImage,
+  PipelineProject,
+} from 'aws-cdk-lib/aws-codebuild';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { CodeBuildStep, CodePipeline, CodePipelineSource } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
@@ -9,13 +14,16 @@ import {
   AppStage,
   getAppStackConfig,
   REGION,
-  SOURCE_BUCKET_ARTIFACT_PATH,
-  bastionSourceBucketName,
+  cloudFrontBucketNameConfig,
+  configLambdaNameConfig,
 } from '../config';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { BlockPublicAccess, Bucket } from 'aws-cdk-lib/aws-s3';
-import { AccountPrincipal } from 'aws-cdk-lib/aws-iam';
-
+import { Pipeline, Artifact } from 'aws-cdk-lib/aws-codepipeline';
+import {
+  CodeStarConnectionsSourceAction,
+  CodeBuildAction,
+  ManualApprovalAction,
+} from 'aws-cdk-lib/aws-codepipeline-actions';
 export class PipelineStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps) {
     super(scope, id, props);
@@ -26,33 +34,18 @@ export class PipelineStack extends Stack {
       connectionArn: codeStarArn,
     });
 
-    const sourceBucket = new Bucket(this, 'SourceCodeBucket', {
-      bucketName: bastionSourceBucketName,
-      autoDeleteObjects: true,
-      enforceSSL: true,
-      removalPolicy: RemovalPolicy.DESTROY,
-      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-    });
+    /*
+      Infra Pipeline
+      This pipeline is used to deploy the infrastructure code to all accounts
+      It is triggered by a webhook from the CodeStar connection
 
-    sourceBucket.addToResourcePolicy(
-      new PolicyStatement({
-        effect: Effect.ALLOW,
-        actions: ['s3:Get*', 's3:List*'],
-        principals: [new AccountPrincipal(accountIdAlias.beta)],
-        resources: [sourceBucket.arnForObjects('*')],
-      })
-    );
-
-    const pipeline = new CodePipeline(this, 'Pipeline', {
-      synth: new CodeBuildStep('CdkSynthAndCodeCopy', {
+      TODO: add custom webhook to path "/deploy", 
+      issue related to https://github.com/aws/aws-cdk/issues/10265
+    */
+    const infraPipeline = new CodePipeline(this, 'InfraPipeline', {
+      synth: new CodeBuildStep('CdkSynth', {
         installCommands: ['node -v', 'corepack enable'],
-        commands: [
-          `aws s3 rm s3://${sourceBucket.bucketName}/${SOURCE_BUCKET_ARTIFACT_PATH} --recursive `,
-          `aws s3 sync ./ s3://${sourceBucket.bucketName}/${SOURCE_BUCKET_ARTIFACT_PATH} `,
-          'cd deploy',
-          'yarn install --immutable',
-          'yarn cdk synth',
-        ],
+        commands: ['cd deploy', 'yarn install --immutable', 'yarn cdk synth'],
         input: sourceFile,
         primaryOutputDirectory: 'deploy/cdk.out',
         rolePolicyStatements: [
@@ -60,11 +53,6 @@ export class PipelineStack extends Stack {
             effect: Effect.ALLOW,
             actions: ['sts:AssumeRole'],
             resources: ['*'],
-          }),
-          new PolicyStatement({
-            effect: Effect.ALLOW,
-            actions: ['s3:*'],
-            resources: [sourceBucket.bucketArn],
           }),
         ],
       }),
@@ -87,56 +75,209 @@ export class PipelineStack extends Stack {
      * Deployment to Beta (Dev) account
      */
     const betaConfig = getAppStackConfig(AppStage.BETA);
-    this.addDeploymentStage(
-      pipeline,
-      'OrcaUIBeta',
-      accountIdAlias.beta,
-      betaConfig,
-      bastionSourceBucketName,
-      accountIdAlias.gamma
+    infraPipeline.addStage(
+      new DeploymentStage(
+        this,
+        'OrcaUIBeta',
+        {
+          account: accountIdAlias.beta,
+          region: REGION,
+        },
+        betaConfig
+      )
     );
 
     /**
      * Deployment to Gamma (Staging) account
      */
     const gammaConfig = getAppStackConfig(AppStage.GAMMA);
-    this.addDeploymentStage(
-      pipeline,
-      'OrcaUIGamma',
-      accountIdAlias.gamma,
-      gammaConfig,
-      betaConfig.cloudFrontBucketName,
-      accountIdAlias.prod
+    infraPipeline.addStage(
+      new DeploymentStage(
+        this,
+        'OrcaUIGamma',
+        {
+          account: accountIdAlias.gamma,
+          region: REGION,
+        },
+        gammaConfig
+      )
+      // {
+      //   pre: [new ManualApprovalStep('Promote to Gamma (Staging)')],
+      // }
     );
 
     /**
      * Deployment to Prod (Production) account
      */
     const prodConfig = getAppStackConfig(AppStage.PROD);
-    this.addDeploymentStage(
-      pipeline,
-      'OrcaUIProd',
-      accountIdAlias.prod,
-      prodConfig,
-      gammaConfig.cloudFrontBucketName
+    infraPipeline.addStage(
+      new DeploymentStage(
+        this,
+        'OrcaUIProd',
+        {
+          account: accountIdAlias.prod,
+          region: REGION,
+        },
+        prodConfig
+      )
+      // {
+      //   pre: [new ManualApprovalStep('Promote to Prod (Production)')],
+      // }
     );
-  }
 
-  private addDeploymentStage(
-    pipeline: CodePipeline,
-    stageName: string,
-    accountId: string,
-    config: ApplicationStackProps,
-    sourceBucketName: string,
-    destinationAccountId?: string
-  ) {
-    const stage = new DeploymentStage(
-      this,
-      stageName,
-      { account: accountId, region: REGION },
-      { ...config, sourceBucketName, destinationAccountId }
-    );
-    pipeline.addStage(stage);
+    /**
+     * React Build and Deploy Pipeline (independent from infra pipeline)
+     * This pipeline is used to build the react app and deploy it to the specified environment
+     * It is triggered by a webhook from the CodeStar connection
+     *
+     * TODO: add custom webhook to be triggered except path "/deploy",
+     * issue related to https://github.com/aws/aws-cdk/issues/10265
+     */
+    const sourceOutput = new Artifact();
+    const buildOutput = new Artifact();
+
+    /**
+     * Build project
+     * This project is used to build the react app, and store the output in a build artifact
+     */
+    const buildProject = new PipelineProject(this, 'ReactBuildProject', {
+      projectName: 'ReactBuildProject',
+      description: 'Build react app',
+      buildSpec: BuildSpec.fromObject({
+        version: 0.2,
+        phases: {
+          install: {
+            'runtime-versions': {
+              nodejs: 20,
+            },
+            commands: ['node -v', 'corepack enable', 'yarn --version', 'yarn install --immutable'],
+          },
+          build: {
+            commands: ['set -eu', 'env | grep VITE', 'yarn build'],
+          },
+        },
+        artifacts: {
+          files: ['**/**'],
+          'base-directory': 'dist/',
+        },
+      }),
+      environment: { buildImage: LinuxArmBuildImage.AMAZON_LINUX_2_STANDARD_3_0 },
+    });
+
+    /**
+     * Deploy project
+     * This project is used to deploy the react app to the specified environment
+     * two commands are executed:
+     * 1. remove all files in the bucket and sync the build artifact to destination bucket
+     * 2. trigger the lambda to update config and invalidate cloudfront cache
+     */
+    const deployProject = (env: AppStage) => {
+      return new PipelineProject(this, `ReactDeployProject${env}`, {
+        projectName: `ReactDeployProject${env}`,
+        description: 'Deploy react app',
+        buildSpec: BuildSpec.fromObject({
+          version: 0.2,
+          phases: {
+            build: {
+              commands: [
+                // remove all files in the bucket and sync the dist
+                'aws s3 rm s3://${DESTINATION_BUCKET_NAME}/ --recursive && aws s3 sync . s3://${DESTINATION_BUCKET_NAME}',
+                // trigger the lambda to update config and invalidate cloudfront cache
+                'aws lambda invoke --function-name ${CONFIG_LAMBDA_NAME} response.json',
+              ],
+            },
+          },
+        }),
+        environment: { buildImage: LinuxArmBuildImage.AMAZON_LINUX_2_STANDARD_3_0 },
+        environmentVariables: {
+          DESTINATION_BUCKET_NAME: {
+            value: cloudFrontBucketNameConfig[env],
+          },
+          CONFIG_LAMBDA_NAME: {
+            value: configLambdaNameConfig[env],
+          },
+        },
+      });
+    };
+
+    /**
+     * React Build and Deploy Pipeline
+     */
+    new Pipeline(this, 'ReactBuildPipeline', {
+      pipelineName: 'ReactBuildPipeline',
+      crossAccountKeys: false,
+      stages: [
+        {
+          stageName: 'Source',
+          actions: [
+            new CodeStarConnectionsSourceAction({
+              actionName: 'Source',
+              owner: 'umccr',
+              repo: 'orca-ui',
+              branch: 'main',
+              connectionArn: codeStarArn,
+              output: sourceOutput,
+              triggerOnPush: true,
+            }),
+          ],
+        },
+        {
+          stageName: 'Build',
+          actions: [
+            new CodeBuildAction({
+              actionName: 'BuildAndDeploy',
+              project: buildProject,
+              input: sourceOutput,
+              outputs: [buildOutput],
+            }),
+          ],
+        },
+        {
+          stageName: 'Deploy to Beta',
+          actions: [
+            new ManualApprovalAction({
+              actionName: 'Approval',
+              runOrder: 1,
+            }),
+            new CodeBuildAction({
+              actionName: 'Deploy',
+              project: deployProject(AppStage.BETA),
+              input: buildOutput,
+            }),
+          ],
+        },
+
+        {
+          stageName: 'Deploy Satge for Gamma',
+          actions: [
+            new ManualApprovalAction({
+              actionName: 'Approval',
+              runOrder: 1,
+            }),
+            new CodeBuildAction({
+              actionName: 'Deploy',
+              project: deployProject(AppStage.GAMMA),
+              input: buildOutput,
+            }),
+          ],
+        },
+
+        {
+          stageName: 'Deploy Satge for Prod',
+          actions: [
+            new ManualApprovalAction({
+              actionName: 'Approval',
+              runOrder: 1,
+            }),
+            new CodeBuildAction({
+              actionName: 'Deploy',
+              project: deployProject(AppStage.PROD),
+              input: buildOutput,
+            }),
+          ],
+        },
+      ],
+    });
   }
 }
 
@@ -145,10 +286,7 @@ class DeploymentStage extends Stage {
     scope: Construct,
     environmentName: string,
     env: Environment,
-    appStackProps: ApplicationStackProps & {
-      sourceBucketName: string;
-      destinationAccountId?: string;
-    }
+    appStackProps: ApplicationStackProps
   ) {
     super(scope, environmentName, { env: env });
     new ApplicationStack(this, 'ApplicationStack', {
