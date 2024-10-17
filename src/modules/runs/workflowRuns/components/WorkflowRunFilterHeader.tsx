@@ -46,7 +46,7 @@ const WorkflowRunFilterHeader = () => {
             { value: '-1', label: 'All workflow', secondaryLabel: '' },
 
             ...workflowData.results.map((workflowType: WorkflowModel) => ({
-              value: workflowType.id.toString(),
+              value: workflowType.orcabusId.toString(),
               label: workflowType.workflowName,
               secondaryLabel: 'v' + workflowType.workflowVersion,
             })),
@@ -105,6 +105,13 @@ const WorkflowRunFilterHeader = () => {
               subLabel: '',
               onClick: () => {
                 setQueryParams({ workflowRunStatus: 'failed' });
+              },
+            },
+            {
+              label: 'Resolved',
+              subLabel: '',
+              onClick: () => {
+                setQueryParams({ workflowRunStatus: 'resolved' });
               },
             },
             {
