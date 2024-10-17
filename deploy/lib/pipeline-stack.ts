@@ -165,7 +165,7 @@ export class PipelineStack extends Stack {
             commands: ['node -v', 'corepack enable', 'yarn --version', 'yarn install --immutable'],
           },
           build: {
-            commands: ['set -eu', 'env | grep VITE', 'yarn build'],
+            commands: ['set -eu', 'yarn build'],
           },
         },
         artifacts: {
