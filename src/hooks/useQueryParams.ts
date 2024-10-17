@@ -42,7 +42,19 @@ export const useQueryParams = (
     }
   };
 
-  const clearQueryParams = () => nav({});
+  const clearQueryParams = (except?: string[]) => {
+    // remove all other query params except the except ones
+    const exceptParams = except ? except.map((key) => key) : [];
+    const queryParams = wgetQueryParams(queryParams);
+    const filteredQueryParams = Object.keys(queryParams).reduce((acc, key) => {
+      if (exceptParams.includes(key)) {
+        acc[key] = queryParams[key];
+      }
+      return acc;
+    }, {});
+    nav(cleanObject({ ...filteredQueryParams }));
+  };
+
   const getQueryParams = () => wgetQueryParams(queryParams);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

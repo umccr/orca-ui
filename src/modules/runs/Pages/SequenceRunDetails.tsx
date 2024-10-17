@@ -4,11 +4,11 @@ import { SpinnerWithText } from '@/components/common/spinner';
 import MainArea from '@/components/layouts/MainArea';
 import { ContentTabs } from '@/components/navigation/tabs';
 import Breadcrumb from '@/components/navigation/breadcrumbs';
-import LibraryTable from '../components/reports/LibraryTable';
+import LibraryTable from '../components/sequenceRuns/reports/LibraryTable';
 
-import SequenceRunOverview from '../components/reports/SequenceRunOverview';
-import SequenceRunsFastqTable from '../components/reports/SequenceRunFastQ';
-import SequenceRunWorkflows from '../components/reports/SequenceRunWorkflows';
+import SequenceRunOverview from '../components/sequenceRuns/reports/SequenceRunOverview';
+import SequenceRunsFastqTable from '../components/sequenceRuns/reports/SequenceRunFastQ';
+import SequenceRunWorkflows from '../components/sequenceRuns/reports/SequenceRunWorkflows';
 
 const SequenceRunsDetails = () => {
   return (

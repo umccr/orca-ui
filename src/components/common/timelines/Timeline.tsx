@@ -1,6 +1,5 @@
 import { FC, useState, useEffect, FunctionComponent, SVGProps } from 'react';
 import { classNames } from '@/utils/commonUtils';
-import { Tooltip } from '../tooltips';
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import { Badge } from '@/components/common/badges';
 
@@ -9,18 +8,18 @@ interface TimelineEvent {
   content: string;
   comment?: string;
   datetime: string;
-  iconBackground: string;
-  payloadId: number;
+  iconBackground?: string;
+  payloadId?: number;
   icon?: FunctionComponent<SVGProps<SVGSVGElement>>;
 }
 
 interface TimelineProps {
   timeline: TimelineEvent[];
-  handldEventClick: (id: number) => void;
-  selectId: number | null;
+  handldEventClick: (id: number | null) => void;
+  selectId?: number;
 }
 
-const Timeline: FC<TimelineProps> = ({ timeline, handldEventClick, selectId }) => {
+const Timeline: FC<TimelineProps> = ({ timeline, handldEventClick, selectId = 0 }) => {
   const [selectedEventPayloadId, setSelectedEventPayloadId] = useState<number | null>(selectId);
   useEffect(() => {
     if (selectId) {
@@ -40,60 +39,48 @@ const Timeline: FC<TimelineProps> = ({ timeline, handldEventClick, selectId }) =
                   className='absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200'
                 />
               ) : null}
-              <Tooltip
-                text={
-                  <>
-                    timestamp: {event.datetime || ''}
-                    <br />
-                    comment: {event.comment || ''}
-                  </>
-                }
-                position='right'
-                size='small'
-                background='gray'
-              >
-                <div
-                  className={classNames('relative flex space-x-3', 'cursor-pointer')}
-                  onClick={() => handldEventClick(event.payloadId)}
-                >
-                  <div>
-                    <div
-                      className={classNames(
-                        event.iconBackground,
-                        'flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white'
-                      )}
-                    >
-                      {event.icon ? (
-                        <event.icon aria-hidden='true' className='h-5 w-5 text-white' />
-                      ) : (
-                        <CheckCircleIcon aria-hidden='true' className='h-5 w-5 text-green-500' />
-                      )}
-                      {/* {event.icon} */}
-                      {/* <p className='text-sm text-gray-500 px-4 py-2'>{event.content} </p> */}
-                    </div>{' '}
-                  </div>
-                  <div className='flex flex-col min-w-0 flex-1 justify-between py-0.5'>
-                    <div>
-                      <Badge
-                        status={event.content}
-                        className={
-                          selectedEventPayloadId === event.payloadId ? 'ring-2 ring-indigo-500' : ''
-                        }
-                      >
-                        {event.content}{' '}
-                      </Badge>
-                      {/* <div className='text-sm text-gray-500'>{event.content} </div> */}
-                    </div>
-                    <div className='whitespace-nowrap text-left text-sm text-gray-500'>
-                      <time dateTime={event.datetime}>{event.datetime}</time>
-                    </div>
 
-                    <div className='whitespace-nowrap text-left text-sm text-gray-500'>
-                      {event.comment}
-                    </div>
+              <div
+                className={classNames('relative flex space-x-3', 'cursor-pointer')}
+                onClick={() => handldEventClick(event.payloadId || null)}
+              >
+                <div>
+                  <div
+                    className={classNames(
+                      event.iconBackground,
+                      'flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white'
+                    )}
+                  >
+                    {event.icon ? (
+                      <event.icon aria-hidden='true' className='h-5 w-5 text-white' />
+                    ) : (
+                      <CheckCircleIcon aria-hidden='true' className='h-5 w-5 text-green-500' />
+                    )}
+                    {/* {event.icon} */}
+                    {/* <p className='text-sm text-gray-500 px-4 py-2'>{event.content} </p> */}
+                  </div>{' '}
+                </div>
+                <div className='flex flex-col min-w-0 flex-1 justify-between py-0.5'>
+                  <div>
+                    <Badge
+                      status={event.content}
+                      className={
+                        selectedEventPayloadId === event.payloadId ? 'ring-2 ring-indigo-500' : ''
+                      }
+                    >
+                      {event.content}{' '}
+                    </Badge>
+                    {/* <div className='text-sm text-gray-500'>{event.content} </div> */}
+                  </div>
+                  <div className='whitespace-nowrap text-left text-sm text-gray-500'>
+                    <time dateTime={event.datetime}>{event.datetime}</time>
+                  </div>
+
+                  <div className='whitespace-nowrap text-left text-sm text-gray-500'>
+                    {event.comment}
                   </div>
                 </div>
-              </Tooltip>
+              </div>
             </div>
           </li>
         ))}

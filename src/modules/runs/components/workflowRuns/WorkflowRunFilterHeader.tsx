@@ -108,6 +108,13 @@ const WorkflowRunFilterHeader = () => {
               },
             },
             {
+              label: 'Resolved',
+              subLabel: '',
+              onClick: () => {
+                setQueryParams({ workflowRunStatus: 'resolved' });
+              },
+            },
+            {
               label: 'Ongoing',
               subLabel: '',
               onClick: () => {
@@ -165,7 +172,7 @@ const WorkflowRunFilterHeader = () => {
             <Button
               size='md'
               onClick={() => {
-                clearQueryParams();
+                clearQueryParams(['tab']);
               }}
               className=' text-gray-400 hover:text-white'
             >

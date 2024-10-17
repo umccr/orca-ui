@@ -8,6 +8,8 @@ import { WorkflowRunDetailsDrawer } from './WorkflowRunDetailsDrawer';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { useWorkflowRunListModel, WorkflowRunModel } from '@/api/workflow';
+import { TableCellsIcon } from '@heroicons/react/24/outline';
+import { Link } from 'react-router-dom';
 
 const WorkflowRunTable = () => {
   const [selectedWorkflowRun, setSelectedWorkflowRun] = useState<WorkflowRunModel | null>(null);
@@ -27,7 +29,9 @@ const WorkflowRunTable = () => {
         rowsPerPage: getPaginationParams().rowsPerPage || DEFAULT_PAGE_SIZE,
         search: getQueryParams().search || undefined,
         workflow__id: getQueryParams().workflowTypeId || undefined,
-        status: ['succeeded', 'failed', 'aborted'].includes(getQueryParams().workflowRunStatus)
+        status: ['succeeded', 'failed', 'aborted', 'resolved'].includes(
+          getQueryParams().workflowRunStatus
+        )
           ? getQueryParams().workflowRunStatus
           : undefined,
         is_ongoing: getQueryParams().workflowRunStatus == 'ongoing' || undefined,
@@ -47,7 +51,7 @@ const WorkflowRunTable = () => {
 
   const onCloseDrawer = () => {
     setSelectedWorkflowRun(null);
-    setQueryParams({ workflowRunId: null });
+    setQueryParams({ workflowRunId: null, sideDrawerTab: null });
   };
   const workflowRunColumn: Column[] = useMemo(
     () => [
@@ -55,6 +59,7 @@ const WorkflowRunTable = () => {
         header: 'Workflow Run Name',
         accessor: 'workflowRunName',
         cell: (workflowRunName: unknown, workflowRunRowData: TableData) => {
+          const id = workflowRunRowData.id;
           if (!workflowRunName) {
             return <div>-</div>;
           } else {
@@ -64,12 +69,19 @@ const WorkflowRunTable = () => {
                   className={classNames(
                     'cursor-pointer flex flex-row items-center ml-2 text-sm lowercase font-medium hover:text-blue-700 text-blue-500'
                   )}
-                  onClick={() => {
-                    setSelectedWorkflowRun(workflowRunRowData as WorkflowRunModel);
-                    setQueryParams({ workflowRunId: workflowRunRowData.id });
-                  }}
+                  // onClick={() => {
+                  //   setSelectedWorkflowRun(workflowRunRowData as WorkflowRunModel);
+                  //   setQueryParams({ workflowRunId: workflowRunRowData.id });
+                  // }}
                 >
-                  {(workflowRunName as string).toLocaleLowerCase()}
+                  <Link
+                    to={`${id}`}
+                    className={classNames(
+                      'cursor-pointer flex flex-row items-center ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+                    )}
+                  >
+                    {(workflowRunName as string).toLocaleLowerCase()}
+                  </Link>
                 </div>
               </div>
             );
@@ -79,6 +91,11 @@ const WorkflowRunTable = () => {
       {
         header: 'Portal Run Id',
         accessor: 'portalRunId',
+        copyable: true,
+        onSort: () => {
+          console.log('sorting');
+        },
+        sortDirection: 'asc',
         cell: (portalRunId: unknown) => {
           if (!portalRunId) {
             return <div>-</div>;
@@ -139,27 +156,28 @@ const WorkflowRunTable = () => {
       //     } else {
       //       return (
       //         <div className='flex flex-row items-center'>
-      //           <div
-      //             // to={`sequence/${portalRunId}/details`}
+      //           <Link
+      //             to={`workflow/${id}`}
       //             className={classNames(
       //               'cursor-pointer flex flex-row items-center ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
       //             )}
-      //             onClick={() => setQueryParams({ workflowRunId: id as string, openDrawer: true })}
       //           >
       //             <TableCellsIcon
       //               className='h-5 w-5 pr-1 shrink-0 text-blue-500'
       //               aria-hidden='true'
       //             />
       //             Details
-      //           </div>
+      //           </Link>
       //         </div>
       //       );
       //     }
       //   },
       // },
     ],
-    [setQueryParams]
+    []
   );
+
+  console.log(workflowRunsData);
 
   return (
     <div>

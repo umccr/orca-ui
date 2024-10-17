@@ -6,6 +6,7 @@ import { createApi } from 'unsplash-js';
 import { Random } from 'unsplash-js/dist/methods/photos/types';
 import { Button } from '@/components/common/buttons';
 import { Spinner } from '@/components/common/spinner';
+import { env } from '@/utils/commonUtils';
 
 const clientId = import.meta.env.VITE_UNSPLASH_CLIENT_ID;
 

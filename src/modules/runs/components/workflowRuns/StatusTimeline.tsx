@@ -112,6 +112,7 @@ const StatusTimeline: FC<StatusTimelineProps> = ({ workflowRuntimelineData }) =>
             content: <JsonDisplay selectedPayloadId={selectedPayloadId} />,
           },
         ]}
+        withQueryParams={false}
       />
     </div>
   );

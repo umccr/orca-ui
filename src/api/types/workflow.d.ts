@@ -100,6 +100,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/workflowrun/{workflowrunId}/comments/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["apiV1WorkflowrunCommentsList"];
+        put?: never;
+        post: operations["apiV1WorkflowrunCommentsCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/{workflowrunId}/comments/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["apiV1WorkflowrunCommentsPartialUpdate"];
+        trace?: never;
+    };
+    "/api/v1/workflowrun/{workflowrunId}/comments/{id}/soft_delete/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["apiV1WorkflowrunCommentsSoftDeleteDestroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/workflowrun/{workflowrunId}/library/": {
         parameters: {
             query?: never;
@@ -141,7 +189,7 @@ export interface paths {
         };
         get: operations["apiV1WorkflowrunStateList"];
         put?: never;
-        post?: never;
+        post: operations["apiV1WorkflowrunStateCreate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -155,13 +203,13 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1WorkflowrunStateRetrieve"];
+        get?: never;
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["apiV1WorkflowrunStatePartialUpdate"];
         trace?: never;
     };
     "/api/v1/workflowrun/count_by_status/": {
@@ -189,6 +237,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["apiV1WorkflowrunOngoingRetrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/unresolved/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["apiV1WorkflowrunUnresolvedRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -246,23 +310,18 @@ export interface components {
             results: components["schemas"]["PayloadModel"][];
         };
         PaginatedStateModelList: {
-            links: {
-                /**
-                 * Format: uri
-                 * @example http://api.example.org/accounts/?page=4
-                 */
-                next?: string | null;
-                /**
-                 * Format: uri
-                 * @example http://api.example.org/accounts/?page=2
-                 */
-                previous?: string | null;
-            };
-            pagination: {
-                count?: number;
-                page?: number;
-                rowsPerPage?: number;
-            };
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
             results: components["schemas"]["StateModel"][];
         };
         PaginatedWorkflowModelList: {
@@ -285,6 +344,21 @@ export interface components {
             };
             results: components["schemas"]["WorkflowModel"][];
         };
+        PaginatedWorkflowRunCommentModelList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["WorkflowRunCommentModel"][];
+        };
         PaginatedWorkflowRunModelList: {
             links: {
                 /**
@@ -304,6 +378,26 @@ export interface components {
                 rowsPerPage?: number;
             };
             results: components["schemas"]["WorkflowRunModel"][];
+        };
+        PatchedStateModel: {
+            readonly id?: number;
+            status?: string;
+            /** Format: date-time */
+            timestamp?: string;
+            comment?: string | null;
+            workflowRun?: number;
+            payload?: number | null;
+        };
+        PatchedWorkflowRunCommentModel: {
+            readonly id?: number;
+            comment?: string;
+            /** Format: date-time */
+            readonly createdAt?: string;
+            /** Format: date-time */
+            readonly updatedAt?: string;
+            createdBy?: string;
+            isDeleted?: boolean;
+            workflowRun?: number;
         };
         PayloadModel: {
             readonly id: number;
@@ -328,11 +422,23 @@ export interface components {
             executionEnginePipelineId: string;
             approvalState: string;
         };
+        WorkflowRunCommentModel: {
+            readonly id: number;
+            comment: string;
+            /** Format: date-time */
+            readonly createdAt: string;
+            /** Format: date-time */
+            readonly updatedAt: string;
+            createdBy: string;
+            isDeleted?: boolean;
+            workflowRun: number;
+        };
         WorkflowRunCountByStatus: {
             all: number;
             succeeded: number;
             aborted: number;
             failed: number;
+            resolved: number;
             ongoing: number;
         };
         WorkflowRunModel: {
@@ -506,6 +612,108 @@ export interface operations {
             };
         };
     };
+    apiV1WorkflowrunCommentsList: {
+        parameters: {
+            query?: {
+                /** @description A page number within the paginated result set. */
+                page?: number;
+            };
+            header?: never;
+            path: {
+                workflowrunId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedWorkflowRunCommentModelList"];
+                };
+            };
+        };
+    };
+    apiV1WorkflowrunCommentsCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workflowrunId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["WorkflowRunCommentModel"];
+                "multipart/form-data": components["schemas"]["WorkflowRunCommentModel"];
+                "application/json": components["schemas"]["WorkflowRunCommentModel"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunCommentModel"];
+                };
+            };
+        };
+    };
+    apiV1WorkflowrunCommentsPartialUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this workflow run comment. */
+                id: number;
+                workflowrunId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedWorkflowRunCommentModel"];
+                "multipart/form-data": components["schemas"]["PatchedWorkflowRunCommentModel"];
+                "application/json": components["schemas"]["PatchedWorkflowRunCommentModel"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunCommentModel"];
+                };
+            };
+        };
+    };
+    apiV1WorkflowrunCommentsSoftDeleteDestroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this workflow run comment. */
+                id: number;
+                workflowrunId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     apiV1WorkflowrunLibraryList: {
         parameters: {
             query?: {
@@ -565,8 +773,6 @@ export interface operations {
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
                 page?: number;
-                /** @description Number of results to return per page. */
-                rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
             };
@@ -588,17 +794,51 @@ export interface operations {
             };
         };
     };
-    apiV1WorkflowrunStateRetrieve: {
+    apiV1WorkflowrunStateCreate: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
                 workflowrunId: string;
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["StateModel"];
+                "multipart/form-data": components["schemas"]["StateModel"];
+                "application/json": components["schemas"]["StateModel"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StateModel"];
+                };
+            };
+        };
+    };
+    apiV1WorkflowrunStatePartialUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this state. */
+                id: number;
+                workflowrunId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedStateModel"];
+                "multipart/form-data": components["schemas"]["PatchedStateModel"];
+                "application/json": components["schemas"]["PatchedStateModel"];
+            };
+        };
         responses: {
             200: {
                 headers: {
@@ -630,6 +870,25 @@ export interface operations {
         };
     };
     apiV1WorkflowrunOngoingRetrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunModel"];
+                };
+            };
+        };
+    };
+    apiV1WorkflowrunUnresolvedRetrieve: {
         parameters: {
             query?: never;
             header?: never;
