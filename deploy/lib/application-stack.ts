@@ -62,6 +62,7 @@ export class ApplicationStack extends Stack {
       architecture: Architecture.ARM_64,
       memorySize: 1024,
       environment: {
+        VITE_REGION: 'ap-southeast-2',
         BUCKET_NAME: clientBucket.bucketName,
         CLOUDFRONT_DISTRIBUTION_ID: distribution.distributionId,
         ...props.reactBuildEnvVariables,

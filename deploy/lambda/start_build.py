@@ -11,23 +11,27 @@ def handler(event, context):
     bucket_name = os.environ['BUCKET_NAME']
     cloudfront_distribution_id = os.environ['CLOUDFRONT_DISTRIBUTION_ID']
     # List of SSM parameters to fetch
-    ssm_params = [
-        '/orcaui/cog_app_client_id_stage',
-        '/orcaui/oauth_redirect_in_stage',
-        '/orcaui/oauth_redirect_out_stage',
-        '/data_portal/client/cog_user_pool_id',
-        '/data_portal/client/cog_identity_pool_id',
-        '/data_portal/client/oauth_domain',
-        '/data_portal/unsplash/client_id',
+    
+    
+    env_params = [
+        'VITE_METADATA_URL',
+        'VITE_WORKFLOW_URL',
+        'VITE_SEQUENCE_RUN_URL',
+        'VITE_FILE_URL',
+        
+        'VITE_REGION',
+        'VITE_COG_APP_CLIENT_ID',
+        'VITE_OAUTH_REDIRECT_IN',
+        'VITE_OAUTH_REDIRECT_OUT',
+        'VITE_COG_USER_POOL_ID',
+        'VITE_COG_IDENTITY_POOL_ID',
+        'VITE_OAUTH_DOMAIN',
+        'VITE_UNSPLASH_CLIENT_ID',
     ]
     
     env_variables = {}
-    
-    # Fetch parameters from SSM
-    params = {}
-    for param in ssm_params:
-        response = ssm.get_parameter(Name=param)
-        env_variables[param] = response['Parameter']['Value']
+    for param in env_params:
+        env_variables[param] = os.environ[param]
         
     env_js_content = f"window.config = {json.dumps(env_variables, indent=2)}"
     
@@ -48,7 +52,7 @@ def handler(event, context):
 
         return {
             'statusCode': 200,
-            'body': f" env.js uploaded to {bucket_name}"
+            'body': f" env.js uploaded to {bucket_name}, and CloudFront cache invalidated for {cloudfront_distribution_id}"
         }
     except Exception as e:
         # Log the error and return a failure response

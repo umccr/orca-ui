@@ -6,7 +6,12 @@ import {
   PipelineProject,
 } from 'aws-cdk-lib/aws-codebuild';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
-import { CodeBuildStep, CodePipeline, CodePipelineSource } from 'aws-cdk-lib/pipelines';
+import {
+  CodeBuildStep,
+  CodePipeline,
+  CodePipelineSource,
+  ManualApprovalStep,
+} from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
 import { ApplicationStack, ApplicationStackProps } from './application-stack';
 import {
@@ -17,7 +22,7 @@ import {
   cloudFrontBucketNameConfig,
   configLambdaNameConfig,
 } from '../config';
-import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { AccountPrincipal, Effect, PolicyStatement, Role } from 'aws-cdk-lib/aws-iam';
 import { Pipeline, Artifact } from 'aws-cdk-lib/aws-codepipeline';
 import {
   CodeStarConnectionsSourceAction,
@@ -100,10 +105,10 @@ export class PipelineStack extends Stack {
           region: REGION,
         },
         gammaConfig
-      )
-      // {
-      //   pre: [new ManualApprovalStep('Promote to Gamma (Staging)')],
-      // }
+      ),
+      {
+        pre: [new ManualApprovalStep('Promote to Gamma (Staging)')],
+      }
     );
 
     /**
@@ -119,10 +124,10 @@ export class PipelineStack extends Stack {
           region: REGION,
         },
         prodConfig
-      )
-      // {
-      //   pre: [new ManualApprovalStep('Promote to Prod (Production)')],
-      // }
+      ),
+      {
+        pre: [new ManualApprovalStep('Promote to Prod (Production)')],
+      }
     );
 
     /**
@@ -171,7 +176,23 @@ export class PipelineStack extends Stack {
      * 1. remove all files in the bucket and sync the build artifact to destination bucket
      * 2. trigger the lambda to update config and invalidate cloudfront cache
      */
+
     const deployProject = (env: AppStage) => {
+      const deployProjectRole = new Role(this, `ReactDeployProjectRole${env}`, {
+        assumedBy: new AccountPrincipal(accountIdAlias[env]),
+      });
+      deployProjectRole.addToPolicy(
+        new PolicyStatement({
+          effect: Effect.ALLOW,
+          actions: ['s3:*', 'lambda:InvokeFunction'],
+          resources: [
+            `arn:aws:s3:::${cloudFrontBucketNameConfig[env]}`,
+            `arn:aws:s3:::${cloudFrontBucketNameConfig[env]}/*`,
+            `arn:aws:lambda:${REGION}:${accountIdAlias[env]}:function:${configLambdaNameConfig[env]}`,
+          ],
+        })
+      );
+
       return new PipelineProject(this, `ReactDeployProject${env}`, {
         projectName: `ReactDeployProject${env}`,
         description: 'Deploy react app',
@@ -197,6 +218,7 @@ export class PipelineStack extends Stack {
             value: configLambdaNameConfig[env],
           },
         },
+        role: deployProjectRole,
       });
     };
 
