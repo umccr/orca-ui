@@ -48,15 +48,15 @@ export class ApplicationStack extends Stack {
     /*
       Trigger CodeBuild pipeline to build and deploy the react app
       This lambda function has 3 stages:
-      1. read all env variables from SSM parameter store
+      1. read all env variables from os environment variables
       2. write into env.js, upload to the S3 bucket
       3. invalidate the CloudFront cache
     */
-    const configLambda = new Function(this, 'TriggerCodeBuildLambda', {
+    const configLambda = new Function(this, 'EnvConfigLambda', {
       functionName: props.configLambdaName,
       code: Code.fromAsset(path.join(__dirname, '..', 'lambda')),
       timeout: Duration.minutes(10),
-      handler: 'start_build.handler',
+      handler: 'env_config.handler',
       logRetention: RetentionDays.ONE_WEEK,
       runtime: Runtime.PYTHON_3_12,
       architecture: Architecture.ARM_64,
