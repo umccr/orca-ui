@@ -364,7 +364,7 @@ export interface operations {
                  *     For example, consider that there are three events for a given bucket, key and version_id
                  *     in the following order: `Created` -> `Deleted` -> `Created`. Then setting
                  *     `?current_state=true` would return only the last `Created` event. */
-                currentState?: boolean | null;
+                currentState?: boolean;
                 /** @description Query by event type. */
                 eventType?: components["schemas"]["EventType"] | null;
                 /** @description Query by bucket. Supports wildcards.
@@ -465,7 +465,7 @@ export interface operations {
                  *     For example, consider that there are three events for a given bucket, key and version_id
                  *     in the following order: `Created` -> `Deleted` -> `Created`. Then setting
                  *     `?current_state=true` would return only the last `Created` event. */
-                currentState?: boolean | null;
+                currentState?: boolean;
                 /** @description Query by event type. */
                 eventType?: components["schemas"]["EventType"] | null;
                 /** @description Query by bucket. Supports wildcards.
@@ -577,7 +577,7 @@ export interface operations {
                  *     For example, consider that there are three events for a given bucket, key and version_id
                  *     in the following order: `Created` -> `Deleted` -> `Created`. Then setting
                  *     `?current_state=true` would return only the last `Created` event. */
-                currentState?: boolean | null;
+                currentState?: boolean;
                 params?: {
                     [key: string]: components["schemas"]["Json"];
                 };
@@ -641,7 +641,7 @@ export interface operations {
                  *     For example, consider that there are three events for a given bucket, key and version_id
                  *     in the following order: `Created` -> `Deleted` -> `Created`. Then setting
                  *     `?current_state=true` would return only the last `Created` event. */
-                currentState?: boolean | null;
+                currentState?: boolean;
                 /** @description Query by event type. */
                 eventType?: components["schemas"]["EventType"] | null;
                 /** @description Query by bucket. Supports wildcards.
