@@ -66,15 +66,17 @@ export class ApplicationStack extends Stack {
         BUCKET_NAME: clientBucket.bucketName,
         CLOUDFRONT_DISTRIBUTION_ID: distribution.distributionId,
         ...props.reactBuildEnvVariables,
-        ...this.getSSMEnvironmentVariables(),
       },
 
-      // initialPolicy: [
-      //   new PolicyStatement({
-      //     actions: ['ssm:GetParameter'],
-      //     resources: Object.values(this.getSSMEnvironmentVariables()).map((value) => value),
-      //   }),
-      // ],
+      initialPolicy: [
+        new PolicyStatement({
+          actions: ['ssm:GetParameter'],
+          resources: [
+            `arn:aws:ssm:${this.region}:${this.account}:/orcaui/*`,
+            `arn:aws:ssm:${this.region}:${this.account}:/data_portal/*`,
+          ],
+        }),
+      ],
     });
     clientBucket.grantReadWrite(configLambda);
     distribution.grantCreateInvalidation(configLambda);
@@ -137,55 +139,46 @@ export class ApplicationStack extends Stack {
     return cloudFrontDistribution;
   }
 
-  private getSSMEnvironmentVariables() {
-    // return {
-    //   VITE_COG_APP_CLIENT_ID: {
-    //     value: '/orcaui/cog_app_client_id_stage',
-    //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
-    //   },
-    //   VITE_OAUTH_REDIRECT_IN: {
-    //     value: '/orcaui/oauth_redirect_in_stage',
-    //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
-    //   },
-    //   VITE_OAUTH_REDIRECT_OUT: {
-    //     value: '/orcaui/oauth_redirect_out_stage',
-    //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
-    //   },
-    //   VITE_COG_USER_POOL_ID: {
-    //     value: '/data_portal/client/cog_user_pool_id',
-    //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
-    //   },
-    //   VITE_COG_IDENTITY_POOL_ID: {
-    //     value: '/data_portal/client/cog_identity_pool_id',
-    //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
-    //   },
-    //   VITE_OAUTH_DOMAIN: {
-    //     value: '/data_portal/client/oauth_domain',
-    //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
-    //   },
-    //   VITE_UNSPLASH_CLIENT_ID: {
-    //     value: '/data_portal/unsplash/client_id',
-    //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
-    //   },
-    // };
+  // private getSSMEnvironmentVariables() {
+  // return {
+  //   VITE_COG_APP_CLIENT_ID: {
+  //     value: '/orcaui/cog_app_client_id_stage',
+  //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
+  //   },
+  //   VITE_OAUTH_REDIRECT_IN: {
+  //     value: '/orcaui/oauth_redirect_in_stage',
+  //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
+  //   },
+  //   VITE_OAUTH_REDIRECT_OUT: {
+  //     value: '/orcaui/oauth_redirect_out_stage',
+  //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
+  //   },
+  //   VITE_COG_USER_POOL_ID: {
+  //     value: '/data_portal/client/cog_user_pool_id',
+  //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
+  //   },
+  //   VITE_COG_IDENTITY_POOL_ID: {
+  //     value: '/data_portal/client/cog_identity_pool_id',
+  //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
+  //   },
+  //   VITE_OAUTH_DOMAIN: {
+  //     value: '/data_portal/client/oauth_domain',
+  //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
+  //   },
+  //   VITE_UNSPLASH_CLIENT_ID: {
+  //     value: '/data_portal/unsplash/client_id',
+  //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
+  //   },
+  // };
 
-    // return {
-    //   VITE_COG_APP_CLIENT_ID: '/orcaui/cog_app_client_id_stage',
-    //   VITE_OAUTH_REDIRECT_IN: '/orcaui/oauth_redirect_in_stage',
-    //   VITE_OAUTH_REDIRECT_OUT: '/orcaui/oauth_redirect_out_stage',
-    //   VITE_COG_USER_POOL_ID: '/data_portal/client/cog_user_pool_id',
-    //   VITE_COG_IDENTITY_POOL_ID: '/data_portal/client/cog_identity_pool_id',
-    //   VITE_OAUTH_DOMAIN: '/data_portal/client/oauth_domain',
-    //   VITE_UNSPLASH_CLIENT_ID: '/data_portal/unsplash/client_id',
-    // };
-    return {
-      VITE_COG_APP_CLIENT_ID: '{{resolve:ssm:/orcaui/cog_app_client_id_stage}}',
-      VITE_OAUTH_REDIRECT_IN: '{{resolve:ssm:/orcaui/oauth_redirect_in_stage}}',
-      VITE_OAUTH_REDIRECT_OUT: '{{resolve:ssm:/orcaui/oauth_redirect_out_stage}}',
-      VITE_COG_USER_POOL_ID: '{{resolve:ssm:/data_portal/client/cog_user_pool_id}}',
-      VITE_COG_IDENTITY_POOL_ID: '{{resolve:ssm:/data_portal/client/cog_identity_pool_id}}',
-      VITE_OAUTH_DOMAIN: '{{resolve:ssm:/data_portal/client/oauth_domain}}',
-      VITE_UNSPLASH_CLIENT_ID: '{{resolve:ssm:/data_portal/unsplash/client_id}}',
-    };
-  }
+  //   return {
+  //     VITE_COG_APP_CLIENT_ID: '/orcaui/cog_app_client_id_stage',
+  //     VITE_OAUTH_REDIRECT_IN: '/orcaui/oauth_redirect_in_stage',
+  //     VITE_OAUTH_REDIRECT_OUT: '/orcaui/oauth_redirect_out_stage',
+  //     VITE_COG_USER_POOL_ID: '/data_portal/client/cog_user_pool_id',
+  //     VITE_COG_IDENTITY_POOL_ID: '/data_portal/client/cog_identity_pool_id',
+  //     VITE_OAUTH_DOMAIN: '/data_portal/client/oauth_domain',
+  //     VITE_UNSPLASH_CLIENT_ID: '/data_portal/unsplash/client_id',
+  //   };
+  // }
 }
