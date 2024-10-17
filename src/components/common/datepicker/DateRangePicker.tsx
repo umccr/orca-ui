@@ -57,8 +57,8 @@ const DateRangePicker: FC<DateRangePickerProps> = ({ align, startDate, endDate, 
         className='form-input !pl-9 dark:bg-slate-800  hover:text-slate-600 hover:bg-magpie-light-25 dark:text-slate-300 dark:hover:text-slate-200 font-medium w-[15.5rem] rounded-lg border-0 bg-white py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
         options={options}
         value={
-          selectedStartDate
-            ? `${selectedStartDate} to ${selectedEndDate}`
+          selectedStartDate && selectedEndDate
+            ? [new Date(selectedStartDate), new Date(selectedEndDate)]
             : isOpen
               ? ''
               : new Date()
