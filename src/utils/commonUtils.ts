@@ -8,12 +8,12 @@ import { twMerge } from 'tailwind-merge';
  */
 declare global {
   interface Window {
-    config?: Record<string, any>;
+    config: Record<string, any>;
   }
 }
 export const env = (() => {
   if (typeof window !== 'undefined') {
-    return window.config || import.meta.env;
+    return Object.keys(window.config || {}).length === 0 ? import.meta.env : window.config;
   }
   return import.meta.env;
 })();
