@@ -4,11 +4,11 @@ import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 export const PortalRunIdDropdown = ({
-  libraryId,
+  libraryOrcabusId,
   portalRunId,
   workflowType,
 }: {
-  libraryId: string;
+  libraryOrcabusId: string;
   workflowType: string;
   portalRunId?: string;
 }) => {
@@ -16,7 +16,11 @@ export const PortalRunIdDropdown = ({
   const workflowRun = useSuspenseWorkflowRunListModel({
     params: {
       query: {
-        libraries__libraryId: libraryId,
+        // WFM-FIXME: Library Orcabus Prefix
+        libraries__orcabusId:
+          libraryOrcabusId.split('.').length > 1
+            ? libraryOrcabusId.split('.')[1]
+            : libraryOrcabusId.split('.')[0],
         workflow__workflowName: workflowType,
         ordering: '-portalRunId',
         rowsPerPage: DEFAULT_NON_PAGINATE_PAGE_SIZE,

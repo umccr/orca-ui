@@ -35,6 +35,12 @@ export type ProjectListQueryParams = operations['apiV1ProjectList']['parameters'
 
 export const useSuspenseMetadataSubjectModel = createMetadataFetchingHook('/api/v1/subject/');
 export const useSuspenseMetadataLibraryModel = createMetadataFetchingHook('/api/v1/library/');
+export const useSuspenseMetadataDetailLibraryModel = createMetadataFetchingHook(
+  '/api/v1/library/{orcabusId}/'
+);
+export const useSuspenseMetadataDetailLibraryHistoryModel = createMetadataFetchingHook(
+  '/api/v1/library/{orcabusId}/history/'
+);
 export const useSuspenseMetadataIndividualModel = createMetadataFetchingHook('/api/v1/individual/');
 export const useSuspenseMetadataSampleModel = createMetadataFetchingHook('/api/v1/sample/');
 export const useSuspenseMetadataContactModel = createMetadataFetchingHook('/api/v1/contact/');
