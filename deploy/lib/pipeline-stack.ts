@@ -22,7 +22,14 @@ import {
   cloudFrontBucketNameConfig,
   configLambdaNameConfig,
 } from '../config';
-import { AccountPrincipal, Effect, PolicyStatement, Role } from 'aws-cdk-lib/aws-iam';
+import {
+  AccountPrincipal,
+  CompositePrincipal,
+  Effect,
+  PolicyStatement,
+  Role,
+  ServicePrincipal,
+} from 'aws-cdk-lib/aws-iam';
 import { Pipeline, Artifact } from 'aws-cdk-lib/aws-codepipeline';
 import {
   CodeStarConnectionsSourceAction,
@@ -179,8 +186,20 @@ export class PipelineStack extends Stack {
 
     const deployProject = (env: AppStage) => {
       const deployProjectRole = new Role(this, `ReactDeployProjectRole${env}`, {
-        assumedBy: new AccountPrincipal(accountIdAlias[env]),
+        assumedBy: new CompositePrincipal(
+          new ServicePrincipal('codebuild.amazonaws.com'),
+          new AccountPrincipal(accountIdAlias[env])
+        ),
       });
+      // Add a trust relationship to allow the bastion account to assume this role
+      deployProjectRole.assumeRolePolicy?.addStatements(
+        new PolicyStatement({
+          actions: ['sts:AssumeRole'],
+          effect: Effect.ALLOW,
+          principals: [new AccountPrincipal(this.account)],
+        })
+      );
+
       deployProjectRole.addToPolicy(
         new PolicyStatement({
           effect: Effect.ALLOW,
