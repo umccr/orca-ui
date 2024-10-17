@@ -255,14 +255,14 @@ export class PipelineStack extends Stack {
           ],
         },
         {
-          stageName: 'Deploy to Beta',
+          stageName: 'DeployToBeta',
           actions: [
             new ManualApprovalAction({
-              actionName: 'Approval',
+              actionName: 'DeployToBetaApproval',
               runOrder: 1,
             }),
             new CodeBuildAction({
-              actionName: 'Deploy',
+              actionName: 'DeployToBeta',
               project: deployProject(AppStage.BETA),
               input: buildOutput,
             }),
@@ -270,14 +270,14 @@ export class PipelineStack extends Stack {
         },
 
         {
-          stageName: 'Deploy Satge for Gamma',
+          stageName: 'DeployToGamma',
           actions: [
             new ManualApprovalAction({
-              actionName: 'Approval',
+              actionName: 'DeployToGammaApproval',
               runOrder: 1,
             }),
             new CodeBuildAction({
-              actionName: 'Deploy',
+              actionName: 'DeployToGamma',
               project: deployProject(AppStage.GAMMA),
               input: buildOutput,
             }),
@@ -285,14 +285,14 @@ export class PipelineStack extends Stack {
         },
 
         {
-          stageName: 'Deploy Satge for Prod',
+          stageName: 'DeployToProd',
           actions: [
             new ManualApprovalAction({
-              actionName: 'Approval',
+              actionName: 'DeployToProdApproval',
               runOrder: 1,
             }),
             new CodeBuildAction({
-              actionName: 'Deploy',
+              actionName: 'DeployToProd',
               project: deployProject(AppStage.PROD),
               input: buildOutput,
             }),
