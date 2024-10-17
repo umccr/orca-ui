@@ -15,7 +15,7 @@ import {
 import { Tooltip } from '@/components/common/tooltips';
 import { Dialog } from '@/components/dialogs';
 import { Textarea } from '@headlessui/react';
-import toaster from '@/components/common/toaster';
+// import toaster from '@/components/common/toaster';
 
 interface JsonDisplayProps {
   selectedPayloadId?: number | null;
@@ -122,7 +122,7 @@ const WorkflowRunTimeline: FC<WorkflowRunTimelineProps> = ({ workflowRuntimeline
   }, [workflowRuntimelineData]);
 
   const currentState = workflowRuntimelineData[0]?.content;
-  console.log(currentState);
+  console.log(workflowRuntimelineData);
   return (
     <div className='flex flex-row pb-4'>
       <div className='flex-1'>

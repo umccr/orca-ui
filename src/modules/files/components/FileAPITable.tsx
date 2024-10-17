@@ -11,8 +11,8 @@ import { Dialog } from '@/components/dialogs';
 import { JsonToTable } from '@/components/common/json-to-table';
 import { FileDownloadButton } from './FileDownloadButton';
 import { DOWNLOADABLE_FILETYPE_LIST } from '@/components/files';
-import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { getFilenameFromKey } from '@/utils/commonUtils';
+import { useQueryParams } from '@/hooks/useQueryParams';
 
 export const FileAPITable = ({
   additionalQueryParam,
@@ -23,17 +23,16 @@ export const FileAPITable = ({
   tableColumn?: Column[];
   additionalQueryParam?: Record<string, string>;
 }) => {
-  const [page, setPage] = useState<number>(1);
-  const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_PAGE_SIZE);
   const [searchBox, setSearchBox] = useState('');
+
+  const { setQueryParams, getPaginationParams } = useQueryParams();
 
   const data = useSuspenseFileObject({
     params: {
       query: {
-        key: searchBox == '' ? undefined : searchBox,
-        page: page,
-        rowsPerPage: rowsPerPage,
         currentState: true,
+        key: searchBox == '' ? undefined : searchBox,
+        ...getPaginationParams(),
         ...additionalQueryParam,
       },
     },
@@ -55,11 +54,11 @@ export const FileAPITable = ({
         rowsPerPage: data.pagination.rowsPerPage ?? 0,
         currentPage: data.pagination.page ?? 0,
         setPage: (n: number) => {
-          setPage(n);
+          setQueryParams({ page: n });
         },
         countUnit: 'files',
         setRowsPerPage: (n) => {
-          setRowsPerPage(n);
+          setQueryParams({ rowsPerPage: n });
         },
       }}
     />
@@ -67,13 +66,15 @@ export const FileAPITable = ({
 };
 
 export const SearchBox = ({
+  initValue = '',
   placeholder = 'Search',
   onSearch,
 }: {
+  initValue?: string;
   placeholder?: string;
   onSearch: (s: string) => void;
 }) => {
-  const [searchBox, setSearchBox] = useState<string>('');
+  const [searchBox, setSearchBox] = useState<string>(initValue);
 
   return (
     <div className='flex flex-col md:flex-row'>

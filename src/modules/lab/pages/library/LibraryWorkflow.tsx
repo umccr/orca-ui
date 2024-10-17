@@ -6,8 +6,8 @@ import { WorkflowVersion } from '../../components/library/WorkflowVersion';
 import { FileAPITable, getTableColumn } from '@/modules/files/components/FileAPITable';
 
 export default function LibraryWorkflowPage() {
-  const { libraryId, portalRunId, workflowType } = useParams();
-  if (!libraryId || !workflowType) {
+  const { libraryOrcabusId, portalRunId, workflowType } = useParams();
+  if (!libraryOrcabusId || !workflowType) {
     throw new Error('Invalid URL!');
   }
 
@@ -17,12 +17,14 @@ export default function LibraryWorkflowPage() {
       <div className='flex flex-row justify-between'>
         <div className='flex flex-row'>
           <h1 className='flex h-full items-center font-bold'>{`${workflowType}`}</h1>
-          {portalRunId && <WorkflowVersion portalRunId={portalRunId} libraryId={libraryId} />}
+          {portalRunId && (
+            <WorkflowVersion portalRunId={portalRunId} libraryOrcabusId={libraryOrcabusId} />
+          )}
         </div>
         <PortalRunIdDropdown
           workflowType={workflowType}
           portalRunId={portalRunId}
-          libraryId={libraryId}
+          libraryOrcabusId={libraryOrcabusId}
         />
       </div>
 

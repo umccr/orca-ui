@@ -8,7 +8,7 @@ import { Button } from '@/components/common/buttons';
 import { Spinner } from '@/components/common/spinner';
 import { env } from '@/utils/commonUtils';
 
-const clientId = import.meta.env.VITE_UNSPLASH_CLIENT_ID;
+const clientId = env.VITE_UNSPLASH_CLIENT_ID;
 
 function Copyright() {
   return (

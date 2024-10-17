@@ -202,7 +202,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/workflowrun/{workflowrunId}/state/": {
+    "/api/v1/workflowrun/{wfrOrcabusId}/state/": {
         parameters: {
             query?: never;
             header?: never;
@@ -218,7 +218,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/workflowrun/{workflowrunId}/state/{id}/": {
+    "/api/v1/workflowrun/{wfrOrcabusId}/state/{id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -505,12 +505,14 @@ export interface components {
         WorkflowMin: {
             readonly orcabusId: string;
             workflowName: string;
+            workflowVersion: string;
         };
         WorkflowRunCountByStatus: {
             all: number;
             succeeded: number;
             aborted: number;
             failed: number;
+            resolved: number;
             ongoing: number;
         };
         WorkflowRunDetail: {
@@ -829,7 +831,7 @@ export interface operations {
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
-                workflow?: string | null;
+                workflow?: components["schemas"]["WorkflowMin"];
                 workflowRunName?: string | null;
             };
             header?: never;
@@ -890,7 +892,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                workflowrunId: string;
+                wfrOrcabusId: string;
             };
             cookie?: never;
         };
@@ -912,7 +914,7 @@ export interface operations {
             header?: never;
             path: {
                 id: string;
-                workflowrunId: string;
+                wfrOrcabusId: string;
             };
             cookie?: never;
         };

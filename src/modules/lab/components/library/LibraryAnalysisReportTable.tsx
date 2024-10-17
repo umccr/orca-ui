@@ -13,37 +13,43 @@ import { SpinnerWithText } from '@/components/common/spinner';
 
 const WORKFLOW_ANALYSIS_TABLE = {
   umccrise: {
-    keyPatterns: [
-      '*.html',
-      '*circos*.png',
-      '*work*small_variants*.vcf.gz',
-      '*work*small_variants*.maf',
-    ],
+    keyPatterns: ['*.html', '*circos*.png', '*somatic-PASS.vcf.gz', '*predispose_genes.vcf.gz'],
     getTableData: (data: ({ key: string } & Record<string, unknown>)[]): TableData[] => {
       return [
         {
-          groupTitle: 'Cancer Report',
+          groupTitle: 'CANCER',
           groupData: data.filter((r) => r.key.endsWith('cancer_report.html')),
         },
         {
-          groupTitle: 'PCGR Report',
+          groupTitle: 'PCGR',
           groupData: data.filter((r) => r.key.endsWith('pcgr.html')),
         },
         {
-          groupTitle: 'CPSR Report',
+          groupTitle: 'CPSR',
           groupData: data.filter((r) => r.key.endsWith('cpsr.html')),
         },
         {
-          groupTitle: 'QC Report',
+          groupTitle: 'MULTIQC',
           groupData: data.filter((r) => r.key.includes('multiqc')),
         },
         {
-          groupTitle: 'CIRCOS Plot',
+          groupTitle: 'CIRCOS',
           groupData: data.filter((r) => r.key.endsWith('.png')),
         },
         {
           groupTitle: 'VCF',
-          groupData: data.filter((r) => r.key.endsWith('.vcf.gz') || r.key.endsWith('.maf')),
+          groupData: data.filter((r) => r.key.endsWith('.vcf.gz')),
+        },
+      ];
+    },
+  },
+  tumor_normal: {
+    keyPatterns: ['*.bam'],
+    getTableData: (data: ({ key: string } & Record<string, unknown>)[]): TableData[] => {
+      return [
+        {
+          groupTitle: 'BAM',
+          groupData: data.filter((r) => r.key.endsWith('.bam')),
         },
       ];
     },
@@ -53,11 +59,11 @@ const WORKFLOW_ANALYSIS_TABLE = {
     getTableData: (data: ({ key: string } & Record<string, unknown>)[]): TableData[] => {
       return [
         {
-          groupTitle: 'QC Report',
+          groupTitle: 'MULTIQC',
           groupData: data.filter((r) => r.key.includes('multiqc')),
         },
         {
-          groupTitle: 'FUSIONS Report',
+          groupTitle: 'FUSIONS',
           groupData: data.filter((r) => r.key.includes('fusions')),
         },
         {
@@ -68,12 +74,12 @@ const WORKFLOW_ANALYSIS_TABLE = {
     },
   },
   rnasum: {
-    keyPatterns: ['*RNAseq_report.html'],
+    keyPatterns: ['*RNAseq_report.html', '*/genes.expr.perc.html', '*/genes.expr.z.html'],
     getTableData: (data: ({ key: string } & Record<string, unknown>)[]): TableData[] => {
       return [
         {
-          groupTitle: 'RNASUM Report',
-          groupData: data.filter((r) => r.key.endsWith('RNAseq_report.html')),
+          groupTitle: 'HTML',
+          groupData: data.filter((r) => r.key.endsWith('.html')),
         },
       ];
     },
@@ -81,10 +87,11 @@ const WORKFLOW_ANALYSIS_TABLE = {
   cttsov2: {
     keyPatterns: [
       '*.bam',
-      '*.tmb.metrics.csv',
-      '*/Results/*.tsv',
+      '*.tmb.msaf.csv',
+      '*/Results/*/*.csv',
+      '*/Results/*/*.tsv',
       '*/Results/*.vcf.gz',
-      '*/Results/*.json',
+      '*/Results/*.gvcf.gz',
     ],
     getTableData: (data: ({ key: string } & Record<string, unknown>)[]): TableData[] => {
       return [
@@ -118,11 +125,6 @@ type LibraryAnalysisReportTableProps = { libraryDetail: components['schemas']['L
 export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = ({
   libraryDetail,
 }) => {
-  const libraryId = libraryDetail.libraryId;
-  if (!libraryId) {
-    throw new Error('No library id in URL path!');
-  }
-
   /**
    * FIX ME
    *
@@ -130,60 +132,79 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
    * Ideally this could be viewable in a case-view to show relevant reports
    *
    * Notes:
-   * WGS library type = "UMCCRISE" workflow type html reports
-   * WTS library type = "wts" && "rnasum" workflow type pdf/html reports
-   * ctDNA library type && "ctTSO" assay = "cttsov2" workflow pdf/html reports
+   * WGS library type => "UMCCRISE" && "tumor_normal" workflow type html reports
+   * WTS library type => "wts" && "rnasum" workflow type pdf/html reports
+   * ctDNA library type && "ctTSO" assay => "cttsov2" workflow pdf/html reports
    */
 
   return (
-    <DetailedErrorBoundary errorTitle='Unable to load analysis report files'>
-      <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
-        <div className='font-bold py-3 text-lg'>Workflow Results</div>
-        {libraryDetail.type === 'WGS' ? (
-          <AnalysisTable
-            libraryId={libraryId}
-            workflowType='umccrise'
-            keyPatterns={WORKFLOW_ANALYSIS_TABLE['umccrise']['keyPatterns']}
-            getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['umccrise']['getTableData']}
-          />
-        ) : libraryDetail.type === 'WTS' ? (
-          <>
+    <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
+      <div className='font-bold py-3 text-lg'>Workflow Results</div>
+      {libraryDetail.type === 'WGS' ? (
+        <>
+          <DetailedErrorBoundary errorTitle={`Unable to load 'umccrise' report files`}>
             <AnalysisTable
-              libraryId={libraryId}
+              libraryOrcabusId={libraryDetail.orcabusId}
+              workflowType='umccrise'
+              keyPatterns={WORKFLOW_ANALYSIS_TABLE['umccrise']['keyPatterns']}
+              getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['umccrise']['getTableData']}
+            />
+          </DetailedErrorBoundary>
+          <div className='py-4'></div>
+          <DetailedErrorBoundary errorTitle={`Unable to load 'tumor_normal' report files`}>
+            <AnalysisTable
+              libraryOrcabusId={libraryDetail.orcabusId}
+              workflowType='tumor_normal'
+              keyPatterns={WORKFLOW_ANALYSIS_TABLE['tumor_normal']['keyPatterns']}
+              getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['tumor_normal']['getTableData']}
+            />
+          </DetailedErrorBoundary>
+        </>
+      ) : libraryDetail.type === 'WTS' ? (
+        <>
+          <DetailedErrorBoundary errorTitle={`Unable to load 'wts' report files`}>
+            <AnalysisTable
+              libraryOrcabusId={libraryDetail.orcabusId}
               workflowType='wts'
               keyPatterns={WORKFLOW_ANALYSIS_TABLE['wts']['keyPatterns']}
               getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['wts']['getTableData']}
             />
-            <div className='py-4'></div>
+          </DetailedErrorBoundary>
+          <div className='py-4'></div>
+          <DetailedErrorBoundary errorTitle={`Unable to load 'rnasum' report files`}>
             <AnalysisTable
-              libraryId={libraryId}
+              libraryOrcabusId={libraryDetail.orcabusId}
               workflowType='rnasum'
               keyPatterns={WORKFLOW_ANALYSIS_TABLE['rnasum']['keyPatterns']}
               getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['rnasum']['getTableData']}
             />
-          </>
-        ) : libraryDetail.type === 'ctDNA' && libraryDetail.assay === 'ctTSO' ? (
+          </DetailedErrorBoundary>
+        </>
+      ) : libraryDetail.type === 'ctDNA' &&
+        (libraryDetail.assay?.toLowerCase() === 'cttso' ||
+          libraryDetail.assay?.toLowerCase() == 'cttsov2') ? (
+        <DetailedErrorBoundary errorTitle={`Unable to load 'cttsov2' report files`}>
           <AnalysisTable
-            libraryId={libraryId}
+            libraryOrcabusId={libraryDetail.orcabusId}
             workflowType='cttsov2'
             keyPatterns={WORKFLOW_ANALYSIS_TABLE['cttsov2']['keyPatterns']}
             getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['cttsov2']['getTableData']}
           />
-        ) : (
-          <pre>No file highlights available for this library</pre>
-        )}
-      </Suspense>
-    </DetailedErrorBoundary>
+        </DetailedErrorBoundary>
+      ) : (
+        <pre>No file highlights available for this library</pre>
+      )}
+    </Suspense>
   );
 };
 
 export const AnalysisTable = ({
-  libraryId,
+  libraryOrcabusId,
   workflowType,
   keyPatterns,
   getTableDataFormat,
 }: {
-  libraryId: string;
+  libraryOrcabusId: string;
   workflowType: string;
   keyPatterns: string[];
   getTableDataFormat: (data: ({ key: string } & Record<string, unknown>)[]) => TableData[];
@@ -191,7 +212,11 @@ export const AnalysisTable = ({
   const workflowRun = useSuspenseWorkflowRunListModel({
     params: {
       query: {
-        libraries__libraryId: libraryId,
+        // WFM-FIXME: Library Orcabus Prefix
+        libraries__orcabusId:
+          libraryOrcabusId.split('.').length > 1
+            ? libraryOrcabusId.split('.')[1]
+            : libraryOrcabusId.split('.')[0],
         workflow__workflowName: workflowType,
         ordering: '-portalRunId',
         rowsPerPage: DEFAULT_NON_PAGINATE_PAGE_SIZE,

@@ -37,7 +37,7 @@ export const Router: RouteObject = {
       element: <SequenceRunDetailsPage />,
     },
     {
-      path: 'workflow/:workflowRunId',
+      path: 'workflow/:orcabusId',
       element: <WorkflowRunDetailsPage />,
     },
   ],

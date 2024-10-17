@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Table, Column, TableData } from '@/components/tables';
 import { classNames } from '@/utils/commonUtils';
 import { keepPreviousData } from '@tanstack/react-query';
@@ -7,12 +7,12 @@ import { Badge } from '@/components/common/badges';
 import { WorkflowRunDetailsDrawer } from './WorkflowRunDetailsDrawer';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { useQueryParams } from '@/hooks/useQueryParams';
-import { useWorkflowRunListModel, WorkflowRunModel } from '@/api/workflow';
-import { TableCellsIcon } from '@heroicons/react/24/outline';
+import { useWorkflowRunListModel } from '@/api/workflow';
+// import { TableCellsIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
 const WorkflowRunTable = () => {
-  const [selectedWorkflowRun, setSelectedWorkflowRun] = useState<WorkflowRunModel | null>(null);
+  // const [selectedWorkflowRun, setSelectedWorkflowRun] = useState<WorkflowRunModel | null>(null);
 
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
 
@@ -50,7 +50,7 @@ const WorkflowRunTable = () => {
   }
 
   const onCloseDrawer = () => {
-    setSelectedWorkflowRun(null);
+    // setSelectedWorkflowRun(null);
     setQueryParams({ workflowRunId: null, sideDrawerTab: null });
   };
   const workflowRunColumn: Column[] = useMemo(
@@ -59,7 +59,7 @@ const WorkflowRunTable = () => {
         header: 'Workflow Run Name',
         accessor: 'workflowRunName',
         cell: (workflowRunName: unknown, workflowRunRowData: TableData) => {
-          const id = workflowRunRowData.id;
+          const id = workflowRunRowData.orcabusId;
           if (!workflowRunName) {
             return <div>-</div>;
           } else {
@@ -199,10 +199,10 @@ const WorkflowRunTable = () => {
           countUnit: 'workflow runs',
         }}
       />
-      {(getQueryParams().workflowRunId || selectedWorkflowRun) && (
+      {getQueryParams().workflowRunOrcabusId && (
         <WorkflowRunDetailsDrawer
-          selectedWorkflowRunData={selectedWorkflowRun}
-          selectedWorkflowRunId={getQueryParams().workflowRunId}
+          // selectedWorkflowRunData={selectedWorkflowRun}
+          selectedWorkflowRunOrcabusId={getQueryParams().workflowRunOrcabusId}
           onCloseDrawer={onCloseDrawer}
         />
       )}

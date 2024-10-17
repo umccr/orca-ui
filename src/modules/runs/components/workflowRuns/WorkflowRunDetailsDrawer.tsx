@@ -21,14 +21,12 @@ import StatusTimeline from './StatusTimeline';
 // import WorkflowRunTimeline from './WorkflowRunTimeline';
 
 interface WorkflowRunDetailsDrawerProps {
-  selectedWorkflowRunData: WorkflowRunModel | null;
-  selectedWorkflowRunId: string;
+  selectedWorkflowRunOrcabusId: string;
   onCloseDrawer?: () => void;
 }
 
 export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
-  selectedWorkflowRunData,
-  selectedWorkflowRunId,
+  selectedWorkflowRunOrcabusId,
   onCloseDrawer,
 }) => {
   // const [selectedPayloadId, setSelectedPayloadId] = useState<number | null>(null);
@@ -36,21 +34,21 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
 
   useEffect(() => {
     // setWorkflowRunId(selectedWorkflowRunId);
-    if (selectedWorkflowRunId) {
+    if (selectedWorkflowRunOrcabusId) {
       setIsOpen(true);
     }
-  }, [selectedWorkflowRunId]);
+  }, [selectedWorkflowRunOrcabusId]);
 
   const { data: workflowRunDetail, isFetching: isFetchingWorkflowRunDetail } =
     useWorkflowRunDetailModel({
-      params: { path: { id: Number(selectedWorkflowRunId) } },
+      params: { path: { orcabusId: selectedWorkflowRunOrcabusId } },
       reactQuery: {
-        enabled: !!selectedWorkflowRunId && !selectedWorkflowRunData,
+        enabled: !!selectedWorkflowRunOrcabusId,
       },
     });
 
   const { data: workflowStateData, isFetching } = useWorkflowStateModel({
-    params: { path: { workflowrunId: selectedWorkflowRunId } },
+    params: { path: { wfrOrcabusId: selectedWorkflowRunOrcabusId.split('.')[1] } },
   });
 
   const { data: workflowCommentData, isFetching: isFetchingWorkflowComment } =
@@ -71,7 +69,7 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
       workflowState
         ? workflowState
             .map((state) => ({
-              id: state.id,
+              id: state.orcabusId,
               content: state.status,
               datetime: dayjs(state.timestamp).format('YYYY-MM-DD HH:mm'),
               comment: state.comment || '',
@@ -79,14 +77,14 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
               iconBackground: statusBackgroundColor(getBadgeType(state.status)),
               payloadId: state?.payload || 1,
             }))
-            .sort((a, b) => a.id - b.id)
+            .sort((a, b) => (dayjs(b.datetime).isAfter(dayjs(a.datetime)) ? 1 : -1))
         : [],
     [workflowState]
   );
 
   console.log('workflowRuntimelineData', workflowRuntimelineData);
 
-  const selectedWorkflowRun = selectedWorkflowRunData || workflowRunDetail;
+  const selectedWorkflowRun = workflowRunDetail;
 
   // format data and disply in the table
   const detailsData = useMemo(
@@ -125,24 +123,27 @@ export const WorkflowRunDetailsDrawer: FC<WorkflowRunDetailsDrawerProps> = ({
       {
         header: 'Library ID',
         accessor: 'libraryId',
-        cell: (libraryId: unknown) => {
-          if (!libraryId) {
+      },
+      {
+        header: 'Orcabus ID',
+        accessor: 'orcabusId',
+        cell: (orcabusId: unknown) => {
+          if (!orcabusId) {
             return <div>-</div>;
           } else {
             return (
               <Link
-                to={`/lab/library/${libraryId}`}
+                to={`/lab/library/${orcabusId}/overview`}
                 className={classNames(
                   'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
                 )}
               >
-                {libraryId as string}
+                {orcabusId as string}
               </Link>
             );
           }
         },
       },
-      { header: 'Orcabus ID', accessor: 'orcabusId' },
     ],
     []
   );

@@ -4,19 +4,22 @@ import { useSuspenseWorkflowModel } from '@/api/workflow';
 import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
 
 export const LibrarySideNavBar = () => {
-  const { libraryId, portalRunId } = useParams();
+  const { libraryOrcabusId, portalRunId } = useParams();
   const { pathname } = useLocation();
 
-  if (!libraryId) {
+  if (!libraryOrcabusId) {
     throw new Error('No library id in URL path!');
   }
 
-  const baseHref = `/lab/library/${libraryId}`;
-
+  const baseHref = `/lab/library/${libraryOrcabusId}`;
   const workflow = useSuspenseWorkflowModel({
     params: {
       query: {
-        workflowrun__libraries__libraryId: libraryId,
+        // WFM-FIXME: Library Orcabus Prefix
+        workflowrun__libraries__orcabusId:
+          libraryOrcabusId.split('.').length > 1
+            ? libraryOrcabusId.split('.')[1]
+            : libraryOrcabusId.split('.')[0],
         ordering: 'id',
         rowsPerPage: DEFAULT_NON_PAGINATE_PAGE_SIZE,
       },
@@ -31,7 +34,10 @@ export const LibrarySideNavBar = () => {
       navigation={[
         {
           title: 'Library',
-          children: [{ name: 'Overview', href: `${baseHref}` }],
+          children: [
+            { name: 'Overview', href: `${baseHref}/overview` },
+            { name: 'History', href: `${baseHref}/history` },
+          ],
         },
         {
           title: 'Workflows',

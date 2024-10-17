@@ -6,46 +6,68 @@ import { useSuspenseMetadataLibraryModel } from '@/api/metadata';
 
 export const LibraryBreadCrumb: FC = () => {
   const { pathname } = useLocation();
-  const { libraryId, workflowType, portalRunId } = useParams();
-  if (!libraryId) {
-    throw new Error('No library id in URL path!');
+  const { libraryOrcabusId, workflowType, portalRunId } = useParams();
+  if (!libraryOrcabusId) {
+    throw new Error('No library orcabus Id in URL path!');
   }
 
   const fullLibraryModel = useSuspenseMetadataLibraryModel({
-    params: { query: { libraryId: libraryId } },
+    params: { query: { orcabusId: libraryOrcabusId } },
   }).data;
 
   if (!fullLibraryModel || fullLibraryModel.results.length == 0) {
     throw new Error('No library Id found in metadata!');
   }
   const library = fullLibraryModel.results[0];
-  const subjectId = library.subject.subjectId;
+  const subject = library.subject;
 
   const libraryBreadCrumbProps = [
     { name: 'SUBJECT', href: '/lab', isCurrent: false },
-    { name: subjectId ?? '-', href: `/lab/subject/${subjectId}`, isCurrent: false },
+    {
+      name: subject.subjectId ?? '-',
+      href: `/lab/?tab=subject&orcabusId=${subject.orcabusId}`,
+      isCurrent: false,
+    },
     { name: 'LIBRARY', href: '/lab', isCurrent: false },
     {
       name: library.libraryId,
-      href: `/lab/library/${library.libraryId}`,
-      isCurrent: library.libraryId ? pathname.endsWith(library.libraryId) : false,
+      href: `/lab/library/${library.orcabusId}`,
+      isCurrent: library.orcabusId ? pathname.endsWith(library.orcabusId) : false,
     },
   ];
 
   if (workflowType) {
     libraryBreadCrumbProps.push({
       name: workflowType,
-      href: `/lab/library/${library.libraryId}/${workflowType}`,
+      href: `/lab/library/${library.orcabusId}/${workflowType}`,
       isCurrent: pathname.endsWith(workflowType),
     });
 
     if (portalRunId) {
       libraryBreadCrumbProps.push({
         name: portalRunId,
-        href: `/lab/library/${library.libraryId}/${workflowType}/${portalRunId}`,
+        href: `/lab/library/${library.orcabusId}/${workflowType}/${portalRunId}`,
         isCurrent: pathname.endsWith(portalRunId),
       });
     }
+  }
+
+  const isOverviewPage = pathname.endsWith('overview');
+  if (isOverviewPage) {
+    libraryBreadCrumbProps.push({
+      name: 'OVERVIEW',
+      href: `/lab/library/${library.orcabusId}/overview`,
+      isCurrent: !!isOverviewPage,
+    });
+  }
+
+  const isHistoryPage = pathname.endsWith('history');
+  if (isHistoryPage) {
+    libraryBreadCrumbProps.push({
+      name: 'HISTORY',
+      href: `/lab/library/${library.orcabusId}/history`,
+      isCurrent: !!isHistoryPage,
+    });
   }
 
   return (

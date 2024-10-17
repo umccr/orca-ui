@@ -14,26 +14,26 @@ import { BackdropWithText } from '@/components/common/backdrop';
 import WorkflowRunTimeline from '../components/workflowRuns/WorkflowRunTimeline';
 
 const WorkflowRunDetails = () => {
-  const { workflowRunId } = useParams();
+  const { orcabusId } = useParams();
 
   const { data: workflowRunDetail, isFetching: isFetchingWorkflowRunDetail } =
     useWorkflowRunDetailModel({
-      params: { path: { id: Number(workflowRunId) } },
+      params: { path: { orcabusId: orcabusId as string } },
       reactQuery: {
-        enabled: !!workflowRunId,
+        enabled: !!orcabusId,
       },
     });
 
   const { data: workflowStateData, isFetching } = useWorkflowStateModel({
-    params: { path: { workflowrunId: workflowRunId } },
+    params: { path: { wfrOrcabusId: orcabusId?.split('.')[1] } },
     reactQuery: {
-      enabled: !!workflowRunId,
+      enabled: !!orcabusId,
     },
   });
 
   const { data: workflowCommentData, isFetching: isFetchingWorkflowComment } =
     useWorkflowRunCommentModel({
-      params: { path: { workflowrunId: workflowRunId } },
+      params: { path: { workflowrunId: orcabusId as string } },
     });
 
   // format data and disply in the table
@@ -73,7 +73,7 @@ const WorkflowRunDetails = () => {
     () =>
       workflowState
         ? workflowState.map((state) => ({
-            id: state.id,
+            id: state.orcabusId,
             content: state.status,
             datetime: dayjs(state.timestamp).format('YYYY-MM-DD HH:mm'),
             comment: state.comment || '',
@@ -100,7 +100,7 @@ const WorkflowRunDetails = () => {
   );
 
   const timelineData = [...workflowRuntimelineData, ...workflowCommentTimelineData].sort((a, b) =>
-    dayjs(b.datetime).isAfter(dayjs(a.datetime)) ? 1 : -1
+    dayjs(a.datetime).isAfter(dayjs(b.datetime)) ? -1 : 1
   );
 
   const librariesTableColumns = useMemo(
