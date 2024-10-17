@@ -9,19 +9,18 @@ type LibraryTableDetailsProps = {
 export const LibraryTableDetails: FC<LibraryTableDetailsProps> = ({ libraryDetail: library }) => {
   return (
     <div>
-      <div className='font-bold py-3 text-lg'>Library Details</div>
       <JsonToTable
         data={{
-          subjectId: library.subject.subjectId ?? '-',
-          sampleId: library.sample.sampleId ?? '-',
-          externalSampleId: library.sample.externalSampleId ?? '-',
-          sampleSource: library.sample.source ?? '-',
-          libraryId: library.libraryId ?? '-',
-          phenotype: library.phenotype ?? '-',
-          workflow: library.workflow ?? '-',
-          quality: library.quality ?? '-',
-          type: library.type ?? '-',
-          assay: library.assay ?? '-',
+          'Library Id': library.libraryId ?? '-',
+          'Subject Id': library.subject.subjectId ?? '-',
+          'Sample Id': library.sample.sampleId ?? '-',
+          'External Sample Id': library.sample.externalSampleId ?? '-',
+          'Sample Source': library.sample.source ?? '-',
+          Phenotype: library.phenotype ?? '-',
+          Workflow: library.workflow ?? '-',
+          Quality: library.quality ?? '-',
+          Type: library.type ?? '-',
+          Assay: library.assay ?? '-',
         }}
       />
     </div>

@@ -103,6 +103,105 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/analysis/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["apiV1AnalysisList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/analysis/{orcabusId}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
+        get: operations["apiV1AnalysisRetrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/analysiscontext/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["apiV1AnalysiscontextList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/analysiscontext/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
+        get: operations["apiV1AnalysiscontextRetrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/analysisrun/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["apiV1AnalysisrunList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/analysisrun/{orcabusId}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
+        get: operations["apiV1AnalysisrunRetrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/payload/": {
         parameters: {
             query?: never;
@@ -126,6 +225,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["apiV1PayloadRetrieve"];
         put?: never;
@@ -160,6 +260,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
+        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["apiV1WorkflowRetrieve"];
         put?: never;
         post?: never;
@@ -186,12 +287,14 @@ export interface paths {
         trace?: never;
     };
     "/api/v1/workflowrun/{orcabusId}/": {
+    "/api/v1/workflowrun/{orcabusId}/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
+        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["apiV1WorkflowrunRetrieve"];
         put?: never;
@@ -225,6 +328,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["apiV1WorkflowrunStateRetrieve"];
         put?: never;
@@ -284,10 +388,76 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/workflowrun/unresolved/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["apiV1WorkflowrunUnresolvedRetrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** @description Serializer to define a default representation of an Analysis record,
+         *     mainly used in record listings. */
+        Analysis: {
+            readonly orcabusId: string;
+            analysisName: string;
+            analysisVersion: string;
+            description: string;
+            status: string;
+            contexts: string[];
+            workflows: string[];
+        };
+        AnalysisContext: {
+            readonly orcabusId: string;
+            name: string;
+            usecase: string;
+            description: string;
+            status: string;
+        };
+        /** @description Serializer to define a detailed representation of an Analysis record,
+         *     mainly used in individual record views. */
+        AnalysisDetail: {
+            readonly orcabusId: string;
+            readonly contexts: components["schemas"]["AnalysisContext"][];
+            readonly workflows: components["schemas"]["WorkflowMin"][];
+            analysisName: string;
+            analysisVersion: string;
+            description: string;
+            status: string;
+        };
+        AnalysisRun: {
+            readonly orcabusId: string;
+            analysisRunName: string;
+            comment?: string | null;
+            status?: string | null;
+            computeContext?: string | null;
+            storageContext?: string | null;
+            analysis?: string | null;
+        };
+        AnalysisRunDetail: {
+            readonly orcabusId: string;
+            readonly libraries: components["schemas"]["Library"][];
+            readonly analysis: components["schemas"]["Analysis"];
+            readonly storageContext: components["schemas"]["AnalysisContext"];
+            readonly computeContext: components["schemas"]["AnalysisContext"];
+            analysisRunName: string;
+            comment?: string | null;
+            status?: string | null;
+        };
+        Library: {
+            readonly orcabusId: string;
         /** @description Serializer to define a default representation of an Analysis record,
          *     mainly used in record listings. */
         Analysis: {
@@ -381,6 +551,47 @@ export interface components {
             results: components["schemas"]["AnalysisDetail"][];
         };
         PaginatedAnalysisRunDetailList: {
+        PaginatedAnalysisContextList: {
+            links: {
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=4
+                 */
+                next?: string | null;
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=2
+                 */
+                previous?: string | null;
+            };
+            pagination: {
+                count?: number;
+                page?: number;
+                rowsPerPage?: number;
+            };
+            results: components["schemas"]["AnalysisContext"][];
+        };
+        PaginatedAnalysisDetailList: {
+            links: {
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=4
+                 */
+                next?: string | null;
+                /**
+                 * Format: uri
+                 * @example http://api.example.org/accounts/?page=2
+                 */
+                previous?: string | null;
+            };
+            pagination: {
+                count?: number;
+                page?: number;
+                rowsPerPage?: number;
+            };
+            results: components["schemas"]["AnalysisDetail"][];
+        };
+        PaginatedAnalysisRunDetailList: {
             links: {
                 /**
                  * Format: uri
@@ -399,7 +610,9 @@ export interface components {
                 rowsPerPage?: number;
             };
             results: components["schemas"]["AnalysisRunDetail"][];
+            results: components["schemas"]["AnalysisRunDetail"][];
         };
+        PaginatedPayloadList: {
         PaginatedPayloadList: {
             links: {
                 /**
@@ -419,7 +632,9 @@ export interface components {
                 rowsPerPage?: number;
             };
             results: components["schemas"]["Payload"][];
+            results: components["schemas"]["Payload"][];
         };
+        PaginatedStateList: {
         PaginatedStateList: {
             links: {
                 /**
@@ -439,7 +654,9 @@ export interface components {
                 rowsPerPage?: number;
             };
             results: components["schemas"]["State"][];
+            results: components["schemas"]["State"][];
         };
+        PaginatedWorkflowList: {
         PaginatedWorkflowList: {
             links: {
                 /**
@@ -459,7 +676,9 @@ export interface components {
                 rowsPerPage?: number;
             };
             results: components["schemas"]["Workflow"][];
+            results: components["schemas"]["Workflow"][];
         };
+        PaginatedWorkflowRunDetailList: {
         PaginatedWorkflowRunDetailList: {
             links: {
                 /**
@@ -479,7 +698,10 @@ export interface components {
                 rowsPerPage?: number;
             };
             results: components["schemas"]["WorkflowRunDetail"][];
+            results: components["schemas"]["WorkflowRunDetail"][];
         };
+        Payload: {
+            readonly orcabusId: string;
         Payload: {
             readonly orcabusId: string;
             payloadRefId: string;
@@ -488,13 +710,19 @@ export interface components {
         };
         State: {
             readonly orcabusId: string;
+        State: {
+            readonly orcabusId: string;
             status: string;
             /** Format: date-time */
             timestamp: string;
             comment?: string | null;
             workflowRun: string;
             payload?: string | null;
+            workflowRun: string;
+            payload?: string | null;
         };
+        Workflow: {
+            readonly orcabusId: string;
         Workflow: {
             readonly orcabusId: string;
             workflowName: string;
@@ -517,9 +745,14 @@ export interface components {
         };
         WorkflowRunDetail: {
             readonly orcabusId: string;
+        WorkflowRunDetail: {
+            readonly orcabusId: string;
             readonly currentState: {
                 [key: string]: unknown;
             };
+            readonly libraries: components["schemas"]["Library"][];
+            readonly workflow: components["schemas"]["WorkflowMin"];
+            readonly analysisRun: components["schemas"]["AnalysisRun"];
             readonly libraries: components["schemas"]["Library"][];
             readonly workflow: components["schemas"]["WorkflowMin"];
             readonly analysisRun: components["schemas"]["AnalysisRun"];
@@ -538,7 +771,14 @@ export interface components {
 export type $defs = Record<string, never>;
 export interface operations {
     apiV1AnalysisList: {
+    apiV1AnalysisList: {
         parameters: {
+            query: {
+                analysisName: string;
+                analysisVersion: string;
+                contexts: string[];
+                description: string;
+                orcabusId?: string;
             query: {
                 analysisName: string;
                 analysisVersion: string;
@@ -555,6 +795,8 @@ export interface operations {
                 search?: string;
                 status: string;
                 workflows: string[];
+                status: string;
+                workflows: string[];
             };
             header?: never;
             path?: never;
@@ -568,15 +810,19 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PaginatedAnalysisDetailList"];
+                    "application/json": components["schemas"]["PaginatedAnalysisDetailList"];
                 };
             };
         };
     };
     apiV1AnalysisRetrieve: {
+    apiV1AnalysisRetrieve: {
         parameters: {
             query?: never;
             header?: never;
             path: {
+                /** @description A unique value identifying this analysis. */
+                orcabusId: string;
                 /** @description A unique value identifying this analysis. */
                 orcabusId: string;
             };
@@ -590,12 +836,18 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AnalysisDetail"];
+                    "application/json": components["schemas"]["AnalysisDetail"];
                 };
             };
         };
     };
     apiV1AnalysiscontextList: {
+    apiV1AnalysiscontextList: {
         parameters: {
+            query: {
+                description: string;
+                name: string;
+                orcabusId?: string;
             query: {
                 description: string;
                 name: string;
@@ -608,6 +860,8 @@ export interface operations {
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
+                status: string;
+                usecase: string;
                 status: string;
                 usecase: string;
             };
@@ -623,15 +877,18 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PaginatedAnalysisContextList"];
+                    "application/json": components["schemas"]["PaginatedAnalysisContextList"];
                 };
             };
         };
     };
     apiV1AnalysiscontextRetrieve: {
+    apiV1AnalysiscontextRetrieve: {
         parameters: {
             query?: never;
             header?: never;
             path: {
+                id: string;
                 id: string;
             };
             cookie?: never;
@@ -644,12 +901,20 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AnalysisContext"];
+                    "application/json": components["schemas"]["AnalysisContext"];
                 };
             };
         };
     };
     apiV1AnalysisrunList: {
+    apiV1AnalysisrunList: {
         parameters: {
+            query: {
+                analysis?: string | null;
+                analysisRunName: string;
+                comment?: string | null;
+                computeContext?: string | null;
+                orcabusId?: string;
             query: {
                 analysis?: string | null;
                 analysisRunName: string;
@@ -720,6 +985,62 @@ export interface operations {
                 /** @description A search term. */
                 search?: string;
                 version: string;
+                status?: string | null;
+                storageContext?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAnalysisRunDetailList"];
+                };
+            };
+        };
+    };
+    apiV1AnalysisrunRetrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique value identifying this analysis run. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnalysisRunDetail"];
+                };
+            };
+        };
+    };
+    apiV1PayloadList: {
+        parameters: {
+            query: {
+                data: unknown;
+                orcabusId?: string;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                payloadRefId: string;
+                /** @description Number of results to return per page. */
+                rowsPerPage?: number;
+                /** @description A search term. */
+                search?: string;
+                version: string;
             };
             header?: never;
             path?: never;
@@ -733,15 +1054,18 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PaginatedPayloadList"];
+                    "application/json": components["schemas"]["PaginatedPayloadList"];
                 };
             };
         };
     };
     apiV1PayloadRetrieve: {
+    apiV1PayloadRetrieve: {
         parameters: {
             query?: never;
             header?: never;
             path: {
+                id: string;
                 id: string;
             };
             cookie?: never;
@@ -754,12 +1078,18 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Payload"];
+                    "application/json": components["schemas"]["Payload"];
                 };
             };
         };
     };
     apiV1WorkflowList: {
+    apiV1WorkflowList: {
         parameters: {
+            query: {
+                executionEngine: string;
+                executionEnginePipelineId: string;
+                orcabusId?: string;
             query: {
                 executionEngine: string;
                 executionEnginePipelineId: string;
@@ -794,8 +1124,31 @@ export interface operations {
     apiV1WorkflowRetrieve: {
         parameters: {
             query?: never;
+                workflowName: string;
+                workflowVersion: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedWorkflowList"];
+                };
+            };
+        };
+    };
+    apiV1WorkflowRetrieve: {
+        parameters: {
+            query?: never;
             header?: never;
             path: {
+                id: string;
                 id: string;
             };
             cookie?: never;
@@ -851,10 +1204,13 @@ export interface operations {
         };
     };
     apiV1WorkflowrunRetrieve: {
+    apiV1WorkflowrunRetrieve: {
         parameters: {
             query?: never;
             header?: never;
             path: {
+                /** @description A unique value identifying this workflow run. */
+                orcabusId: string;
                 /** @description A unique value identifying this workflow run. */
                 orcabusId: string;
             };
@@ -868,6 +1224,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkflowRunDetail"];
+                    "application/json": components["schemas"]["WorkflowRunDetail"];
                 };
             };
         };
@@ -877,15 +1234,22 @@ export interface operations {
             query: {
                 comment?: string | null;
                 orcabusId?: string;
+            query: {
+                comment?: string | null;
+                orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
                 page?: number;
                 payload?: string | null;
+                payload?: string | null;
                 /** @description Number of results to return per page. */
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
+                status: string;
+                timestamp: string;
+                workflowRun: string;
                 status: string;
                 timestamp: string;
                 workflowRun: string;
@@ -903,6 +1267,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
+                    "application/json": components["schemas"]["PaginatedStateList"];
                     "application/json": components["schemas"]["PaginatedStateList"];
                 };
             };
@@ -925,6 +1290,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
+                    "application/json": components["schemas"]["State"];
                     "application/json": components["schemas"]["State"];
                 };
             };
@@ -963,6 +1329,26 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
+                    "application/json": components["schemas"]["WorkflowRunDetail"];
+                };
+            };
+        };
+    };
+    apiV1WorkflowrunUnresolvedRetrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunDetail"];
                     "application/json": components["schemas"]["WorkflowRunDetail"];
                 };
             };
