@@ -35,14 +35,16 @@ export function createWorkflowQueryHook<K extends keyof paths>(path: K) {
   };
 }
 
-export type WorkflowModel = components['schemas']['WorkflowModel'];
-export type WorkflowRunModel = components['schemas']['WorkflowRunModel'];
+export type WorkflowModel = components['schemas']['Workflow'];
+export type WorkflowRunModel = components['schemas']['WorkflowRunDetail'];
 
 export const useWorkflowModel = createWorkflowQueryHook('/api/v1/workflow/');
 export const useWorkflowRunListModel = createWorkflowQueryHook('/api/v1/workflowrun/');
-export const useWorkflowRunDetailModel = createWorkflowQueryHook('/api/v1/workflowrun/{id}/');
+export const useWorkflowRunDetailModel = createWorkflowQueryHook(
+  '/api/v1/workflowrun/{orcabusId}/'
+);
 export const useWorkflowStateModel = createWorkflowQueryHook(
-  '/api/v1/workflowrun/{workflowrunId}/state/'
+  '/api/v1/workflowrun/{wfrOrcabusId}/state/'
 );
 export const useWorkflowPayloadModel = createWorkflowQueryHook('/api/v1/payload/{id}/');
 export const useWorkflowRunStatusCountModel = createWorkflowQueryHook(

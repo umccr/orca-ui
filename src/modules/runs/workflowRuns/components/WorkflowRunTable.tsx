@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Table, Column, TableData } from '@/components/tables';
 import { classNames } from '@/utils/commonUtils';
 import { keepPreviousData } from '@tanstack/react-query';
@@ -7,10 +7,10 @@ import { Badge } from '@/components/common/badges';
 import { WorkflowRunDetailsDrawer } from './WorkflowRunDetailsDrawer';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { useQueryParams } from '@/hooks/useQueryParams';
-import { useWorkflowRunListModel, WorkflowRunModel } from '@/api/workflow';
+import { useWorkflowRunListModel } from '@/api/workflow';
 
 const WorkflowRunTable = () => {
-  const [selectedWorkflowRun, setSelectedWorkflowRun] = useState<WorkflowRunModel | null>(null);
+  // const [selectedWorkflowRun, setSelectedWorkflowRun] = useState<WorkflowRunModel | null>(null);
 
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
 
@@ -27,7 +27,9 @@ const WorkflowRunTable = () => {
         rowsPerPage: getPaginationParams().rowsPerPage || DEFAULT_PAGE_SIZE,
         search: getQueryParams().search || undefined,
         workflow__id: getQueryParams().workflowTypeId || undefined,
-        status: ['succeeded', 'failed', 'aborted'].includes(getQueryParams().workflowRunStatus)
+        status: ['succeeded', 'failed', 'aborted', 'resolved'].includes(
+          getQueryParams().workflowRunStatus
+        )
           ? getQueryParams().workflowRunStatus
           : undefined,
         is_ongoing: getQueryParams().workflowRunStatus == 'ongoing' || undefined,
@@ -46,7 +48,7 @@ const WorkflowRunTable = () => {
   }
 
   const onCloseDrawer = () => {
-    setSelectedWorkflowRun(null);
+    // setSelectedWorkflowRun(null);
     setQueryParams({ workflowRunId: null });
   };
   const workflowRunColumn: Column[] = useMemo(
@@ -65,8 +67,8 @@ const WorkflowRunTable = () => {
                     'cursor-pointer flex flex-row items-center ml-2 text-sm lowercase font-medium hover:text-blue-700 text-blue-500'
                   )}
                   onClick={() => {
-                    setSelectedWorkflowRun(workflowRunRowData as WorkflowRunModel);
-                    setQueryParams({ workflowRunId: workflowRunRowData.id });
+                    // setSelectedWorkflowRun(workflowRunRowData as WorkflowRunModel);
+                    setQueryParams({ workflowRunOrcabusId: workflowRunRowData.orcabusId });
                   }}
                 >
                   {(workflowRunName as string).toLocaleLowerCase()}
@@ -181,10 +183,10 @@ const WorkflowRunTable = () => {
           countUnit: 'workflow runs',
         }}
       />
-      {(getQueryParams().workflowRunId || selectedWorkflowRun) && (
+      {getQueryParams().workflowRunOrcabusId && (
         <WorkflowRunDetailsDrawer
-          selectedWorkflowRunData={selectedWorkflowRun}
-          selectedWorkflowRunId={getQueryParams().workflowRunId}
+          // selectedWorkflowRunData={selectedWorkflowRun}
+          selectedWorkflowRunOrcabusId={getQueryParams().workflowRunOrcabusId}
           onCloseDrawer={onCloseDrawer}
         />
       )}
