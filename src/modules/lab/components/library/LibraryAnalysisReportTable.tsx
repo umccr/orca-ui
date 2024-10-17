@@ -125,11 +125,6 @@ type LibraryAnalysisReportTableProps = { libraryDetail: components['schemas']['L
 export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = ({
   libraryDetail,
 }) => {
-  const libraryId = libraryDetail.libraryId;
-  if (!libraryId) {
-    throw new Error('No library id in URL path!');
-  }
-
   /**
    * FIX ME
    *
@@ -149,7 +144,7 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
         <>
           <DetailedErrorBoundary errorTitle={`Unable to load 'umccrise' report files`}>
             <AnalysisTable
-              libraryId={libraryId}
+              libraryOrcabusId={libraryDetail.orcabusId}
               workflowType='umccrise'
               keyPatterns={WORKFLOW_ANALYSIS_TABLE['umccrise']['keyPatterns']}
               getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['umccrise']['getTableData']}
@@ -158,7 +153,7 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
           <div className='py-4'></div>
           <DetailedErrorBoundary errorTitle={`Unable to load 'tumor_normal' report files`}>
             <AnalysisTable
-              libraryId={libraryId}
+              libraryOrcabusId={libraryDetail.orcabusId}
               workflowType='tumor_normal'
               keyPatterns={WORKFLOW_ANALYSIS_TABLE['tumor_normal']['keyPatterns']}
               getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['tumor_normal']['getTableData']}
@@ -169,7 +164,7 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
         <>
           <DetailedErrorBoundary errorTitle={`Unable to load 'wts' report files`}>
             <AnalysisTable
-              libraryId={libraryId}
+              libraryOrcabusId={libraryDetail.orcabusId}
               workflowType='wts'
               keyPatterns={WORKFLOW_ANALYSIS_TABLE['wts']['keyPatterns']}
               getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['wts']['getTableData']}
@@ -178,17 +173,19 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
           <div className='py-4'></div>
           <DetailedErrorBoundary errorTitle={`Unable to load 'rnasum' report files`}>
             <AnalysisTable
-              libraryId={libraryId}
+              libraryOrcabusId={libraryDetail.orcabusId}
               workflowType='rnasum'
               keyPatterns={WORKFLOW_ANALYSIS_TABLE['rnasum']['keyPatterns']}
               getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['rnasum']['getTableData']}
             />
           </DetailedErrorBoundary>
         </>
-      ) : libraryDetail.type === 'ctDNA' && libraryDetail.assay === 'ctTSO' ? (
+      ) : libraryDetail.type === 'ctDNA' &&
+        (libraryDetail.assay?.toLowerCase() === 'cttso' ||
+          libraryDetail.assay?.toLowerCase() == 'cttsov2') ? (
         <DetailedErrorBoundary errorTitle={`Unable to load 'cttsov2' report files`}>
           <AnalysisTable
-            libraryId={libraryId}
+            libraryOrcabusId={libraryDetail.orcabusId}
             workflowType='cttsov2'
             keyPatterns={WORKFLOW_ANALYSIS_TABLE['cttsov2']['keyPatterns']}
             getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['cttsov2']['getTableData']}
@@ -202,12 +199,12 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
 };
 
 export const AnalysisTable = ({
-  libraryId,
+  libraryOrcabusId,
   workflowType,
   keyPatterns,
   getTableDataFormat,
 }: {
-  libraryId: string;
+  libraryOrcabusId: string;
   workflowType: string;
   keyPatterns: string[];
   getTableDataFormat: (data: ({ key: string } & Record<string, unknown>)[]) => TableData[];
@@ -215,7 +212,11 @@ export const AnalysisTable = ({
   const workflowRun = useSuspenseWorkflowRunListModel({
     params: {
       query: {
-        libraries__libraryId: libraryId,
+        // WFM-FIXME: Library Orcabus Prefix
+        libraries__orcabusId:
+          libraryOrcabusId.split('.').length > 1
+            ? libraryOrcabusId.split('.')[1]
+            : libraryOrcabusId.split('.')[0],
         workflow__workflowName: workflowType,
         ordering: '-portalRunId',
         rowsPerPage: DEFAULT_NON_PAGINATE_PAGE_SIZE,
