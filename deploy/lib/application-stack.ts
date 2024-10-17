@@ -88,6 +88,7 @@ export class ApplicationStack extends Stack {
       Grant the toolchain account access to the S3 bucket and lambda function
       so that it can invoke the lambda function to trigger the CodeBuild pipeline
     */
+    clientBucket.grantDelete(new AccountPrincipal(TOOLCHAIN_ACCOUNT_ID));
     clientBucket.grantReadWrite(new AccountPrincipal(TOOLCHAIN_ACCOUNT_ID));
     configLambda.grantInvoke(new AccountPrincipal(TOOLCHAIN_ACCOUNT_ID));
   }

@@ -184,7 +184,7 @@ export class PipelineStack extends Stack {
       deployProjectRole.addToPolicy(
         new PolicyStatement({
           effect: Effect.ALLOW,
-          actions: ['s3:*', 'lambda:InvokeFunction'],
+          actions: ['s3:GetObject', 's3:PutObject', 's3:DeleteObject', 'lambda:InvokeFunction'],
           resources: [
             `arn:aws:s3:::${cloudFrontBucketNameConfig[env]}`,
             `arn:aws:s3:::${cloudFrontBucketNameConfig[env]}/*`,
