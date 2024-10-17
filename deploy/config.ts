@@ -22,11 +22,18 @@ export const cloudFrontBucketNameConfig: Record<AppStage, string> = {
   [AppStage.PROD]: 'orcaui-cloudfront-472057503814',
 };
 
+export const configLambdaNameConfig: Record<AppStage, string> = {
+  [AppStage.BETA]: 'TriggerCodeBuildLambdaBeta',
+  [AppStage.GAMMA]: 'TriggerCodeBuildLambdaGamma',
+  [AppStage.PROD]: 'TriggerCodeBuildLambdaProd',
+};
+
 export const getAppStackConfig = (appStage: AppStage): ApplicationStackProps => {
   switch (appStage) {
     case AppStage.BETA:
       return {
         cloudFrontBucketName: cloudFrontBucketNameConfig[appStage],
+        configLambdaName: configLambdaNameConfig[appStage],
         aliasDomainName: ['orcaui.dev.umccr.org'],
         reactBuildEnvVariables: {
           VITE_METADATA_URL: `https://metadata.dev.umccr.org`,
@@ -39,6 +46,7 @@ export const getAppStackConfig = (appStage: AppStage): ApplicationStackProps => 
     case AppStage.GAMMA:
       return {
         cloudFrontBucketName: cloudFrontBucketNameConfig[appStage],
+        configLambdaName: configLambdaNameConfig[appStage],
         aliasDomainName: ['orcaui.stg.umccr.org'],
         reactBuildEnvVariables: {
           VITE_METADATA_URL: `https://metadata.stg.umccr.org`,
@@ -51,6 +59,7 @@ export const getAppStackConfig = (appStage: AppStage): ApplicationStackProps => 
     case AppStage.PROD:
       return {
         cloudFrontBucketName: cloudFrontBucketNameConfig[appStage],
+        configLambdaName: configLambdaNameConfig[appStage],
         aliasDomainName: ['orcaui.umccr.org', 'orcaui.prod.umccr.org'],
         reactBuildEnvVariables: {
           VITE_METADATA_URL: `https://metadata.prod.umccr.org`,
