@@ -16,7 +16,7 @@ import { BlockPublicAccess, Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { Architecture, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
-import { BuildEnvironmentVariableType } from 'aws-cdk-lib/aws-codebuild';
+// import { BuildEnvironmentVariableType } from 'aws-cdk-lib/aws-codebuild';
 import { AccountPrincipal, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Function } from 'aws-cdk-lib/aws-lambda';
@@ -69,7 +69,7 @@ export class ApplicationStack extends Stack {
         ...Object.fromEntries(
           Object.entries(this.getSSMEnvironmentVariables()).map(([key, value]) => [
             key,
-            StringParameter.valueForStringParameter(this, value.value),
+            StringParameter.valueForStringParameter(this, value),
           ])
         ),
       },
@@ -77,7 +77,7 @@ export class ApplicationStack extends Stack {
       initialPolicy: [
         new PolicyStatement({
           actions: ['ssm:GetParameter'],
-          resources: Object.values(this.getSSMEnvironmentVariables()).map((value) => value.value),
+          resources: Object.values(this.getSSMEnvironmentVariables()).map((value) => value),
         }),
       ],
     });
@@ -143,35 +143,45 @@ export class ApplicationStack extends Stack {
   }
 
   private getSSMEnvironmentVariables() {
+    // return {
+    //   VITE_COG_APP_CLIENT_ID: {
+    //     value: '/orcaui/cog_app_client_id_stage',
+    //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
+    //   },
+    //   VITE_OAUTH_REDIRECT_IN: {
+    //     value: '/orcaui/oauth_redirect_in_stage',
+    //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
+    //   },
+    //   VITE_OAUTH_REDIRECT_OUT: {
+    //     value: '/orcaui/oauth_redirect_out_stage',
+    //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
+    //   },
+    //   VITE_COG_USER_POOL_ID: {
+    //     value: '/data_portal/client/cog_user_pool_id',
+    //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
+    //   },
+    //   VITE_COG_IDENTITY_POOL_ID: {
+    //     value: '/data_portal/client/cog_identity_pool_id',
+    //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
+    //   },
+    //   VITE_OAUTH_DOMAIN: {
+    //     value: '/data_portal/client/oauth_domain',
+    //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
+    //   },
+    //   VITE_UNSPLASH_CLIENT_ID: {
+    //     value: '/data_portal/unsplash/client_id',
+    //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
+    //   },
+    // };
+
     return {
-      VITE_COG_APP_CLIENT_ID: {
-        value: '/orcaui/cog_app_client_id_stage',
-        type: BuildEnvironmentVariableType.PARAMETER_STORE,
-      },
-      VITE_OAUTH_REDIRECT_IN: {
-        value: '/orcaui/oauth_redirect_in_stage',
-        type: BuildEnvironmentVariableType.PARAMETER_STORE,
-      },
-      VITE_OAUTH_REDIRECT_OUT: {
-        value: '/orcaui/oauth_redirect_out_stage',
-        type: BuildEnvironmentVariableType.PARAMETER_STORE,
-      },
-      VITE_COG_USER_POOL_ID: {
-        value: '/data_portal/client/cog_user_pool_id',
-        type: BuildEnvironmentVariableType.PARAMETER_STORE,
-      },
-      VITE_COG_IDENTITY_POOL_ID: {
-        value: '/data_portal/client/cog_identity_pool_id',
-        type: BuildEnvironmentVariableType.PARAMETER_STORE,
-      },
-      VITE_OAUTH_DOMAIN: {
-        value: '/data_portal/client/oauth_domain',
-        type: BuildEnvironmentVariableType.PARAMETER_STORE,
-      },
-      VITE_UNSPLASH_CLIENT_ID: {
-        value: '/data_portal/unsplash/client_id',
-        type: BuildEnvironmentVariableType.PARAMETER_STORE,
-      },
+      VITE_COG_APP_CLIENT_ID: '/orcaui/cog_app_client_id_stage',
+      VITE_OAUTH_REDIRECT_IN: '/orcaui/oauth_redirect_in_stage',
+      VITE_OAUTH_REDIRECT_OUT: '/orcaui/oauth_redirect_out_stage',
+      VITE_COG_USER_POOL_ID: '/data_portal/client/cog_user_pool_id',
+      VITE_COG_IDENTITY_POOL_ID: '/data_portal/client/cog_identity_pool_id',
+      VITE_OAUTH_DOMAIN: '/data_portal/client/oauth_domain',
+      VITE_UNSPLASH_CLIENT_ID: '/data_portal/unsplash/client_id',
     };
   }
 }

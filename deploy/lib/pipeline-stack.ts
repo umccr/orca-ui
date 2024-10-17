@@ -54,7 +54,8 @@ export class PipelineStack extends Stack {
       TODO: add custom webhook to path "/deploy", 
       issue related to https://github.com/aws/aws-cdk/issues/10265
     */
-    const infraPipeline = new CodePipeline(this, 'InfraPipeline', {
+    const infraPipeline = new CodePipeline(this, 'OrcaUIInfraPipeline', {
+      pipelineName: 'OrcaUIInfraPipeline',
       synth: new CodeBuildStep('CdkSynth', {
         installCommands: ['node -v', 'corepack enable'],
         commands: ['cd deploy', 'yarn install --immutable', 'yarn cdk synth'],
@@ -244,8 +245,8 @@ export class PipelineStack extends Stack {
     /**
      * React Build and Deploy Pipeline
      */
-    new Pipeline(this, 'ReactBuildPipeline', {
-      pipelineName: 'ReactBuildPipeline',
+    new Pipeline(this, 'OrcaUICodeCICDPipeline', {
+      pipelineName: 'OrcaUICodeCICDPipeline',
       crossAccountKeys: false,
       stages: [
         {
