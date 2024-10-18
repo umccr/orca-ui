@@ -8,8 +8,15 @@ s3 = boto3.client('s3')
 cloudfront = boto3.client('cloudfront')
 
 def get_ssm_parameter(name):
-    response = ssm.get_parameter(Name=name, WithDecryption=True)
-    return response['Parameter']['Value']
+    try: 
+        response = ssm.get_parameter(Name=name, WithDecryption=True)
+        return response['Parameter']['Value']
+    except ssm.exceptions.ParameterNotFound:
+        print(f"SSM Parameter not found: {name}")
+        return None
+    except Exception as e:
+        print(f"Error fetching SSM parameter {name}: {str(e)}")
+        return None
 
 def handler(event, context):
     

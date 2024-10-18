@@ -67,17 +67,18 @@ export class ApplicationStack extends Stack {
         CLOUDFRONT_DISTRIBUTION_ID: distribution.distributionId,
         ...props.reactBuildEnvVariables,
       },
-
-      initialPolicy: [
-        new PolicyStatement({
-          actions: ['ssm:GetParameter'],
-          resources: [
-            `arn:aws:ssm:${this.region}:${this.account}:/orcaui/*`,
-            `arn:aws:ssm:${this.region}:${this.account}:/data_portal/*`,
-          ],
-        }),
-      ],
     });
+
+    configLambda.addToRolePolicy(
+      new PolicyStatement({
+        actions: ['ssm:GetParameter'],
+        resources: [
+          `arn:aws:ssm:${this.region}:${this.account}:/orcaui/*`,
+          `arn:aws:ssm:${this.region}:${this.account}:/data_portal/*`,
+        ],
+      })
+    );
+
     clientBucket.grantReadWrite(configLambda);
     distribution.grantCreateInvalidation(configLambda);
 
