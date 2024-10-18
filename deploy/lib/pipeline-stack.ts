@@ -200,20 +200,23 @@ export class PipelineStack extends Stack {
           principals: [new AccountPrincipal(this.account)],
         })
       );
-
+      // Grant bucket access permission
       deployProjectRole.addToPolicy(
         new PolicyStatement({
           effect: Effect.ALLOW,
-          actions: [
-            's3:Get*',
-            's3:List*',
-            's3:PutObject',
-            's3:DeleteObject',
-            'lambda:InvokeFunction',
-          ],
+          actions: ['s3:Get*', 's3:List*', 's3:PutObject', 's3:DeleteObject'],
           resources: [
             `arn:aws:s3:::${cloudFrontBucketNameConfig[env]}`,
             `arn:aws:s3:::${cloudFrontBucketNameConfig[env]}/*`,
+          ],
+        })
+      );
+      // Grant Lambda invoke permission
+      deployProjectRole.addToPolicy(
+        new PolicyStatement({
+          effect: Effect.ALLOW,
+          actions: ['lambda:InvokeFunction'],
+          resources: [
             `arn:aws:lambda:${REGION}:${accountIdAlias[env]}:function:${configLambdaNameConfig[env]}`,
           ],
         })
