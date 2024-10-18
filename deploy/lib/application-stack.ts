@@ -17,7 +17,7 @@ import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { Architecture, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
 // import { BuildEnvironmentVariableType } from 'aws-cdk-lib/aws-codebuild';
-import { AccountPrincipal } from 'aws-cdk-lib/aws-iam';
+import { AccountPrincipal, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Function } from 'aws-cdk-lib/aws-lambda';
 import { TOOLCHAIN_ACCOUNT_ID } from '../config';
@@ -67,12 +67,32 @@ export class ApplicationStack extends Stack {
         BUCKET_NAME: clientBucket.bucketName,
         CLOUDFRONT_DISTRIBUTION_ID: distribution.distributionId,
         ...props.reactBuildEnvVariables,
-        ...this.getSSMEnvironmentVariables(),
+        VITE_COG_APP_CLIENT_ID: '/orcaui/cog_app_client_id_stage',
+        VITE_OAUTH_REDIRECT_IN: '/orcaui/oauth_redirect_in_stage',
+        VITE_OAUTH_REDIRECT_OUT: '/orcaui/oauth_redirect_out_stage',
+        VITE_COG_USER_POOL_ID: '/data_portal/client/cog_user_pool_id',
+        VITE_COG_IDENTITY_POOL_ID: '/data_portal/client/cog_identity_pool_id',
+        VITE_OAUTH_DOMAIN: '/data_portal/client/oauth_domain',
+        VITE_UNSPLASH_CLIENT_ID: '/data_portal/unsplash/client_id',
       },
     });
 
     clientBucket.grantReadWrite(configLambda);
     distribution.grantCreateInvalidation(configLambda);
+    // Grant SSM read permissions to the Lambda function
+    // Grant KMS decrypt permissions for secure string parameters
+    const kmsKey = Key.fromLookup(this, 'SSMKey', { aliasName: 'alias/aws/ssm' });
+    kmsKey.grantDecrypt(configLambda);
+    configLambda.addToRolePolicy(
+      new PolicyStatement({
+        actions: ['ssm:Get*', 'kms:Decrypt'],
+        resources: [
+          `arn:aws:ssm:${this.region}:${this.account}:parameter/orcaui/*`,
+          `arn:aws:ssm:${this.region}:${this.account}:parameter/data_portal/*`,
+          kmsKey.keyArn,
+        ],
+      })
+    );
 
     /*
       Grant the toolchain account access to the S3 bucket and lambda function
@@ -132,49 +152,49 @@ export class ApplicationStack extends Stack {
     return cloudFrontDistribution;
   }
 
-  private getSSMEnvironmentVariables() {
-    return {
-      VITE_COG_APP_CLIENT_ID: StringParameter.fromStringParameterName(
-        this,
-        'VITE_COG_APP_CLIENT_ID',
-        '/orcaui/cog_app_client_id_stage'
-      ).stringValue,
-      VITE_OAUTH_REDIRECT_IN: StringParameter.fromStringParameterName(
-        this,
-        'VITE_OAUTH_REDIRECT_IN',
-        '/orcaui/oauth_redirect_in_stage'
-      ).stringValue,
-      VITE_OAUTH_REDIRECT_OUT: StringParameter.fromStringParameterName(
-        this,
-        'VITE_OAUTH_REDIRECT_OUT',
-        '/orcaui/oauth_redirect_out_stage'
-      ).stringValue,
-      VITE_COG_USER_POOL_ID: StringParameter.fromStringParameterName(
-        this,
-        'VITE_COG_USER_POOL_ID',
-        '/data_portal/client/cog_user_pool_id'
-      ).stringValue,
-      VITE_COG_IDENTITY_POOL_ID: StringParameter.fromStringParameterName(
-        this,
-        'VITE_COG_IDENTITY_POOL_ID',
-        '/data_portal/client/cog_identity_pool_id'
-      ).stringValue,
-      VITE_OAUTH_DOMAIN: StringParameter.fromStringParameterName(
-        this,
-        'VITE_OAUTH_DOMAIN',
-        '/data_portal/client/oauth_domain'
-      ).stringValue,
-      // secure string for unsplash client id
-      VITE_UNSPLASH_CLIENT_ID: StringParameter.fromSecureStringParameterAttributes(
-        this,
-        'VITE_UNSPLASH_CLIENT_ID',
-        {
-          parameterName: '/data_portal/unsplash/client_id',
-          encryptionKey: Key.fromLookup(this, 'UnsplashClientIdKey', {
-            aliasName: 'alias/aws/ssm',
-          }),
-        }
-      ).stringValue,
-    };
-  }
+  // private getSSMEnvironmentVariables() {
+  //   return {
+  //     VITE_COG_APP_CLIENT_ID: StringParameter.fromStringParameterName(
+  //       this,
+  //       'VITE_COG_APP_CLIENT_ID',
+  //       '/orcaui/cog_app_client_id_stage'
+  //     ).stringValue,
+  //     VITE_OAUTH_REDIRECT_IN: StringParameter.fromStringParameterName(
+  //       this,
+  //       'VITE_OAUTH_REDIRECT_IN',
+  //       '/orcaui/oauth_redirect_in_stage'
+  //     ).stringValue,
+  //     VITE_OAUTH_REDIRECT_OUT: StringParameter.fromStringParameterName(
+  //       this,
+  //       'VITE_OAUTH_REDIRECT_OUT',
+  //       '/orcaui/oauth_redirect_out_stage'
+  //     ).stringValue,
+  //     VITE_COG_USER_POOL_ID: StringParameter.fromStringParameterName(
+  //       this,
+  //       'VITE_COG_USER_POOL_ID',
+  //       '/data_portal/client/cog_user_pool_id'
+  //     ).stringValue,
+  //     VITE_COG_IDENTITY_POOL_ID: StringParameter.fromStringParameterName(
+  //       this,
+  //       'VITE_COG_IDENTITY_POOL_ID',
+  //       '/data_portal/client/cog_identity_pool_id'
+  //     ).stringValue,
+  //     VITE_OAUTH_DOMAIN: StringParameter.fromStringParameterName(
+  //       this,
+  //       'VITE_OAUTH_DOMAIN',
+  //       '/data_portal/client/oauth_domain'
+  //     ).stringValue,
+  //     // secure string for unsplash client id
+  //     VITE_UNSPLASH_CLIENT_ID: StringParameter.fromSecureStringParameterAttributes(
+  //       this,
+  //       'VITE_UNSPLASH_CLIENT_ID',
+  //       {
+  //         parameterName: '/data_portal/unsplash/client_id',
+  //         encryptionKey: Key.fromLookup(this, 'UnsplashClientIdKey', {
+  //           aliasName: 'alias/aws/ssm',
+  //         }),
+  //       }
+  //     ).stringValue,
+  //   };
+  // }
 }
