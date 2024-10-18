@@ -79,8 +79,8 @@ export class ApplicationStack extends Stack {
       '/orcaui/oauth_redirect_out_stage',
       '/data_portal/client/cog_user_pool_id',
       '/data_portal/client/cog_identity_pool_id',
-      '/data_portal/client/oauth_domain',
       '/data_portal/unsplash/client_id',
+      '/data_portal/client/oauth_domain',
     ];
 
     ssmParameterNames.forEach((name, index) => {
