@@ -17,7 +17,7 @@ import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { Architecture, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
 // import { BuildEnvironmentVariableType } from 'aws-cdk-lib/aws-codebuild';
-import { AccountPrincipal, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { AccountPrincipal } from 'aws-cdk-lib/aws-iam';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Function } from 'aws-cdk-lib/aws-lambda';
 import { TOOLCHAIN_ACCOUNT_ID } from '../config';
@@ -52,6 +52,37 @@ export class ApplicationStack extends Stack {
       2. write into env.js, upload to the S3 bucket
       3. invalidate the CloudFront cache
     */
+    const ssmParams = {
+      VITE_COG_APP_CLIENT_ID: StringParameter.valueForStringParameter(
+        this,
+        '/orcaui/cog_app_client_id_stage'
+      ),
+      VITE_OAUTH_REDIRECT_IN: StringParameter.valueForStringParameter(
+        this,
+        '/orcaui/oauth_redirect_in_stage'
+      ),
+      VITE_OAUTH_REDIRECT_OUT: StringParameter.valueForStringParameter(
+        this,
+        '/orcaui/oauth_redirect_out_stage'
+      ),
+      VITE_COG_USER_POOL_ID: StringParameter.valueForStringParameter(
+        this,
+        '/data_portal/client/cog_user_pool_id'
+      ),
+      VITE_COG_IDENTITY_POOL_ID: StringParameter.valueForStringParameter(
+        this,
+        '/data_portal/client/cog_identity_pool_id'
+      ),
+      VITE_OAUTH_DOMAIN: StringParameter.valueForStringParameter(
+        this,
+        '/data_portal/client/oauth_domain'
+      ),
+      VITE_UNSPLASH_CLIENT_ID: StringParameter.valueForStringParameter(
+        this,
+        '/data_portal/unsplash/client_id'
+      ),
+    };
+
     const configLambda = new Function(this, 'EnvConfigLambda', {
       functionName: props.configLambdaName,
       code: Code.fromAsset(path.join(__dirname, '..', 'lambda')),
@@ -66,18 +97,9 @@ export class ApplicationStack extends Stack {
         BUCKET_NAME: clientBucket.bucketName,
         CLOUDFRONT_DISTRIBUTION_ID: distribution.distributionId,
         ...props.reactBuildEnvVariables,
+        ...ssmParams,
       },
     });
-
-    configLambda.addToRolePolicy(
-      new PolicyStatement({
-        actions: ['ssm:GetParameter'],
-        resources: [
-          `arn:aws:ssm:${this.region}:${this.account}:/orcaui/*`,
-          `arn:aws:ssm:${this.region}:${this.account}:/data_portal/*`,
-        ],
-      })
-    );
 
     clientBucket.grantReadWrite(configLambda);
     distribution.grantCreateInvalidation(configLambda);
