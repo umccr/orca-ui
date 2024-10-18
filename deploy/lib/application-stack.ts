@@ -21,7 +21,7 @@ import { AccountPrincipal } from 'aws-cdk-lib/aws-iam';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Function } from 'aws-cdk-lib/aws-lambda';
 import { TOOLCHAIN_ACCOUNT_ID } from '../config';
-
+import { Key } from 'aws-cdk-lib/aws-kms';
 export type ApplicationStackProps = {
   cloudFrontBucketName: string;
   configLambdaName: string;
@@ -67,30 +67,12 @@ export class ApplicationStack extends Stack {
         BUCKET_NAME: clientBucket.bucketName,
         CLOUDFRONT_DISTRIBUTION_ID: distribution.distributionId,
         ...props.reactBuildEnvVariables,
+        ...this.getSSMEnvironmentVariables(),
       },
     });
 
     clientBucket.grantReadWrite(configLambda);
     distribution.grantCreateInvalidation(configLambda);
-
-    const ssmParameterNames = [
-      '/orcaui/cog_app_client_id_stage',
-      '/orcaui/oauth_redirect_in_stage',
-      '/orcaui/oauth_redirect_out_stage',
-      '/data_portal/client/cog_user_pool_id',
-      '/data_portal/client/cog_identity_pool_id',
-      '/data_portal/unsplash/client_id',
-      '/data_portal/client/oauth_domain',
-    ];
-
-    ssmParameterNames.forEach((name, index) => {
-      const ssmParameter = StringParameter.fromStringParameterName(
-        this,
-        `SSMParameter${index}`,
-        name
-      );
-      ssmParameter.grantRead(configLambda);
-    });
 
     /*
       Grant the toolchain account access to the S3 bucket and lambda function
@@ -150,46 +132,49 @@ export class ApplicationStack extends Stack {
     return cloudFrontDistribution;
   }
 
-  // private getSSMEnvironmentVariables() {
-  // return {
-  //   VITE_COG_APP_CLIENT_ID: {
-  //     value: '/orcaui/cog_app_client_id_stage',
-  //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
-  //   },
-  //   VITE_OAUTH_REDIRECT_IN: {
-  //     value: '/orcaui/oauth_redirect_in_stage',
-  //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
-  //   },
-  //   VITE_OAUTH_REDIRECT_OUT: {
-  //     value: '/orcaui/oauth_redirect_out_stage',
-  //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
-  //   },
-  //   VITE_COG_USER_POOL_ID: {
-  //     value: '/data_portal/client/cog_user_pool_id',
-  //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
-  //   },
-  //   VITE_COG_IDENTITY_POOL_ID: {
-  //     value: '/data_portal/client/cog_identity_pool_id',
-  //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
-  //   },
-  //   VITE_OAUTH_DOMAIN: {
-  //     value: '/data_portal/client/oauth_domain',
-  //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
-  //   },
-  //   VITE_UNSPLASH_CLIENT_ID: {
-  //     value: '/data_portal/unsplash/client_id',
-  //     type: BuildEnvironmentVariableType.PARAMETER_STORE,
-  //   },
-  // };
-
-  //   return {
-  //     VITE_COG_APP_CLIENT_ID: '/orcaui/cog_app_client_id_stage',
-  //     VITE_OAUTH_REDIRECT_IN: '/orcaui/oauth_redirect_in_stage',
-  //     VITE_OAUTH_REDIRECT_OUT: '/orcaui/oauth_redirect_out_stage',
-  //     VITE_COG_USER_POOL_ID: '/data_portal/client/cog_user_pool_id',
-  //     VITE_COG_IDENTITY_POOL_ID: '/data_portal/client/cog_identity_pool_id',
-  //     VITE_OAUTH_DOMAIN: '/data_portal/client/oauth_domain',
-  //     VITE_UNSPLASH_CLIENT_ID: '/data_portal/unsplash/client_id',
-  //   };
-  // }
+  private getSSMEnvironmentVariables() {
+    return {
+      VITE_COG_APP_CLIENT_ID: StringParameter.fromStringParameterName(
+        this,
+        'VITE_COG_APP_CLIENT_ID',
+        '/orcaui/cog_app_client_id_stage'
+      ).stringValue,
+      VITE_OAUTH_REDIRECT_IN: StringParameter.fromStringParameterName(
+        this,
+        'VITE_OAUTH_REDIRECT_IN',
+        '/orcaui/oauth_redirect_in_stage'
+      ).stringValue,
+      VITE_OAUTH_REDIRECT_OUT: StringParameter.fromStringParameterName(
+        this,
+        'VITE_OAUTH_REDIRECT_OUT',
+        '/orcaui/oauth_redirect_out_stage'
+      ).stringValue,
+      VITE_COG_USER_POOL_ID: StringParameter.fromStringParameterName(
+        this,
+        'VITE_COG_USER_POOL_ID',
+        '/data_portal/client/cog_user_pool_id'
+      ).stringValue,
+      VITE_COG_IDENTITY_POOL_ID: StringParameter.fromStringParameterName(
+        this,
+        'VITE_COG_IDENTITY_POOL_ID',
+        '/data_portal/client/cog_identity_pool_id'
+      ).stringValue,
+      VITE_OAUTH_DOMAIN: StringParameter.fromStringParameterName(
+        this,
+        'VITE_OAUTH_DOMAIN',
+        '/data_portal/client/oauth_domain'
+      ).stringValue,
+      // secure string for unsplash client id
+      VITE_UNSPLASH_CLIENT_ID: StringParameter.fromSecureStringParameterAttributes(
+        this,
+        'VITE_UNSPLASH_CLIENT_ID',
+        {
+          parameterName: '/data_portal/unsplash/client_id',
+          encryptionKey: Key.fromLookup(this, 'UnsplashClientIdKey', {
+            aliasName: 'alias/aws/ssm',
+          }),
+        }
+      ).stringValue,
+    };
+  }
 }
