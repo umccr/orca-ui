@@ -232,8 +232,9 @@ export class PipelineStack extends Stack {
               commands: [
                 // remove all files in the bucket and sync the dist
                 'aws s3 rm s3://${DESTINATION_BUCKET_NAME}/ --recursive && aws s3 sync . s3://${DESTINATION_BUCKET_NAME}',
+
                 // trigger the lambda to update config and invalidate cloudfront cache
-                'aws lambda invoke --function-name ${CONFIG_LAMBDA_NAME} response.json',
+                'aws lambda invoke --function-name arn:aws:lambda:${REGION}:${DESTINATION_ACCOUNT_ID}:function:${CONFIG_LAMBDA_NAME} response.json',
               ],
             },
           },
@@ -245,6 +246,12 @@ export class PipelineStack extends Stack {
           },
           CONFIG_LAMBDA_NAME: {
             value: configLambdaNameConfig[env],
+          },
+          REGION: {
+            value: REGION,
+          },
+          DESTINATION_ACCOUNT_ID: {
+            value: accountIdAlias[env],
           },
         },
         role: deployProjectRole,
@@ -286,10 +293,6 @@ export class PipelineStack extends Stack {
         {
           stageName: 'DeployToBeta',
           actions: [
-            new ManualApprovalAction({
-              actionName: 'DeployToBetaApproval',
-              runOrder: 1,
-            }),
             new CodeBuildAction({
               actionName: 'DeployToBeta',
               project: deployProject(AppStage.BETA),
