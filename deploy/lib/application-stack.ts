@@ -83,8 +83,12 @@ export class ApplicationStack extends Stack {
       '/data_portal/unsplash/client_id',
     ];
 
-    ssmParameterNames.forEach((name) => {
-      const ssmParameter = StringParameter.fromStringParameterName(this, 'SSMParameter', name);
+    ssmParameterNames.forEach((name, index) => {
+      const ssmParameter = StringParameter.fromStringParameterName(
+        this,
+        `SSMParameter${index}`,
+        name
+      );
       ssmParameter.grantRead(configLambda);
     });
 
