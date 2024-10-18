@@ -52,36 +52,6 @@ export class ApplicationStack extends Stack {
       2. write into env.js, upload to the S3 bucket
       3. invalidate the CloudFront cache
     */
-    const ssmParams = {
-      VITE_COG_APP_CLIENT_ID: StringParameter.valueForStringParameter(
-        this,
-        '/orcaui/cog_app_client_id_stage'
-      ),
-      VITE_OAUTH_REDIRECT_IN: StringParameter.valueForStringParameter(
-        this,
-        '/orcaui/oauth_redirect_in_stage'
-      ),
-      VITE_OAUTH_REDIRECT_OUT: StringParameter.valueForStringParameter(
-        this,
-        '/orcaui/oauth_redirect_out_stage'
-      ),
-      VITE_COG_USER_POOL_ID: StringParameter.valueForStringParameter(
-        this,
-        '/data_portal/client/cog_user_pool_id'
-      ),
-      VITE_COG_IDENTITY_POOL_ID: StringParameter.valueForStringParameter(
-        this,
-        '/data_portal/client/cog_identity_pool_id'
-      ),
-      VITE_OAUTH_DOMAIN: StringParameter.valueForStringParameter(
-        this,
-        '/data_portal/client/oauth_domain'
-      ),
-      VITE_UNSPLASH_CLIENT_ID: StringParameter.valueForStringParameter(
-        this,
-        '/data_portal/unsplash/client_id'
-      ),
-    };
 
     const configLambda = new Function(this, 'EnvConfigLambda', {
       functionName: props.configLambdaName,
@@ -97,12 +67,26 @@ export class ApplicationStack extends Stack {
         BUCKET_NAME: clientBucket.bucketName,
         CLOUDFRONT_DISTRIBUTION_ID: distribution.distributionId,
         ...props.reactBuildEnvVariables,
-        ...ssmParams,
       },
     });
 
     clientBucket.grantReadWrite(configLambda);
     distribution.grantCreateInvalidation(configLambda);
+
+    const ssmParameterNames = [
+      '/orcaui/cog_app_client_id_stage',
+      '/orcaui/oauth_redirect_in_stage',
+      '/orcaui/oauth_redirect_out_stage',
+      '/data_portal/client/cog_user_pool_id',
+      '/data_portal/client/cog_identity_pool_id',
+      '/data_portal/client/oauth_domain',
+      '/data_portal/unsplash/client_id',
+    ];
+
+    ssmParameterNames.forEach((name) => {
+      const ssmParameter = StringParameter.fromStringParameterName(this, 'SSMParameter', name);
+      ssmParameter.grantRead(configLambda);
+    });
 
     /*
       Grant the toolchain account access to the S3 bucket and lambda function
