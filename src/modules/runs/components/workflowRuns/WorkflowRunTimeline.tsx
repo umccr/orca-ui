@@ -98,6 +98,7 @@ const WorkflowRunTimeline = () => {
                         className='w-4 h-4 cursor-pointer stroke-gray-500'
                         onClick={() => {
                           setResolvedId(state.orcabusId);
+                          setResolvedComment(state.comment || '');
                           setIsOpenUpdateResolvedDialog(true);
                         }}
                       />
@@ -328,6 +329,7 @@ const WorkflowRunTimeline = () => {
       toaster.success({ title: 'Comment deleted successfully' });
       refetchWorkflowComment();
       resetDeleteWorkflowRunComment();
+      setComment('');
     }
 
     if (isErrorDeletingWorkflowRunComment) {
@@ -368,6 +370,7 @@ const WorkflowRunTimeline = () => {
       toaster.success({ title: 'Resolved Event updated successfully' });
       refetchWorkflowState();
       resetUpdateWorkflowRunResolvedState();
+      setResolvedComment('');
     }
 
     if (isErrorUpdatingWorkflowRunResolvedState) {
@@ -497,6 +500,15 @@ const WorkflowRunTimeline = () => {
             TitleIcon={ChatBubbleBottomCenterTextIcon}
             open={isOpenUpdateResolvedDialog}
             title='Update Resolved Event'
+            content={
+              <div className='flex flex-col gap-2'>
+                <div className='text-sm font-semibold'>Comment</div>
+                <Textarea
+                  value={resolvedComment}
+                  onChange={(e) => setResolvedComment(e.target.value)}
+                />
+              </div>
+            }
             onClose={() => {
               setIsOpenUpdateResolvedDialog(false);
             }}
