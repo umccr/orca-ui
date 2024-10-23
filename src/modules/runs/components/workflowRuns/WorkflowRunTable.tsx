@@ -177,8 +177,6 @@ const WorkflowRunTable = () => {
     []
   );
 
-  console.log(workflowRunsData);
-
   return (
     <div>
       <Table
@@ -187,9 +185,9 @@ const WorkflowRunTable = () => {
         inCard={true}
         isFetchingData={isFetching}
         paginationProps={{
-          totalCount: workflowRunsData?.pagination.count ?? 0,
-          rowsPerPage: workflowRunsData?.pagination.rowsPerPage ?? DEFAULT_PAGE_SIZE,
-          currentPage: workflowRunsData?.pagination.page ?? 0,
+          totalCount: workflowRunsData?.pagination?.count ?? 0,
+          rowsPerPage: workflowRunsData?.pagination?.rowsPerPage ?? DEFAULT_PAGE_SIZE,
+          currentPage: workflowRunsData?.pagination?.page ?? 0,
           setPage: (n: number) => {
             setQueryParams({ page: n });
           },

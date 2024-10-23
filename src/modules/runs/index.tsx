@@ -1,6 +1,6 @@
 // import RunsModuleLayout from '@/components/layouts/runs/RunsModuleLayout';
 import { lazy, Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 // import { RouteObject } from '@/types/routeObject';
 // import { AppURLs } from '@/utils/appURLs';
 // import RunsModuleLayout from '@/components/layouts/runs/RunsModuleLayout';
@@ -27,10 +27,16 @@ export const Router: RouteObject = {
     </RunsPageLayout>
   ),
   children: [
-    { path: '', element: <RunsPage /> },
-    { path: 'sequence', element: <SequenceRunPage /> },
-    { path: 'library', element: <LibraryRunPage /> },
-    { path: 'workflow', element: <WorkflowRunPage /> },
+    {
+      path: '',
+      element: <RunsPage />,
+      children: [
+        { path: '', element: <Navigate to='sequence' replace /> },
+        { path: 'sequence', element: <SequenceRunPage /> },
+        { path: 'library', element: <LibraryRunPage /> },
+        { path: 'workflow', element: <WorkflowRunPage /> },
+      ],
+    },
 
     {
       path: 'sequence/:id',

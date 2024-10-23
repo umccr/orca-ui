@@ -185,6 +185,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/workflowrun/{orcabusId}/comment/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["apiV1WorkflowrunCommentList"];
+        put?: never;
+        post: operations["apiV1WorkflowrunCommentCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/{orcabusId}/comment/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["apiV1WorkflowrunCommentPartialUpdate"];
+        trace?: never;
+    };
+    "/api/v1/workflowrun/{orcabusId}/comment/{id}/soft_delete/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["apiV1WorkflowrunCommentSoftDeleteDestroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/{orcabusId}/state/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["apiV1WorkflowrunStateList"];
+        put?: never;
+        post: operations["apiV1WorkflowrunStateCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/{orcabusId}/state/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["apiV1WorkflowrunStatePartialUpdate"];
+        trace?: never;
+    };
     "/api/v1/workflowrun/{orcabusId}/": {
         parameters: {
             query?: never;
@@ -194,39 +274,6 @@ export interface paths {
         };
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["apiV1WorkflowrunRetrieve"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/workflowrun/{wfrOrcabusId}/state/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["apiV1WorkflowrunStateList"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/workflowrun/{wfrOrcabusId}/state/{id}/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
-        get: operations["apiV1WorkflowrunStateRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -420,26 +467,6 @@ export interface components {
             };
             results: components["schemas"]["Payload"][];
         };
-        PaginatedStateList: {
-            links: {
-                /**
-                 * Format: uri
-                 * @example http://api.example.org/accounts/?page=4
-                 */
-                next?: string | null;
-                /**
-                 * Format: uri
-                 * @example http://api.example.org/accounts/?page=2
-                 */
-                previous?: string | null;
-            };
-            pagination: {
-                count?: number;
-                page?: number;
-                rowsPerPage?: number;
-            };
-            results: components["schemas"]["State"][];
-        };
         PaginatedWorkflowList: {
             links: {
                 /**
@@ -480,6 +507,26 @@ export interface components {
             };
             results: components["schemas"]["WorkflowRunDetail"][];
         };
+        PatchedState: {
+            readonly orcabusId?: string;
+            status?: string;
+            /** Format: date-time */
+            timestamp?: string;
+            comment?: string | null;
+            workflowRun?: string;
+            payload?: string | null;
+        };
+        PatchedWorkflowRunComment: {
+            readonly orcabusId?: string;
+            comment?: string;
+            /** Format: date-time */
+            readonly createdAt?: string;
+            createdBy?: string;
+            /** Format: date-time */
+            readonly updatedAt?: string;
+            isDeleted?: boolean;
+            workflowRun?: string;
+        };
         Payload: {
             readonly orcabusId: string;
             payloadRefId: string;
@@ -507,6 +554,17 @@ export interface components {
             workflowName: string;
             workflowVersion: string;
         };
+        WorkflowRunComment: {
+            readonly orcabusId: string;
+            comment: string;
+            /** Format: date-time */
+            readonly createdAt: string;
+            createdBy: string;
+            /** Format: date-time */
+            readonly updatedAt: string;
+            isDeleted?: boolean;
+            workflowRun: string;
+        };
         WorkflowRunCountByStatus: {
             all: number;
             succeeded: number;
@@ -521,7 +579,7 @@ export interface components {
                 [key: string]: unknown;
             };
             readonly libraries: components["schemas"]["Library"][];
-            readonly workflow: components["schemas"]["WorkflowMin"];
+            readonly workflow: components["schemas"]["Workflow"];
             readonly analysisRun: components["schemas"]["AnalysisRun"];
             portalRunId: string;
             executionId?: string | null;
@@ -539,12 +597,7 @@ export type $defs = Record<string, never>;
 export interface operations {
     apiV1AnalysisList: {
         parameters: {
-            query: {
-                analysisName: string;
-                analysisVersion: string;
-                contexts: string[];
-                description: string;
-                orcabusId?: string;
+            query?: {
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
@@ -553,8 +606,6 @@ export interface operations {
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
-                status: string;
-                workflows: string[];
             };
             header?: never;
             path?: never;
@@ -596,10 +647,7 @@ export interface operations {
     };
     apiV1AnalysiscontextList: {
         parameters: {
-            query: {
-                description: string;
-                name: string;
-                orcabusId?: string;
+            query?: {
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
@@ -608,8 +656,6 @@ export interface operations {
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
-                status: string;
-                usecase: string;
             };
             header?: never;
             path?: never;
@@ -650,12 +696,7 @@ export interface operations {
     };
     apiV1AnalysisrunList: {
         parameters: {
-            query: {
-                analysis?: string | null;
-                analysisRunName: string;
-                comment?: string | null;
-                computeContext?: string | null;
-                orcabusId?: string;
+            query?: {
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
@@ -664,8 +705,6 @@ export interface operations {
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
-                status?: string | null;
-                storageContext?: string | null;
             };
             header?: never;
             path?: never;
@@ -707,19 +746,15 @@ export interface operations {
     };
     apiV1PayloadList: {
         parameters: {
-            query: {
-                data: unknown;
-                orcabusId?: string;
+            query?: {
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
                 page?: number;
-                payloadRefId: string;
                 /** @description Number of results to return per page. */
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
-                version: string;
             };
             header?: never;
             path?: never;
@@ -760,10 +795,7 @@ export interface operations {
     };
     apiV1WorkflowList: {
         parameters: {
-            query: {
-                executionEngine: string;
-                executionEnginePipelineId: string;
-                orcabusId?: string;
+            query?: {
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
@@ -772,8 +804,6 @@ export interface operations {
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
-                workflowName: string;
-                workflowVersion: string;
             };
             header?: never;
             path?: never;
@@ -814,25 +844,15 @@ export interface operations {
     };
     apiV1WorkflowrunList: {
         parameters: {
-            query: {
-                analysisRun?: string | null;
-                comment?: string | null;
-                currentState?: {
-                    [key: string]: unknown;
-                };
-                executionId?: string | null;
-                orcabusId?: string;
+            query?: {
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
                 page?: number;
-                portalRunId: string;
                 /** @description Number of results to return per page. */
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
-                workflow?: components["schemas"]["WorkflowMin"];
-                workflowRunName?: string | null;
             };
             header?: never;
             path?: never;
@@ -846,6 +866,179 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PaginatedWorkflowRunDetailList"];
+                };
+            };
+        };
+    };
+    apiV1WorkflowrunCommentList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunComment"][];
+                };
+            };
+        };
+    };
+    apiV1WorkflowrunCommentCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["WorkflowRunComment"];
+                "multipart/form-data": components["schemas"]["WorkflowRunComment"];
+                "application/json": components["schemas"]["WorkflowRunComment"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunComment"];
+                };
+            };
+        };
+    };
+    apiV1WorkflowrunCommentPartialUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedWorkflowRunComment"];
+                "multipart/form-data": components["schemas"]["PatchedWorkflowRunComment"];
+                "application/json": components["schemas"]["PatchedWorkflowRunComment"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunComment"];
+                };
+            };
+        };
+    };
+    apiV1WorkflowrunCommentSoftDeleteDestroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    apiV1WorkflowrunStateList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["State"][];
+                };
+            };
+        };
+    };
+    apiV1WorkflowrunStateCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["State"];
+                "multipart/form-data": components["schemas"]["State"];
+                "application/json": components["schemas"]["State"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["State"];
+                };
+            };
+        };
+    };
+    apiV1WorkflowrunStatePartialUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedState"];
+                "multipart/form-data": components["schemas"]["PatchedState"];
+                "application/json": components["schemas"]["PatchedState"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["State"];
                 };
             };
         };
@@ -868,64 +1061,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkflowRunDetail"];
-                };
-            };
-        };
-    };
-    apiV1WorkflowrunStateList: {
-        parameters: {
-            query: {
-                comment?: string | null;
-                orcabusId?: string;
-                /** @description Which field to use when ordering the results. */
-                ordering?: string;
-                /** @description A page number within the paginated result set. */
-                page?: number;
-                payload?: string | null;
-                /** @description Number of results to return per page. */
-                rowsPerPage?: number;
-                /** @description A search term. */
-                search?: string;
-                status: string;
-                timestamp: string;
-                workflowRun: string;
-            };
-            header?: never;
-            path: {
-                wfrOrcabusId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedStateList"];
-                };
-            };
-        };
-    };
-    apiV1WorkflowrunStateRetrieve: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-                wfrOrcabusId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["State"];
                 };
             };
         };

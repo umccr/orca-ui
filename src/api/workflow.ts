@@ -1,5 +1,5 @@
 import config from '@/config';
-import createClient from 'openapi-fetch';
+import createClient, { ParamsOption } from 'openapi-fetch';
 import type { paths, components } from './types/workflow';
 import { useSuspenseQuery, useQuery, useMutation } from '@tanstack/react-query';
 import {
@@ -26,15 +26,28 @@ export function createWorkflowFetchingHook<K extends keyof paths>(path: K) {
   };
 }
 
-export function createWorkflowQueryHook<K extends keyof paths>(path: K) {
-  return function ({ params, reactQuery }: UseQueryOptions<paths[typeof path]['get']>) {
-    return useQuery({
+export function createWorkflowQueryHook<
+  K extends keyof paths,
+  M extends keyof paths[K] & 'get',
+  R = paths[K][M] extends { responses: { 200: { content: { 'application/json': infer T } } } }
+    ? T
+    : never,
+>(path: K) {
+  return function ({
+    params,
+    reactQuery,
+    signal,
+  }: Omit<UseQueryOptions<paths[K][M]>, 'queryKey' | 'queryFn'> & { signal?: AbortSignal }) {
+    return useQuery<R, Error, R, [K, typeof params]>({
       ...reactQuery,
       queryKey: [path, params],
-      queryFn: async ({ signal }) => {
+      queryFn: async ({ signal: querySignal }) => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.GET(path, { params, signal });
-        return data;
+        const { data } = await client.GET(path, {
+          params: params as ParamsOption<paths[K][M]>,
+          signal: signal || querySignal,
+        });
+        return data as R;
       },
     });
   };
@@ -67,12 +80,12 @@ export function createWorkflowPatchMutationHook<K extends keyof paths>(path: K) 
 }
 
 export function createWorkflowDeleteMutationHook<K extends keyof paths>(path: K) {
-  return function ({ params, reactQuery }: UseMutationOptions<paths[typeof path]['delete']>) {
+  return function ({ params, reactQuery, body }: UseMutationOptions<paths[typeof path]['delete']>) {
     return useMutation({
       ...reactQuery,
       mutationFn: async () => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.DELETE(path, { params });
+        const { data } = await client.DELETE(path, { params, body: body });
         return data;
       },
     });
@@ -88,35 +101,35 @@ export const useWorkflowRunDetailModel = createWorkflowQueryHook(
   '/api/v1/workflowrun/{orcabusId}/'
 );
 export const useWorkflowStateModel = createWorkflowQueryHook(
-  '/api/v1/workflowrun/{wfrOrcabusId}/state/'
+  '/api/v1/workflowrun/{orcabusId}/state/'
 );
 export const useWorkflowPayloadModel = createWorkflowQueryHook('/api/v1/payload/{id}/');
+
 export const useWorkflowRunStatusCountModel = createWorkflowQueryHook(
   '/api/v1/workflowrun/count_by_status/'
 );
 
-// workflowrun comment api
 export const useWorkflowRunCommentModel = createWorkflowQueryHook(
-  '/api/v1/workflowrun/{workflowrunId}/comments/'
+  '/api/v1/workflowrun/{orcabusId}/comment/'
 );
 export const useWorkflowRunCommentCreateModel = createWorkflowPostMutationHook(
-  '/api/v1/workflowrun/{workflowrunId}/comments/'
+  '/api/v1/workflowrun/{orcabusId}/comment/'
 );
 export const useWorkflowRunCommentUpdateModel = createWorkflowPatchMutationHook(
-  '/api/v1/workflowrun/{workflowrunId}/comments/{id}/'
+  '/api/v1/workflowrun/{orcabusId}/comment/{id}/'
 );
 
 export const useWorkflowRunCommentDeleteModel = createWorkflowDeleteMutationHook(
-  '/api/v1/workflowrun/{workflowrunId}/comments/{id}/'
+  '/api/v1/workflowrun/{orcabusId}/comment/{id}/soft_delete/'
 );
 
 // workflow run state "RESOLVED"
 export const useWorkflowRunResolvedStateCreateModel = createWorkflowPostMutationHook(
-  '/api/v1/workflowrun/{workflowrunId}/state/'
+  '/api/v1/workflowrun/{orcabusId}/state/'
 );
 
 export const useWorkflowRunResolvedStateUpdateModel = createWorkflowPatchMutationHook(
-  '/api/v1/workflowrun/{workflowrunId}/state/{id}/'
+  '/api/v1/workflowrun/{orcabusId}/state/{id}/'
 );
 
 // Use suspenseQuery hook for fetching data

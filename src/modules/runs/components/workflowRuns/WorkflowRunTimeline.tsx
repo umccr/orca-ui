@@ -1,215 +1,539 @@
-import { FC, useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 import { Timeline } from '@/components/common/timelines';
+import type { TimelineEvent } from '@/components/common/timelines';
 import { ContentTabs } from '@/components/navigation/tabs';
-import { BackdropWithText } from '@/components/common/backdrop';
-import Skeleton from 'react-loading-skeleton';
-import { JsonToNestedList } from '@/components/common/json-to-table';
-import { useWorkflowPayloadModel } from '@/api/workflow';
+import { JsonToNestedList, JsonDisplay } from '@/components/common/json-to-table';
+import {
+  useWorkflowStateModel,
+  useWorkflowRunCommentModel,
+  useWorkflowPayloadModel,
+  useWorkflowRunCommentCreateModel,
+  useWorkflowRunCommentUpdateModel,
+  useWorkflowRunCommentDeleteModel,
+  useWorkflowRunResolvedStateCreateModel,
+  useWorkflowRunResolvedStateUpdateModel,
+} from '@/api/workflow';
 import { keepPreviousData } from '@tanstack/react-query';
 import {
-  PlusCircleIcon,
   CheckCircleIcon,
+  ChatBubbleLeftRightIcon,
   ChatBubbleBottomCenterTextIcon,
+  WrenchIcon,
+  TrashIcon,
 } from '@heroicons/react/24/outline';
-
+import toaster from '@/components/common/toaster';
 import { Tooltip } from '@/components/common/tooltips';
 import { Dialog } from '@/components/dialogs';
 import { Textarea } from '@headlessui/react';
-// import toaster from '@/components/common/toaster';
+import { useAuthContext } from '@/context/AmplifyAuthContext';
+import { Badge } from '@/components/common/badges';
+import { getBadgeType, statusBackgroundColor } from '@/components/common/badges';
+import { dayjs } from '@/utils/dayjs';
+import { getUsername } from '@/utils/commonUtils';
+import { BackdropWithText } from '@/components/common/backdrop';
 
-interface JsonDisplayProps {
-  selectedPayloadId?: number | null;
-}
+// interface WorkflowRunTimelineProps {
+//   currentState: string;
+//   handleCommentUpdated: () => void;
+//   handleResolvedUpdated: () => void;
+//   workflowRuntimelineData: TimelineEvent[];
+// }
 
-const JsonDisplay: FC<JsonDisplayProps> = ({ selectedPayloadId }) => {
-  const [selectPayloadId, setSelectPayloadId] = useState<number | null>(selectedPayloadId || null);
-  useEffect(() => {
-    setSelectPayloadId(selectedPayloadId || null);
-  }, [selectedPayloadId]);
+const WorkflowRunTimeline = () => {
+  const { orcabusId } = useParams();
+  const { user } = useAuthContext();
 
-  const { data: selectedWorkflowPayloadData, isFetching } = useWorkflowPayloadModel({
-    params: { path: { id: selectPayloadId || 0 } },
-    reactQuery: {
-      enabled: !!selectPayloadId,
-      placeholderData: keepPreviousData,
-    },
-  });
+  const [selectedPayloadId, setSelectedPayloadId] = useState<string | null>(null);
+  const [selectedState, setSelectedState] = useState<string | null>(null);
 
-  return (
-    <div className='relative bg-gray-50 border border-gray-300 rounded-md m-2 p-2 shadow-sm overflow-scroll'>
-      {selectedWorkflowPayloadData && isFetching ? (
-        <BackdropWithText text='Loading data...' isVisible={true} />
-      ) : null}
-      {selectedPayloadId && selectedWorkflowPayloadData ? (
-        <pre className='whitespace-pre-wrap text-wrap text-xs text-gray-800'>
-          {JSON.stringify(selectedWorkflowPayloadData || {}, null, 2)}
-        </pre>
-      ) : (
-        <div className='flex flex-col gap-2 w-80'>
-          {[...Array(10)].map((_, index) => (
-            <Skeleton key={index} className='h-4 w-full' />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-interface JsonToListDisplayProps {
-  selectedPayloadId?: number | null;
-}
-const JsonToListDisplay: FC<JsonToListDisplayProps> = ({ selectedPayloadId }) => {
-  const [selectPayloadId, setSelectPayloadId] = useState<number | null>(selectedPayloadId || null);
-  useEffect(() => {
-    setSelectPayloadId(selectedPayloadId || null);
-  }, [selectedPayloadId]);
-
-  const { data: selectedWorkflowPayloadData, isFetching } = useWorkflowPayloadModel({
-    params: { path: { id: selectPayloadId || 0 } },
-    reactQuery: {
-      enabled: !!selectPayloadId,
-      placeholderData: keepPreviousData,
-    },
-  });
-
-  return (
-    <JsonToNestedList
-      data={selectedWorkflowPayloadData?.data as Record<string, unknown>}
-      isFetchingData={isFetching}
-    />
-  );
-};
-
-interface WorkflowRunTimelineProps {
-  workflowRuntimelineData: {
-    id: number;
-    content: string;
-    datetime: string;
-    comment: string;
-    iconBackground: string;
-    payloadId: number;
-  }[];
-}
-
-const WorkflowRunTimeline: FC<WorkflowRunTimelineProps> = ({ workflowRuntimelineData }) => {
-  const [selectedPayloadId, setSelectedPayloadId] = useState<number | null>(
-    workflowRuntimelineData[workflowRuntimelineData.length - 1]?.payloadId || null
-  );
-
-  const [isOpenCommentDialog, setIsOpenCommentDialog] = useState<boolean>(false);
+  const [isOpenAddCommentDialog, setIsOpenAddCommentDialog] = useState<boolean>(false);
+  const [isOpenUpdateCommentDialog, setIsOpenUpdateCommentDialog] = useState<boolean>(false);
+  const [isOpenDeleteCommentDialog, setIsOpenDeleteCommentDialog] = useState<boolean>(false);
+  const [commentId, setCommentId] = useState<string | null>(null);
   const [comment, setComment] = useState<string>('');
-  const [isOpenResolvedDialog, setIsOpenResolvedDialog] = useState<boolean>(false);
+  const [isOpenAddResolvedDialog, setIsOpenAddResolvedDialog] = useState<boolean>(false);
+  const [isOpenUpdateResolvedDialog, setIsOpenUpdateResolvedDialog] = useState<boolean>(false);
+  const [resolvedId, setResolvedId] = useState<string | null>(null);
   const [resolvedComment, setResolvedComment] = useState<string>('');
 
-  const handleComment = () => {
-    console.log('sendComment', comment);
-    setIsOpenCommentDialog(false);
-    // toaster.success({ title: 'Comment added' });
+  const {
+    data: workflowStateData,
+    isFetching: isFetchingWorkflowState,
+    refetch: refetchWorkflowState,
+  } = useWorkflowStateModel({
+    params: { path: { orcabusId: orcabusId?.split('.')[1] as string } },
+    reactQuery: {
+      enabled: !!orcabusId,
+    },
+  });
+
+  const {
+    data: workflowCommentData,
+    isFetching: isFetchingWorkflowComment,
+    refetch: refetchWorkflowComment,
+  } = useWorkflowRunCommentModel({
+    params: { path: { orcabusId: orcabusId?.split('.')[1] as string } },
+    reactQuery: {
+      enabled: !!orcabusId,
+    },
+  });
+
+  const currentState = workflowStateData?.[workflowStateData.length - 1]?.status;
+
+  // format data and disply in the table
+  const workflowStateTimelineData = useMemo(
+    () =>
+      workflowStateData
+        ? workflowStateData
+            .map((state) => ({
+              id: state.orcabusId,
+              content: (
+                <div className='flex flex-row gap-2 text-sm text-gray-500 group'>
+                  <div>Status Changed</div>
+                  <Badge status={state.status}>{state.status}</Badge>
+                  {state.status === 'RESOLVED' && (
+                    <div className='opacity-0 group-hover:opacity-100'>
+                      <WrenchIcon
+                        className='w-4 h-4 cursor-pointer stroke-gray-500'
+                        onClick={() => {
+                          setResolvedId(state.orcabusId);
+                          setIsOpenUpdateResolvedDialog(true);
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              ),
+              datetime: dayjs(state.timestamp).format('YYYY-MM-DD HH:mm'),
+              comment: state.comment || '',
+              status: state.status,
+              iconBackground: statusBackgroundColor(getBadgeType(state.status)),
+              payloadId: state?.payload || '',
+              eventType: 'stateChange' as const,
+            }))
+            .reverse()
+        : [],
+    [workflowStateData]
+  );
+  const workflowCommentTimelineData = useMemo(
+    () =>
+      workflowCommentData
+        ? workflowCommentData
+            .map((comment) => ({
+              id: comment.orcabusId,
+              content: (
+                <div className='flex flex-row gap-2 text-sm group'>
+                  <div className='font-medium'>{`${getUsername(comment.createdBy)} `}</div>
+                  <div className='text-gray-500'>made a new</div>
+                  <Badge type='unknown'>comment</Badge>
+                  {comment.comment && (
+                    <div className='opacity-0 group-hover:opacity-100 flex flex-row gap-2'>
+                      <WrenchIcon
+                        className='w-4 h-4 cursor-pointer stroke-gray-500'
+                        onClick={() => {
+                          setCommentId(comment.orcabusId);
+                          setComment(comment.comment);
+                          setIsOpenUpdateCommentDialog(true);
+                        }}
+                      />
+                      <TrashIcon
+                        className='w-4 h-4 cursor-pointer stroke-gray-500'
+                        onClick={() => {
+                          setCommentId(comment.orcabusId);
+                          setIsOpenDeleteCommentDialog(true);
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              ),
+              status: undefined,
+              datetime: dayjs(comment.updatedAt).format('YYYY-MM-DD HH:mm'),
+              iconBackground: 'bg-green-100',
+              comment: comment.comment,
+              eventType: 'comment' as const,
+            }))
+            .reverse()
+        : [],
+    [workflowCommentData]
+  );
+
+  const workflowRuntimelineData = [
+    ...workflowStateTimelineData,
+    ...workflowCommentTimelineData,
+  ].sort((a, b) => (dayjs(a.datetime).isAfter(dayjs(b.datetime)) ? -1 : 1));
+
+  useEffect(() => {
+    setSelectedPayloadId(selectedPayloadId || null);
+  }, [selectedPayloadId]);
+
+  const { data: selectedWorkflowPayloadData, isFetching } = useWorkflowPayloadModel({
+    params: { path: { id: selectedPayloadId || '' } },
+    reactQuery: {
+      enabled: !!selectedPayloadId,
+      placeholderData: keepPreviousData,
+    },
+  });
+
+  const {
+    mutate: createWorkflowRunComment,
+    isSuccess: isCreatedWorkflowRunComment,
+    isError: isErrorCreatingWorkflowRunComment,
+    reset: resetCreateWorkflowRunComment,
+  } = useWorkflowRunCommentCreateModel({
+    params: { path: { orcabusId: orcabusId?.split('.')[1] as string } },
+    body: {
+      comment: comment,
+      createdBy: user?.email,
+    },
+  });
+
+  const handleAddComment = () => {
+    createWorkflowRunComment();
+    setIsOpenAddCommentDialog(false);
   };
+
+  useEffect(() => {
+    if (isCreatedWorkflowRunComment) {
+      toaster.success({ title: 'Comment added successfully' });
+      refetchWorkflowComment();
+      resetCreateWorkflowRunComment();
+      setComment('');
+    }
+
+    if (isErrorCreatingWorkflowRunComment) {
+      toaster.error({ title: 'Error adding comment' });
+      resetCreateWorkflowRunComment();
+    }
+  }, [
+    isCreatedWorkflowRunComment,
+    isErrorCreatingWorkflowRunComment,
+    refetchWorkflowComment,
+    resetCreateWorkflowRunComment,
+  ]);
+
+  const {
+    mutate: createWorkflowRunResolvedState,
+    isSuccess: isCreatedWorkflowRunResolvedState,
+    isError: isErrorCreatingWorkflowRunResolvedState,
+    reset: resetCreateWorkflowRunResolvedState,
+  } = useWorkflowRunResolvedStateCreateModel({
+    params: { path: { orcabusId: orcabusId?.split('.')[1] as string } },
+    body: {
+      status: 'RESOLVED',
+      comment: resolvedComment,
+      createdBy: user?.email,
+    },
+  });
 
   const handleResolvedEvent = () => {
-    console.log('sendResolvedComment', resolvedComment);
-    setIsOpenResolvedDialog(false);
-    // toaster.success({ title: 'Resolved Status added' });
+    createWorkflowRunResolvedState();
+    setIsOpenAddResolvedDialog(false);
   };
 
-  const handleTimelineSelect = (payloadId: number | null) => {
-    setSelectedPayloadId(payloadId);
+  useEffect(() => {
+    if (isCreatedWorkflowRunResolvedState) {
+      toaster.success({ title: 'Resolved Status added' });
+      refetchWorkflowState();
+      resetCreateWorkflowRunResolvedState();
+      setResolvedComment('');
+    }
+
+    if (isErrorCreatingWorkflowRunResolvedState) {
+      toaster.error({ title: 'Error adding resolved status' });
+      resetCreateWorkflowRunResolvedState();
+    }
+  }, [
+    isCreatedWorkflowRunResolvedState,
+    refetchWorkflowState,
+    resetCreateWorkflowRunResolvedState,
+    isErrorCreatingWorkflowRunResolvedState,
+  ]);
+
+  const handleTimelineSelect = (event: TimelineEvent) => {
+    setSelectedPayloadId(event.payloadId || null);
+    setSelectedState(event.status || null);
   };
+
+  const {
+    mutate: updateWorkflowRunComment,
+    isSuccess: isUpdatedWorkflowRunComment,
+    isError: isErrorUpdatingWorkflowRunComment,
+    reset: resetUpdateWorkflowRunComment,
+  } = useWorkflowRunCommentUpdateModel({
+    params: {
+      path: {
+        orcabusId: orcabusId?.split('.')[1] as string,
+        id: commentId?.split('.')[1] as string,
+      },
+    },
+    body: {
+      comment: comment,
+      createdBy: user?.email,
+    },
+    reactQuery: {
+      enabled: !!commentId,
+    },
+  });
+
+  const handleUpdateComment = () => {
+    updateWorkflowRunComment();
+    setIsOpenUpdateCommentDialog(false);
+  };
+
+  useEffect(() => {
+    if (isUpdatedWorkflowRunComment) {
+      toaster.success({ title: 'Comment updated successfully' });
+      refetchWorkflowComment();
+      resetUpdateWorkflowRunComment();
+      setComment('');
+    }
+
+    if (isErrorUpdatingWorkflowRunComment) {
+      toaster.error({ title: 'Error updating comment' });
+      resetUpdateWorkflowRunComment();
+    }
+  }, [
+    isUpdatedWorkflowRunComment,
+    refetchWorkflowComment,
+    resetUpdateWorkflowRunComment,
+    isErrorUpdatingWorkflowRunComment,
+  ]);
+
+  const {
+    mutate: deleteWorkflowRunComment,
+    isSuccess: isDeletedWorkflowRunComment,
+    isError: isErrorDeletingWorkflowRunComment,
+    reset: resetDeleteWorkflowRunComment,
+  } = useWorkflowRunCommentDeleteModel({
+    params: {
+      path: {
+        orcabusId: orcabusId?.split('.')[1] as string,
+        id: commentId?.split('.')[1] as string,
+      },
+    },
+    body: {
+      createdBy: user?.email,
+    },
+  });
+
+  const handleDeleteComment = () => {
+    deleteWorkflowRunComment();
+    setIsOpenDeleteCommentDialog(false);
+  };
+
+  useEffect(() => {
+    if (isDeletedWorkflowRunComment) {
+      toaster.success({ title: 'Comment deleted successfully' });
+      refetchWorkflowComment();
+      resetDeleteWorkflowRunComment();
+    }
+
+    if (isErrorDeletingWorkflowRunComment) {
+      toaster.error({ title: 'Error deleting comment' });
+      resetDeleteWorkflowRunComment();
+    }
+  }, [
+    isDeletedWorkflowRunComment,
+    refetchWorkflowComment,
+    resetDeleteWorkflowRunComment,
+    isErrorDeletingWorkflowRunComment,
+  ]);
+
+  const {
+    mutate: updateWorkflowRunResolvedState,
+    isSuccess: isUpdatedWorkflowRunResolvedState,
+    isError: isErrorUpdatingWorkflowRunResolvedState,
+    reset: resetUpdateWorkflowRunResolvedState,
+  } = useWorkflowRunResolvedStateUpdateModel({
+    params: {
+      path: {
+        orcabusId: orcabusId?.split('.')[1] as string,
+        id: resolvedId?.split('.')[1] as string,
+      },
+    },
+    body: {
+      comment: resolvedComment,
+    },
+  });
+
+  const handleUpdateResolved = () => {
+    updateWorkflowRunResolvedState();
+    setIsOpenUpdateResolvedDialog(false);
+  };
+
+  useEffect(() => {
+    if (isUpdatedWorkflowRunResolvedState) {
+      toaster.success({ title: 'Resolved Event updated successfully' });
+      refetchWorkflowState();
+      resetUpdateWorkflowRunResolvedState();
+    }
+
+    if (isErrorUpdatingWorkflowRunResolvedState) {
+      toaster.error({ title: 'Error updating resolved event' });
+      resetUpdateWorkflowRunResolvedState();
+    }
+  }, [
+    isUpdatedWorkflowRunResolvedState,
+    refetchWorkflowState,
+    resetUpdateWorkflowRunResolvedState,
+    isErrorUpdatingWorkflowRunResolvedState,
+  ]);
+
   useEffect(() => {
     setSelectedPayloadId(
-      workflowRuntimelineData[workflowRuntimelineData.length - 1]?.payloadId || null
+      workflowRuntimelineData.filter((event) => event.eventType === 'stateChange')[0]?.payloadId ||
+        null
+    );
+    setSelectedState(
+      workflowRuntimelineData.filter((event) => event.eventType === 'stateChange')[0]?.status ||
+        null
     );
   }, [workflowRuntimelineData]);
 
-  const currentState = workflowRuntimelineData[0]?.content;
-  console.log(workflowRuntimelineData);
   return (
-    <div className='flex flex-row pb-4'>
-      <div className='flex-1'>
-        <div className='pb-4 flex flex-row gap-2 items-end'>
-          <div className='text-base font-semibold '>Timeline</div>
-          <Tooltip text='Add a new comment' position='top' background='white'>
-            <PlusCircleIcon
-              className='w-5 h-5 cursor-pointer stroke-gray-500 opacity-opacity-100'
-              onClick={() => {
-                setIsOpenCommentDialog(true);
-              }}
-            />
-          </Tooltip>
-          {currentState === 'FAILED' && (
-            <Tooltip text='Add the Resolved Event' position='top' background='white'>
-              <CheckCircleIcon
+    <div>
+      {(isFetchingWorkflowState || isFetchingWorkflowComment) && (
+        <BackdropWithText text='Loading Status data...' />
+      )}
+      <div className='flex flex-row pb-4'>
+        <div className='flex-1'>
+          <div className='pb-4 flex flex-row gap-2 items-end'>
+            <div className='text-base font-semibold '>Timeline</div>
+            <Tooltip text='Add a new comment' position='top' background='white'>
+              <ChatBubbleLeftRightIcon
                 className='w-5 h-5 cursor-pointer stroke-gray-500 opacity-opacity-100'
                 onClick={() => {
-                  setIsOpenResolvedDialog(true);
+                  setIsOpenAddCommentDialog(true);
                 }}
               />
             </Tooltip>
-          )}
-        </div>
-        <Dialog
-          TitleIcon={ChatBubbleBottomCenterTextIcon}
-          open={isOpenCommentDialog}
-          title='Add a new comment'
-          content={
-            <div className='flex flex-col gap-2'>
-              <div className='text-sm font-semibold'>Comment</div>
-              <Textarea value={comment} onChange={(e) => setComment(e.target.value)} />
-            </div>
-          }
-          onClose={() => {
-            setIsOpenCommentDialog(false);
-          }}
-          closeBtn={{
-            label: 'Close',
-            onClick: () => {
-              setIsOpenCommentDialog(false);
-            },
-          }}
-          confirmBtn={{ label: 'Confirm', onClick: handleComment }}
-        ></Dialog>
-        <Dialog
-          TitleIcon={CheckCircleIcon}
-          open={isOpenResolvedDialog}
-          title='Add the Resolved Event'
-          content={
-            <div className='flex flex-col gap-2'>
-              <div className='text-sm font-semibold'>Comment</div>
-              <Textarea
-                value={resolvedComment}
-                onChange={(e) => setResolvedComment(e.target.value)}
-              />
-            </div>
-          }
-          onClose={() => {
-            setIsOpenResolvedDialog(false);
-          }}
-          closeBtn={{
-            label: 'Close',
-            onClick: () => {
-              setIsOpenResolvedDialog(false);
-            },
-          }}
-          confirmBtn={{ label: 'Confirm', onClick: handleResolvedEvent }}
-        ></Dialog>
+            {currentState === 'FAILED' && (
+              <Tooltip text='Add the Resolved Event' position='top' background='white'>
+                <CheckCircleIcon
+                  className='w-5 h-5 cursor-pointer stroke-gray-500 opacity-opacity-100'
+                  onClick={() => {
+                    setIsOpenAddResolvedDialog(true);
+                  }}
+                />
+              </Tooltip>
+            )}
+          </div>
+          <Dialog
+            TitleIcon={ChatBubbleBottomCenterTextIcon}
+            open={isOpenAddCommentDialog}
+            title='Add a new comment'
+            content={
+              <div className='flex flex-col gap-2'>
+                <div className='text-sm font-semibold'>Comment</div>
+                <Textarea value={comment} onChange={(e) => setComment(e.target.value)} />
+              </div>
+            }
+            onClose={() => {
+              setIsOpenAddCommentDialog(false);
+              setComment('');
+            }}
+            closeBtn={{
+              label: 'Close',
+              onClick: () => {
+                setIsOpenAddCommentDialog(false);
+              },
+            }}
+            confirmBtn={{ label: 'Add Comment', onClick: handleAddComment }}
+          ></Dialog>
+          <Dialog
+            TitleIcon={CheckCircleIcon}
+            open={isOpenAddResolvedDialog}
+            title='Add the Resolved Event'
+            content={
+              <div className='flex flex-col gap-2'>
+                <div className='text-sm font-semibold'>Comment</div>
+                <Textarea
+                  value={resolvedComment}
+                  onChange={(e) => setResolvedComment(e.target.value)}
+                />
+              </div>
+            }
+            onClose={() => {
+              setIsOpenAddResolvedDialog(false);
+              setResolvedComment('');
+            }}
+            closeBtn={{
+              label: 'Close',
+              onClick: () => {
+                setIsOpenAddResolvedDialog(false);
+              },
+            }}
+            confirmBtn={{ label: 'Confirm', onClick: handleResolvedEvent }}
+          ></Dialog>
+          <Dialog
+            TitleIcon={ChatBubbleBottomCenterTextIcon}
+            open={isOpenUpdateCommentDialog}
+            title='Update Comment'
+            content={
+              <div className='flex flex-col gap-2'>
+                <div className='text-sm font-semibold'>Comment</div>
+                <Textarea value={comment} onChange={(e) => setComment(e.target.value)} />
+              </div>
+            }
+            onClose={() => {
+              setIsOpenUpdateCommentDialog(false);
+            }}
+            confirmBtn={{ label: 'Update Comment', onClick: handleUpdateComment }}
+          ></Dialog>
 
-        <Timeline timeline={workflowRuntimelineData} handldEventClick={handleTimelineSelect} />
-      </div>
-      <div className='flex-2'>
-        <div className='text-base font-semibold pb-4'>Payload</div>
-        <ContentTabs
-          tabs={[
-            {
-              label: 'List',
-              content: <JsonToListDisplay selectedPayloadId={selectedPayloadId} />,
-            },
-            {
-              label: 'JSON',
-              content: <JsonDisplay selectedPayloadId={selectedPayloadId} />,
-            },
-          ]}
-          withQueryParams={false}
-        />
+          <Dialog
+            TitleIcon={ChatBubbleBottomCenterTextIcon}
+            open={isOpenDeleteCommentDialog}
+            title='Delete Comment'
+            onClose={() => {
+              setIsOpenDeleteCommentDialog(false);
+            }}
+            confirmBtn={{ label: 'Delete Comment', onClick: handleDeleteComment }}
+          ></Dialog>
+
+          <Dialog
+            TitleIcon={ChatBubbleBottomCenterTextIcon}
+            open={isOpenUpdateResolvedDialog}
+            title='Update Resolved Event'
+            onClose={() => {
+              setIsOpenUpdateResolvedDialog(false);
+            }}
+            confirmBtn={{ label: 'Update Resolved Event', onClick: handleUpdateResolved }}
+          ></Dialog>
+
+          <Timeline timeline={workflowRuntimelineData} handldEventClick={handleTimelineSelect} />
+        </div>
+        <div className='flex-2'>
+          <div className='text-base font-semibold pb-4'>Payload</div>
+          <div className='flex flex-row gap-2 items-center'>
+            <div className='text-sm text-gray-500'>Selected State:</div>
+            <Badge status={selectedState || 'unknown'}>{selectedState || 'unknown'}</Badge>
+          </div>
+          <ContentTabs
+            tabs={[
+              {
+                label: 'List',
+                content: (
+                  <JsonToNestedList
+                    data={selectedWorkflowPayloadData?.data as Record<string, unknown>}
+                    isFetchingData={isFetching}
+                  />
+                ),
+              },
+              {
+                label: 'JSON',
+                content: (
+                  <JsonDisplay
+                    isFetchingData={isFetching}
+                    data={selectedWorkflowPayloadData as Record<string, unknown>}
+                  />
+                ),
+              },
+            ]}
+          />
+        </div>
       </div>
     </div>
   );
