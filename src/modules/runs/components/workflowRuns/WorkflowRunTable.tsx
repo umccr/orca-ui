@@ -4,16 +4,12 @@ import { classNames } from '@/utils/commonUtils';
 import { keepPreviousData } from '@tanstack/react-query';
 import { dayjs } from '@/utils/dayjs';
 import { Badge } from '@/components/common/badges';
-import { WorkflowRunDetailsDrawer } from './WorkflowRunDetailsDrawer';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { useWorkflowRunListModel } from '@/api/workflow';
-// import { TableCellsIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
 const WorkflowRunTable = () => {
-  // const [selectedWorkflowRun, setSelectedWorkflowRun] = useState<WorkflowRunModel | null>(null);
-
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
 
   // Api call to get workflow runs
@@ -49,10 +45,6 @@ const WorkflowRunTable = () => {
     throw error;
   }
 
-  const onCloseDrawer = () => {
-    // setSelectedWorkflowRun(null);
-    setQueryParams({ workflowRunId: null, sideDrawerTab: null });
-  };
   const workflowRunColumn: Column[] = useMemo(
     () => [
       {
@@ -197,13 +189,6 @@ const WorkflowRunTable = () => {
           countUnit: 'workflow runs',
         }}
       />
-      {getQueryParams().workflowRunOrcabusId && (
-        <WorkflowRunDetailsDrawer
-          // selectedWorkflowRunData={selectedWorkflowRun}
-          selectedWorkflowRunOrcabusId={getQueryParams().workflowRunOrcabusId}
-          onCloseDrawer={onCloseDrawer}
-        />
-      )}
     </div>
   );
 };

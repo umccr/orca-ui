@@ -87,14 +87,20 @@ const WorkflowRunTimeline = () => {
                   <Badge status={state.status}>{state.status}</Badge>
                   {state.status === 'RESOLVED' && (
                     <div className='opacity-0 group-hover:opacity-100'>
-                      <WrenchIcon
-                        className='w-4 h-4 cursor-pointer stroke-gray-500'
-                        onClick={() => {
-                          setResolvedId(state.orcabusId);
-                          setResolvedComment(state.comment || '');
-                          setIsOpenUpdateResolvedDialog(true);
-                        }}
-                      />
+                      <Tooltip
+                        text='Update the Resolved Event Comment'
+                        position='top'
+                        background='white'
+                      >
+                        <WrenchIcon
+                          className='w-4 h-4 cursor-pointer stroke-gray-500'
+                          onClick={() => {
+                            setResolvedId(state.orcabusId);
+                            setResolvedComment(state.comment || '');
+                            setIsOpenUpdateResolvedDialog(true);
+                          }}
+                        />
+                      </Tooltip>
                     </div>
                   )}
                 </div>
@@ -123,21 +129,25 @@ const WorkflowRunTimeline = () => {
                   <Badge type='unknown'>comment</Badge>
                   {comment.comment && (
                     <div className='opacity-0 group-hover:opacity-100 flex flex-row gap-2'>
-                      <WrenchIcon
-                        className='w-4 h-4 cursor-pointer stroke-gray-500'
-                        onClick={() => {
-                          setCommentId(comment.orcabusId);
-                          setComment(comment.comment);
-                          setIsOpenUpdateCommentDialog(true);
-                        }}
-                      />
-                      <TrashIcon
-                        className='w-4 h-4 cursor-pointer stroke-gray-500'
-                        onClick={() => {
-                          setCommentId(comment.orcabusId);
-                          setIsOpenDeleteCommentDialog(true);
-                        }}
-                      />
+                      <Tooltip text='Update' position='top' background='white'>
+                        <WrenchIcon
+                          className='w-4 h-4 cursor-pointer stroke-gray-500'
+                          onClick={() => {
+                            setCommentId(comment.orcabusId);
+                            setComment(comment.comment);
+                            setIsOpenUpdateCommentDialog(true);
+                          }}
+                        />
+                      </Tooltip>
+                      <Tooltip text='Delete' position='top' background='white'>
+                        <TrashIcon
+                          className='w-4 h-4 cursor-pointer stroke-gray-500'
+                          onClick={() => {
+                            setCommentId(comment.orcabusId);
+                            setIsOpenDeleteCommentDialog(true);
+                          }}
+                        />
+                      </Tooltip>
                     </div>
                   )}
                 </div>
