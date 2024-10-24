@@ -12,15 +12,30 @@ import {
 const client = createClient<paths>({ baseUrl: config.apiEndpoint.workflow });
 client.use(authMiddleware);
 
-export function createWorkflowFetchingHook<K extends keyof paths>(path: K) {
-  return function ({ params, reactQuery }: UseSuspenseQueryOptions<paths[typeof path]['get']>) {
-    return useSuspenseQuery({
+export function createWorkflowFetchingHook<
+  K extends keyof paths,
+  M extends keyof paths[K] & 'get',
+  R = paths[K][M] extends { responses: { 200: { content: { 'application/json': infer T } } } }
+    ? T
+    : never,
+>(path: K) {
+  return function ({
+    params,
+    reactQuery,
+    signal,
+  }: Omit<UseSuspenseQueryOptions<paths[typeof path][M]>, 'queryKey' | 'queryFn'> & {
+    signal?: AbortSignal;
+  }) {
+    return useSuspenseQuery<R, Error, R, [K, typeof params]>({
       ...reactQuery,
       queryKey: [path, params],
-      queryFn: async ({ signal }) => {
+      queryFn: async () => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.GET(path, { params, signal });
-        return data;
+        const { data } = await client.GET(path, {
+          params: params as ParamsOption<paths[K][M]>,
+          signal: signal,
+        });
+        return data as R;
       },
     });
   };
