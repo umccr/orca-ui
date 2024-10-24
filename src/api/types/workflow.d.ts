@@ -598,6 +598,11 @@ export interface operations {
     apiV1AnalysisList: {
         parameters: {
             query?: {
+                analysisName?: string;
+                analysisVersion?: string;
+                contexts?: string[];
+                description?: string;
+                orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
@@ -606,6 +611,8 @@ export interface operations {
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
+                status?: string;
+                workflows?: string[];
             };
             header?: never;
             path?: never;
@@ -648,6 +655,9 @@ export interface operations {
     apiV1AnalysiscontextList: {
         parameters: {
             query?: {
+                description?: string;
+                name?: string;
+                orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
@@ -656,6 +666,8 @@ export interface operations {
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
+                status?: string;
+                usecase?: string;
             };
             header?: never;
             path?: never;
@@ -697,6 +709,12 @@ export interface operations {
     apiV1AnalysisrunList: {
         parameters: {
             query?: {
+                analysis?: string | null;
+                analysisRunName?: string;
+                comment?: string | null;
+                computeContext?: string | null;
+                libraries?: string[];
+                orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
@@ -705,6 +723,8 @@ export interface operations {
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
+                status?: string | null;
+                storageContext?: string | null;
             };
             header?: never;
             path?: never;
@@ -747,14 +767,18 @@ export interface operations {
     apiV1PayloadList: {
         parameters: {
             query?: {
+                data?: unknown;
+                orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
                 page?: number;
+                payloadRefId?: string;
                 /** @description Number of results to return per page. */
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
+                version?: string;
             };
             header?: never;
             path?: never;
@@ -796,6 +820,9 @@ export interface operations {
     apiV1WorkflowList: {
         parameters: {
             query?: {
+                executionEngine?: string;
+                executionEnginePipelineId?: string;
+                orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
@@ -804,6 +831,8 @@ export interface operations {
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
+                workflowName?: string;
+                workflowVersion?: string;
             };
             header?: never;
             path?: never;
@@ -845,14 +874,25 @@ export interface operations {
     apiV1WorkflowrunList: {
         parameters: {
             query?: {
+                analysisRun?: string | null;
+                comment?: string | null;
+                currentState?: {
+                    [key: string]: unknown;
+                };
+                executionId?: string | null;
+                libraries?: string[];
+                orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
                 page?: number;
+                portalRunId?: string;
                 /** @description Number of results to return per page. */
                 rowsPerPage?: number;
                 /** @description A search term. */
                 search?: string;
+                workflow?: string | null;
+                workflowRunName?: string | null;
             };
             header?: never;
             path?: never;
