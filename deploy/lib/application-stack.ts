@@ -57,7 +57,7 @@ export class ApplicationStack extends Stack {
       functionName: props.configLambdaName,
       code: Code.fromAsset(path.join(__dirname, '..', 'lambda')),
       timeout: Duration.minutes(10),
-      handler: 'env_config.handler',
+      handler: 'env_config_and_cdn_refresh.handler',
       logRetention: RetentionDays.ONE_WEEK,
       runtime: Runtime.PYTHON_3_12,
       architecture: Architecture.ARM_64,

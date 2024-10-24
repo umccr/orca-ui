@@ -8,6 +8,11 @@ The React application is deployed using AWS CloudFront and S3, utilizing a custo
 
 For each account, the React assets are built and then pushed to a designated S3 bucket using AWS CodeBuild and Lambda functions. Specifically, a Lambda function uploads the assets to S3 and subsequently triggers CodeBuild. CodeBuild then compiles the React application and uploads the built assets back to S3.
 
+## Deployment Strategy
+
+The deployment strategy is to deploy the React application to the toolchain account, and then use AWS CodePipeline to deploy the application to the respective accounts.
+![ORCA UI DUAL PIPELINE](../docs/orca-ui-dual-pipeline.png)
+
 ## Development
 
 Change to the deploy directory
