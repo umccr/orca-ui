@@ -93,7 +93,7 @@ const Timeline: FC<TimelineProps> = ({ timeline, handldEventClick, selectId = ''
                       <time dateTime={event.datetime}>{event.datetime}</time>
                     </div>
                     <div className='flex-auto rounded-md py-1 px-2 ring-1 ring-inset ring-gray-200'>
-                      <div className='whitespace-nowrap text-left text-sm text-gray-500'>
+                      <div className='whitespace-nowrap text-left text-sm text-gray-500 max-w-sm text-wrap'>
                         {event.comment}
                       </div>
                     </div>
