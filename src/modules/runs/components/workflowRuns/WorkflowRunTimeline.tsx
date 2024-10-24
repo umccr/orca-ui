@@ -33,13 +33,6 @@ import { dayjs } from '@/utils/dayjs';
 import { getUsername } from '@/utils/commonUtils';
 import { BackdropWithText } from '@/components/common/backdrop';
 
-// interface WorkflowRunTimelineProps {
-//   currentState: string;
-//   handleCommentUpdated: () => void;
-//   handleResolvedUpdated: () => void;
-//   workflowRuntimelineData: TimelineEvent[];
-// }
-
 const WorkflowRunTimeline = () => {
   const { orcabusId } = useParams();
   const { user } = useAuthContext();
@@ -165,12 +158,8 @@ const WorkflowRunTimeline = () => {
     ...workflowCommentTimelineData,
   ].sort((a, b) => (dayjs(a.datetime).isAfter(dayjs(b.datetime)) ? -1 : 1));
 
-  useEffect(() => {
-    setSelectedPayloadId(selectedPayloadId || null);
-  }, [selectedPayloadId]);
-
   const { data: selectedWorkflowPayloadData, isFetching } = useWorkflowPayloadModel({
-    params: { path: { id: selectedPayloadId || '' } },
+    params: { path: { id: selectedPayloadId?.split('.')[1] || '' } },
     reactQuery: {
       enabled: !!selectedPayloadId,
       placeholderData: keepPreviousData,
@@ -253,8 +242,10 @@ const WorkflowRunTimeline = () => {
   ]);
 
   const handleTimelineSelect = (event: TimelineEvent) => {
-    setSelectedPayloadId(event.payloadId || null);
-    setSelectedState(event.status || null);
+    if (event.eventType === 'stateChange') {
+      setSelectedPayloadId(event.payloadId || null);
+      setSelectedState(event.status || null);
+    }
   };
 
   const {
@@ -383,17 +374,6 @@ const WorkflowRunTimeline = () => {
     resetUpdateWorkflowRunResolvedState,
     isErrorUpdatingWorkflowRunResolvedState,
   ]);
-
-  useEffect(() => {
-    setSelectedPayloadId(
-      workflowRuntimelineData.filter((event) => event.eventType === 'stateChange')[0]?.payloadId ||
-        null
-    );
-    setSelectedState(
-      workflowRuntimelineData.filter((event) => event.eventType === 'stateChange')[0]?.status ||
-        null
-    );
-  }, [workflowRuntimelineData]);
 
   return (
     <div>
