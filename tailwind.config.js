@@ -14,6 +14,14 @@ export default {
       flex: {
         2: '2 2 0%',
       },
+      fontSize: {
+        '2xs': '0.625rem',
+      },
+      fontFamily: {
+        sans: ['Inter, sans-serif', { fontFeatureSettings: '"cv11"' }],
+        mono: ['Inter, monospace', { fontFeatureSettings: '"tnum"' }],
+        code: ['Source Code Pro', 'monospace'],
+      },
     },
   },
   plugins: [require('@tailwindcss/forms')],

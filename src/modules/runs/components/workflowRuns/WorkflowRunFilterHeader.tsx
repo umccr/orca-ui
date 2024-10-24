@@ -172,7 +172,7 @@ const WorkflowRunFilterHeader = () => {
             <Button
               size='md'
               onClick={() => {
-                clearQueryParams();
+                clearQueryParams(['tab']);
               }}
               className=' text-gray-400 hover:text-white'
             >

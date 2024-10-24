@@ -42,11 +42,11 @@ const JsonToNestedList: FC<JsonToNestedListProps> = ({
       return (
         <dl className='divide-y divide-gray-100'>
           {Object.entries(value).map(([key, val], index) => (
-            <div key={index} className='px-4 py-1 sm:grid sm:grid-cols-4 sm:gap-1 sm:px-0'>
+            <div key={index} className='px-4 py-1 sm:grid sm:grid-cols-5 sm:gap-1 sm:px-0'>
               <dt className='mt-1 text-sm font-medium leading-6 text-gray-900 text-pretty break-words'>
                 {key}
               </dt>
-              <dd className='mt-1 text-sm leading-6 text-gray-600 break-words sm:col-span-3 '>
+              <dd className='mt-1 text-sm leading-6 text-gray-600 break-words sm:col-span-4 '>
                 {renderValue(val)}
               </dd>
             </div>

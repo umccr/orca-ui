@@ -10,8 +10,8 @@ import MainArea from '../MainArea';
 const FilesLayout = ({ children }: PropsWithChildren) => {
   return (
     <MainArea>
-      <LocationBreadcrumb />
-      <Card>
+      <Card className='w-full h-full sm:px-4 lg:px-6 lg:py-4 p-2 !rounded-none'>
+        <LocationBreadcrumb />
         <Suspense fallback={<SpinnerWithText text='Loading ...' />}>
           <DetailedErrorBoundary errorTitle='Unable to load files page'>
             {children || <Outlet />}

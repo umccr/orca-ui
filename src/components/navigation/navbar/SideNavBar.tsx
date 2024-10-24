@@ -23,39 +23,33 @@ const SideNavbar: FC<SideNavbarProps> = ({ navigation }) => {
   }, [location.pathname, navigation]);
 
   return (
-    <div className=' bg-magpie-light-50 w-[68px] border-0 border-magpie-light-75'>
+    <div className=' bg-heritage-blue-100 w-14 border-0'>
       {/* slide indicator */}
       <div
-        className='absolute z-50 left-[1px] top-0 w-[3px] h-[48px] bg-heritage-blue-100 transition-transform duration-300 '
-        style={{ transform: `translateY(${activeIndex * 56 + 48}px)` }} // header height 44px + padding 4px
+        className='absolute z-50 left-[1px] top-0 w-[2px] h-[48px] bg-white transition-transform duration-300 '
+        style={{ transform: `translateY(${activeIndex * 56 + 48 + 40 + 2}px)` }} // header height 44px + mt-10 + space -y-2 + padding 4px + space -y-2
       />
+
       {/* list of module navigation */}
 
-      <nav>
+      <nav className='mt-10'>
         <ul role='list' className='flex flex-1 flex-col items-center w-full'>
           {navigation.map((item, index) => (
-            <li
-              key={index}
-              className='w-full h-[56px] hover:bg-magpie-light-100'
-              onClick={() => setActiveIndex(index)}
-            >
+            <li key={index} className='w-full h-[56px] ' onClick={() => setActiveIndex(index)}>
               <Link
                 to={item.href}
                 className={classNames(
-                  'group flex flex-1 flex-col items-center text-xs leading-6 p-[4px] transition-colors duration-300 transform hover:bg-magpie-light-25',
+                  'group flex flex-1 flex-col items-center text-2xs leading-5 p-[4px] transition-colors duration-300 transform hover:bg-heritage-blue-50',
                   location.pathname.includes(item.href)
-                    ? ' text-heritage-blue-100 font-semibold '
-                    : ' text-heritage-blue-75 font-normal '
+                    ? ' text-white font-semibold '
+                    : ' text-gray-300 font-normal '
                 )}
               >
                 {location.pathname.includes(item.href) ? (
-                  <item.solidIcon
-                    className='h-6 w-5 shrink-0 text-heritage-blue-100'
-                    aria-hidden='true'
-                  />
+                  <item.solidIcon className='h-6 w-5 shrink-0 text-white' aria-hidden='true' />
                 ) : (
                   <item.icon
-                    className='h-6 w-5 shrink-0 text-heritage-blue-75'
+                    className='h-6 w-5 shrink-0 text-gray-300 stroke-2'
                     aria-hidden='true'
                   />
                 )}
