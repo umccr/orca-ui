@@ -1,35 +1,75 @@
 import { FC } from 'react';
-import { toast, ToastOptions } from 'react-toastify';
+import { Bounce, toast, ToastOptions } from 'react-toastify';
 
+export enum ToastType {
+  success = 'success',
+  error = 'error',
+  info = 'info',
+  warning = 'warning',
+  default = 'default',
+}
 export type Id = string | number;
 export interface MsgProps {
   title: string;
   message?: string;
+  type?: ToastType;
 }
-export const Msg: FC<MsgProps> = ({ title, message }) => {
+export const Msg: FC<MsgProps> = ({ title, message, type }) => {
+  const typeClass = (type: ToastType) => {
+    switch (type) {
+      case ToastType.success:
+        return 'text-green-500';
+      case ToastType.error:
+        return 'text-red-500';
+      case ToastType.info:
+        return 'text-blue-500';
+      case ToastType.warning:
+        return 'text-yellow-500';
+      default:
+        return 'text-gray-500';
+    }
+  };
   return (
-    <div className='flex items-start'>
+    <div className={`flex items-start ${typeClass(type || ToastType.default)}`}>
       <div className='ml-2 w-0 flex-1 '>
-        <p className='text-lg font-medium text-white'>{title}</p>
-        <p className='mt-1 text-sm text-white'>{message}</p>
+        <p className='text-base font-medium '>{title}</p>
+        <p className='mt-1 text-sm '>{message}</p>
       </div>
     </div>
   );
 };
 
-const toaster = (myProps: MsgProps, toastProps?: ToastOptions): Id =>
-  toast(<Msg {...myProps} />, { ...toastProps });
+const defaultToastProps: ToastOptions = {
+  position: 'top-right',
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: 'light',
+  transition: Bounce,
+};
 
-toaster.success = (myProps: MsgProps, toastProps?: ToastOptions): Id =>
-  toast.success(<Msg {...myProps} />, { theme: 'colored', ...toastProps });
+const createToast =
+  (type: ToastType) =>
+  (myProps: MsgProps, toastProps?: ToastOptions): Id => {
+    const options = {
+      ...defaultToastProps,
+      ...toastProps,
+      render: <Msg {...myProps} />,
+    };
+    const content = <Msg {...myProps} type={type} />;
 
-toaster.error = (myProps: MsgProps, toastProps?: ToastOptions): Id =>
-  toast.error(<Msg {...myProps} />, { theme: 'colored', ...toastProps });
+    return type === ToastType.default ? toast(content, options) : toast[type](content, options);
+  };
 
-toaster.info = (myProps: MsgProps, toastProps?: ToastOptions): Id =>
-  toast.info(<Msg {...myProps} />, { theme: 'colored', ...toastProps });
-
-toaster.warning = (myProps: MsgProps, toastProps?: ToastOptions): Id =>
-  toast.warning(<Msg {...myProps} />, { theme: 'colored', ...toastProps });
+const toaster = {
+  default: createToast(ToastType.default),
+  success: createToast(ToastType.success),
+  error: createToast(ToastType.error),
+  info: createToast(ToastType.info),
+  warning: createToast(ToastType.warning),
+};
 
 export default toaster;

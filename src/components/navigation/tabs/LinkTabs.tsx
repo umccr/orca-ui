@@ -1,21 +1,9 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { classNames } from '@/utils/commonUtils';
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 
 interface LinkTabsProps {
+  className?: string;
   tabs: {
     name: string;
     href: string;
@@ -23,9 +11,9 @@ interface LinkTabsProps {
   }[];
 }
 
-export const LinkTabs: FC<LinkTabsProps> = ({ tabs }) => {
+export const LinkTabs: FC<LinkTabsProps> = ({ tabs, className }) => {
   return (
-    <div>
+    <div className={className}>
       <div className='sm:hidden'>
         <label htmlFor='tabs' className='sr-only'>
           Select a tab
@@ -35,7 +23,7 @@ export const LinkTabs: FC<LinkTabsProps> = ({ tabs }) => {
           id='tabs'
           name='tabs'
           defaultValue={tabs.find((tab) => tab.current)?.name}
-          className='block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
+          className='block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:bg-gray-800 dark:text-gray-300'
         >
           {tabs.map((tab) => (
             <option key={tab.name}>{tab.name}</option>
@@ -43,30 +31,32 @@ export const LinkTabs: FC<LinkTabsProps> = ({ tabs }) => {
         </select>
       </div>
       <div className='hidden sm:block'>
-        <nav aria-label='Tabs' className='isolate flex divide-x divide-gray-200 rounded-lg shadow'>
-          {tabs.map((tab, tabIdx) => (
-            <a
-              key={tab.name}
-              href={tab.href}
-              aria-current={tab.current ? 'page' : undefined}
-              className={classNames(
-                tab.current ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700',
-                tabIdx === 0 ? 'rounded-l-lg' : '',
-                tabIdx === tabs.length - 1 ? 'rounded-r-lg' : '',
-                'group relative min-w-40 flex-1 overflow-hidden bg-white px-4 py-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10'
-              )}
-            >
-              <span>{tab.name}</span>
-              <span
-                aria-hidden='true'
+        <div className='border-b border-gray-200'>
+          <nav aria-label='Tabs' className='-mb-px flex space-x-8'>
+            {tabs.map((tab, tabIdx) => (
+              <Link
+                key={tabIdx}
+                to={tab.href}
+                aria-current={tab.current ? 'page' : undefined}
                 className={classNames(
-                  tab.current ? 'bg-indigo-500' : 'bg-transparent',
-                  'absolute inset-x-0 bottom-0 h-0.5'
+                  tab.current
+                    ? 'border-indigo-500 text-indigo-600'
+                    : 'border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700',
+                  'flex whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium'
                 )}
-              />
-            </a>
-          ))}
-        </nav>
+              >
+                <span>{tab.name}</span>
+                <span
+                  aria-hidden='true'
+                  className={classNames(
+                    tab.current ? 'bg-indigo-500' : 'bg-transparent',
+                    'absolute inset-x-0 bottom-0 h-0.5'
+                  )}
+                />
+              </Link>
+            ))}
+          </nav>
+        </div>
       </div>
     </div>
   );

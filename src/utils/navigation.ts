@@ -9,7 +9,7 @@ import {
   // CloudArrowUpIcon as SolidCloudArrowUpIcon,
   ChartBarIcon as SolidChartBarIcon,
   FolderIcon as SolidFolderIcon,
-} from '@heroicons/react/20/solid';
+} from '@heroicons/react/24/solid';
 import { AppURLs } from './appURLs';
 
 const sideNavigation = [

@@ -27,7 +27,7 @@ const Header = () => {
   const openTokenDialogOpen = () => setIsTokenDialogOpen(true);
 
   return (
-    <Disclosure as='nav' className='bg-heritage-blue-100 shadow py-0.5'>
+    <Disclosure as='nav' className='bg-heritage-blue-100 shadow py-1'>
       {({ open }) => (
         <>
           {isTokenDialogOpen && (

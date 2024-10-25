@@ -8,6 +8,8 @@
       "path": "./tsconfig.vite.json"
     }
   ],
+
+  /* Paths */
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

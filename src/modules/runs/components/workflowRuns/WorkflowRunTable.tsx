@@ -4,14 +4,12 @@ import { classNames } from '@/utils/commonUtils';
 import { keepPreviousData } from '@tanstack/react-query';
 import { dayjs } from '@/utils/dayjs';
 import { Badge } from '@/components/common/badges';
-import { WorkflowRunDetailsDrawer } from './WorkflowRunDetailsDrawer';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { useWorkflowRunListModel } from '@/api/workflow';
+import { Link } from 'react-router-dom';
 
 const WorkflowRunTable = () => {
-  // const [selectedWorkflowRun, setSelectedWorkflowRun] = useState<WorkflowRunModel | null>(null);
-
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
 
   // Api call to get workflow runs
@@ -26,7 +24,7 @@ const WorkflowRunTable = () => {
         page: getQueryParams().page || 1,
         rowsPerPage: getPaginationParams().rowsPerPage || DEFAULT_PAGE_SIZE,
         search: getQueryParams().search || undefined,
-        workflow__id: getQueryParams().workflowTypeId || undefined,
+        workflow__orcabus_id: getQueryParams().workflowTypeId || undefined,
         status: ['succeeded', 'failed', 'aborted', 'resolved'].includes(
           getQueryParams().workflowRunStatus
         )
@@ -47,16 +45,13 @@ const WorkflowRunTable = () => {
     throw error;
   }
 
-  const onCloseDrawer = () => {
-    // setSelectedWorkflowRun(null);
-    setQueryParams({ workflowRunId: null });
-  };
   const workflowRunColumn: Column[] = useMemo(
     () => [
       {
         header: 'Workflow Run Name',
         accessor: 'workflowRunName',
         cell: (workflowRunName: unknown, workflowRunRowData: TableData) => {
+          const id = workflowRunRowData.orcabusId;
           if (!workflowRunName) {
             return <div>-</div>;
           } else {
@@ -66,12 +61,19 @@ const WorkflowRunTable = () => {
                   className={classNames(
                     'cursor-pointer flex flex-row items-center ml-2 text-sm lowercase font-medium hover:text-blue-700 text-blue-500'
                   )}
-                  onClick={() => {
-                    // setSelectedWorkflowRun(workflowRunRowData as WorkflowRunModel);
-                    setQueryParams({ workflowRunOrcabusId: workflowRunRowData.orcabusId });
-                  }}
+                  // onClick={() => {
+                  //   setSelectedWorkflowRun(workflowRunRowData as WorkflowRunModel);
+                  //   setQueryParams({ workflowRunId: workflowRunRowData.id });
+                  // }}
                 >
-                  {(workflowRunName as string).toLocaleLowerCase()}
+                  <Link
+                    to={`${id}`}
+                    className={classNames(
+                      'cursor-pointer flex flex-row items-center ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+                    )}
+                  >
+                    {(workflowRunName as string).toLocaleLowerCase()}
+                  </Link>
                 </div>
               </div>
             );
@@ -81,6 +83,11 @@ const WorkflowRunTable = () => {
       {
         header: 'Portal Run Id',
         accessor: 'portalRunId',
+        copyable: true,
+        onSort: () => {
+          console.log('sorting');
+        },
+        sortDirection: 'asc',
         cell: (portalRunId: unknown) => {
           if (!portalRunId) {
             return <div>-</div>;
@@ -141,26 +148,25 @@ const WorkflowRunTable = () => {
       //     } else {
       //       return (
       //         <div className='flex flex-row items-center'>
-      //           <div
-      //             // to={`sequence/${portalRunId}/details`}
+      //           <Link
+      //             to={`workflow/${id}`}
       //             className={classNames(
       //               'cursor-pointer flex flex-row items-center ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
       //             )}
-      //             onClick={() => setQueryParams({ workflowRunId: id as string, openDrawer: true })}
       //           >
       //             <TableCellsIcon
       //               className='h-5 w-5 pr-1 shrink-0 text-blue-500'
       //               aria-hidden='true'
       //             />
       //             Details
-      //           </div>
+      //           </Link>
       //         </div>
       //       );
       //     }
       //   },
       // },
     ],
-    [setQueryParams]
+    []
   );
 
   return (
@@ -171,9 +177,9 @@ const WorkflowRunTable = () => {
         inCard={true}
         isFetchingData={isFetching}
         paginationProps={{
-          totalCount: workflowRunsData?.pagination.count ?? 0,
-          rowsPerPage: workflowRunsData?.pagination.rowsPerPage ?? DEFAULT_PAGE_SIZE,
-          currentPage: workflowRunsData?.pagination.page ?? 0,
+          totalCount: workflowRunsData?.pagination?.count ?? 0,
+          rowsPerPage: workflowRunsData?.pagination?.rowsPerPage ?? DEFAULT_PAGE_SIZE,
+          currentPage: workflowRunsData?.pagination?.page ?? 0,
           setPage: (n: number) => {
             setQueryParams({ page: n });
           },
@@ -183,13 +189,6 @@ const WorkflowRunTable = () => {
           countUnit: 'workflow runs',
         }}
       />
-      {getQueryParams().workflowRunOrcabusId && (
-        <WorkflowRunDetailsDrawer
-          // selectedWorkflowRunData={selectedWorkflowRun}
-          selectedWorkflowRunOrcabusId={getQueryParams().workflowRunOrcabusId}
-          onCloseDrawer={onCloseDrawer}
-        />
-      )}
     </div>
   );
 };

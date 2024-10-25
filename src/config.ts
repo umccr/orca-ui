@@ -1,7 +1,5 @@
 import { env } from '@/utils/commonUtils';
 
-console.log('hhhhh', env.VITE_REGION, '2323232', env);
-
 const REGION = env.VITE_REGION;
 const OAUTH_DOMAIN = `${env.VITE_OAUTH_DOMAIN}.auth.${REGION}.amazoncognito.com`;
 
