@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 interface LinkTabsProps {
+  className?: string;
   tabs: {
     name: string;
     href: string;
@@ -10,9 +11,9 @@ interface LinkTabsProps {
   }[];
 }
 
-export const LinkTabs: FC<LinkTabsProps> = ({ tabs }) => {
+export const LinkTabs: FC<LinkTabsProps> = ({ tabs, className }) => {
   return (
-    <div>
+    <div className={className}>
       <div className='sm:hidden'>
         <label htmlFor='tabs' className='sr-only'>
           Select a tab

@@ -129,7 +129,9 @@ const WorkflowRunFilterHeader = () => {
     if (selected.length === 0 || selected.includes('-1')) {
       setQueryParams({ workflowTypeId: null });
     } else {
-      setQueryParams({ workflowTypeId: selected });
+      const selectedWorkflowTypeIds = selected.map((id) => id.toString().split('.')[1]);
+      console.log(selectedWorkflowTypeIds, selected);
+      setQueryParams({ workflowTypeId: selectedWorkflowTypeIds });
     }
   };
 

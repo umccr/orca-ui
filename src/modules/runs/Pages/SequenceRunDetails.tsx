@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { DetailedErrorBoundary } from '@/components/common/error';
 import { SpinnerWithText } from '@/components/common/spinner';
-import MainArea from '@/components/layouts/MainArea';
+
 import { ContentTabs } from '@/components/navigation/tabs';
 import Breadcrumb from '@/components/navigation/breadcrumbs';
 import LibraryTable from '../components/sequenceRuns/reports/LibraryTable';
@@ -14,7 +14,7 @@ const SequenceRunsDetails = () => {
   return (
     <Suspense fallback={<SpinnerWithText text='Loading metadata table ...' />}>
       <DetailedErrorBoundary errorTitle='Unable to load metadata table'>
-        <MainArea>
+        <div>
           <Breadcrumb />
 
           <ContentTabs
@@ -28,7 +28,7 @@ const SequenceRunsDetails = () => {
               },
             ]}
           />
-        </MainArea>
+        </div>
       </DetailedErrorBoundary>
     </Suspense>
   );
