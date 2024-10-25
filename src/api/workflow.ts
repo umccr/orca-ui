@@ -151,3 +151,9 @@ export const useWorkflowRunResolvedStateUpdateModel = createWorkflowPatchMutatio
 export const useSuspenseWorkflowRunListModel = createWorkflowFetchingHook('/api/v1/workflowrun/');
 export const useSuspenseWorkflowModel = createWorkflowFetchingHook('/api/v1/workflow/');
 export const useSuspensePayloadListModel = createWorkflowFetchingHook('/api/v1/payload/');
+
+// analysis run
+export const useAnalysisRunListModel = createWorkflowQueryHook('/api/v1/analysisrun/');
+export const useAnalysisRunDetailModel = createWorkflowQueryHook(
+  '/api/v1/analysisrun/{orcabusId}/'
+);

@@ -6,6 +6,7 @@ const RunsPage = () => {
   const fullPath = useLocation().pathname;
   const tabs = [
     { name: 'Sequence', href: '/runs/sequence', current: fullPath.includes('/runs/sequence') },
+    { name: 'Analysis', href: '/runs/analysis', current: fullPath.includes('/runs/analysis') },
     // { name: 'Library', href: '/runs/library', current: fullPath.includes('/runs/library') },
     { name: 'Workflow', href: '/runs/workflow', current: fullPath.includes('/runs/workflow') },
   ];

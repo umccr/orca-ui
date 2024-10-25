@@ -15,6 +15,8 @@ const SequenceRunDetailsPage = lazy(() => import('@/modules/runs/Pages/SequenceR
 const SequenceRunPage = lazy(() => import('@/modules/runs/Pages/SequenceRuns'));
 const WorkflowRunPage = lazy(() => import('@/modules/runs/Pages/WorkflowRuns'));
 const WorkflowRunDetailsPage = lazy(() => import('@/modules/runs/Pages/WorkflowRunDetails'));
+const AnalysisRunPage = lazy(() => import('@/modules/runs/Pages/AnalysisRuns'));
+const AnalysisRunDetailsPage = lazy(() => import('@/modules/runs/Pages/AnalysisRunsDetails'));
 const RunsPage = lazy(() => import('@/modules/runs/Pages/RunsPage'));
 
 export const Router: RouteObject = {
@@ -33,6 +35,7 @@ export const Router: RouteObject = {
       children: [
         { path: '', element: <Navigate to='sequence' replace /> },
         { path: 'sequence', element: <SequenceRunPage /> },
+        { path: 'analysis', element: <AnalysisRunPage /> },
         { path: 'library', element: <LibraryRunPage /> },
         { path: 'workflow', element: <WorkflowRunPage /> },
       ],
@@ -44,6 +47,14 @@ export const Router: RouteObject = {
     },
     {
       path: 'workflow/:orcabusId',
+      element: <WorkflowRunDetailsPage />,
+    },
+    {
+      path: 'analysis/:orcabusId',
+      element: <AnalysisRunDetailsPage />,
+    },
+    {
+      path: 'analysis/:analysis_orcabusId/:orcabusId',
       element: <WorkflowRunDetailsPage />,
     },
   ],
