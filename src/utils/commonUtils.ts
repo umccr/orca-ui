@@ -66,15 +66,6 @@ export function getUsername(email: string) {
  * const queryParams = getQueryParams(searchParams);
  * console.log(queryParams); // { name: 'John', age: '30', division: ['HR', 'IT'] }
  */
-/**
- * Get query params from URLSearchParams
- * @param searchParams - the URLSearchParams object
- * @returns the query params
- * @example
- * const searchParams = new URLSearchParams('?name=John&age=30&division=HR&division=IT');
- * const queryParams = getQueryParams(searchParams);
- * console.log(queryParams); // { name: 'John', age: '30', division: ['HR', 'IT'] }
- */
 export const getQueryParams = (searchParams: URLSearchParams) => {
   const params = [...searchParams.entries()].reduce((acc, tuple) => {
     const [key, val] = tuple;
@@ -135,11 +126,6 @@ export const getFilenameFromKey = (key: string): string => {
   return key.split('/').pop() || '';
 };
 
-/**
- * Sleep function to pause the execution for a while
- * @param timeout - the time to sleep in milliseconds
- * @returns a promise that resolves after the sleep
- */
 /**
  * Sleep function to pause the execution for a while
  * @param timeout - the time to sleep in milliseconds

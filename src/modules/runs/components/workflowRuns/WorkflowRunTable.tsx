@@ -24,7 +24,7 @@ const WorkflowRunTable = () => {
         page: getQueryParams().page || 1,
         rowsPerPage: getPaginationParams().rowsPerPage || DEFAULT_PAGE_SIZE,
         search: getQueryParams().search || undefined,
-        workflow__id: getQueryParams().workflowTypeId || undefined,
+        workflow__orcabus_id: getQueryParams().workflowTypeId || undefined,
         status: ['succeeded', 'failed', 'aborted', 'resolved'].includes(
           getQueryParams().workflowRunStatus
         )

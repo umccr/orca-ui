@@ -45,13 +45,16 @@ export const useQueryParams = (
   const clearQueryParams = (except?: string[]) => {
     // remove all other query params except the except ones
     const exceptParams = except ? except.map((key) => key) : [];
-    const queryParams = wgetQueryParams(queryParams);
-    const filteredQueryParams = Object.keys(queryParams).reduce((acc, key) => {
-      if (exceptParams.includes(key)) {
-        acc[key] = queryParams[key];
-      }
-      return acc;
-    }, {});
+    const currentQueryParams = getQueryParams();
+    const filteredQueryParams = Object.keys(currentQueryParams).reduce<Record<string, string>>(
+      (acc, key) => {
+        if (exceptParams.includes(key)) {
+          acc[key] = currentQueryParams[key];
+        }
+        return acc;
+      },
+      {}
+    );
     nav(cleanObject({ ...filteredQueryParams }));
   };
 

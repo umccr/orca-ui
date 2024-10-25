@@ -504,8 +504,9 @@ const WorkflowRunTimeline = () => {
             }}
             confirmBtn={{ label: 'Update Resolved Event', onClick: handleUpdateResolved }}
           ></Dialog>
-
-          <Timeline timeline={workflowRuntimelineData} handldEventClick={handleTimelineSelect} />
+          <div className='px-4'>
+            <Timeline timeline={workflowRuntimelineData} handldEventClick={handleTimelineSelect} />
+          </div>
         </div>
         <div className='flex-2'>
           <div className='text-base font-semibold pb-4'>Payload</div>

@@ -11,7 +11,7 @@ const RunsPage = () => {
   ];
   return (
     <>
-      <LinkTabs tabs={tabs} />
+      <LinkTabs tabs={tabs} className='mb-4' />
       <Suspense fallback={<div>Loading...</div>}>
         <Outlet />
       </Suspense>
