@@ -1,7 +1,12 @@
 import AnalysisRunDetailsTable from '../components/analysisRuns/AnalysisRunDetailsTable';
-
+import AnalysisRunDetailsWorkflowRuns from '../components/analysisRuns/AnalysisRunDetailsWorkflowRuns';
 const AnalysisRunsDetails = () => {
-  return <AnalysisRunDetailsTable />;
+  return (
+    <div>
+      <AnalysisRunDetailsTable />
+      <AnalysisRunDetailsWorkflowRuns />
+    </div>
+  );
 };
 
 export default AnalysisRunsDetails;

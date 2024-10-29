@@ -32,6 +32,18 @@ export function classNames(...classes: ClassValue[]) {
 }
 
 /**
+ * Omit keys from object
+ * @param obj - the object to omit keys from
+ * @param keys - the keys to omit
+ * @returns the object with the omitted keys
+ */
+export function omit<T extends object, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {
+  const result = { ...obj };
+  keys.forEach((key) => delete result[key]);
+  return result;
+}
+
+/**
  * Get username from email
  * @param email - the email
  * @returns the username

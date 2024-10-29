@@ -6,7 +6,12 @@ import { keepPreviousData } from '@tanstack/react-query';
 // import { dayjs } from '@/utils/dayjs';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { Badge } from '@/components/common/badges';
-import { useAnalysisRunListModel } from '@/api/workflow';
+import {
+  AnalysisModel,
+  ComputeContextModel,
+  StorageContextModel,
+  useAnalysisRunListModel,
+} from '@/api/workflow';
 import { Link } from 'react-router-dom';
 
 const AnalysisRunTable = () => {
@@ -81,17 +86,33 @@ const AnalysisRunTable = () => {
         },
       },
       {
+        header: 'Analysis',
+        accessor: 'analysis',
+        cell: (analysis: unknown) => {
+          return (
+            <div className='flex flex-row items-center'>
+              <div className='px-2 text-sm font-normal rounded text-gray-900'>
+                {(analysis as AnalysisModel).analysisName}
+              </div>
+              <div className='px-2 text-sm font-normal rounded text-gray-500'>
+                {`v ${(analysis as AnalysisModel).analysisVersion}`}
+              </div>
+            </div>
+          );
+        },
+      },
+      {
         header: 'Compute Context',
         accessor: 'computeContext',
         cell: (computeContext: unknown) => {
-          return <div>{(computeContext as { name: string }).name}</div>;
+          return <div>{(computeContext as ComputeContextModel).name}</div>;
         },
       },
       {
         header: 'Storage Context',
         accessor: 'storageContext',
         cell: (storageContext: unknown) => {
-          return <div>{(storageContext as { name: string }).name}</div>;
+          return <div>{(storageContext as StorageContextModel).name}</div>;
         },
       },
       {
