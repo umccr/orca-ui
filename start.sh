@@ -77,7 +77,7 @@ export VITE_OAUTH_REDIRECT_OUT=$oauth_redirect_out_local
 # Backend API URLs
 # https://github.com/umccr/orcabus#running-api-locally
 export VITE_METADATA_URL=${VITE_METADATA_MANAGER_URL:-"http://localhost:8100"}
-export VITE_WORKFLOW_URL=${VITE_WORKFLOW_MANAGER_URL:-"http://localhost:8000"}
+export VITE_WORKFLOW_URL=${VITE_WORKFLOW_MANAGER_URL:-"http://localhost:8200"}
 export VITE_SEQUENCE_RUN_URL=${VITE_SEQUENCE_RUN_MANAGER_URL:-"http://localhost:8300"}
 export VITE_FILE_URL=${VITE_FILE_MANAGER_URL:-"http://localhost:8400"}
 
