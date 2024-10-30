@@ -5,9 +5,7 @@ import { SpinnerWithText } from '@/components/common/spinner';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { IndividualListAPITable } from '../components/individual/IndividualListAPITable';
 import { SampleListAPITable } from '../components/sample/SampleListAPITable';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/common/buttons';
-import { ArrowPathIcon } from '@heroicons/react/20/solid';
+import { Navigate } from 'react-router-dom';
 
 const selectedClassName =
   'inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500';
@@ -16,7 +14,7 @@ const regularClassName =
 
 export default function MetadataPage() {
   const { getQueryParams, setQueryParams } = useQueryParams();
-  const navigate = useNavigate();
+
   const queryParams = getQueryParams();
 
   const currentTabSelection = queryParams.tab;
@@ -56,18 +54,6 @@ export default function MetadataPage() {
 
   return (
     <>
-      <div className='w-full flex justify-end'>
-        <Button
-          onClick={() => {
-            navigate('./sync');
-          }}
-          type='green'
-          size='sm'
-          className='justify-center rounded-md ring-gray-300 ring-1'
-        >
-          <ArrowPathIcon className='h-5 w-5' />
-        </Button>
-      </div>
       <div className='text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700'>
         <ul className='flex flex-wrap -mb-px'>
           {tabs.map((tab, index) => {

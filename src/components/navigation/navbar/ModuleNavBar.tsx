@@ -27,7 +27,7 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
     <div
       className={classNames(
         'relative flex grow-0 flex-col gap-y-5 overflow-y-auto',
-        isOpen ? 'bg-magpie-light-25 min-w-40' : 'bg-gray-50 min-w-14'
+        isOpen ? 'bg-magpie-light-25 min-w-40' : 'bg-white min-w-14'
       )}
     >
       {isOpen ? (
@@ -72,10 +72,7 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
           {footer && footer}
         </>
       ) : (
-        <button
-          onClick={() => setIsOpen((p) => !p)}
-          className='h-full hover:bg-magpie-light-25 z-10'
-        >
+        <button onClick={() => setIsOpen((p) => !p)} className='h-full hover:bg-gray-50 z-10'>
           <div className='absolute right-0 top-0 m-4 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2'>
             <Bars3Icon aria-hidden='true' className='h-6 w-6' />
           </div>

@@ -32,7 +32,7 @@ const LocationBreadcrumb: FC = () => {
   const splitPath = fullPath.split('/');
   const currentPage = splitPath[splitPath.length - 1];
   return (
-    <nav className='flex mb-3 pb-4 border-b-4' aria-label='Breadcrumb'>
+    <nav className='flex mb-3' aria-label='Breadcrumb'>
       <ol role='list' className='flex items-center space-x-2 -ml-2'>
         {splitPath.map((path, key) => (
           <li key={key}>
