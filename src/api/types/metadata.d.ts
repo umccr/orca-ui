@@ -11,7 +11,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1ContactList"];
+        get: operations["contactList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -28,7 +28,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
-        get: operations["apiV1ContactRetrieve"];
+        get: operations["contactRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -45,7 +45,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Retrieve the history of this model */
-        get: operations["apiV1ContactHistoryList"];
+        get: operations["contactHistoryList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -61,7 +61,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1IndividualList"];
+        get: operations["individualList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -78,7 +78,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
-        get: operations["apiV1IndividualRetrieve"];
+        get: operations["individualRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -95,7 +95,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Retrieve the history of this model */
-        get: operations["apiV1IndividualHistoryList"];
+        get: operations["individualHistoryList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -111,7 +111,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1LibraryList"];
+        get: operations["libraryList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -128,7 +128,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
-        get: operations["apiV1LibraryRetrieve"];
+        get: operations["libraryRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -145,7 +145,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Retrieve the history of this model */
-        get: operations["apiV1LibraryHistoryList"];
+        get: operations["libraryHistoryList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -161,7 +161,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1ProjectList"];
+        get: operations["projectList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -178,7 +178,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
-        get: operations["apiV1ProjectRetrieve"];
+        get: operations["projectRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -195,7 +195,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Retrieve the history of this model */
-        get: operations["apiV1ProjectHistoryList"];
+        get: operations["projectHistoryList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -211,7 +211,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1SampleList"];
+        get: operations["sampleList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -228,7 +228,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
-        get: operations["apiV1SampleRetrieve"];
+        get: operations["sampleRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -245,7 +245,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Retrieve the history of this model */
-        get: operations["apiV1SampleHistoryList"];
+        get: operations["sampleHistoryList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -261,7 +261,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1SubjectList"];
+        get: operations["subjectList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -278,7 +278,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
-        get: operations["apiV1SubjectRetrieve"];
+        get: operations["subjectRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -295,9 +295,43 @@ export interface paths {
             cookie?: never;
         };
         /** @description Retrieve the history of this model */
-        get: operations["apiV1SubjectHistoryList"];
+        get: operations["subjectHistoryList"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/sync/gsheet/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Sync metadata with the Google tracking sheet */
+        post: operations["syncGsheetCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/sync/presigned-csv/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Sync metadata from the provided csv presigned url. */
+        post: operations["syncPresignedCsvCreate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -770,6 +804,13 @@ export interface components {
             historyType: components["schemas"]["HistoryTypeEnum"];
             historyUser?: number | null;
         };
+        SyncCustomCsv: {
+            /** Format: uri */
+            presignedUrl: string;
+        };
+        SyncGSheet: {
+            year: string;
+        };
         /**
          * @description * `10X` - Ten X
          *     * `BiModal` - Bimodal
@@ -806,7 +847,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    apiV1ContactList: {
+    contactList: {
         parameters: {
             query?: {
                 contactId?: string | null;
@@ -839,7 +880,7 @@ export interface operations {
             };
         };
     };
-    apiV1ContactRetrieve: {
+    contactRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -861,7 +902,7 @@ export interface operations {
             };
         };
     };
-    apiV1ContactHistoryList: {
+    contactHistoryList: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -892,7 +933,7 @@ export interface operations {
             };
         };
     };
-    apiV1IndividualList: {
+    individualList: {
         parameters: {
             query?: {
                 individualId?: string | null;
@@ -924,7 +965,7 @@ export interface operations {
             };
         };
     };
-    apiV1IndividualRetrieve: {
+    individualRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -946,7 +987,7 @@ export interface operations {
             };
         };
     };
-    apiV1IndividualHistoryList: {
+    individualHistoryList: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -977,7 +1018,7 @@ export interface operations {
             };
         };
     };
-    apiV1LibraryList: {
+    libraryList: {
         parameters: {
             query?: {
                 assay?: string | null;
@@ -1041,7 +1082,7 @@ export interface operations {
             };
         };
     };
-    apiV1LibraryRetrieve: {
+    libraryRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1063,7 +1104,7 @@ export interface operations {
             };
         };
     };
-    apiV1LibraryHistoryList: {
+    libraryHistoryList: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -1094,7 +1135,7 @@ export interface operations {
             };
         };
     };
-    apiV1ProjectList: {
+    projectList: {
         parameters: {
             query?: {
                 description?: string | null;
@@ -1126,7 +1167,7 @@ export interface operations {
             };
         };
     };
-    apiV1ProjectRetrieve: {
+    projectRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1148,7 +1189,7 @@ export interface operations {
             };
         };
     };
-    apiV1ProjectHistoryList: {
+    projectHistoryList: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -1179,7 +1220,7 @@ export interface operations {
             };
         };
     };
-    apiV1SampleList: {
+    sampleList: {
         parameters: {
             query?: {
                 externalSampleId?: string | null;
@@ -1230,7 +1271,7 @@ export interface operations {
             };
         };
     };
-    apiV1SampleRetrieve: {
+    sampleRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1252,7 +1293,7 @@ export interface operations {
             };
         };
     };
-    apiV1SampleHistoryList: {
+    sampleHistoryList: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -1283,7 +1324,7 @@ export interface operations {
             };
         };
     };
-    apiV1SubjectList: {
+    subjectList: {
         parameters: {
             query?: {
                 /** @description Filter based on 'library_id' of the library associated with the subject. */
@@ -1317,7 +1358,7 @@ export interface operations {
             };
         };
     };
-    apiV1SubjectRetrieve: {
+    subjectRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1339,7 +1380,7 @@ export interface operations {
             };
         };
     };
-    apiV1SubjectHistoryList: {
+    subjectHistoryList: {
         parameters: {
             query?: {
                 /** @description Which field to use when ordering the results. */
@@ -1366,6 +1407,56 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PaginatedSubjectHistoryList"];
+                };
+            };
+        };
+    };
+    syncGsheetCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["SyncGSheet"];
+                "multipart/form-data": components["schemas"]["SyncGSheet"];
+                "application/json": components["schemas"]["SyncGSheet"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    syncPresignedCsvCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["SyncCustomCsv"];
+                "multipart/form-data": components["schemas"]["SyncCustomCsv"];
+                "application/json": components["schemas"]["SyncCustomCsv"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
                 };
             };
         };
