@@ -7,15 +7,46 @@ ssm = boto3.client('ssm')
 s3 = boto3.client('s3')
 cloudfront = boto3.client('cloudfront')
 
-def get_ssm_parameter(name):
-    try:
-        response = ssm.get_parameter(Name=name, WithDecryption=True)
+def get_ssm_parameter(name, with_decryption=False):
+    """Fetch a SSM parameter"""
+    try: 
+        response = ssm.get_parameter(Name=name, WithDecryption=with_decryption)
         return response['Parameter']['Value']
     except Exception as e:
         print(f"Error fetching SSM parameter {name}: {e}")
         return None
 
+
+def update_api_versions(event):
+    """Update API versions from event with validation and logging"""
+    if not event or not isinstance(event, dict):
+        print("No update event data received, skipping API version updates")
+        return
+        
+    api_version_mappings = {
+        'metadata_api_version': 'VITE_METADATA_API_VERSION',
+        'workflow_api_version': 'VITE_WORKFLOW_API_VERSION',
+        'sequence_run_api_version': 'VITE_SEQUENCE_RUN_API_VERSION',
+        'file_api_version': 'VITE_FILE_API_VERSION'
+    }
+    
+    # Check if any version keys exist in the event
+    if not any(key in event for key in api_version_mappings):
+        print("No API version updates found in event")
+        return
+    
+    # update the environment variables
+    for event_key, env_key in api_version_mappings.items():
+        version = event.get(event_key)
+        if version and isinstance(version, str):
+            os.environ[env_key] = version
+            print(f"Updated {env_key} to {version}")
+            
 def handler(event, context):
+    """Handler for the lambda function"""
+    
+    # read the event to update the api version
+    update_api_versions(event)
     
     bucket_name = os.environ['BUCKET_NAME']
     cloudfront_distribution_id = os.environ['CLOUDFRONT_DISTRIBUTION_ID']
@@ -35,8 +66,15 @@ def handler(event, context):
         'VITE_WORKFLOW_URL': os.environ['VITE_WORKFLOW_URL'],
         'VITE_SEQUENCE_RUN_URL': os.environ['VITE_SEQUENCE_RUN_URL'],
         'VITE_FILE_URL': os.environ['VITE_FILE_URL'],
+        
+        # API Version
+        'VITE_METADATA_API_VERSION': os.environ.get('VITE_METADATA_API_VERSION', None),
+        'VITE_WORKFLOW_API_VERSION': os.environ.get('VITE_WORKFLOW_API_VERSION', None),
+        'VITE_SEQUENCE_RUN_API_VERSION': os.environ.get('VITE_SEQUENCE_RUN_API_VERSION', None),
+        'VITE_FILE_API_VERSION': os.environ.get('VITE_FILE_API_VERSION', None),
     }
-    
+    # Remove null values
+    env_vars = {k: v for k, v in env_vars.items() if v is not None}
         
     env_js_content = f"window.config = {json.dumps(env_vars, indent=2)}"
     
