@@ -1,38 +1,52 @@
-import { FC, useState, useEffect, FunctionComponent, SVGProps } from 'react';
+import { FC, useState, useEffect, ReactNode } from 'react';
 import { classNames } from '@/utils/commonUtils';
-import { Tooltip } from '../tooltips';
-import { CheckCircleIcon } from '@heroicons/react/24/outline';
-import { Badge } from '@/components/common/badges';
+import { ChatBubbleBottomCenterTextIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+// import { Badge } from '@/components/common/badges';
 
-interface TimelineEvent {
-  id: number;
-  content: string;
+export interface TimelineEvent {
+  id: string;
+  content: ReactNode;
   comment?: string;
+  status?: string;
   datetime: string;
-  iconBackground: string;
-  payloadId: number;
-  icon?: FunctionComponent<SVGProps<SVGSVGElement>>;
+  iconBackground?: string;
+  payloadId?: string;
+  eventType?: 'stateChange' | 'comment';
 }
 
-interface TimelineProps {
+export interface TimelineProps {
   timeline: TimelineEvent[];
-  handldEventClick: (id: number) => void;
-  selectId: number | null;
+  handldEventClick: (event: TimelineEvent) => void;
+  selectId?: string;
 }
 
-const Timeline: FC<TimelineProps> = ({ timeline, handldEventClick, selectId }) => {
-  const [selectedEventPayloadId, setSelectedEventPayloadId] = useState<number | null>(selectId);
+const Timeline: FC<TimelineProps> = ({ timeline, handldEventClick, selectId = '' }) => {
+  const [selectedEventId, setSelectedEventId] = useState<string>(timeline[0]?.id || '');
   useEffect(() => {
     if (selectId) {
-      setSelectedEventPayloadId(selectId);
+      setSelectedEventId(selectId);
     }
   }, [selectId]);
+
+  const eventIcon = (eventType: TimelineEvent['eventType'] | undefined) => {
+    if (eventType === 'comment') {
+      return (
+        <ChatBubbleBottomCenterTextIcon aria-hidden='true' className='h-5 w-5 text-gray-500' />
+      );
+    }
+    return <CheckCircleIcon aria-hidden='true' className='h-5 w-5 text-green-500' />;
+  };
+
+  const handleTimelineEventClick = (event: TimelineEvent) => {
+    setSelectedEventId(event.id || '');
+    handldEventClick(event);
+  };
 
   return (
     <div className='flow-root'>
       <ul role='list' className='-mb-8'>
         {timeline.map((event, eventIdx) => (
-          <li key={event.id}>
+          <li key={eventIdx}>
             <div className='relative pb-8'>
               {eventIdx !== timeline.length - 1 ? (
                 <span
@@ -40,60 +54,52 @@ const Timeline: FC<TimelineProps> = ({ timeline, handldEventClick, selectId }) =
                   className='absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200'
                 />
               ) : null}
-              <Tooltip
-                text={
-                  <>
-                    timestamp: {event.datetime || ''}
-                    <br />
-                    comment: {event.comment || ''}
-                  </>
-                }
-                position='right'
-                size='small'
-                background='gray'
+
+              <div
+                className={classNames('relative flex space-x-3', 'cursor-pointer')}
+                onClick={() => handleTimelineEventClick(event)}
               >
-                <div
-                  className={classNames('relative flex space-x-3', 'cursor-pointer')}
-                  onClick={() => handldEventClick(event.payloadId)}
-                >
-                  <div>
-                    <div
-                      className={classNames(
-                        event.iconBackground,
-                        'flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white'
-                      )}
-                    >
-                      {event.icon ? (
-                        <event.icon aria-hidden='true' className='h-5 w-5 text-white' />
-                      ) : (
-                        <CheckCircleIcon aria-hidden='true' className='h-5 w-5 text-green-500' />
-                      )}
-                      {/* {event.icon} */}
-                      {/* <p className='text-sm text-gray-500 px-4 py-2'>{event.content} </p> */}
-                    </div>{' '}
-                  </div>
-                  <div className='flex flex-col min-w-0 flex-1 justify-between py-0.5'>
+                <div>
+                  <div
+                    className={classNames(
+                      event.iconBackground,
+                      'flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white',
+                      selectedEventId === event.id ? ' ring-2 ring-indigo-500' : ''
+                    )}
+                  >
+                    {event.eventType ? (
+                      eventIcon(event.eventType)
+                    ) : (
+                      <CheckCircleIcon aria-hidden='true' className='h-5 w-5 text-green-500' />
+                    )}
+                    {/* {event.icon} */}
+                    {/* <p className='text-sm text-gray-500 px-4 py-2'>{event.content} </p> */}
+                  </div>{' '}
+                </div>
+                <div>
+                  <div className='flex flex-col min-w-0 flex-1 justify-between py-1 pr-4'>
                     <div>
-                      <Badge
-                        status={event.content}
-                        className={
-                          selectedEventPayloadId === event.payloadId ? 'ring-2 ring-indigo-500' : ''
-                        }
-                      >
-                        {event.content}{' '}
-                      </Badge>
+                      {/* <Badge
+                      status={event.content}
+                      className={
+                        selectedEventPayloadId === event.payloadId ? 'ring-2 ring-indigo-500' : ''
+                      }
+                    > */}
+                      {event.content}
+
                       {/* <div className='text-sm text-gray-500'>{event.content} </div> */}
                     </div>
-                    <div className='whitespace-nowrap text-left text-sm text-gray-500'>
+                    <div className='whitespace-nowrap text-left text-sm text-gray-500 '>
                       <time dateTime={event.datetime}>{event.datetime}</time>
                     </div>
-
-                    <div className='whitespace-nowrap text-left text-sm text-gray-500'>
-                      {event.comment}
+                    <div className='flex-auto rounded-md py-1 px-2 ring-1 ring-inset ring-gray-200'>
+                      <div className='whitespace-nowrap text-left text-sm text-gray-500 max-w-sm text-wrap'>
+                        {event.comment}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </Tooltip>
+              </div>
             </div>
           </li>
         ))}

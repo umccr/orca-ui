@@ -1,9 +1,10 @@
 import { FC, Fragment, ReactNode } from 'react';
 import { classNames } from '@/utils/commonUtils';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { ChevronDownIcon, ClipboardDocumentIcon } from '@heroicons/react/24/outline';
 import Pagination, { PaginationProps } from './Pagination';
 import { BackdropWithText } from '@/components/common/backdrop';
 import Skeleton from 'react-loading-skeleton';
+import toaster from '@/components/common/toaster';
 
 export type TableData = Record<string, unknown>;
 
@@ -16,6 +17,7 @@ export type Column = {
   cell?: (cellData: unknown, rowData: TableData) => ReactNode;
   onSort?: () => void;
   sortDirection?: 'asc' | 'desc';
+  copyable?: boolean;
 };
 
 export interface TableProps {
@@ -106,9 +108,7 @@ const Table: FC<TableProps> = ({
                           onClick={() => column.onSort && column.onSort()}
                         >
                           <div
-                            className={classNames(
-                              column.onSort ? 'group inline-flex cursor-pointer' : ''
-                            )}
+                            className={classNames(column.onSort ? 'group inline-flex gap-2' : '')}
                           >
                             {column.header}
                             {column.sortDirection && (
@@ -116,7 +116,7 @@ const Table: FC<TableProps> = ({
                                 <ChevronDownIcon
                                   aria-hidden='true'
                                   className={classNames(
-                                    'h-5 w-5 transition-transform duration-300',
+                                    'w-5 h-5 cursor-pointer stroke-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200',
                                     column.sortDirection === 'asc' ? '-rotate-180' : 'rotate-0'
                                   )}
                                 />
@@ -161,9 +161,29 @@ const Table: FC<TableProps> = ({
                                   column.cellClassName ? column.cellClassName : ''
                                 )}
                               >
-                                {column.cell
-                                  ? column.cell(data[column.accessor], data) // pass cell data and row data to cell renderer
-                                  : (data[column.accessor] as ReactNode)}
+                                {/* only when hover, show the copy icon*/}
+                                <div
+                                  className={classNames(
+                                    column.copyable ? 'group inline-flex gap-2' : ''
+                                  )}
+                                >
+                                  {column.cell
+                                    ? column.cell(data[column.accessor], data) // pass cell data and row data to cell renderer
+                                    : (data[column.accessor] as ReactNode)}
+                                  {column.copyable && (
+                                    <ClipboardDocumentIcon
+                                      className='w-5 h-5 cursor-pointer stroke-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200'
+                                      onClick={() => {
+                                        navigator.clipboard.writeText(
+                                          data[column.accessor] as string
+                                        );
+                                        toaster.success({
+                                          title: `Copied ${column.accessor} to clipboard`,
+                                        });
+                                      }}
+                                    />
+                                  )}
+                                </div>
                               </td>
                             ))}
                         </tr>

@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 /**
  * Get environment variables from window.config or import.meta.env
@@ -25,10 +27,19 @@ export const env = (() => {
  * const combinedClassNames = classNames(...classNames);
  * console.log(combinedClassNames); // btn btn-primary
  */
-export function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
+export function classNames(...classes: ClassValue[]) {
+  return twMerge(clsx(classes));
 }
 
+/**
+ * Get username from email
+ * @param email - the email
+ * @returns the username
+ * @example
+ * const email = 'test.name@example';
+ * const username = getUsername(email);
+ * console.log(username); // Test Name
+ */
 /**
  * Get username from email
  * @param email - the email
@@ -82,6 +93,15 @@ export const getQueryParams = (searchParams: URLSearchParams) => {
  * const cleanedObj = cleanObject(obj);
  * console.log(cleanedObj); // { name: 'John' }
  */
+/**
+ * Clean object from undefined, null, or empty string
+ * @param obj - the object to clean
+ * @returns the cleaned object
+ * @example
+ * const obj = { name: 'John', age: '', division: null, department: undefined };
+ * const cleanedObj = cleanObject(obj);
+ * console.log(cleanedObj); // { name: 'John' }
+ */
 export function cleanObject(obj: Record<string, any>) {
   return Object.keys(obj).reduce(
     (prev: Record<string, any>, key) => {
@@ -97,6 +117,8 @@ export function cleanObject(obj: Record<string, any>) {
 
 /**
  * Extract filename from S3 key
+ * @param key - the S3 key
+ * @returns the filename
  * @param key - the S3 key
  * @returns the filename
  */

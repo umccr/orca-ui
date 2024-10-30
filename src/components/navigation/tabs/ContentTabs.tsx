@@ -1,41 +1,65 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import { FC, ReactNode, useState } from 'react';
-import { useQueryParams } from '@/hooks/useQueryParams';
-import { ErrorBoundary } from 'react-error-boundary';
-
+import { FC, ReactNode, useState, useEffect } from 'react';
+import { classNames } from '@/utils/commonUtils';
 interface TabItemProps {
   label: string;
   content: ReactNode;
 }
 export interface TabsProps {
   tabs: TabItemProps[];
+  selectedLabel?: string;
 }
 
-export const Tabs: FC<TabsProps> = ({ tabs }) => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const onChangeParams = (queryParams: URLSearchParams) => {
-    const tab = queryParams.get('tab');
-    if (tab) {
-      setSelectedIndex(tabs.findIndex((t) => t.label === tab));
-    }
-  };
+export const Tabs: FC<TabsProps> = ({ tabs, selectedLabel = tabs[0].label }) => {
+  const [selectedTabIndex, setSelectedTabIndex] = useState(
+    tabs.findIndex((tab) => tab.label === selectedLabel)
+  );
 
   const onChangeTabs = (index: number) => {
-    setSelectedIndex(index);
-    setQueryParams({ tab: tabs[index].label });
+    setSelectedTabIndex(index);
   };
 
-  const { setQueryParams } = useQueryParams(onChangeParams);
+  useEffect(() => {
+    setSelectedTabIndex(tabs.findIndex((tab) => tab.label === selectedLabel));
+  }, [selectedLabel, tabs]);
+
+  const selectedClassName =
+    'border-blue-500 text-blue-600 rounded-t-lg active dark:text-blue-500 focus:outline-none';
+  const regularClassName =
+    'border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300';
 
   return (
-    <div className='flex h-full w-full justify-center pt-4 px-4 '>
-      <div className='w-full'>
-        <TabGroup selectedIndex={selectedIndex} onChange={onChangeTabs}>
-          <TabList className='flex'>
+    <div>
+      {/* Mobile tab selector */}
+      <div className='sm:hidden'>
+        <label htmlFor='tabs' className='sr-only'>
+          Select a tab
+        </label>
+        {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
+        <select
+          id='tabs'
+          name='tabs'
+          defaultValue={selectedTabIndex}
+          className='block rounded-md text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700'
+        >
+          {tabs.map((tab, index) => (
+            <option key={index}>{tab.label}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Desktop tab selector */}
+      <div className='hidden sm:block  '>
+        <TabGroup selectedIndex={selectedTabIndex} onChange={onChangeTabs}>
+          <TabList className='flex text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700'>
             {tabs.map(({ label }, index) => (
               <Tab
+                as='div'
                 key={index}
-                className='min-w-24 rounded-sm  py-1 px-3 text-sm font-semibold text-black hover:bg-gray-25 focus:z-10  data-[selected]:bg-magpie-light-75 data-[hover]:bg-magpie-light-50 data-[selected]:data-[hover]:bg-magpie-light-75  data-[selected]:outline-0 data-[selected]:border-b-[2px] data-[selected]:border-b-regal-blue'
+                className={classNames(
+                  selectedTabIndex === index ? selectedClassName : regularClassName,
+                  'cursor-pointer	inline-block p-4 border-b-2 '
+                )}
               >
                 {label}
               </Tab>
@@ -43,7 +67,7 @@ export const Tabs: FC<TabsProps> = ({ tabs }) => {
           </TabList>
           <TabPanels className='mt-3'>
             {tabs.map(({ content }, index) => (
-              <TabPanel key={index} className='rounded-xl p-2'>
+              <TabPanel key={index} className='rounded-xl mt-2'>
                 {content}
               </TabPanel>
             ))}
