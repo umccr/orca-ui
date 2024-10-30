@@ -6,10 +6,10 @@ import RunsPageLayout from '@/components/layouts/runs/RunsPageLayout';
 import { RouteObject } from 'react-router-dom';
 
 const LibraryRunPage = lazy(() => import('@/modules/runs/Pages/LibraryRuns'));
-const SequenceRunDetailsPage = lazy(() => import('@/modules/runs/Pages/SequenceRunDetails'));
+const SequenceRunDetailsPage = lazy(() => import('@/modules/runs/Pages/SequenceRunsDetails'));
 const SequenceRunPage = lazy(() => import('@/modules/runs/Pages/SequenceRuns'));
 const WorkflowRunPage = lazy(() => import('@/modules/runs/Pages/WorkflowRuns'));
-const WorkflowRunDetailsPage = lazy(() => import('@/modules/runs/Pages/WorkflowRunDetails'));
+const WorkflowRunDetailsPage = lazy(() => import('@/modules/runs/Pages/WorkflowRunsDetails'));
 const AnalysisRunPage = lazy(() => import('@/modules/runs/Pages/AnalysisRuns'));
 const AnalysisRunDetailsPage = lazy(() => import('@/modules/runs/Pages/AnalysisRunsDetails'));
 const RunsPage = lazy(() => import('@/modules/runs/Pages/RunsPage'));
