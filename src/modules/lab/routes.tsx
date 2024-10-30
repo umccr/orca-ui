@@ -5,6 +5,7 @@ import MetadataLayout from '@/components/layouts/lab/MetadataLayout';
 import { DetailedErrorBoundary } from '@/components/common/error';
 
 const MetadataPage = lazy(() => import('@/modules/lab/pages/Metadata'));
+const SyncPage = lazy(() => import('@/modules/lab/pages/Sync'));
 const LibraryOverviewPage = lazy(() => import('@/modules/lab/pages/library/LibraryOverview'));
 const LibraryWorkflowPage = lazy(() => import('@/modules/lab/pages/library/LibraryWorkflow'));
 const LibraryHistoryPage = lazy(() => import('@/modules/lab/pages/library/LibraryHistory'));
@@ -23,6 +24,16 @@ export const Router: RouteObject = {
         <MetadataLayout>
           <Suspense fallback={<div>Loading...</div>}>
             <MetadataPage />
+          </Suspense>
+        </MetadataLayout>
+      ),
+    },
+    {
+      path: 'sync',
+      element: (
+        <MetadataLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <SyncPage />
           </Suspense>
         </MetadataLayout>
       ),
