@@ -110,7 +110,7 @@ export function createWorkflowDeleteMutationHook<K extends keyof paths>(path: K)
 export type WorkflowModel = components['schemas']['Workflow'];
 export type WorkflowRunModel = components['schemas']['WorkflowRunDetail'];
 export type AnalysisRunModel = components['schemas']['AnalysisRunDetail'];
-export type AnalysisModel = components['schemas']['Analysis'];
+export type AnalysisModel = components['schemas']['AnalysisMin'];
 export type ComputeContextModel = components['schemas']['AnalysisContext'];
 export type StorageContextModel = components['schemas']['AnalysisContext'];
 

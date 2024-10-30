@@ -264,6 +264,7 @@ export interface components {
             eventType: components["schemas"]["EventType"];
             /** Format: uuid */
             ingestId?: string | null;
+            isCurrentState: boolean;
             isDeleteMarker: boolean;
             key: string;
             lastModifiedDate?: components["schemas"]["DateTimeWithTimeZone"] | null;

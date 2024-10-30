@@ -10,7 +10,7 @@ const AnalysisRunFilterHeader = () => {
         <Search
           onSearch={(searchContent) => setQueryParams({ search: searchContent })}
           searchBoxContent={getQueryParams().search || ''}
-          hasTooltip
+          hasTooltip={false}
         />
       </div>
 

@@ -20,7 +20,23 @@ const AnalysisRunDetailsTable = () => {
     () =>
       analysisRun
         ? {
-            analysis: omit(analysisRun?.analysis, ['orcabusId']),
+            currentStatus: analysisRun?.status,
+            comment: analysisRun?.comment,
+            analysis: {
+              analysisName: analysisRun?.analysis?.analysisName,
+              analysisVersion: analysisRun?.analysis?.analysisVersion,
+              analysisStatus: analysisRun?.analysis?.status,
+              workflows: analysisRun?.analysis?.workflows.map((workflow) => ({
+                name: workflow.workflowName,
+                version: workflow.workflowVersion,
+              })),
+              contexts: analysisRun?.analysis?.contexts.map((context) => ({
+                name: context.name,
+                usecase: context.usecase,
+                description: context.description,
+                status: context.status,
+              })),
+            },
             computeContext: omit(analysisRun?.computeContext, ['orcabusId']),
             storageContext: omit(analysisRun?.storageContext, ['orcabusId']),
           }
