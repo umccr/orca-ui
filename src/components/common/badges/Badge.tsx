@@ -1,5 +1,6 @@
 import { RequireAtLeastOne } from 'type-fest';
 import { ReactNode } from 'react';
+import { classNames } from '@/utils/commonUtils';
 export interface BadgePropsInterface {
   children: ReactNode;
   type: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'abort' | 'unknown' | 'runing';
@@ -24,7 +25,9 @@ const Badge = ({ children, type = 'primary', status, className }: BadgeProps) =>
     running: 'text-blue-700 bg-blue-100 ring-1 ring-inset ring-blue-700/10 ',
   };
 
-  return <span className={`${baseStyles} ${colorStyles[badgetype]} ${className}`}>{children}</span>;
+  return (
+    <span className={classNames(baseStyles, colorStyles[badgetype], className)}>{children}</span>
+  );
 };
 
 export const getBadgeType = (status: string) => {

@@ -16,7 +16,7 @@ const JsonDisplay: FC<JsonDisplayProps> = ({ isFetchingData, data }) => {
       {isFetchingData ? <BackdropWithText text='Loading data...' isVisible={true} /> : null}
       {data ? (
         <div className='group flex flex-row justify-between'>
-          <pre className='whitespace-pre-wrap text-wrap text-xs text-gray-800'>
+          <pre className='whitespace-pre-wrap text-wrap break-all text-xs text-gray-800'>
             {JSON.stringify(data || {}, null, 2)}
           </pre>
           <ClipboardDocumentIcon

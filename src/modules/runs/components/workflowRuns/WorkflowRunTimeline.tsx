@@ -83,7 +83,7 @@ const WorkflowRunTimeline = () => {
               id: state.orcabusId,
               content: (
                 <div className='flex flex-row gap-2 text-sm text-gray-500 group'>
-                  <div>Status Changed</div>
+                  <div>Status Updated</div>
                   <Badge status={state.status}>{state.status}</Badge>
                   {state.status === 'RESOLVED' && (
                     <div className='opacity-0 group-hover:opacity-100'>
@@ -123,10 +123,10 @@ const WorkflowRunTimeline = () => {
             .map((comment) => ({
               id: comment.orcabusId,
               content: (
-                <div className='flex flex-row gap-2 text-sm group'>
-                  <div className='font-medium'>{`${getUsername(comment.createdBy)} `}</div>
-                  <div className='text-gray-500'>made a new</div>
-                  <Badge type='unknown'>comment</Badge>
+                <div className='flex flex-row gap-2 text-sm text-gray-500 group'>
+                  <div className='font-medium text-nowrap'>{`${getUsername(comment.createdBy)} `}</div>
+                  <div className='text-gray-500 text-nowrap'>made a new</div>
+                  <Badge type='unknown'>Comment</Badge>
                   {comment.comment && (
                     <div className='opacity-0 group-hover:opacity-100 flex flex-row gap-2'>
                       <Tooltip text='Update' position='top' background='white'>
@@ -529,8 +529,8 @@ const WorkflowRunTimeline = () => {
                 label: 'JSON',
                 content: (
                   <JsonDisplay
-                    isFetchingData={isFetching}
                     data={selectedWorkflowPayloadData as Record<string, unknown>}
+                    isFetchingData={isFetching}
                   />
                 ),
               },
