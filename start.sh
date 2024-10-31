@@ -81,6 +81,12 @@ export VITE_WORKFLOW_URL=${VITE_WORKFLOW_MANAGER_URL:-"http://localhost:8200"}
 export VITE_SEQUENCE_RUN_URL=${VITE_SEQUENCE_RUN_MANAGER_URL:-"http://localhost:8300"}
 export VITE_FILE_URL=${VITE_FILE_MANAGER_URL:-"http://localhost:8400"}
 
+# API Version (default is v1, update this to update the api version respectively)
+# export VITE_METADATA_API_VERSION=${VITE_METADATA_API_VERSION:-"v1"}
+# export VITE_WORKFLOW_API_VERSION=${VITE_WORKFLOW_API_VERSION:-"v1"}
+# export VITE_SEQUENCE_RUN_API_VERSION=${VITE_SEQUENCE_RUN_API_VERSION:-"v1"}
+# export VITE_FILE_API_VERSION=${VITE_FILE_API_VERSION:-"v1"}
+
 env | grep VITE
 
 yarn run -B vite
