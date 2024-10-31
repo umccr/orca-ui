@@ -23,9 +23,9 @@ export const cloudFrontBucketNameConfig: Record<AppStage, string> = {
 };
 
 export const configLambdaNameConfig: Record<AppStage, string> = {
-  [AppStage.BETA]: 'TriggerCodeBuildLambdaBeta',
-  [AppStage.GAMMA]: 'TriggerCodeBuildLambdaGamma',
-  [AppStage.PROD]: 'TriggerCodeBuildLambdaProd',
+  [AppStage.BETA]: 'CodeBuildEnvConfigLambdaBeta',
+  [AppStage.GAMMA]: 'CodeBuildEnvConfigLambdaGamma',
+  [AppStage.PROD]: 'CodeBuildEnvConfigLambdaProd',
 };
 
 export const getAppStackConfig = (appStage: AppStage): ApplicationStackProps => {
