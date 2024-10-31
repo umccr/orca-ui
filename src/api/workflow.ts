@@ -8,9 +8,17 @@ import {
   UseQueryOptions,
   UseMutationOptions,
 } from './utils';
+import { env } from '@/utils/commonUtils';
 
 const client = createClient<paths>({ baseUrl: config.apiEndpoint.workflow });
 client.use(authMiddleware);
+
+const apiVersion = env.VITE_WORKFLOW_API_VERSION;
+
+function getVersionedPath<K extends keyof paths>(path: K): K {
+  if (!apiVersion) return path;
+  return path.replace('/api/v1/', `/api/${apiVersion}/`) as K;
+}
 
 export function createWorkflowFetchingHook<
   K extends keyof paths,
@@ -26,12 +34,13 @@ export function createWorkflowFetchingHook<
   }: Omit<UseSuspenseQueryOptions<paths[typeof path][M]>, 'queryKey' | 'queryFn'> & {
     signal?: AbortSignal;
   }) {
+    const versionedPath = getVersionedPath(path);
     return useSuspenseQuery<R, Error, R, [K, typeof params]>({
       ...reactQuery,
-      queryKey: [path, params],
+      queryKey: [versionedPath, params],
       queryFn: async () => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.GET(path, {
+        const { data } = await client.GET(versionedPath, {
           params: params as ParamsOption<paths[K][M]>,
           signal: signal,
         });
@@ -48,6 +57,7 @@ export function createWorkflowQueryHook<
     ? T
     : never,
 >(path: K) {
+  const versionedPath = getVersionedPath(path);
   return function ({
     params,
     reactQuery,
@@ -55,10 +65,10 @@ export function createWorkflowQueryHook<
   }: Omit<UseQueryOptions<paths[K][M]>, 'queryKey' | 'queryFn'> & { signal?: AbortSignal }) {
     return useQuery<R, Error, R, [K, typeof params]>({
       ...reactQuery,
-      queryKey: [path, params],
+      queryKey: [versionedPath, params],
       queryFn: async ({ signal: querySignal }) => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.GET(path, {
+        const { data } = await client.GET(versionedPath, {
           params: params as ParamsOption<paths[K][M]>,
           signal: signal || querySignal,
         });
@@ -70,11 +80,12 @@ export function createWorkflowQueryHook<
 
 export function createWorkflowPostMutationHook<K extends keyof paths>(path: K) {
   return function ({ params, reactQuery, body }: UseMutationOptions<paths[typeof path]['post']>) {
+    const versionedPath = getVersionedPath(path);
     return useMutation({
       ...reactQuery,
       mutationFn: async () => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.POST(path, { params, body: body });
+        const { data } = await client.POST(versionedPath, { params, body: body });
         return data;
       },
     });
@@ -83,11 +94,12 @@ export function createWorkflowPostMutationHook<K extends keyof paths>(path: K) {
 
 export function createWorkflowPatchMutationHook<K extends keyof paths>(path: K) {
   return function ({ params, reactQuery, body }: UseMutationOptions<paths[typeof path]['patch']>) {
+    const versionedPath = getVersionedPath(path);
     return useMutation({
       ...reactQuery,
       mutationFn: async () => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.PATCH(path, { params, body: body });
+        const { data } = await client.PATCH(versionedPath, { params, body: body });
         return data;
       },
     });
@@ -96,11 +108,12 @@ export function createWorkflowPatchMutationHook<K extends keyof paths>(path: K) 
 
 export function createWorkflowDeleteMutationHook<K extends keyof paths>(path: K) {
   return function ({ params, reactQuery, body }: UseMutationOptions<paths[typeof path]['delete']>) {
+    const versionedPath = getVersionedPath(path);
     return useMutation({
       ...reactQuery,
       mutationFn: async () => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.DELETE(path, { params, body: body });
+        const { data } = await client.DELETE(versionedPath, { params, body: body });
         return data;
       },
     });
