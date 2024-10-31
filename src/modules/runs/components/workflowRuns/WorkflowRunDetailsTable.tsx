@@ -52,24 +52,27 @@ const WorkflowRunDetailsTable = () => {
       {
         header: 'Library ID',
         accessor: 'libraryId',
-        cell: (libraryId: unknown) => {
-          if (!libraryId) {
+      },
+      {
+        header: 'Orcabus ID',
+        accessor: 'orcabusId',
+        cell: (orcabusId: unknown) => {
+          if (!orcabusId) {
             return <div>-</div>;
           } else {
             return (
               <Link
-                to={`/lab/library/${libraryId}`}
+                to={`/lab/library/${orcabusId}`}
                 className={classNames(
                   'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
                 )}
               >
-                {libraryId as string}
+                {orcabusId as string}
               </Link>
             );
           }
         },
       },
-      { header: 'Orcabus ID', accessor: 'orcabusId' },
     ],
     []
   );
