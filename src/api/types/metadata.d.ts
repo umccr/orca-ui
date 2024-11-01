@@ -369,11 +369,11 @@ export interface components {
             description?: string | null;
             /** Format: email */
             email?: string | null;
+            historyUserId?: string | null;
             /** Format: date-time */
             historyDate: string;
             historyChangeReason?: string | null;
             historyType: components["schemas"]["HistoryTypeEnum"];
-            historyUser?: number | null;
         };
         /**
          * @description * `+` - Created
@@ -398,11 +398,11 @@ export interface components {
             readonly orcabusId: string;
             individualId?: string | null;
             source?: string | null;
+            historyUserId?: string | null;
             /** Format: date-time */
             historyDate: string;
             historyChangeReason?: string | null;
             historyType: components["schemas"]["HistoryTypeEnum"];
-            historyUser?: number | null;
         };
         Library: {
             readonly orcabusId: string;
@@ -443,13 +443,13 @@ export interface components {
             assay?: string | null;
             /** Format: double */
             coverage?: number | null;
+            historyUserId?: string | null;
             /** Format: date-time */
             historyDate: string;
             historyChangeReason?: string | null;
             historyType: components["schemas"]["HistoryTypeEnum"];
             sample?: string | null;
             subject?: string | null;
-            historyUser?: number | null;
         };
         /** @enum {unknown} */
         NullEnum: null;
@@ -721,11 +721,11 @@ export interface components {
             projectId?: string | null;
             name?: string | null;
             description?: string | null;
+            historyUserId?: string | null;
             /** Format: date-time */
             historyDate: string;
             historyChangeReason?: string | null;
             historyType: components["schemas"]["HistoryTypeEnum"];
-            historyUser?: number | null;
         };
         /**
          * @description * `very-poor` - VeryPoor
@@ -754,11 +754,11 @@ export interface components {
             sampleId?: string | null;
             externalSampleId?: string | null;
             source?: (components["schemas"]["SourceEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+            historyUserId?: string | null;
             /** Format: date-time */
             historyDate: string;
             historyChangeReason?: string | null;
             historyType: components["schemas"]["HistoryTypeEnum"];
-            historyUser?: number | null;
         };
         /**
          * @description * `ascites` - Ascites
@@ -798,15 +798,16 @@ export interface components {
             readonly individualSet: string[];
             readonly orcabusId: string;
             subjectId?: string | null;
+            historyUserId?: string | null;
             /** Format: date-time */
             historyDate: string;
             historyChangeReason?: string | null;
             historyType: components["schemas"]["HistoryTypeEnum"];
-            historyUser?: number | null;
         };
         SyncCustomCsv: {
             /** Format: uri */
             presignedUrl: string;
+            reason?: string;
         };
         SyncGSheet: {
             year: string;

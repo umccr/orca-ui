@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/common/buttons';
 import { SpinnerWithText } from '@/components/common/spinner';
-import { ArrowPathIcon } from '@heroicons/react/20/solid';
+import { ArrowPathIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import { useMutationSyncCustomCsv, useMutationSyncGsheet } from '@/api/metadata';
 import { DetailedErrorBoundary } from '@/components/common/error';
 
@@ -77,6 +77,27 @@ const SyncSelector = ({
   );
 };
 
+const SuccessTriggerWrapper = ({
+  children,
+  onClose,
+}: {
+  children: React.ReactNode;
+  onClose?: () => void;
+}) => (
+  <div className='flex flex-col items-center bg-green-100 text-green-800 h-18 p-4 relative'>
+    {children}
+    <div className='italic mt-2 text-xs'>*sync may take up to 15 minutes</div>
+    {onClose && (
+      <button
+        onClick={onClose}
+        className='absolute top-2 right-2 text-green-800 hover:text-green-600'
+      >
+        <XMarkIcon className='h-5 w-5' />
+      </button>
+    )}
+  </div>
+);
+
 const GsheetTrigger = () => {
   const currentYear = new Date().getFullYear();
   const startYear = 2017;
@@ -84,12 +105,12 @@ const GsheetTrigger = () => {
 
   const [yearSelected, setYearSelected] = useState(currentYear);
 
-  const { data, isPending, isError, isSuccess, error, mutate } = useMutationSyncGsheet({
+  const { data, isPending, isError, isSuccess, error, mutate, reset } = useMutationSyncGsheet({
     body: { year: yearSelected },
   });
 
   if (isPending) {
-    return <SpinnerWithText text='Triggering sync with the Google Tracking Sheet...' />;
+    return <SpinnerWithText text='Triggering sync with the Google tracking sheet' />;
   }
 
   if (isError) {
@@ -97,7 +118,16 @@ const GsheetTrigger = () => {
   }
 
   if (isSuccess) {
-    return <div className='flex items-center bg-green-100 text-green-800 h-18 p-4	'>{data}</div>;
+    return (
+      <SuccessTriggerWrapper
+        onClose={() => {
+          setYearSelected(currentYear);
+          reset();
+        }}
+      >
+        {data}
+      </SuccessTriggerWrapper>
+    );
   }
 
   return (
@@ -133,13 +163,14 @@ const GsheetTrigger = () => {
 
 const PresignedCsvTrigger = () => {
   const [urlInput, setUrlInput] = useState<string>('');
+  const [reason, setReason] = useState<string>('');
 
-  const { data, isPending, isError, isSuccess, error, mutate } = useMutationSyncCustomCsv({
-    body: { presignedUrl: urlInput },
+  const { data, isPending, isError, isSuccess, error, mutate, reset } = useMutationSyncCustomCsv({
+    body: { presignedUrl: urlInput, reason: reason ? reason : undefined },
   });
 
   if (isPending) {
-    return <SpinnerWithText text='Triggering sync with the Google Tracking Sheet...' />;
+    return <SpinnerWithText text='Triggering sync from given presigned url' />;
   }
 
   if (isError) {
@@ -147,14 +178,27 @@ const PresignedCsvTrigger = () => {
   }
 
   if (isSuccess) {
-    return <div className='flex items-center bg-green-100 text-green-800 h-18 p-4	'>{data}</div>;
+    return (
+      <SuccessTriggerWrapper
+        onClose={() => {
+          setUrlInput('');
+          setReason('');
+          reset();
+        }}
+      >
+        {data}
+      </SuccessTriggerWrapper>
+    );
   }
 
   return (
     <>
-      <div>CSV Presigned URL</div>
+      <div className='mb-4'>CSV Presigned URL</div>
+
+      {/* URL input */}
+      <div className='text-xs font-medium mt-4'>Presigned URL of the CSV file.</div>
       <div className='text-xs font-light mb-2'>
-        Presigned URL of the CSV file. Format:{' '}
+        Format:{' '}
         <a
           className='hover:text-blue-700 text-blue-500'
           href='https://github.com/umccr/orcabus/blob/main/lib/workload/stateless/stacks/metadata-manager/README.md#custom-csv-file-loader'
@@ -162,11 +206,21 @@ const PresignedCsvTrigger = () => {
           GitHub
         </a>
       </div>
+
       <input
         value={urlInput}
         onChange={(e) => setUrlInput(e.target.value)}
         className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'
-      ></input>
+      />
+
+      {/* Reason input */}
+      <div className='text-xs font-medium mt-4'>Reason</div>
+      <div className='text-xs font-light mb-2'>Optional reason or comment for the sync </div>
+      <input
+        value={reason}
+        onChange={(e) => setReason(e.target.value)}
+        className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'
+      />
 
       <Button
         onClick={() => {
