@@ -5,6 +5,7 @@ import { SpinnerWithText } from '@/components/common/spinner';
 import { DetailedErrorBoundary } from '@/components/common/error';
 import { LibrarySideNavBar } from './components/LibrarySideNavBar';
 import { LibraryBreadCrumb } from './components/LibraryBreadCrumb';
+import LocationBreadcrumb from '@/components/navigation/breadcrumbs';
 // import { Dropdown } from '@/components/common/dropdowns';
 
 const LibraryLayout = ({ children }: PropsWithChildren) => {
@@ -16,7 +17,8 @@ const LibraryLayout = ({ children }: PropsWithChildren) => {
         </div>
         <div className='flex flex-1 flex-col py-4 px-8 overflow-auto min-w-[450px] overflow-x-auto'>
           <div className='flex flex-row justify-between space-x-4'>
-            <LibraryBreadCrumb />
+            {/* <LibraryBreadCrumb /> */}
+            <LocationBreadcrumb />
 
             {/* Will comment library versioning for now */}
             {/* <Dropdown className='' items={[{ label: 'RESEARCH' }]} value='RESEARCH' /> */}
