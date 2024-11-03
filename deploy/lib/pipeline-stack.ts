@@ -113,10 +113,7 @@ export class PipelineStack extends Stack {
           region: REGION,
         },
         gammaConfig
-      ),
-      {
-        pre: [new ManualApprovalStep('Promote to Gamma (Staging)')],
-      }
+      )
     );
 
     /**
