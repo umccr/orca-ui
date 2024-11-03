@@ -290,7 +290,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Returns the count of records for each status: 'SUCCEEDED', 'ABORTED', 'FAILED', and 'Onging' State. */
-        get: operations["/api/v1/workflowRun/countByStatus/"];
+        get: operations["apiV1WorkflowrunCountByStatusRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -323,6 +323,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["apiV1WorkflowrunUnresolvedRetrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun_list_all/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["apiV1WorkflowrunListAllList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1105,7 +1121,7 @@ export interface operations {
             };
         };
     };
-    "/api/v1/workflowRun/countByStatus/": {
+    apiV1WorkflowrunCountByStatusRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1158,6 +1174,25 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkflowRunDetail"];
+                };
+            };
+        };
+    };
+    apiV1WorkflowrunListAllList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunDetail"][];
                 };
             };
         };

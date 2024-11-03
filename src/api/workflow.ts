@@ -174,3 +174,7 @@ export const useAnalysisRunListModel = createWorkflowQueryHook('/api/v1/analysis
 export const useAnalysisRunDetailModel = createWorkflowQueryHook(
   '/api/v1/analysisrun/{orcabusId}/'
 );
+
+export const useAnalysisRunStatisticsModel = createWorkflowQueryHook(
+  '/api/v1/workflowrun_list_all/'
+);

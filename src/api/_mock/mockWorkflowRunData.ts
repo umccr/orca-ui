@@ -86,11 +86,11 @@ interface TaskRunData {
 }
 
 export const generateMockWorkflowRunData = () => {
-  const tasksData = { ...mockWorkflowData };
+  const tasksData: { [key: string]: any[] } = { ...mockWorkflowData };
   Object.keys(tasksData).forEach((key) => {
     tasksData[key] = groupTasksByPortalRunId(tasksData[key]);
   });
-  return tasksData as unknown as TaskRunData;
+  return tasksData as TaskRunData;
 };
 
 // Assuming the file exports mockData array

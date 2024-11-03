@@ -1,6 +1,7 @@
 import { DetailedErrorBoundary } from '@/components/common/error';
 import SequenceRunTable from '../components/sequenceRuns/SequenceRunTable';
 import SequenceRunFilterHeader from '../components/sequenceRuns/SequenceRunFilterHeader';
+
 const Workflow = () => {
   return (
     <DetailedErrorBoundary errorTitle='Unable to load recent sequence runs data'>

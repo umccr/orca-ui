@@ -1,7 +1,5 @@
 import { lazy, Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-// import { RouteObject } from '@/types/routeObject';
-// import { AppURLs } from '@/utils/appURLs';
 import RunsPageLayout from '@/components/layouts/runs/RunsPageLayout';
 import { RouteObject } from 'react-router-dom';
 
@@ -13,6 +11,7 @@ const WorkflowRunDetailsPage = lazy(() => import('@/modules/runs/Pages/WorkflowR
 const AnalysisRunPage = lazy(() => import('@/modules/runs/Pages/AnalysisRuns'));
 const AnalysisRunDetailsPage = lazy(() => import('@/modules/runs/Pages/AnalysisRunsDetails'));
 const RunsPage = lazy(() => import('@/modules/runs/Pages/RunsPage'));
+const WorkflowRunsReport = lazy(() => import('@/modules/runs/Pages/WorkflowRunsReport'));
 
 export const Router: RouteObject = {
   path: 'runs',
@@ -34,6 +33,10 @@ export const Router: RouteObject = {
         { path: 'library', element: <LibraryRunPage /> },
         { path: 'workflow', element: <WorkflowRunPage /> },
       ],
+    },
+    {
+      path: 'workflow/report',
+      element: <WorkflowRunsReport />,
     },
 
     {
