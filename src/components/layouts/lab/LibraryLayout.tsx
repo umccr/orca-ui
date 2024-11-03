@@ -16,13 +16,13 @@ const LibraryLayout = ({ children }: PropsWithChildren) => {
           <LibrarySideNavBar />
         </div>
         <div className='flex flex-1 flex-col py-4 px-8 overflow-auto min-w-[450px] overflow-x-auto'>
-          <div className='flex flex-row justify-between space-x-4'>
-            {/* <LibraryBreadCrumb /> */}
-            <LocationBreadcrumb />
+          <LocationBreadcrumb />
 
-            {/* Will comment library versioning for now */}
-            {/* <Dropdown className='' items={[{ label: 'RESEARCH' }]} value='RESEARCH' /> */}
-          </div>
+          {/* Will comment library versioning for now */}
+          {/* <div className='flex flex-row justify-between space-x-4'>
+            <LibraryBreadCrumb />
+            <Dropdown className='' items={[{ label: 'RESEARCH' }]} value='RESEARCH' />
+          </div> */}
 
           <div className='mt-3'>
             <Suspense fallback={<SpinnerWithText text='Loading library page' />}>
