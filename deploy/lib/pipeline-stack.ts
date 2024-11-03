@@ -113,10 +113,7 @@ export class PipelineStack extends Stack {
           region: REGION,
         },
         gammaConfig
-      ),
-      {
-        pre: [new ManualApprovalStep('Promote to Gamma (Staging)')],
-      }
+      )
     );
 
     /**
@@ -304,10 +301,6 @@ export class PipelineStack extends Stack {
         {
           stageName: 'DeployToGamma',
           actions: [
-            new ManualApprovalAction({
-              actionName: 'DeployToGammaApproval',
-              runOrder: 1,
-            }),
             new CodeBuildAction({
               actionName: 'DeployToGamma',
               project: deployProject(AppStage.GAMMA),
@@ -327,6 +320,7 @@ export class PipelineStack extends Stack {
               actionName: 'DeployToProd',
               project: deployProject(AppStage.PROD),
               input: buildOutput,
+              runOrder: 2,
             }),
           ],
         },
