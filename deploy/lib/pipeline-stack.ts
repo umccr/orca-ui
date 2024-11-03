@@ -304,15 +304,10 @@ export class PipelineStack extends Stack {
         {
           stageName: 'DeployToGamma',
           actions: [
-            new ManualApprovalAction({
-              actionName: 'DeployToGammaApproval',
-              runOrder: 1,
-            }),
             new CodeBuildAction({
               actionName: 'DeployToGamma',
               project: deployProject(AppStage.GAMMA),
               input: buildOutput,
-              runOrder: 2,
             }),
           ],
         },
