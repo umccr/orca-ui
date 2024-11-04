@@ -15,7 +15,7 @@ const ButtonGroup: FC<ButtonGroupProps> = ({ buttonItems, selectedItemLabel }) =
   const [selectItemLabel, setSelectItemLabel] = useState(selectedItemLabel);
 
   useEffect(() => {
-    selectItemLabel !== selectedItemLabel && setSelectItemLabel(selectedItemLabel);
+    if (selectItemLabel !== selectedItemLabel) setSelectItemLabel(selectedItemLabel);
   }, [selectItemLabel, selectedItemLabel]);
 
   const baseClassName =

@@ -1,6 +1,5 @@
 import { useCallback, useEffect, FC } from 'react';
 import {
-  Background,
   Controls,
   ReactFlow,
   addEdge,

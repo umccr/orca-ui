@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 import { SpinnerWithText } from '@/components/common/spinner';
 import { DetailedErrorBoundary } from '@/components/common/error';
 import { LibrarySideNavBar } from './components/LibrarySideNavBar';
-import { LibraryBreadCrumb } from './components/LibraryBreadCrumb';
+// import { LibraryBreadCrumb } from './components/LibraryBreadCrumb';
 import LocationBreadcrumb from '@/components/navigation/breadcrumbs';
 // import { Dropdown } from '@/components/common/dropdowns';
 
