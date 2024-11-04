@@ -11,7 +11,7 @@
     "start": "bash -c 'source start.sh'",
     "dev": "bash -c 'source start.sh'",
     "build": "tsc && vite build",
-    "lint": "eslint --ignore-pattern 'deploy/*' --ignore-pattern 'src/modules/runs/*'",
+    "lint": "eslint --ignore-pattern 'deploy/cdk.out' --ignore-pattern 'src/modules/runs/*'",
     "prettier-fix": "prettier . --write --ignore-path .gitignore --ignore-path deploy/.gitignore",
     "prettier-check": "prettier . --check --ignore-path .gitignore --ignore-path deploy/.gitignore",
     "preview": "vite preview",
