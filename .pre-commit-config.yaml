@@ -18,12 +18,12 @@ repos:
         args: ['--baseline', '.secrets.baseline']
         exclude: ^(yarn.lock|.yarn/|.yarnrc.yml)
 
-  - repo: local
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v9.6.0
     hooks:
       - id: eslint
-        name: eslint
-        entry: yarn run lint
-        language: system
+        files: \.[jt]sx?$ # *.js, *.jsx, *.ts and *.tsx
+        types: [file]
 
   - repo: local
     hooks:
