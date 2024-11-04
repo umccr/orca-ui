@@ -49,6 +49,7 @@ const extractAnchorText = (htmlString: string): string => {
   return anchorTextMatch ? anchorTextMatch[1] : '';
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const groupTasksByPortalRunId = (tasks: any[]) => {
   const groupedTasks: { [key: string]: TaskOutput } = {};
 
