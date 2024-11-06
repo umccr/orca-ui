@@ -2,18 +2,20 @@ import config from '@/config';
 import createClient from 'openapi-fetch';
 import type { paths, components, operations } from './types/metadata';
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
-import { authMiddleware, UseSuspenseQueryOptions, UseMutationOptions } from './utils';
+import { authMiddleware, UseSuspenseQueryOptions, UseMutationOptions, PathsWithGet } from './utils';
 
 const client = createClient<paths>({ baseUrl: config.apiEndpoint.metadata });
 client.use(authMiddleware);
 
-function createMetadataFetchingHook<K extends keyof paths>(path: K) {
-  return function ({ params, reactQuery }: UseSuspenseQueryOptions<paths[typeof path]['get']>) {
+type GetPaths = PathsWithGet<paths>;
+
+function createMetadataFetchingHook<K extends GetPaths>(path: K) {
+  return function ({ params, reactQuery }: UseSuspenseQueryOptions<paths[K]['get']>) {
     return useSuspenseQuery({
       ...reactQuery,
       queryKey: [path, params],
       queryFn: async ({ signal }) => {
-        const { data, error, response }: { data?: unknown; error?: undefined; response: Response } =
+        const { data, error, response } =
           // @ts-expect-error: params is dynamic type type for openapi-fetch
           await client.GET(path, { params, signal });
 
