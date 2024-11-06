@@ -1,13 +1,12 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { SampleListQueryParams, useSuspenseMetadataSampleModel } from '@/api/metadata';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { components } from '@/api/types/metadata';
-import { Column, Table } from '@/components/tables';
-import { classNames } from '@/utils/commonUtils';
-import { Link } from 'react-router-dom';
-import { getCurrentSortDirection, getSortValue, multiRowCell } from '@/components/tables/Table';
+import { Table } from '@/components/tables';
 import { Search } from '@/components/common/search';
 import { SampleTableFilter } from './SampleTableFilter';
+import { getLibraryTableColumn } from '../library/utils';
+import { getSampleTableColumn } from './utils';
 
 export const SampleListAPITable = ({ queryParams }: { queryParams: SampleListQueryParams }) => {
   const { setQueryParams, getPaginationParams } = useQueryParams();
@@ -44,7 +43,11 @@ export const SampleListAPITable = ({ queryParams }: { queryParams: SampleListQue
           },
           currentSort: queryParams?.ordering,
         }),
-        ...getLibraryTableColumn(),
+        ...getLibraryTableColumn({
+          headerGroupLabel: 'Library',
+          headerClassName: 'bg-orange-100',
+          cellClassName: 'bg-orange-50',
+        }),
       ]}
       tableData={flatData}
       paginationProps={{
@@ -72,11 +75,11 @@ const processDataResults = (data: components['schemas']['SampleDetail'][]) => {
   return data.map((smp) => {
     const rec = {
       sampleIds: {
-        orcabusId: smp.orcabusId,
+        sampleOrcabusId: smp.orcabusId,
         sampleId: smp.sampleId,
       },
-      externalSampleId: smp.externalSampleId ?? '-',
-      source: smp.source ?? '-',
+      sampleExternalId: smp.externalSampleId ?? '-',
+      sampleSource: smp.source ?? '-',
 
       // libraries
       libraryIds: [] as { libraryId: string; libraryOrcabusId: string }[],
@@ -103,144 +106,4 @@ const processDataResults = (data: components['schemas']['SampleDetail'][]) => {
 
     return rec;
   });
-};
-
-/**
- * Table Columns Properties
- */
-
-// Exported as it might be useful for other components when rendering the Library Table
-export const getSampleTableColumn = ({
-  setSort,
-  currentSort,
-}: {
-  setSort?: (newOrder: string) => void;
-  currentSort?: string;
-}): Column[] => [
-  {
-    header: 'Sample Id',
-    headerGroup: { colSpan: 3 },
-    accessor: 'sampleIds',
-    onSort: setSort
-      ? () => {
-          setSort(getSortValue(currentSort, 'sample_id'));
-        }
-      : undefined,
-    sortDirection: getCurrentSortDirection(currentSort, 'sample_id'),
-    cell: (p: unknown) => {
-      const ids = p as { orcabusId: string; sampleId: string };
-      return (
-        <Link
-          to={`/lab/?tab=sample&orcabusId=${ids.orcabusId}`}
-          className={classNames(
-            'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
-          )}
-        >
-          {ids.sampleId}
-        </Link>
-      );
-    },
-  },
-  {
-    header: 'External Sample Id',
-    accessor: 'externalSampleId',
-    onSort: setSort
-      ? () => {
-          setSort(getSortValue(currentSort, 'externalSampleId'));
-        }
-      : undefined,
-    sortDirection: getCurrentSortDirection(currentSort, 'externalSampleId'),
-  },
-  {
-    header: 'Source',
-    accessor: 'source',
-    onSort: setSort
-      ? () => {
-          setSort(getSortValue(currentSort, 'source'));
-        }
-      : undefined,
-    sortDirection: getCurrentSortDirection(currentSort, 'source'),
-  },
-];
-
-export const getLibraryTableColumn = (): Column[] => {
-  const cellColor = {
-    headerClassName: 'bg-orange-100',
-    cellClassName: 'bg-orange-50',
-  };
-  return [
-    {
-      header: 'Library Id',
-      headerClassName: cellColor.headerClassName,
-      headerGroup: { label: 'Library', colSpan: 7, additionalClassName: cellColor.headerClassName },
-      accessor: 'libraryIds',
-      cell: (p: unknown) => {
-        const data = p as { libraryId: string; libraryOrcabusId: string }[];
-        return (
-          <Fragment>
-            {data.map((lib, idx) => {
-              if (!lib.libraryId) {
-                return <div key={idx}>-</div>;
-              }
-              return (
-                <div className='py-2' key={idx}>
-                  <Link
-                    to={`library/${lib.libraryId}`}
-                    className={classNames(
-                      'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
-                    )}
-                  >
-                    {lib.libraryId}
-                  </Link>
-                </div>
-              );
-            })}
-          </Fragment>
-        );
-      },
-      cellClassName: cellColor.cellClassName,
-    },
-    {
-      header: 'Phenotype',
-      headerClassName: cellColor.headerClassName,
-      accessor: 'phenotype',
-      cell: multiRowCell,
-      cellClassName: cellColor.cellClassName,
-    },
-    {
-      header: 'Workflow',
-      headerClassName: cellColor.headerClassName,
-      accessor: 'workflow',
-      cell: multiRowCell,
-      cellClassName: cellColor.cellClassName,
-    },
-    {
-      header: 'Quality',
-      headerClassName: cellColor.headerClassName,
-      accessor: 'quality',
-      cell: multiRowCell,
-      cellClassName: cellColor.cellClassName,
-    },
-    {
-      header: 'Type',
-      headerClassName: cellColor.headerClassName,
-      accessor: 'type',
-      cell: multiRowCell,
-      cellClassName: cellColor.cellClassName,
-    },
-    {
-      header: 'Assay',
-      headerClassName: cellColor.headerClassName,
-      accessor: 'assay',
-      cell: multiRowCell,
-      cellClassName: cellColor.cellClassName,
-    },
-    {
-      header: 'Coverage',
-      headerClassName: cellColor.headerClassName,
-      accessor: 'coverage',
-      cell: multiRowCell,
-      cellClassName: cellColor.cellClassName,
-    },
-  ];
 };

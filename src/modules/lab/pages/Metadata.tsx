@@ -7,7 +7,8 @@ import { IndividualListAPITable } from '../components/individual/IndividualListA
 import { SampleListAPITable } from '../components/sample/SampleListAPITable';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/common/buttons';
-import { ArrowPathIcon } from '@heroicons/react/20/solid';
+import { PlusIcon } from '@heroicons/react/24/outline';
+import { ProjectListAPITable } from '../components/project/ProjectListAPITable';
 
 const selectedClassName =
   'inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500';
@@ -47,6 +48,10 @@ export default function MetadataPage() {
       content: <SampleListAPITable queryParams={passInQueryParams} />,
     },
     {
+      label: 'project',
+      content: <ProjectListAPITable queryParams={passInQueryParams} />,
+    },
+    {
       label: 'MODEL',
       content: (
         <img src='https://raw.githubusercontent.com/umccr/orcabus/refs/heads/main/lib/workload/stateless/stacks/metadata-manager/docs/schema.drawio.svg' />
@@ -65,7 +70,7 @@ export default function MetadataPage() {
           size='sm'
           className='justify-center rounded-md ring-gray-300 ring-1'
         >
-          <ArrowPathIcon className='h-5 w-5' />
+          <PlusIcon className='h-5 w-5' />
         </Button>
       </div>
       <div className='text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700'>

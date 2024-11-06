@@ -8,10 +8,11 @@ import { FilterTextInput } from '../utils';
 
 type FilterType = {
   orcabusId?: string[];
-  individualId?: string[];
+  projectId?: string[];
+  name?: string[];
 };
 
-export const IndividualTableFilter = () => {
+export const ProjectTableFilter = () => {
   const [filter, setFilter] = useState<FilterType>({});
 
   const { setQueryParams, getQueryParams, clearQueryParams } = useQueryParams();
@@ -25,7 +26,7 @@ export const IndividualTableFilter = () => {
     setFilter((prev) => ({ ...prev, [key]: value }));
   };
 
-  const IndividualFilter = () => (
+  const ProjectFilter = () => (
     <>
       <FilterTextInput
         title='Orcabus Id *'
@@ -34,9 +35,15 @@ export const IndividualTableFilter = () => {
         handleFilterChange={handleFilterChange}
       />
       <FilterTextInput
-        title='Individual Id *'
-        keyFilter='individualId'
-        defaultInput={filter.individualId ? filter.individualId : []}
+        title='Project Id *'
+        keyFilter='projectId'
+        defaultInput={filter.projectId ? filter.projectId : []}
+        handleFilterChange={handleFilterChange}
+      />
+      <FilterTextInput
+        title='Project Id *'
+        keyFilter='name'
+        defaultInput={filter.projectId ? filter.projectId : []}
         handleFilterChange={handleFilterChange}
       />
       <div className='border-b-2 mb-2 pb-2 italic text-s	text-gray-700 font-thin	'>
@@ -59,7 +66,7 @@ export const IndividualTableFilter = () => {
       content={
         <div className='z-10 bg-white rounded-lg w-80'>
           <div className='max-h-[250px] px-3 pb-3 overflow-y-auto text-sm text-gray-700 '>
-            <IndividualFilter />
+            <ProjectFilter />
           </div>
           <ClosePopoverWrapper className='mt-4'>
             <Button

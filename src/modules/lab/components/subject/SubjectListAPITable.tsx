@@ -2,18 +2,14 @@ import React, { Fragment } from 'react';
 import { SubjectListQueryParams, useSuspenseMetadataSubjectModel } from '@/api/metadata';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { Column } from '@/components/tables';
-import Table, {
-  getCurrentSortDirection,
-  getSortValue,
-  multiRowCell,
-} from '@/components/tables/Table';
-import { Link } from 'react-router-dom';
-import { classNames } from '@/utils/commonUtils';
+import Table, { multiRowCell } from '@/components/tables/Table';
 import { components } from '@/api/types/metadata';
 import { Search } from '@/components/common/search';
 import { SubjectTableFilter } from './SubjectTableFilter';
 import { Tooltip } from '@/components/common/tooltips';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import { getLibraryTableColumn } from '../library/utils';
+import { getSubjectTableColumn } from './utils';
 
 export const SubjectListAPITable = ({ queryParams }: { queryParams: SubjectListQueryParams }) => {
   const { setQueryParams, getPaginationParams } = useQueryParams();
@@ -42,41 +38,18 @@ export const SubjectListAPITable = ({ queryParams }: { queryParams: SubjectListQ
         </div>
       }
       columns={[
-        {
-          header: (
-            <div className='flex flex-row items-center'>
-              <div>Subject Id</div>
-              <Tooltip
-                text={`This is now the 'ExternalSubjectID' from the tracking sheet`}
-                position='right'
-              >
-                <InformationCircleIcon className='h-4	ml-2' />
-              </Tooltip>
-            </div>
-          ),
-          accessor: 'subjectIds',
-          headerGroup: { colSpan: 1 },
-          onSort: () =>
-            setQueryParams({
-              ordering: getSortValue(queryParams?.ordering, 'subject_id'),
-            }),
-          sortDirection: getCurrentSortDirection(queryParams?.ordering, 'subject_id'),
-          cell: (p: unknown) => {
-            const data = p as { subjectId: string; subjectOrcabusId: string };
-            return (
-              <Link
-                to={`/lab/?tab=subject&orcabusId=${data.subjectOrcabusId}`}
-                className={classNames(
-                  'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
-                )}
-              >
-                {data.subjectId}
-              </Link>
-            );
+        ...getSubjectTableColumn({
+          setSort: (newOrder: string) => {
+            setQueryParams({ ordering: newOrder });
           },
-        },
+          currentSort: queryParams?.ordering,
+        }),
         ...individualTableColumn(),
-        ...getLibraryTableColumn(),
+        ...getLibraryTableColumn({
+          headerGroupLabel: 'Library',
+          headerClassName: 'bg-red-100',
+          cellClassName: 'bg-red-50',
+        }),
       ]}
       tableData={tableData}
       paginationProps={{
@@ -145,91 +118,6 @@ const processSubjectResult = (data: components['schemas']['SubjectDetail'][]) =>
       ...rec,
     };
   });
-};
-
-/**
- * Library column properties
- */
-export const getLibraryTableColumn = (): Column[] => {
-  const cellColor = {
-    headerClassName: 'bg-red-100',
-    cellClassName: 'bg-red-50',
-  };
-  return [
-    {
-      header: 'Library Id',
-      headerClassName: cellColor.headerClassName,
-      headerGroup: { label: 'Library', colSpan: 7, additionalClassName: cellColor.headerClassName },
-      accessor: 'libraryIds',
-      cell: (p: unknown) => {
-        const data = p as { libraryId: string; libraryOrcabusId: string }[];
-        return (
-          <Fragment>
-            {data.map((lib, idx) => {
-              if (!lib.libraryId) {
-                return <div key={idx}>-</div>;
-              }
-              return (
-                <div className='py-2' key={idx}>
-                  <Link
-                    to={`library/${lib.libraryOrcabusId}`}
-                    className={classNames(
-                      'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
-                    )}
-                  >
-                    {lib.libraryId}
-                  </Link>
-                </div>
-              );
-            })}
-          </Fragment>
-        );
-      },
-      cellClassName: cellColor.cellClassName,
-    },
-    {
-      header: 'Phenotype',
-      headerClassName: cellColor.headerClassName,
-      accessor: 'phenotype',
-      cell: multiRowCell,
-      cellClassName: cellColor.cellClassName,
-    },
-    {
-      header: 'Workflow',
-      headerClassName: cellColor.headerClassName,
-      accessor: 'workflow',
-      cell: multiRowCell,
-      cellClassName: cellColor.cellClassName,
-    },
-    {
-      header: 'Quality',
-      headerClassName: cellColor.headerClassName,
-      accessor: 'quality',
-      cell: multiRowCell,
-      cellClassName: cellColor.cellClassName,
-    },
-    {
-      header: 'Type',
-      headerClassName: cellColor.headerClassName,
-      accessor: 'type',
-      cell: multiRowCell,
-      cellClassName: cellColor.cellClassName,
-    },
-    {
-      header: 'Assay',
-      headerClassName: cellColor.headerClassName,
-      accessor: 'assay',
-      cell: multiRowCell,
-      cellClassName: cellColor.cellClassName,
-    },
-    {
-      header: 'Coverage',
-      headerClassName: cellColor.headerClassName,
-      accessor: 'coverage',
-      cell: multiRowCell,
-      cellClassName: cellColor.cellClassName,
-    },
-  ];
 };
 
 export const individualTableColumn = (): Column[] => {
