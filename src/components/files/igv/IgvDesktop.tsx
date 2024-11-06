@@ -50,7 +50,7 @@ export const IgvDesktopButton = ({ s3ObjectId, bucket, s3Key, className }: Props
           title: 'IGV loaded successfully',
           message: 'File successfully loaded to IGV desktop',
         });
-      } catch (error) {
+      } catch {
         toaster.error({
           title: 'Unable to connect to IGV local',
           message: 'Please make sure IGV is running on your computer',

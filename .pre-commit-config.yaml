@@ -22,7 +22,8 @@ repos:
     rev: v9.6.0
     hooks:
       - id: eslint
-        exclude: ^(skel/|yarn.lock|.yarn/|.local/|docs/|openapi/)
+        files: \.[jt]sx?$ # *.js, *.jsx, *.ts and *.tsx
+        types: [file]
 
   - repo: local
     hooks:

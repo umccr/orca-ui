@@ -17,8 +17,6 @@ import { TokenDialog } from './TokenDialog';
 import { DetailedErrorBoundary } from '@/components/common/error';
 import { Link } from 'react-router-dom';
 
-export interface HeaderProps {}
-
 const Header = () => {
   const { user: userInformation, logout } = useAuthContext();
   const userName = userInformation?.name || getUsername(userInformation?.email as string);
