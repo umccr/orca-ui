@@ -8,7 +8,7 @@ import { SideNavbar } from '@/components/navigation/navbar';
 
 const MainLayout = ({ children }: PropsWithChildren) => {
   return (
-    <div className='flex flex-col h-screen bg-heritage-blue-100'>
+    <div className='h-screen w-screen flex flex-col bg-heritage-blue-100 fixed'>
       <Header />
       <div className='flex flex-1 bg-heritage-blue-100'>
         <SideNavbar navigation={navigation} />
