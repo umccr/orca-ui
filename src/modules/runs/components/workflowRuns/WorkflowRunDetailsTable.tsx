@@ -21,14 +21,14 @@ const WorkflowRunDetailsTable = () => {
     () =>
       workflowRunDetail
         ? {
+            workflowName: workflowRunDetail.workflow.workflowName,
             portalRunId: workflowRunDetail.portalRunId,
             executionId: workflowRunDetail.executionId || '-',
+            excutionEngine: workflowRunDetail.workflow.executionEngine,
             workflowType:
               workflowRunDetail.workflow.workflowName +
-              ' v' +
+              '  v' +
               workflowRunDetail.workflow.workflowVersion,
-            excutionEngine: workflowRunDetail.workflow.executionEngine,
-            currentState: (workflowRunDetail.currentState.status as string) || '-',
             timestamp: (workflowRunDetail.currentState.timestamp as string) || '-',
             comments: workflowRunDetail.comment || '-',
           }

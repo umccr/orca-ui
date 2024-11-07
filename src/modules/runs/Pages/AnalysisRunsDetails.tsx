@@ -13,7 +13,11 @@ const AnalysisRunsDetails = () => {
       content: <AnalysisRunDetailsWorkflowRuns />,
     },
   ];
-  return <ContentTabs tabs={tabs} />;
+  return (
+    <div className='flex flex-col gap-4 h-full w-full'>
+      <ContentTabs tabs={tabs} />
+    </div>
+  );
 };
 
 export default AnalysisRunsDetails;
