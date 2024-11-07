@@ -172,7 +172,7 @@ export const getLibraryTableColumn = (): Column[] => {
               return (
                 <div className='py-2' key={idx}>
                   <Link
-                    to={`library/${lib.libraryId}`}
+                    to={`library/${lib.libraryOrcabusId}`}
                     className={classNames(
                       'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
                     )}

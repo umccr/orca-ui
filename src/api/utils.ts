@@ -28,6 +28,7 @@ export type UseQueryOptions<T> = RequestBodyOption<T> & {
 
 export type UseSuspenseQueryOptions<T> = RequestBodyOption<T> & {
   // add your custom options here
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   reactQuery?: {
     // Note: React Query type’s inference is difficult to apply automatically, hence manual option passing here
     // add other React Query options as needed
@@ -41,6 +42,7 @@ export type UseSuspenseQueryOptions<T> = RequestBodyOption<T> & {
 
 // Extend the UseMutationOptions type
 export type UseMutationOptions<T> = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   reactQuery?: {
     // Note: React Query type’s inference is difficult to apply automatically, hence manual option passing here
     // add other React Query options as needed
