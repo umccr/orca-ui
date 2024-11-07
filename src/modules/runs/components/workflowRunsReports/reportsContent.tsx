@@ -12,6 +12,7 @@ import { useMemo } from 'react';
 const ReportsContent = () => {
   const { getQueryParams } = useQueryParams();
 
+  // api call to get analysis run statistics data
   const { data: analysisRunStatisticsData } = useAnalysisRunStatisticsModel({
     params: {
       query: {
@@ -24,6 +25,7 @@ const ReportsContent = () => {
     },
   });
 
+  /*********** workflow count by workflow name ***********/
   // reduce to count on workflow name
   const workflowCount = analysisRunStatisticsData?.reduce((acc: Record<string, number>, curr) => {
     if (acc[curr.workflow.workflowName]) {
@@ -98,7 +100,7 @@ const ReportsContent = () => {
                   // }}
                 >
                   <Link
-                    to={`${id}`}
+                    to={`/runs/workflow/${id}`}
                     className={classNames(
                       'cursor-pointer flex flex-row items-center ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
                     )}
@@ -200,6 +202,27 @@ const ReportsContent = () => {
     []
   );
 
+  /********** workflow count by analysis ***********/
+  const workflowAnalysisCount = analysisRunStatisticsData?.reduce(
+    (acc: Record<string, number>, curr) => {
+      if (acc[curr.analysisRun.analysis?.analysisName]) {
+        acc[curr.analysisRun.analysis?.analysisName] += 1;
+      } else {
+        acc[curr.analysisRun.analysis?.analysisName] = 1;
+      }
+      return acc;
+    },
+    {}
+  );
+
+  const workflowAnalysisCountData = Object.entries(workflowAnalysisCount || {}).map(
+    ([name, count]) => ({
+      name,
+      value: count,
+    })
+  );
+
+  /*********** get summary table data by workflow type ***********/
   const getSummaryTableDataByWorkflowType = (workflowType: string) => {
     return (
       analysisRunStatisticsData?.filter((data) => data.workflow.workflowName === workflowType) || []
@@ -208,7 +231,7 @@ const ReportsContent = () => {
 
   const workflowTypes = Object.keys(workflowCount || { test: 1 });
   const tabs = workflowTypes.map((type) => ({
-    label: type,
+    label: type + ' (' + workflowCount?.[type] + ')',
     content: (
       <Table
         tableData={getSummaryTableDataByWorkflowType(type)}
@@ -230,10 +253,20 @@ const ReportsContent = () => {
         </div>
       </div>
 
-      <div className='py-4 text-xl font-base border-b border-gray-200 pb-2'>
-        Overview Gantt Chart
+      <div className='py-4 text-xl font-base border-b border-gray-200 pb-2'>Analysis</div>
+      <div className='flex flex-row justify-between'>
+        <div className='w-1/2'>
+          <PieChart data={workflowAnalysisCountData} width={500} height={240} />
+        </div>
+        <div className='w-1/2'>
+          <Table
+            tableData={workflowAnalysisCountData}
+            columns={[...summaryTableColumns]}
+            inCard={true}
+          />
+        </div>
       </div>
-      <div>{/* <GanttChart /> */}</div>
+
       <div className='py-4 text-xl font-base border-b border-gray-200 pb-2'>Workflow Category</div>
       <div className='min-h-[300px]'>
         <ContentTabs tabs={tabs} />

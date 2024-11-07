@@ -46,7 +46,7 @@ const SequenceRunDetailsDrawer: FC<SequenceRunDetailsDrawerProps> = ({
     // call onCloseDrawer func after close drawer closed
     setIsOpen(false);
     sleep(300).then(() => {
-      onCloseDrawer && onCloseDrawer();
+      if (onCloseDrawer) onCloseDrawer();
     });
   };
 

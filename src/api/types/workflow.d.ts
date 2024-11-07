@@ -351,23 +351,17 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        /** @description Serializer to define a default representation of an Analysis record,
-         *     mainly used in record listings. */
-        Analysis: {
-            readonly orcabusId: string;
-            analysisName: string;
-            analysisVersion: string;
-            description: string;
-            status: string;
-            contexts: string[];
-            workflows: string[];
-        };
         AnalysisContext: {
             readonly orcabusId: string;
             name: string;
             usecase: string;
             description: string;
             status: string;
+        };
+        AnalysisContextMin: {
+            readonly orcabusId: string;
+            name: string;
+            usecase: string;
         };
         /** @description Serializer to define a detailed representation of an Analysis record,
          *     mainly used in individual record views. */
@@ -380,19 +374,25 @@ export interface components {
             description: string;
             status: string;
         };
+        AnalysisMin: {
+            readonly orcabusId: string;
+            analysisName: string;
+            analysisVersion: string;
+            status: string;
+        };
         AnalysisRun: {
             readonly orcabusId: string;
+            readonly analysis: components["schemas"]["AnalysisMin"];
+            readonly storageContext: components["schemas"]["AnalysisContextMin"];
+            readonly computeContext: components["schemas"]["AnalysisContextMin"];
             analysisRunName: string;
             comment?: string | null;
             status?: string | null;
-            computeContext?: string | null;
-            storageContext?: string | null;
-            analysis?: string | null;
         };
         AnalysisRunDetail: {
             readonly orcabusId: string;
             readonly libraries: components["schemas"]["Library"][];
-            readonly analysis: components["schemas"]["Analysis"];
+            readonly analysis: components["schemas"]["AnalysisDetail"];
             readonly storageContext: components["schemas"]["AnalysisContext"];
             readonly computeContext: components["schemas"]["AnalysisContext"];
             analysisRunName: string;

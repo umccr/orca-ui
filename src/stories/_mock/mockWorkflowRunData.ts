@@ -41,7 +41,7 @@ interface TaskOutput {
   taskName: string;
   libraryIds: string[];
   endStatus: string;
-  subjectId?: string;
+  subjectId: string;
 }
 
 const extractAnchorText = (htmlString: string): string => {
@@ -82,12 +82,17 @@ const groupTasksByPortalRunId = (tasks: any[]) => {
 //   endStatus: string;
 // }
 
+interface TaskInput {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
+}
+
 interface TaskRunData {
   [taskName: string]: TaskOutput[];
 }
 
 export const generateMockWorkflowRunData = () => {
-  const tasksData: { [key: string]: any[] } = { ...mockWorkflowData };
+  const tasksData: { [key: string]: TaskInput[] } = { ...mockWorkflowData };
   Object.keys(tasksData).forEach((key) => {
     tasksData[key] = groupTasksByPortalRunId(tasksData[key]);
   });
@@ -108,6 +113,9 @@ export function groupBySubjectAndCount(): SubjectWorkflowCount {
   const result: SubjectWorkflowCount = {};
 
   Object.keys(mockWorkflowData).forEach((workflowType) => {
+    console.log(`Processing workflow type: ${workflowType}`);
+    console.log(`Data for workflow:`, mockWorkflowData[workflowType]);
+
     mockWorkflowData[workflowType].forEach((item) => {
       const subjectID = extractAnchorText(item.SubjectID);
 
@@ -125,15 +133,3 @@ export function groupBySubjectAndCount(): SubjectWorkflowCount {
   console.log(result);
   return result;
 }
-
-//{
-//   SBJ05554: {
-//     bcl_convert: 2,
-//     wgs_alignment_qc: 1,
-//   },
-//   SBJ05555: {
-//     bcl_convert: 1,
-//     wgs_alignment_qc: 3,
-//   },
-//   // More subjects...
-// }
