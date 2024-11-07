@@ -20,7 +20,23 @@ const AnalysisRunDetailsTable = () => {
     () =>
       analysisRun
         ? {
-            analysis: omit(analysisRun?.analysis, ['orcabusId']),
+            currentStatus: analysisRun?.status,
+            comment: analysisRun?.comment,
+            analysis: {
+              analysisName: analysisRun?.analysis?.analysisName,
+              analysisVersion: analysisRun?.analysis?.analysisVersion,
+              analysisStatus: analysisRun?.analysis?.status,
+              workflows: analysisRun?.analysis?.workflows.map((workflow) => ({
+                name: workflow.workflowName,
+                version: workflow.workflowVersion,
+              })),
+              contexts: analysisRun?.analysis?.contexts.map((context) => ({
+                name: context.name,
+                usecase: context.usecase,
+                description: context.description,
+                status: context.status,
+              })),
+            },
             computeContext: omit(analysisRun?.computeContext, ['orcabusId']),
             storageContext: omit(analysisRun?.storageContext, ['orcabusId']),
           }
@@ -33,24 +49,27 @@ const AnalysisRunDetailsTable = () => {
       {
         header: 'Library ID',
         accessor: 'libraryId',
-        cell: (libraryId: unknown) => {
-          if (!libraryId) {
+      },
+      {
+        header: 'Orcabus ID',
+        accessor: 'orcabusId',
+        cell: (orcabusId: unknown) => {
+          if (!orcabusId) {
             return <div>-</div>;
           } else {
             return (
               <Link
-                to={`/lab/library/${libraryId}`}
+                to={`/lab/library/${orcabusId}`}
                 className={classNames(
                   'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
                 )}
               >
-                {libraryId as string}
+                {orcabusId as string}
               </Link>
             );
           }
         },
       },
-      { header: 'Orcabus ID', accessor: 'orcabusId' },
     ],
     []
   );

@@ -5,10 +5,11 @@ import { useState, useEffect, FC } from 'react';
 interface SearchProps {
   searchBoxContent?: string;
   hasTooltip?: boolean;
+  tooltipText?: string;
   onSearch: (search: string | null) => void;
 }
 
-const Search: FC<SearchProps> = ({ onSearch, searchBoxContent, hasTooltip }) => {
+const Search: FC<SearchProps> = ({ onSearch, searchBoxContent, hasTooltip, tooltipText }) => {
   const [searchBox, setSearchBox] = useState<string>('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -68,7 +69,10 @@ const Search: FC<SearchProps> = ({ onSearch, searchBoxContent, hasTooltip }) => 
       </div>
       {showTooltip && (
         <Tooltip
-          text='Available Search Items:  workflowRunName, comment, libraryId, orcabusId, workflowName'
+          text={
+            tooltipText ||
+            'Available Search Items:  workflowRunName, comment, libraryId, orcabusId, workflowName'
+          }
           position='top'
           background='white'
         >
