@@ -29,7 +29,6 @@ export default [
       'react/react-in-jsx-scope': 'off',
     },
   },
-
   // eslint-plugin-react-hooks
   {
     plugins: {
@@ -44,6 +43,9 @@ export default [
   {
     plugins: {
       'react-refresh': reactRefresh,
+    },
+    rules: {
+      'react-refresh/only-export-components': 'warn',
     },
   },
 
