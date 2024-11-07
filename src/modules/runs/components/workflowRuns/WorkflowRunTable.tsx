@@ -59,20 +59,16 @@ const WorkflowRunTable = () => {
               <div>
                 <div
                   className={classNames(
-                    'cursor-pointer flex flex-row items-center ml-2 text-sm lowercase font-medium hover:text-blue-700 text-blue-500'
+                    'cursor-pointer flex flex-row items-center ml-2 text-sm font-medium hover:text-blue-700 text-blue-500'
                   )}
-                  // onClick={() => {
-                  //   setSelectedWorkflowRun(workflowRunRowData as WorkflowRunModel);
-                  //   setQueryParams({ workflowRunId: workflowRunRowData.id });
-                  // }}
                 >
                   <Link
                     to={`${id}`}
                     className={classNames(
-                      'cursor-pointer flex flex-row items-center ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+                      'cursor-pointer flex flex-row items-center ml-2 text-sm font-medium hover:text-blue-700 text-blue-500'
                     )}
                   >
-                    {(workflowRunName as string).toLocaleLowerCase()}
+                    <div>{workflowRunName as string}</div>
                   </Link>
                 </div>
               </div>
@@ -139,32 +135,6 @@ const WorkflowRunTable = () => {
           }
         },
       },
-      // {
-      //   header: '',
-      //   accessor: 'id',
-      //   cell: (id: unknown) => {
-      //     if (!id) {
-      //       return <div>-</div>;
-      //     } else {
-      //       return (
-      //         <div className='flex flex-row items-center'>
-      //           <Link
-      //             to={`workflow/${id}`}
-      //             className={classNames(
-      //               'cursor-pointer flex flex-row items-center ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
-      //             )}
-      //           >
-      //             <TableCellsIcon
-      //               className='h-5 w-5 pr-1 shrink-0 text-blue-500'
-      //               aria-hidden='true'
-      //             />
-      //             Details
-      //           </Link>
-      //         </div>
-      //       );
-      //     }
-      //   },
-      // },
     ],
     []
   );
