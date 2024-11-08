@@ -1,19 +1,19 @@
 import { DetailedErrorBoundary } from '@/components/common/error';
-import WorkflowRunFilterHeader from '../components/workflowRuns/WorkflowRunFilterHeader';
-import WorkflowRunTable from '../components/workflowRuns/WorkflowRunTable';
+import AnalysisRunFilterHeader from '../components/analysisRuns/AnalysisRunFilterHeader';
+import AnalysisRunTable from '../components/analysisRuns/AnalysisRunTable';
 
-const WorkflowRuns = () => {
+const AnalysisRuns = () => {
   return (
     <DetailedErrorBoundary errorTitle='Unable to load workflow runs data'>
       <div className='w-full h-full'>
         {/* <div className='text-2xl font-bold py-2'>Workflow</div> */}
         {/* workflow run filter header */}
-        <WorkflowRunFilterHeader />
+        <AnalysisRunFilterHeader />
         {/* workflow run table */}
-        <WorkflowRunTable />
+        <AnalysisRunTable />
       </div>
     </DetailedErrorBoundary>
   );
 };
 
-export default WorkflowRuns;
+export default AnalysisRuns;

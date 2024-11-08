@@ -3,11 +3,10 @@ import WorkflowRunDetailsTable from '../components/workflowRuns/WorkflowRunDetai
 
 const WorkflowRunDetails = () => {
   return (
-    <div>
+    <div className='flex flex-col gap-4 h-full w-full'>
       <WorkflowRunDetailsTable />
-      <div className='pt-4'>
-        <WorkflowRunTimeline />
-      </div>
+
+      <WorkflowRunTimeline />
     </div>
   );
 };

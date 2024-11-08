@@ -37,6 +37,7 @@ const WorkflowRunTimeline = () => {
   const { orcabusId } = useParams();
   const { user } = useAuthContext();
 
+  const [currentState, setCurrentState] = useState<string | null>(null);
   const [selectedPayloadId, setSelectedPayloadId] = useState<string | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);
 
@@ -72,7 +73,7 @@ const WorkflowRunTimeline = () => {
     },
   });
 
-  const currentState = workflowStateData?.[workflowStateData.length - 1]?.status;
+  const workflowLastState = workflowStateData?.[workflowStateData.length - 1]?.status;
 
   // format data and disply in the table
   const workflowStateTimelineData = useMemo(
@@ -168,6 +169,13 @@ const WorkflowRunTimeline = () => {
     ...workflowCommentTimelineData,
   ].sort((a, b) => (dayjs(a.datetime).isAfter(dayjs(b.datetime)) ? -1 : 1));
 
+  useEffect(() => {
+    if (workflowStateTimelineData.length > 0) {
+      setCurrentState(workflowStateTimelineData[0].status);
+      setSelectedPayloadId(workflowStateTimelineData[0].payloadId);
+    }
+  }, [workflowStateTimelineData]);
+
   const { data: selectedWorkflowPayloadData, isFetching } = useWorkflowPayloadModel({
     params: { path: { id: selectedPayloadId?.split('.')[1] || '' } },
     reactQuery: {
@@ -231,7 +239,6 @@ const WorkflowRunTimeline = () => {
     createWorkflowRunResolvedState();
     setIsOpenAddResolvedDialog(false);
   };
-
   useEffect(() => {
     if (isCreatedWorkflowRunResolvedState) {
       toaster.success({ title: 'Resolved Status added' });
@@ -402,7 +409,7 @@ const WorkflowRunTimeline = () => {
                 }}
               />
             </Tooltip>
-            {currentState === 'FAILED' && (
+            {workflowLastState === 'FAILED' && (
               <Tooltip text='Add the Resolved Event' position='top' background='white'>
                 <CheckCircleIcon
                   className='w-5 h-5 cursor-pointer stroke-gray-500 opacity-opacity-100'
@@ -504,15 +511,16 @@ const WorkflowRunTimeline = () => {
             }}
             confirmBtn={{ label: 'Update Resolved Event', onClick: handleUpdateResolved }}
           ></Dialog>
-          <div className='px-4'>
-            <Timeline timeline={workflowRuntimelineData} handldEventClick={handleTimelineSelect} />
-          </div>
+
+          <Timeline timeline={workflowRuntimelineData} handldEventClick={handleTimelineSelect} />
         </div>
         <div className='flex-2'>
           <div className='text-base font-semibold pb-4'>Payload</div>
           <div className='flex flex-row gap-2 items-center'>
             <div className='text-sm text-gray-500'>Selected State:</div>
-            <Badge status={selectedState || 'unknown'}>{selectedState || 'unknown'}</Badge>
+            <Badge status={selectedState || currentState || 'unknown'}>
+              {selectedState || currentState || 'unknown'}
+            </Badge>
           </div>
           <ContentTabs
             tabs={[

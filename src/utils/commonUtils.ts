@@ -32,6 +32,18 @@ export function classNames(...classes: ClassValue[]) {
 }
 
 /**
+ * Omit keys from object
+ * @param obj - the object to omit keys from
+ * @param keys - the keys to omit
+ * @returns the object with the omitted keys
+ */
+export function omit<T extends object, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {
+  const result = { ...obj };
+  keys.forEach((key) => delete result[key]);
+  return result;
+}
+
+/**
  * Get username from email
  * @param email - the email
  * @returns the username
@@ -57,6 +69,15 @@ export function getUsername(email: string) {
     .join(' ');
 }
 
+/**
+ * Get query params from URLSearchParams
+ * @param searchParams - the URLSearchParams object
+ * @returns the query params
+ * @example
+ * const searchParams = new URLSearchParams('?name=John&age=30&division=HR&division=IT');
+ * const queryParams = getQueryParams(searchParams);
+ * console.log(queryParams); // { name: 'John', age: '30', division: ['HR', 'IT'] }
+ */
 /**
  * Get query params from URLSearchParams
  * @param searchParams - the URLSearchParams object
@@ -126,6 +147,11 @@ export const getFilenameFromKey = (key: string): string => {
   return key.split('/').pop() || '';
 };
 
+/**
+ * Sleep function to pause the execution for a while
+ * @param timeout - the time to sleep in milliseconds
+ * @returns a promise that resolves after the sleep
+ */
 /**
  * Sleep function to pause the execution for a while
  * @param timeout - the time to sleep in milliseconds
