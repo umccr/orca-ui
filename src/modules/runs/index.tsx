@@ -3,13 +3,13 @@ import { Navigate, Outlet } from 'react-router-dom';
 import RunsPageLayout from '@/components/layouts/runs/RunsPageLayout';
 import { RouteObject } from 'react-router-dom';
 
-const SequenceRunPage = lazy(() => import('@/modules/runs/Pages/SequenceRuns'));
-const WorkflowRunPage = lazy(() => import('@/modules/runs/Pages/WorkflowRuns'));
-const WorkflowRunDetailsPage = lazy(() => import('@/modules/runs/Pages/WorkflowRunsDetails'));
-const AnalysisRunPage = lazy(() => import('@/modules/runs/Pages/AnalysisRuns'));
-const AnalysisRunDetailsPage = lazy(() => import('@/modules/runs/Pages/AnalysisRunsDetails'));
-const RunsPage = lazy(() => import('@/modules/runs/Pages/RunsPage'));
-const WorkflowRunsReport = lazy(() => import('@/modules/runs/Pages/WorkflowRunsReport'));
+const SequenceRunPage = lazy(() => import('@/modules/runs/pages/SequenceRuns'));
+const WorkflowRunPage = lazy(() => import('@/modules/runs/pages/WorkflowRuns'));
+const WorkflowRunDetailsPage = lazy(() => import('@/modules/runs/pages/WorkflowRunsDetails'));
+const AnalysisRunPage = lazy(() => import('@/modules/runs/pages/AnalysisRuns'));
+const AnalysisRunDetailsPage = lazy(() => import('@/modules/runs/pages/AnalysisRunsDetails'));
+const RunsPage = lazy(() => import('@/modules/runs/pages/RunsPage'));
+const WorkflowRunsReport = lazy(() => import('@/modules/runs/pages/WorkflowRunsReport'));
 
 export const Router: RouteObject = {
   path: 'runs',

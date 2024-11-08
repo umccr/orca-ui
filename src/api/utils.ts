@@ -9,6 +9,10 @@ export const authMiddleware: Middleware = {
   },
 };
 
+export type PathsWithGet<Paths> = {
+  [K in keyof Paths]: Paths[K] extends { get: unknown } ? K : never;
+}[keyof Paths];
+
 export type UseQueryOptions<T> = RequestBodyOption<T> & {
   // add your custom options here
   reactQuery?: {
