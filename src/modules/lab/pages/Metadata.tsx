@@ -1,6 +1,6 @@
 import { LibraryListAPITable } from '@/modules/lab/components/library/LibraryListAPITable';
 import { SubjectListAPITable } from '../components/subject/SubjectListAPITable';
-import { Suspense } from 'react';
+import { Fragment, Suspense } from 'react';
 import { SpinnerWithText } from '@/components/common/spinner';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { IndividualListAPITable } from '../components/individual/IndividualListAPITable';
@@ -96,9 +96,9 @@ export default function MetadataPage() {
         {tabs.map((tab, index) => {
           if (currentTabSelection === tab.label) {
             return (
-              <div key={index}>
+              <Fragment key={index}>
                 <Suspense fallback={<SpinnerWithText />}>{tab.content}</Suspense>
-              </div>
+              </Fragment>
             );
           }
           return null;
