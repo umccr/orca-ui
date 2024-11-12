@@ -23,7 +23,7 @@ export default function LibraryOverviewPage() {
   return (
     <div className='flex flex-col 2xl:flex-row'>
       <div className='w-full 2xl:w-96'>
-        <div className='font-bold py-3 text-lg'>Library Details</div>
+        <div className='font-bold 2xl:pt-3 pb-3 text-lg'>Library Details</div>
 
         <LibraryTableDetails libraryDetail={libraryDetailRes} />
       </div>

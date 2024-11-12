@@ -1,6 +1,4 @@
 import { Column } from '@/components/tables';
-import { classNames } from '@/utils/commonUtils';
-import { Link } from 'react-router-dom';
 import { getCurrentSortDirection, getSortValue } from '@/components/tables/Table';
 
 export const getContactTableColumn = ({
@@ -43,14 +41,15 @@ export const getContactTableColumn = ({
         <>
           {data.map((prj, idx) => (
             <div className='py-2' key={idx}>
-              <Link
+              {prj.contactId}
+              {/* <Link
                 to={`/lab/?tab=contact&orcabusId=${prj.contactOrcabusId}`}
                 className={classNames(
                   'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
                 )}
               >
                 {prj.contactId}
-              </Link>
+              </Link> */}
             </div>
           ))}
         </>

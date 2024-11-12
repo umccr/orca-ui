@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const keyClassName = 'font-bold px-4';
-const valueClassName = 'py-2';
+import React from 'react';
+const keyClassName = 'font-bold px-4 text-sm';
+const valueClassName = 'py-2 text-sm';
 const rowClassName = 'even:bg-gray-50';
 
 const JsonToTable = ({ data }: { data: Record<string, any> }) => {
@@ -9,10 +10,14 @@ const JsonToTable = ({ data }: { data: Record<string, any> }) => {
       return '-';
     }
 
+    if (React.isValidElement(value)) {
+      return value;
+    }
+
     if (Array.isArray(value)) {
       return value.length > 0
         ? value.map((item, idx) => (
-            <div className='py-2' key={idx}>
+            <div className={`${idx == 0 ? '' : 'pt-2'}`} key={idx}>
               {item}
             </div>
           ))
