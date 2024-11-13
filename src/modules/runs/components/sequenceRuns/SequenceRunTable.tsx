@@ -121,7 +121,7 @@ const SequenceRunTable = () => {
               {/* <Link
                 to={`sequence/${instrumentRunId}/details`}
                 className={classNames(
-                  'flex flex-row items-center ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+                  'flex flex-row items-center ml-2 text-sm font-medium hover:text-blue-700 text-blue-500'
                 )}
               >
                 <TableCellsIcon
@@ -133,7 +133,7 @@ const SequenceRunTable = () => {
               {/* <Link
               to={`sequence/${instrumentRunId}/diagram`}
               className={classNames(
-                'flex flex-row items-center ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+                'flex flex-row items-center ml-2 text-sm font-medium hover:text-blue-700 text-blue-500'
               )}
             >
               <RectangleGroupIcon
@@ -145,7 +145,7 @@ const SequenceRunTable = () => {
               <Link
                 to={`sequence/${instrumentRunId}/report`}
                 className={classNames(
-                  'flex flex-row items-center ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+                  'flex flex-row items-center ml-2 text-sm font-medium hover:text-blue-700 text-blue-500'
                 )}
               >
                 <ClipboardIcon className='h-5 w-5 pr-1 shrink-0 text-blue-500' aria-hidden='true' />

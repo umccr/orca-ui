@@ -1,13 +1,13 @@
 import { LibraryListAPITable } from '@/modules/lab/components/library/LibraryListAPITable';
 import { SubjectListAPITable } from '../components/subject/SubjectListAPITable';
-import { Suspense } from 'react';
+import { Fragment, Suspense } from 'react';
 import { SpinnerWithText } from '@/components/common/spinner';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { IndividualListAPITable } from '../components/individual/IndividualListAPITable';
 import { SampleListAPITable } from '../components/sample/SampleListAPITable';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/common/buttons';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { DocumentArrowUpIcon } from '@heroicons/react/24/outline';
 import { ProjectListAPITable } from '../components/project/ProjectListAPITable';
 
 const selectedClassName =
@@ -21,10 +21,6 @@ export default function MetadataPage() {
   const queryParams = getQueryParams();
 
   const currentTabSelection = queryParams.tab;
-
-  if (!currentTabSelection) {
-    return <Navigate to='/lab?tab=library' replace />;
-  }
 
   // sanitise to remove tab from query params
   const passInQueryParams = { ...queryParams };
@@ -59,6 +55,10 @@ export default function MetadataPage() {
     },
   ];
 
+  if (!currentTabSelection || !tabs.map((tab) => tab.label).includes(currentTabSelection)) {
+    return <Navigate to='/lab?tab=library' replace />;
+  }
+
   return (
     <>
       <div className='w-full flex justify-end'>
@@ -70,7 +70,8 @@ export default function MetadataPage() {
           size='sm'
           className='justify-center rounded-md ring-gray-300 ring-1'
         >
-          <PlusIcon className='h-5 w-5' />
+          Import
+          <DocumentArrowUpIcon className='h-5 w-5' />
         </Button>
       </div>
       <div className='text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700'>
@@ -96,12 +97,11 @@ export default function MetadataPage() {
         {tabs.map((tab, index) => {
           if (currentTabSelection === tab.label) {
             return (
-              <div key={index}>
+              <Fragment key={index}>
                 <Suspense fallback={<SpinnerWithText />}>{tab.content}</Suspense>
-              </div>
+              </Fragment>
             );
           }
-          return null;
         })}
       </div>
     </>

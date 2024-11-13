@@ -35,7 +35,7 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
           <button
             type='button'
             onClick={() => setIsOpen((p) => !p)}
-            className='absolute right-0 top-0 m-4 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2'
+            className='absolute right-0 top-0 m-4 mt-6 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2'
           >
             <span className='absolute -inset-2.5' />
             <span className='sr-only'>Close panel</span>
@@ -46,7 +46,7 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
               {navigation.map((item, index) => (
                 <li key={index} className='gap-2'>
                   {item.title ? (
-                    <div className='pt-10 pb-3 pl-5 pr-6 text-xl font-medium'>{item.title}</div>
+                    <div className='pt-6 pb-3 pl-5 pr-6 text-xl font-medium'>{item.title}</div>
                   ) : (
                     <div className='pb-3'></div>
                   )}
