@@ -43,7 +43,7 @@ const WORKFLOW_ANALYSIS_TABLE = {
       ];
     },
   },
-  tumor_normal: {
+  'tumor-normal': {
     keyPatterns: ['*.bam'],
     getTableData: (data: ({ key: string } & Record<string, unknown>)[]): TableData[] => {
       return [
@@ -132,7 +132,7 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
    * Ideally this could be viewable in a case-view to show relevant reports
    *
    * Notes:
-   * WGS library type => "UMCCRISE" && "tumor_normal" workflow type html reports
+   * WGS library type => "UMCCRISE" && "tumor-normal" workflow type html reports
    * WTS library type => "wts" && "rnasum" workflow type pdf/html reports
    * ctDNA library type && "ctTSO" assay => "cttsov2" workflow pdf/html reports
    */
@@ -151,12 +151,12 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
             />
           </DetailedErrorBoundary>
           <div className='py-4'></div>
-          <DetailedErrorBoundary errorTitle={`Unable to load 'tumor_normal' report files`}>
+          <DetailedErrorBoundary errorTitle={`Unable to load 'tumor-normal' report files`}>
             <AnalysisTable
               libraryOrcabusId={libraryDetail.orcabusId}
-              workflowType='tumor_normal'
-              keyPatterns={WORKFLOW_ANALYSIS_TABLE['tumor_normal']['keyPatterns']}
-              getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['tumor_normal']['getTableData']}
+              workflowType='tumor-normal'
+              keyPatterns={WORKFLOW_ANALYSIS_TABLE['tumor-normal']['keyPatterns']}
+              getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['tumor-normal']['getTableData']}
             />
           </DetailedErrorBoundary>
         </>

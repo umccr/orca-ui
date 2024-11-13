@@ -17,7 +17,7 @@ import { TokenDialog } from './TokenDialog';
 import { DetailedErrorBoundary } from '@/components/common/error';
 import { Link } from 'react-router-dom';
 
-const Header = () => {
+const Header = ({ className }: { className?: string }) => {
   const { user: userInformation, logout } = useAuthContext();
   const userName = userInformation?.name || getUsername(userInformation?.email as string);
 
@@ -25,7 +25,7 @@ const Header = () => {
   const openTokenDialogOpen = () => setIsTokenDialogOpen(true);
 
   return (
-    <Disclosure as='nav' className='bg-heritage-blue-100 shadow py-1'>
+    <Disclosure as='nav' className={`w-full z-10 bg-heritage-blue-100 shadow ${className ?? ''}`}>
       {({ open }) => (
         <>
           {isTokenDialogOpen && (

@@ -11,9 +11,10 @@ export interface NavigationItem {
 
 export interface SideNavbarProps {
   navigation: NavigationItem[];
+  className?: string;
 }
 
-const SideNavbar: FC<SideNavbarProps> = ({ navigation }) => {
+const SideNavbar: FC<SideNavbarProps> = ({ navigation, className }) => {
   const location = useLocation();
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
@@ -23,7 +24,7 @@ const SideNavbar: FC<SideNavbarProps> = ({ navigation }) => {
   }, [location.pathname, navigation]);
 
   return (
-    <div className=' bg-heritage-blue-100 w-14 border-0'>
+    <div className={`bg-heritage-blue-100 border-0 ${className ?? ''}`}>
       {/* slide indicator */}
       <div
         className='absolute z-50 left-[1px] top-0 w-[2px] h-[48px] bg-white transition-transform duration-300 '

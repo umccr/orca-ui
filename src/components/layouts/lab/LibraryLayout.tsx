@@ -24,13 +24,11 @@ const LibraryLayout = ({ children }: PropsWithChildren) => {
             <Dropdown className='' items={[{ label: 'RESEARCH' }]} value='RESEARCH' />
           </div> */}
 
-          <div className='mt-3'>
-            <Suspense fallback={<SpinnerWithText text='Loading library page' />}>
-              <DetailedErrorBoundary errorTitle='Unable to load library page'>
-                {children || <Outlet />}
-              </DetailedErrorBoundary>
-            </Suspense>
-          </div>
+          <Suspense fallback={<SpinnerWithText text='Loading library page' />}>
+            <DetailedErrorBoundary errorTitle='Unable to load library page'>
+              {children || <Outlet />}
+            </DetailedErrorBoundary>
+          </Suspense>
         </div>
       </div>
     </Suspense>
