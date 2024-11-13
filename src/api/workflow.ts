@@ -122,13 +122,9 @@ export function createWorkflowDeleteMutationHook<K extends keyof paths>(path: K)
 
 export type WorkflowModel = components['schemas']['Workflow'];
 export type WorkflowRunModel = components['schemas']['WorkflowRunDetail'];
-export type AnalysisRunModel = components['schemas']['AnalysisRunDetail'];
 export type AnalysisModel = components['schemas']['AnalysisMin'];
 export type ComputeContextModel = components['schemas']['AnalysisContext'];
-export type StorageContextModel = components['schemas']['AnalysisContext'];
 export type AnalysisRunModel = components['schemas']['AnalysisRunDetail'];
-export type AnalysisModel = components['schemas']['AnalysisMin'];
-export type ComputeContextModel = components['schemas']['AnalysisContext'];
 export type StorageContextModel = components['schemas']['AnalysisContext'];
 
 export const useWorkflowModel = createWorkflowQueryHook('/api/v1/workflow/');
@@ -179,6 +175,4 @@ export const useAnalysisRunDetailModel = createWorkflowQueryHook(
   '/api/v1/analysisrun/{orcabusId}/'
 );
 
-export const useAnalysisRunStatisticsModel = createWorkflowQueryHook(
-  '/api/v1/workflowrun_list_all/'
-);
+export const useWorkflowRunListAllModel = createWorkflowQueryHook('/api/v1/workflowrun_list_all/');

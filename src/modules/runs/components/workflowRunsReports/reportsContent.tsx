@@ -1,5 +1,5 @@
 import { useQueryParams } from '@/hooks/useQueryParams';
-import { useAnalysisRunStatisticsModel } from '@/api/workflow';
+import { useWorkflowRunListAllModel } from '@/api/workflow';
 import { PieChart } from '@/components/charts';
 import { Table, Column, TableData } from '@/components/tables';
 import { ContentTabs } from '@/components/navigation/tabs';
@@ -12,8 +12,8 @@ import { useMemo } from 'react';
 const ReportsContent = () => {
   const { getQueryParams } = useQueryParams();
 
-  // api call to get analysis run statistics data
-  const { data: analysisRunStatisticsData } = useAnalysisRunStatisticsModel({
+  // api call to get workflow run all data without pagination
+  const { data: workflowRunListAllData } = useWorkflowRunListAllModel({
     params: {
       query: {
         start_time: getQueryParams().startDate || undefined,
@@ -27,7 +27,7 @@ const ReportsContent = () => {
 
   /*********** workflow count by workflow name ***********/
   // reduce to count on workflow name
-  const workflowCount = analysisRunStatisticsData?.reduce((acc: Record<string, number>, curr) => {
+  const workflowCount = workflowRunListAllData?.reduce((acc: Record<string, number>, curr) => {
     if (acc[curr.workflow.workflowName]) {
       acc[curr.workflow.workflowName] += 1;
     } else {
@@ -42,7 +42,7 @@ const ReportsContent = () => {
   }));
   // reduce to count on workflow name and current status
   //result: [{name: 'workflow name', end_status: 'status', value: 'count'}]
-  const workflowStatusCount = analysisRunStatisticsData?.reduce(
+  const workflowStatusCount = workflowRunListAllData?.reduce(
     (acc: Record<string, number>, curr) => {
       if (acc[`${curr.workflow.workflowName}-${curr.currentState.status}`]) {
         acc[`${curr.workflow.workflowName}-${curr.currentState.status}`] += 1;
@@ -60,23 +60,25 @@ const ReportsContent = () => {
       value: count,
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
-  const summaryTableColumns: Column[] = [
-    { header: 'Workflow type', accessor: 'name' },
-    {
-      header: 'Workflow end_status',
-      accessor: 'end_status',
-      cell: (end_status: unknown) => {
-        return (
-          <Badge status={end_status as string} type='success'>
-            {end_status as string}
-          </Badge>
-        );
-      },
-    },
-    { header: 'Count', accessor: 'value' },
-  ];
 
-  console.log(analysisRunStatisticsData, workflowCount);
+  const summaryTableColumns: Column[] = useMemo(
+    () => [
+      { header: 'Workflow type', accessor: 'name' },
+      {
+        header: 'Workflow end_status',
+        accessor: 'end_status',
+        cell: (end_status: unknown) => {
+          return (
+            <Badge status={end_status as string} type='success'>
+              {end_status as string}
+            </Badge>
+          );
+        },
+      },
+      { header: 'Count', accessor: 'value' },
+    ],
+    []
+  );
 
   const workflowRunColumn: Column[] = useMemo(
     () => [
@@ -203,29 +205,126 @@ const ReportsContent = () => {
   );
 
   /********** workflow count by analysis ***********/
-  const workflowAnalysisCount = analysisRunStatisticsData?.reduce(
+  const workflowAnalysisCount = workflowRunListAllData?.reduce(
     (acc: Record<string, number>, curr) => {
-      if (acc[curr.analysisRun.analysis?.analysisName]) {
-        acc[curr.analysisRun.analysis?.analysisName] += 1;
+      if (acc[curr.analysisRun.analysisRunName]) {
+        acc[`${curr.analysisRun.analysisRunName}-${curr.analysisRun.orcabusId}`] += 1;
       } else {
-        acc[curr.analysisRun.analysis?.analysisName] = 1;
+        acc[`${curr.analysisRun.analysisRunName}-${curr.analysisRun.orcabusId}`] = 1;
       }
       return acc;
     },
     {}
   );
 
-  const workflowAnalysisCountData = Object.entries(workflowAnalysisCount || {}).map(
+  const workflowAnalysisCountColumns = useMemo(
+    () => [
+      {
+        header: 'Analysis',
+        accessor: 'analysisRunName',
+        cell: (analysisRunName: unknown, analysisRunRowData: TableData) => {
+          const orcabusId = analysisRunRowData.orcabusId;
+          if (!orcabusId) {
+            return <div>-</div>;
+          } else {
+            return (
+              <Link
+                to={`/runs/analysis/${orcabusId}`}
+                className={classNames('text-sm font-medium hover:text-blue-700 text-blue-500')}
+              >
+                <div>{analysisRunName as string}</div>
+              </Link>
+            );
+          }
+        },
+      },
+      { header: 'Count', accessor: 'value' },
+    ],
+    []
+  );
+
+  const workflowAnalysisCountPieChartData = Object.entries(workflowAnalysisCount || {}).map(
     ([name, count]) => ({
       name,
       value: count,
     })
   );
 
+  const workflowAnalysisCountData = Object.entries(workflowAnalysisCount || {}).map(
+    ([name, count]) => ({
+      analysisRunName: name.split('-')[0],
+      orcabusId: name.split('-')[1],
+      value: count,
+    })
+  );
+
+  console.log(workflowAnalysisCountData);
+
+  /***** workflow Library statistics ***********/
+  const workflowLibraryCount = workflowRunListAllData?.reduce(
+    (acc: Record<string, number>, curr) => {
+      // Handle each library in the array
+      curr.libraries.forEach((library) => {
+        if (acc[`${library.libraryId}-${library.orcabusId}`]) {
+          acc[`${library.libraryId}-${library.orcabusId}`] += 1;
+        } else {
+          acc[`${library.libraryId}-${library.orcabusId}`] = 1;
+        }
+      });
+      return acc;
+    },
+    {}
+  );
+
+  const workflowLibraryCountPieChartData = Object.entries(workflowLibraryCount || {}).map(
+    ([name, count]) => ({
+      name: name.split('-')[0],
+      value: count,
+    })
+  );
+
+  const workflowLibraryCountData = Object.entries(workflowLibraryCount || {}).map(
+    ([name, count]) => ({
+      libraryId: name.split('-')[0],
+      orcabusId: name.split('-')[1],
+      value: count,
+    })
+  );
+
+  const workflowLibraryCountColumns = useMemo(
+    () => [
+      {
+        header: 'Library',
+        accessor: 'libraryId',
+        cell: (libraryId: unknown, libraryRowData: TableData) => {
+          const orcabusId = libraryRowData.orcabusId;
+          console.log(libraryId, orcabusId);
+          if (!orcabusId) {
+            return <div>-</div>;
+          } else {
+            return (
+              <Link
+                to={`/lab/library/${orcabusId}`}
+                className={classNames('text-sm font-medium hover:text-blue-700 text-blue-500')}
+              >
+                <div>{libraryId as string}</div>
+              </Link>
+            );
+          }
+        },
+      },
+      { header: 'Count', accessor: 'value' },
+    ],
+    []
+  );
+  // http://localhost:3000/lab/library/lib.03J5M2JFE1JPYV62RYQEG99CP5/overview
+  // http://localhost:3000/lab/library/lib.05J5M2JFE1JPYV62RYQEG99CP5/overview
+  // http://localhost:3000/lab/library/lib.03J5M2JFE1JPYV62RYQEG99CP5/overview
+
   /*********** get summary table data by workflow type ***********/
   const getSummaryTableDataByWorkflowType = (workflowType: string) => {
     return (
-      analysisRunStatisticsData?.filter((data) => data.workflow.workflowName === workflowType) || []
+      workflowRunListAllData?.filter((data) => data.workflow.workflowName === workflowType) || []
     );
   };
 
@@ -255,19 +354,33 @@ const ReportsContent = () => {
 
       <div className='py-4 text-xl font-base border-b border-gray-200 pb-2'>Analysis</div>
       <div className='flex flex-row justify-between'>
-        <div className='w-1/2'>
-          <PieChart data={workflowAnalysisCountData} width={500} height={240} />
+        <div className='flex flex-row w-1/2'>
+          <PieChart data={workflowAnalysisCountPieChartData} width={500} height={240} />
         </div>
-        <div className='w-1/2'>
+        <div className='flex flex-row w-1/2'>
           <Table
             tableData={workflowAnalysisCountData}
-            columns={[...summaryTableColumns]}
+            columns={[...workflowAnalysisCountColumns]}
             inCard={true}
           />
         </div>
       </div>
 
-      <div className='py-4 text-xl font-base border-b border-gray-200 pb-2'>Workflow Category</div>
+      <div className='py-4 text-xl font-base border-b border-gray-200 pb-2'>Library</div>
+      <div className='flex flex-row justify-between'>
+        <div className='flex flex-row w-1/2'>
+          <PieChart data={workflowLibraryCountPieChartData} width={500} height={240} />
+        </div>
+        <div className='flex flex-row w-1/2'>
+          <Table
+            tableData={workflowLibraryCountData}
+            columns={[...workflowLibraryCountColumns]}
+            inCard={true}
+          />
+        </div>
+      </div>
+
+      <div className='py-4 text-xl font-base border-b border-gray-200 pb-2'>Workflow Metadata</div>
       <div className='min-h-[300px]'>
         <ContentTabs tabs={tabs} />
       </div>
