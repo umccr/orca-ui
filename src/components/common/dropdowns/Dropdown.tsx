@@ -27,7 +27,7 @@ const Dropdown: FC<DropdownProps> = ({
 }) => {
   return (
     <div className='min-w-20'>
-      <Menu as='div' className='relative inline-block text-left cursor-pointer min-w-2'>
+      <Menu as='div' className='relative inline-block text-left cursor-pointer min-w-2 w-full'>
         {floatingLabel && (
           <label
             className={classNames(
