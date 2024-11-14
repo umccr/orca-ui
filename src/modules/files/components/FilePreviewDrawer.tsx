@@ -1,6 +1,11 @@
 import React, { Suspense, useState } from 'react';
 import { Drawer } from '@/components/common/drawers';
-import { FileViewer, isFileSizeAcceptable, isFileViewable } from '@/components/files';
+import {
+  FileViewer,
+  IGV_FILETYPE_LIST,
+  isFileSizeAcceptable,
+  isFileViewable,
+} from '@/components/files';
 import { DetailedErrorBoundary } from '@/components/common/error';
 import { getFilenameFromKey } from '@/utils/commonUtils';
 import Button from '@/components/common/buttons/Button';
@@ -12,11 +17,12 @@ export const FilePreviewDrawer = ({ s3Record }: { s3Record: S3Record }) => {
   const { key: s3Key, bucket, s3ObjectId, size } = s3Record;
   const [isFilePreview, setIsFilePreview] = useState(false);
 
-  const isFileAllowed = isFileViewable(s3Key);
+  // A special case for IGV viewable size we will not check the size
+  // IGV will only request a range byte of the file
+  const isIGVFile = !!IGV_FILETYPE_LIST.find((f) => s3Key.endsWith(f));
+  const isFileSizeAllowed = isIGVFile || (size && isFileSizeAcceptable(size));
 
-  // FIX ME: Although we should not limit igv openable file, but since the presign url from FM is configured to 20MB, we
-  // would limit this for now.
-  const isFileSizeAllowed = size ? isFileSizeAcceptable(size) : false;
+  const isFileAllowed = isFileViewable(s3Key);
 
   return (
     <>

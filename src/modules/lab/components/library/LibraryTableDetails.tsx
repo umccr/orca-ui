@@ -24,7 +24,7 @@ export const LibraryTableDetails: FC<LibraryTableDetailsProps> = ({ libraryDetai
           ),
           'Sample Id': (
             <Link
-              to={`/lab/?tab=subject&orcabusId=${library.sample.orcabusId}`}
+              to={`/lab/?tab=sample&orcabusId=${library.sample.orcabusId}`}
               className={classNames('hover:text-blue-700 text-blue-500')}
             >
               {library.sample.sampleId ?? '-'}
