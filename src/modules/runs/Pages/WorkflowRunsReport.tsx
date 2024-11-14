@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import ReportsFilterHeader from '@/modules/runs/components/workflowRunsReports/reportsFilter';
 import ReportsContent from '@/modules/runs/components/workflowRunsReports/reportsContent';
 import { Dialog } from '@/components/dialogs';
+import toaster from '@/components/common/toaster';
 
 const WorkflowRunsReport = () => {
   const reportRef = useRef<HTMLDivElement>(null);
@@ -41,10 +42,17 @@ const WorkflowRunsReport = () => {
       }
 
       pdf.save('workflow-runs-report.pdf');
+      toaster.success({
+        title: 'Exported PDF successfully',
+      });
     } catch (error) {
       console.error('Error exporting PDF:', error);
+      toaster.error({
+        title: 'Error exporting PDF',
+      });
       // Handle error (show toast notification, etc.)
     }
+    setIsOpenExportDialog(false);
   };
 
   const exportAsHTML = () => {
@@ -94,6 +102,10 @@ const WorkflowRunsReport = () => {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+    toaster.success({
+      title: 'Exported HTML successfully',
+    });
+    setIsOpenExportDialog(false);
   };
 
   const [isOpenExportDialog, setIsOpenExportDialog] = useState(false);
