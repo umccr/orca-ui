@@ -111,6 +111,19 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement 
     setIsAuthenticating(false);
   }, []);
 
+  // redirect to main domain in production environment
+  // as callback is only working for main domain, refer: https://github.com/umccr/orca-ui/issues/68
+  const PROD_DOMAIN = 'orcaui.prod.umccr.org';
+  const MAIN_DOMAIN = 'orcaui.umccr.org';
+
+  useEffect(() => {
+    // Only redirect in production environment
+    if (window.location.hostname === PROD_DOMAIN) {
+      window.location.href = window.location.href.replace(PROD_DOMAIN, MAIN_DOMAIN);
+      return;
+    }
+  }, []);
+
   useEffect(() => {
     // Listen for auth events
     const unsubscribe = Hub.listen('auth', ({ payload }) => {
