@@ -28,7 +28,7 @@ const SideNavbar: FC<SideNavbarProps> = ({ navigation, className }) => {
       {/* slide indicator */}
       <div
         className='absolute z-50 left-[1px] top-0 w-[2px] h-[48px] bg-white transition-transform duration-300 '
-        style={{ transform: `translateY(${activeIndex * 56 + 48 + 40 + 2}px)` }} // header height 44px + mt-10 + space -y-2 + padding 4px + space -y-2
+        style={{ transform: `translateY(${activeIndex * 56 + 40 + 2}px)` }} // header height 44px + mt-10 + space -y-2 + padding 4px + space -y-2
       />
 
       {/* list of module navigation */}
