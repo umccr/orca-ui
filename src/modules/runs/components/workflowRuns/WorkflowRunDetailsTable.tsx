@@ -63,7 +63,7 @@ const WorkflowRunDetailsTable = () => {
             return (
               <Link
                 to={`/lab/library/${orcabusId}`}
-                className={classNames('ml-2 text-sm font-medium hover:text-blue-700 text-blue-500')}
+                className={classNames('text-sm font-medium hover:text-blue-700 text-blue-500')}
               >
                 <div>{orcabusId as string}</div>
               </Link>
