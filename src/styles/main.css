@@ -11,3 +11,9 @@
     @apply font-code;
   }
 }
+
+/* Hide horizontal overflow for the html tag */
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
