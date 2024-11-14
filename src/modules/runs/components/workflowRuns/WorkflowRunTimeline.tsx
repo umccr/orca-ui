@@ -427,7 +427,11 @@ const WorkflowRunTimeline = () => {
             content={
               <div className='flex flex-col gap-2'>
                 <div className='text-sm font-semibold'>Comment</div>
-                <Textarea value={comment} onChange={(e) => setComment(e.target.value)} />
+                <Textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  className='border-gray-400 rounded-md border-[1px] py-1.5 px-3 text-sm/6'
+                />
               </div>
             }
             onClose={() => {
@@ -452,6 +456,7 @@ const WorkflowRunTimeline = () => {
                 <Textarea
                   value={resolvedComment}
                   onChange={(e) => setResolvedComment(e.target.value)}
+                  className='border-gray-400 rounded-md border-[1px] py-1.5 px-3 text-sm/6'
                 />
               </div>
             }
@@ -474,7 +479,11 @@ const WorkflowRunTimeline = () => {
             content={
               <div className='flex flex-col gap-2'>
                 <div className='text-sm font-semibold'>Comment</div>
-                <Textarea value={comment} onChange={(e) => setComment(e.target.value)} />
+                <Textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  className='border-gray-400 rounded-md border-[1px] py-1.5 px-3 text-sm/6'
+                />
               </div>
             }
             onClose={() => {

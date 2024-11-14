@@ -56,22 +56,14 @@ const WorkflowRunTable = () => {
             return <div>-</div>;
           } else {
             return (
-              <div>
-                <div
-                  className={classNames(
-                    'cursor-pointer flex flex-row items-center ml-2 text-sm font-medium hover:text-blue-700 text-blue-500'
-                  )}
-                >
-                  <Link
-                    to={`${id}`}
-                    className={classNames(
-                      'cursor-pointer flex flex-row items-center ml-2 text-sm font-medium hover:text-blue-700 text-blue-500'
-                    )}
-                  >
-                    <div>{workflowRunName as string}</div>
-                  </Link>
-                </div>
-              </div>
+              <Link
+                to={`${id}`}
+                className={classNames(
+                  'cursor-pointer flex flex-row items-center text-sm font-medium hover:text-blue-700 text-blue-500'
+                )}
+              >
+                <div>{workflowRunName as string}</div>
+              </Link>
             );
           }
         },
