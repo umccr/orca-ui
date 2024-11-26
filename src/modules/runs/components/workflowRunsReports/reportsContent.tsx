@@ -7,9 +7,13 @@ import { Link } from 'react-router-dom';
 import { classNames } from '@/utils/commonUtils';
 import { dayjs } from '@/utils/dayjs';
 import { Badge } from '@/components/common/badges';
-import { useMemo } from 'react';
+import { FC, useMemo } from 'react';
 
-const ReportsContent = () => {
+interface ReportsContentProps {
+  isExporting?: boolean;
+}
+
+const ReportsContent: FC<ReportsContentProps> = ({ isExporting }) => {
   const { getQueryParams } = useQueryParams();
 
   // api call to get workflow run all data without pagination
@@ -419,7 +423,26 @@ const ReportsContent = () => {
 
       <div className='py-4 text-xl font-base border-b border-gray-200 pb-2'>Workflow Metadata</div>
       <div className='min-h-[300px]'>
-        <ContentTabs tabs={tabs} />
+        {isExporting ? (
+          // When exporting, render all tab contents sequentially
+          <div className='flex flex-col gap-8'>
+            {workflowTypes.map((type) => (
+              <div key={type}>
+                <h3 className='text-lg font-medium mb-4'>
+                  {type} ({workflowCount?.[type]})
+                </h3>
+                <Table
+                  tableData={getSummaryTableDataByWorkflowType(type)}
+                  columns={[...workflowRunColumn]}
+                  inCard={true}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          // Normal interactive view
+          <ContentTabs tabs={tabs} />
+        )}
       </div>
     </div>
   );

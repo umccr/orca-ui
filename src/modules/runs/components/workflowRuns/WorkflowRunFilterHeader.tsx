@@ -8,12 +8,14 @@ import { useWorkflowRunStatusCountModel, useWorkflowModel } from '@/api/workflow
 import type { WorkflowModel } from '@/api/workflow';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
+import { keepPreviousData } from '@tanstack/react-query';
 
 const WorkflowRunFilterHeader = () => {
   // bugfix: if set array object to state, it will be refresh the page continuously as the object is always new
   // Convert selectedWorkflowTypeIds to selectedWorkflowTypeIdsStr: selectedWorkflowTypeIds.sort().join(',')
   const [selectedWorkflowTypeIdsStr, setSelectedWorkflowTypeIdsStr] = useState<string>('');
 
+  console.log(selectedWorkflowTypeIdsStr);
   // handle query params changes
   const onChangeParams = () => {
     // handle selectedWorkflowTypeIds changes
@@ -22,6 +24,7 @@ const WorkflowRunFilterHeader = () => {
       workflowTypeIds.length === 0 ? '-1' : workflowTypeIds.sort().join(',')
     );
   };
+
   const { setQueryParams, clearQueryParams, queryParams, getQueryParams } =
     useQueryParams(onChangeParams);
 
@@ -50,13 +53,24 @@ const WorkflowRunFilterHeader = () => {
               label: workflowType.workflowName,
               secondaryLabel: 'v' + workflowType.workflowVersion,
             })),
-          ]
+          ].sort((a, b) => a.label.localeCompare(b.label))
         : [],
     [workflowData]
   );
 
   const { data: workflowRunStatusCountData } = useWorkflowRunStatusCountModel({
-    params: {},
+    params: {
+      query: {
+        search: getQueryParams().search || undefined,
+        workflow__orcabus_id: getQueryParams().workflowTypeId || undefined,
+        start_time: getQueryParams().startDate || undefined,
+        end_time: getQueryParams().endDate || undefined,
+      },
+    },
+    reactQuery: {
+      enabled: true,
+      placeholderData: keepPreviousData,
+    },
   });
 
   const workflowRunStatusOptions = useMemo(

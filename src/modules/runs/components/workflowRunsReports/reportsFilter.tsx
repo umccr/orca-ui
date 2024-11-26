@@ -10,14 +10,18 @@ const ReportsFilterHeader = () => {
   };
 
   return (
-    <div className='flex flex-row items-center'>
-      <div className='text-xl font-base mr-4'>Period</div>
-      <DateRangePicker
-        align='left'
-        startDate={getQueryParams().startDate}
-        endDate={getQueryParams().endDate}
-        onTimeChange={handleTimeChange}
-      />
+    <div className='bg-white p-4 rounded-lg shadow-sm border border-gray-200'>
+      <div className='flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0'>
+        <div className='flex items-center'>
+          <span className='text-sm font-medium text-gray-600 mr-3'>Time Period:</span>
+          <DateRangePicker
+            align='left'
+            startDate={getQueryParams().startDate}
+            endDate={getQueryParams().endDate}
+            onTimeChange={handleTimeChange}
+          />
+        </div>
+      </div>
     </div>
   );
 };

@@ -709,7 +709,6 @@ export interface components {
         ProjectDetail: {
             readonly orcabusId: string;
             readonly contactSet: components["schemas"]["Contact"][];
-            readonly librarySet: components["schemas"]["Library"][];
             projectId?: string | null;
             name?: string | null;
             description?: string | null;
