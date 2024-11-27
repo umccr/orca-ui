@@ -87,15 +87,17 @@ export const SampleTableFilter = () => {
             </Button>
           </ClosePopoverWrapper>
 
-          <Button
-            className='w-full justify-center mt-2'
-            type='primary'
-            onClick={() => {
-              setQueryParams({ ...filter }, true);
-            }}
-          >
-            Apply
-          </Button>
+          <ClosePopoverWrapper>
+            <Button
+              className='w-full justify-center mt-2'
+              type='primary'
+              onClick={() => {
+                setQueryParams({ ...filter }, true);
+              }}
+            >
+              Apply
+            </Button>
+          </ClosePopoverWrapper>
         </div>
       }
     />
