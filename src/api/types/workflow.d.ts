@@ -11,7 +11,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1AnalysisList"];
+        get: operations["analysisList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -28,7 +28,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
-        get: operations["apiV1AnalysisRetrieve"];
+        get: operations["analysisRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -44,7 +44,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1AnalysiscontextList"];
+        get: operations["analysiscontextList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -61,7 +61,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
-        get: operations["apiV1AnalysiscontextRetrieve"];
+        get: operations["analysiscontextRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -77,7 +77,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1AnalysisrunList"];
+        get: operations["analysisrunList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -94,7 +94,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
-        get: operations["apiV1AnalysisrunRetrieve"];
+        get: operations["analysisrunRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -110,7 +110,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1PayloadList"];
+        get: operations["payloadList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -127,7 +127,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
-        get: operations["apiV1PayloadRetrieve"];
+        get: operations["payloadRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -143,7 +143,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1WorkflowList"];
+        get: operations["workflowList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -160,7 +160,7 @@ export interface paths {
             cookie?: never;
         };
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
-        get: operations["apiV1WorkflowRetrieve"];
+        get: operations["workflowRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -176,7 +176,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1WorkflowrunList"];
+        get: operations["workflowrunList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -192,9 +192,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1WorkflowrunCommentList"];
+        get: operations["workflowrunCommentList"];
         put?: never;
-        post: operations["apiV1WorkflowrunCommentCreate"];
+        post: operations["workflowrunCommentCreate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -214,7 +214,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch: operations["apiV1WorkflowrunCommentPartialUpdate"];
+        patch: operations["workflowrunCommentPartialUpdate"];
         trace?: never;
     };
     "/api/v1/workflowrun/{orcabusId}/comment/{id}/soft_delete/": {
@@ -227,7 +227,7 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete: operations["apiV1WorkflowrunCommentSoftDeleteDestroy"];
+        delete: operations["workflowrunCommentSoftDeleteDestroy"];
         options?: never;
         head?: never;
         patch?: never;
@@ -240,9 +240,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1WorkflowrunStateList"];
+        get: operations["workflowrunStateList"];
         put?: never;
-        post: operations["apiV1WorkflowrunStateCreate"];
+        post: operations["workflowrunStateCreate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -262,7 +262,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch: operations["apiV1WorkflowrunStatePartialUpdate"];
+        patch: operations["workflowrunStatePartialUpdate"];
         trace?: never;
     };
     "/api/v1/workflowrun/{orcabusId}/": {
@@ -273,9 +273,26 @@ export interface paths {
             cookie?: never;
         };
         /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
-        get: operations["apiV1WorkflowrunRetrieve"];
+        get: operations["workflowrunRetrieve"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/{orcabusId}/rerun/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Trigger a workflow run rerun by emitting an event to EventBridge with an overridden workflow input payload. Current supported workflow: 'rnasum' */
+        post: operations["workflowrunRerunCreate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -306,7 +323,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1WorkflowrunOngoingRetrieve"];
+        get: operations["workflowrunOngoingRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -322,7 +339,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["apiV1WorkflowrunUnresolvedRetrieve"];
+        get: operations["workflowrunUnresolvedRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -383,6 +400,49 @@ export interface components {
             comment?: string | null;
             status?: string | null;
         };
+        /**
+         * @description * `BRCA` - BRCA
+         *     * `THCA` - THCA
+         *     * `HNSC` - HNSC
+         *     * `LGG` - LGG
+         *     * `KIRC` - KIRC
+         *     * `LUSC` - LUSC
+         *     * `LUAD` - LUAD
+         *     * `PRAD` - PRAD
+         *     * `STAD` - STAD
+         *     * `LIHC` - LIHC
+         *     * `COAD` - COAD
+         *     * `KIRP` - KIRP
+         *     * `BLCA` - BLCA
+         *     * `OV` - OV
+         *     * `SARC` - SARC
+         *     * `PCPG` - PCPG
+         *     * `CESC` - CESC
+         *     * `UCEC` - UCEC
+         *     * `PAAD` - PAAD
+         *     * `TGCT` - TGCT
+         *     * `LAML` - LAML
+         *     * `ESCA` - ESCA
+         *     * `GBM` - GBM
+         *     * `THYM` - THYM
+         *     * `SKCM` - SKCM
+         *     * `READ` - READ
+         *     * `UVM` - UVM
+         *     * `ACC` - ACC
+         *     * `MESO` - MESO
+         *     * `KICH` - KICH
+         *     * `UCS` - UCS
+         *     * `DLBC` - DLBC
+         *     * `CHOL` - CHOL
+         *     * `LUAD-LCNEC` - LUAD-LCNEC
+         *     * `BLCA-NET` - BLCA-NET
+         *     * `PAAD-IPMN` - PAAD-IPMN
+         *     * `PAAD-NET` - PAAD-NET
+         *     * `PAAD-ACC` - PAAD-ACC
+         *     * `PANCAN` - PANCAN
+         * @enum {string}
+         */
+        DatasetEnum: "BRCA" | "THCA" | "HNSC" | "LGG" | "KIRC" | "LUSC" | "LUAD" | "PRAD" | "STAD" | "LIHC" | "COAD" | "KIRP" | "BLCA" | "OV" | "SARC" | "PCPG" | "CESC" | "UCEC" | "PAAD" | "TGCT" | "LAML" | "ESCA" | "GBM" | "THYM" | "SKCM" | "READ" | "UVM" | "ACC" | "MESO" | "KICH" | "UCS" | "DLBC" | "CHOL" | "LUAD-LCNEC" | "BLCA-NET" | "PAAD-IPMN" | "PAAD-NET" | "PAAD-ACC" | "PANCAN";
         Library: {
             readonly orcabusId: string;
             libraryId: string;
@@ -533,6 +593,10 @@ export interface components {
             version: string;
             data: unknown;
         };
+        /** @description For 'rnasum' workflow rerun only allow dataset to be overridden. */
+        RnasumRerunInput: {
+            dataset: components["schemas"]["DatasetEnum"];
+        };
         State: {
             readonly orcabusId: string;
             status: string;
@@ -586,6 +650,7 @@ export interface components {
             workflowRunName?: string | null;
             comment?: string | null;
         };
+        WorkflowRunRerun: components["schemas"]["RnasumRerunInput"];
     };
     responses: never;
     parameters: never;
@@ -595,7 +660,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    apiV1AnalysisList: {
+    analysisList: {
         parameters: {
             query?: {
                 analysisName?: string;
@@ -630,7 +695,7 @@ export interface operations {
             };
         };
     };
-    apiV1AnalysisRetrieve: {
+    analysisRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -652,7 +717,7 @@ export interface operations {
             };
         };
     };
-    apiV1AnalysiscontextList: {
+    analysiscontextList: {
         parameters: {
             query?: {
                 description?: string;
@@ -685,7 +750,7 @@ export interface operations {
             };
         };
     };
-    apiV1AnalysiscontextRetrieve: {
+    analysiscontextRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -706,7 +771,7 @@ export interface operations {
             };
         };
     };
-    apiV1AnalysisrunList: {
+    analysisrunList: {
         parameters: {
             query?: {
                 analysis?: string | null;
@@ -742,7 +807,7 @@ export interface operations {
             };
         };
     };
-    apiV1AnalysisrunRetrieve: {
+    analysisrunRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -764,7 +829,7 @@ export interface operations {
             };
         };
     };
-    apiV1PayloadList: {
+    payloadList: {
         parameters: {
             query?: {
                 data?: unknown;
@@ -796,7 +861,7 @@ export interface operations {
             };
         };
     };
-    apiV1PayloadRetrieve: {
+    payloadRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -817,7 +882,7 @@ export interface operations {
             };
         };
     };
-    apiV1WorkflowList: {
+    workflowList: {
         parameters: {
             query?: {
                 executionEngine?: string;
@@ -850,7 +915,7 @@ export interface operations {
             };
         };
     };
-    apiV1WorkflowRetrieve: {
+    workflowRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -871,7 +936,7 @@ export interface operations {
             };
         };
     };
-    apiV1WorkflowrunList: {
+    workflowrunList: {
         parameters: {
             query?: {
                 analysisRun?: string | null;
@@ -910,7 +975,7 @@ export interface operations {
             };
         };
     };
-    apiV1WorkflowrunCommentList: {
+    workflowrunCommentList: {
         parameters: {
             query?: never;
             header?: never;
@@ -931,7 +996,7 @@ export interface operations {
             };
         };
     };
-    apiV1WorkflowrunCommentCreate: {
+    workflowrunCommentCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -958,7 +1023,7 @@ export interface operations {
             };
         };
     };
-    apiV1WorkflowrunCommentPartialUpdate: {
+    workflowrunCommentPartialUpdate: {
         parameters: {
             query?: never;
             header?: never;
@@ -986,7 +1051,7 @@ export interface operations {
             };
         };
     };
-    apiV1WorkflowrunCommentSoftDeleteDestroy: {
+    workflowrunCommentSoftDeleteDestroy: {
         parameters: {
             query?: never;
             header?: never;
@@ -1007,7 +1072,7 @@ export interface operations {
             };
         };
     };
-    apiV1WorkflowrunStateList: {
+    workflowrunStateList: {
         parameters: {
             query?: never;
             header?: never;
@@ -1028,7 +1093,7 @@ export interface operations {
             };
         };
     };
-    apiV1WorkflowrunStateCreate: {
+    workflowrunStateCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -1055,7 +1120,7 @@ export interface operations {
             };
         };
     };
-    apiV1WorkflowrunStatePartialUpdate: {
+    workflowrunStatePartialUpdate: {
         parameters: {
             query?: never;
             header?: never;
@@ -1083,7 +1148,7 @@ export interface operations {
             };
         };
     };
-    apiV1WorkflowrunRetrieve: {
+    workflowrunRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1101,6 +1166,36 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkflowRunDetail"];
+                };
+            };
+        };
+    };
+    workflowrunRerunCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique value identifying this workflow run. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["WorkflowRunRerun"];
+                "multipart/form-data": components["schemas"]["WorkflowRunRerun"];
+                "application/json": components["schemas"]["WorkflowRunRerun"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
         };
@@ -1124,7 +1219,7 @@ export interface operations {
             };
         };
     };
-    apiV1WorkflowrunOngoingRetrieve: {
+    workflowrunOngoingRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1143,7 +1238,7 @@ export interface operations {
             };
         };
     };
-    apiV1WorkflowrunUnresolvedRetrieve: {
+    workflowrunUnresolvedRetrieve: {
         parameters: {
             query?: never;
             header?: never;
