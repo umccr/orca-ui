@@ -77,8 +77,8 @@ export const SearchBox = ({
   const [searchBox, setSearchBox] = useState<string>(initValue);
 
   return (
-    <div className='flex flex-col md:flex-row'>
-      <div className='flex flex-1 items-center justify-start pt-2'>
+    <div className='flex flex-col md:flex-row font-normal'>
+      <div className='flex flex-col flex-1 items-start pt-2'>
         <div className='w-full'>
           <label htmlFor='search' className='sr-only'>
             Search
@@ -89,11 +89,11 @@ export const SearchBox = ({
             </div>
             <input
               onBlur={() => {
-                onSearch(searchBox);
+                onSearch(`*${searchBox}*`);
               }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  onSearch(searchBox);
+                  onSearch(`*${searchBox}*`);
                 }
               }}
               onChange={(e) => {
@@ -110,6 +110,11 @@ export const SearchBox = ({
               type='search'
             />
           </div>
+        </div>
+        <div className='text-xs italic font-light my-2'>
+          The search matches values within S3 keys. Use an asterisk (*) as a wildcard to match any
+          sequence of characters. By default, an asterisk is added at the beginning and end of the
+          search term.
         </div>
       </div>
     </div>
