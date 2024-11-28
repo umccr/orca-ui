@@ -10,6 +10,9 @@ import { Column, TableData } from '@/components/tables/GroupedRowTable';
 import { Dropdown } from '@/components/common/dropdowns';
 import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
 import { SpinnerWithText } from '@/components/common/spinner';
+import { Link } from 'react-router-dom';
+import { classNames } from '@/utils/commonUtils';
+import { DocumentMagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 const WORKFLOW_ANALYSIS_TABLE = {
   umccrise: {
@@ -259,14 +262,24 @@ export const AnalysisTable = ({
         tableHeader={
           <div className='flex flex-row justify-between items-center'>
             <div>{workflowType}</div>
-            <Dropdown
-              floatingLabel='Portal Run Id'
-              value={portalRunId}
-              items={workflowRunResults.map((i) => ({
-                label: i.portalRunId,
-                onClick: () => setSelectedPortalRunId(i.portalRunId),
-              }))}
-            />
+            <div className='flex flex-row '>
+              <Link
+                to={`/runs/workflow?search=${portalRunId}`}
+                className={classNames('text-sm font-medium hover:text-blue-700 mt-4')}
+              >
+                <div className='items-center mr-4'>
+                  <DocumentMagnifyingGlassIcon className='h-5 w-5' />
+                </div>
+              </Link>
+              <Dropdown
+                floatingLabel='Portal Run Id'
+                value={portalRunId}
+                items={workflowRunResults.map((i) => ({
+                  label: i.portalRunId,
+                  onClick: () => setSelectedPortalRunId(i.portalRunId),
+                }))}
+              />
+            </div>
           </div>
         }
         striped={false}

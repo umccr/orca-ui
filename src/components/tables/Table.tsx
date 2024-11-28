@@ -211,7 +211,7 @@ const Table: FC<TableProps> = ({
         <div className='flex justify-center'>No data found</div>
       )}
 
-      {paginationProps && <Pagination {...paginationProps} />}
+      {paginationProps && !isFetchingData && <Pagination {...paginationProps} />}
     </div>
   );
 };
