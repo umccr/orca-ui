@@ -17,17 +17,23 @@ const BarChart: FC<BarChartProps> = ({ data, width, height = 240 }) => {
     d3.select(svgRef.current).selectAll('*').remove();
 
     // Calculate max label length to determine bottom margin
-    const maxLabelLength = Math.max(...data.map((d) => d.name.length));
-    const bottomMargin = Math.max(80, maxLabelLength * 4); // Adjust multiplier as needed
+    // const maxLabelLength = Math.max(...data.map((d) => d.name.length));
+    // const bottomMargin = Math.max(80, maxLabelLength * 4); // Adjust multiplier as needed
+
+    // Calculate legend width based on longest text
+    const legendWidth = Math.max(...data.map((d) => d.name.length)) * 8 + 40; // Approximate width needed
 
     // Set margins with dynamic bottom margin
     const margin = {
       top: 20,
-      right: 20,
-      bottom: bottomMargin, // Dynamic bottom margin
+      right: legendWidth + 20, // Add space for legend
+      bottom: Math.max(80, Math.max(...data.map((d) => d.name.length)) * 4),
       left: 60,
     };
-    const innerWidth = width - margin.left - margin.right;
+
+    // Calculate dimensions
+    const containerWidth = Math.min(800, width); // Increased to accommodate legend
+    const innerWidth = containerWidth - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
     // Create color scale
@@ -50,13 +56,16 @@ const BarChart: FC<BarChartProps> = ({ data, width, height = 240 }) => {
       .scaleBand()
       .domain(data.map((d) => d.name))
       .range([0, innerWidth])
-      .padding(0.2);
+      .padding(0.5);
 
     const y = d3
       .scaleLinear()
       .domain([0, d3.max(data, (d) => d.value) || 0])
       .nice()
       .range([innerHeight, 0]);
+
+    // Clear previous chart
+    d3.select(svgRef.current).selectAll('*').remove();
 
     // Create SVG container
     const svg = d3.select(svgRef.current).attr('width', width).attr('height', height);
@@ -91,7 +100,7 @@ const BarChart: FC<BarChartProps> = ({ data, width, height = 240 }) => {
           .style('background-color', colorScale(d.name))
           .style('color', 'white');
       })
-      .on('mouseout', function (event, d) {
+      .on('mouseout', function (_event, d) {
         d3.select(this).transition().duration(200).attr('fill', colorScale(d.name));
 
         tooltip.style('opacity', 0);
@@ -130,6 +139,39 @@ const BarChart: FC<BarChartProps> = ({ data, width, height = 240 }) => {
       .style('pointer-events', 'none')
       .style('font-size', '12px')
       .style('box-shadow', '0 2px 4px rgba(0,0,0,0.1)');
+
+    // Add legend
+    const legendSpacing = 20;
+    const legendRectSize = 12;
+    const legend = g
+      .append('g')
+      .attr('class', 'legend')
+      .attr('transform', `translate(${innerWidth + 10}, 0)`);
+
+    const legendItems = legend
+      .selectAll('.legend-item')
+      .data(data)
+      .enter()
+      .append('g')
+      .attr('class', 'legend-item')
+      .attr('transform', (d, i) => `translate(0, ${i * legendSpacing})`);
+
+    // Add colored rectangles to legend
+    legendItems
+      .append('rect')
+      .attr('width', legendRectSize)
+      .attr('height', legendRectSize)
+      .attr('rx', 2)
+      .style('fill', (d) => colorScale(d.name));
+
+    // Add text to legend with value
+    legendItems
+      .append('text')
+      .attr('x', legendRectSize + 5)
+      .attr('y', legendRectSize - 2)
+      .style('font-size', '12px')
+      .style('font-family', 'sans-serif')
+      .text((d) => `${d.name} (${d.value})`);
 
     // Cleanup
     return () => {

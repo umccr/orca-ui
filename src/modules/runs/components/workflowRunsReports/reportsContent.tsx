@@ -79,7 +79,7 @@ const ReportsContent: FC<ReportsContentProps> = ({ isExporting }) => {
           );
         },
       },
-      { header: 'Count', accessor: 'value' },
+      { header: 'Workflow Runs', accessor: 'value' },
     ],
     []
   );
@@ -255,7 +255,7 @@ const ReportsContent: FC<ReportsContentProps> = ({ isExporting }) => {
           }
         },
       },
-      { header: 'Count', accessor: 'value' },
+      { header: 'Workflow Runs', accessor: 'value' },
     ],
     []
   );
@@ -355,7 +355,7 @@ const ReportsContent: FC<ReportsContentProps> = ({ isExporting }) => {
           }
         },
       },
-      { header: 'Count', accessor: 'value' },
+      { header: 'Workflow Runs', accessor: 'value' },
     ],
     []
   );
@@ -394,7 +394,7 @@ const ReportsContent: FC<ReportsContentProps> = ({ isExporting }) => {
       <div className='py-4 text-xl font-base border-b border-gray-200 pb-2'>Analysis</div>
       <div className='flex flex-row justify-between'>
         <div className='flex flex-row w-1/2'>
-          <BarChart data={workflowAnalysisCountChartData} width={400} height={400} />
+          <BarChart data={workflowAnalysisCountChartData} width={500} height={400} />
         </div>
         <div className='flex flex-row w-1/2'>
           <Table
