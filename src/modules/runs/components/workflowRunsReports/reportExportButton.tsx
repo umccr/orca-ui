@@ -10,7 +10,7 @@ interface ReportExportButtonProps {
 const ReportExportButton: FC<ReportExportButtonProps> = ({ onClick, label, icon }) => {
   return (
     <Button onClick={onClick} type='light'>
-      <div className='flex items-center'>
+      <div className='flex items-center flex-row'>
         {icon}
         <div className='ml-2'>{label}</div>
       </div>

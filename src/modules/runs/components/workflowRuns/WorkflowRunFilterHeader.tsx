@@ -9,13 +9,17 @@ import type { WorkflowModel } from '@/api/workflow';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
 import { keepPreviousData } from '@tanstack/react-query';
-
+import { IconDropdown } from '@/components/common/dropdowns';
+import { useNavigate } from 'react-router-dom';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import { Tooltip } from '@/components/common/tooltips';
 const WorkflowRunFilterHeader = () => {
+  const navigate = useNavigate();
+
   // bugfix: if set array object to state, it will be refresh the page continuously as the object is always new
   // Convert selectedWorkflowTypeIds to selectedWorkflowTypeIdsStr: selectedWorkflowTypeIds.sort().join(',')
   const [selectedWorkflowTypeIdsStr, setSelectedWorkflowTypeIdsStr] = useState<string>('');
 
-  console.log(selectedWorkflowTypeIdsStr);
   // handle query params changes
   const onChangeParams = () => {
     // handle selectedWorkflowTypeIds changes
@@ -185,15 +189,30 @@ const WorkflowRunFilterHeader = () => {
           </div>
 
           <div className='px-0 flex-none'>
-            <Button
-              size='md'
-              onClick={() => {
-                clearQueryParams(['tab']);
-              }}
-              className=' text-gray-400 hover:text-white'
-            >
-              Clear all
-            </Button>
+            <Tooltip text='Clear all filters' position='top' background='white'>
+              <Button
+                size='md'
+                onClick={() => {
+                  clearQueryParams(['tab']);
+                }}
+                type='light'
+                className=' !text-gray-400 !hover:text-gray-600 !hover:bg-magpie-light-50 !p-1.5 !m-0 ring-1 ring-offset-0 ring-offset-gray-100 ring-gray-300'
+              >
+                <XMarkIcon className='h-5 w-5' />
+              </Button>
+            </Tooltip>
+          </div>
+          <div className='px-0 flex-none'>
+            <IconDropdown
+              items={[
+                {
+                  label: 'Report',
+                  onClick: () => {
+                    navigate('/runs/workflow/report');
+                  },
+                },
+              ]}
+            />
           </div>
         </div>
       </div>

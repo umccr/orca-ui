@@ -10,7 +10,7 @@ const ReportsFilterHeader = () => {
   };
 
   return (
-    <div className='bg-white p-4 rounded-lg shadow-sm border border-gray-200'>
+    <div className='bg-white p-4 rounded-lg'>
       <div className='flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0'>
         <div className='flex items-center'>
           <span className='text-sm font-medium text-gray-600 mr-3'>Time Period:</span>

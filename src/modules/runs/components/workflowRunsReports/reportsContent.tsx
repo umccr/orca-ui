@@ -302,8 +302,6 @@ const ReportsContent: FC<ReportsContentProps> = ({ isExporting }) => {
     }))
     .sort((a, b) => a.analysisName.localeCompare(b.analysisName));
 
-  console.log(workflowAnalysisCountData);
-
   /***** workflow Library statistics ***********/
   const workflowLibraryCount = workflowRunListAllData?.reduce(
     (acc: Record<string, number>, curr) => {
@@ -342,7 +340,7 @@ const ReportsContent: FC<ReportsContentProps> = ({ isExporting }) => {
         accessor: 'libraryId',
         cell: (libraryId: unknown, libraryRowData: TableData) => {
           const orcabusId = libraryRowData.orcabusId;
-          console.log(libraryId, orcabusId);
+          // console.log(libraryId, orcabusId);
           if (!orcabusId) {
             return <div>-</div>;
           } else {
@@ -423,8 +421,12 @@ const ReportsContent: FC<ReportsContentProps> = ({ isExporting }) => {
 
       <div className='py-4 text-xl font-base border-b border-gray-200 pb-2'>Workflow Metadata</div>
       <div className='min-h-[300px]'>
+        {/*  
+        TODO: add styling for exporting to enable export with same tab styling
+        potenial solution: add hidden export button in each tab and show it when exporting
+        currently when exporting, render all tab contents sequentially
+         */}
         {isExporting ? (
-          // When exporting, render all tab contents sequentially
           <div className='flex flex-col gap-8'>
             {workflowTypes.map((type) => (
               <div key={type}>

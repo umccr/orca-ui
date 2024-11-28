@@ -51,7 +51,7 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
   const selectedValues = useMemo(
     () =>
       options
-        .filter((option) => selected.includes(option.value))
+        .filter((option) => selected.includes(option.value.toString().split('.')[1]))
         .map(
           (option) => option.label + (option.secondaryLabel ? ` (${option.secondaryLabel})` : '')
         ),
