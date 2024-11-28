@@ -138,7 +138,7 @@ export const useWorkflowStateModel = createWorkflowQueryHook(
 export const useWorkflowPayloadModel = createWorkflowQueryHook('/api/v1/payload/{id}/');
 
 export const useWorkflowRunStatusCountModel = createWorkflowQueryHook(
-  '/api/v1/workflowrun/list_all/count_by_status/'
+  '/api/v1/workflowrun/stats/count_by_status/'
 );
 
 export const useWorkflowRunCommentModel = createWorkflowQueryHook(
@@ -175,4 +175,6 @@ export const useAnalysisRunDetailModel = createWorkflowQueryHook(
   '/api/v1/analysisrun/{orcabusId}/'
 );
 
-export const useWorkflowRunListAllModel = createWorkflowQueryHook('/api/v1/workflowrun/list_all/');
+export const useWorkflowRunListAllModel = createWorkflowQueryHook(
+  '/api/v1/workflowrun/stats/list_all/'
+);

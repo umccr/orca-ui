@@ -65,8 +65,8 @@ export const isFileViewable = (s3Key: string): boolean => {
 };
 
 export const isFileSizeAcceptable = (objectSize: number): boolean => {
-  // Only allow to view size less than 20MB - refer to file-manager settings
-  if (objectSize < 20000000) {
+  // Only allow to view size less than 50MB
+  if (objectSize < 50000000) {
     return true;
   }
   return false;

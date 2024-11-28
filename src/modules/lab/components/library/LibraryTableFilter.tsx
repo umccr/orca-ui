@@ -12,10 +12,9 @@ type FilterType = {
   orcabusId?: string[];
   libraryId?: string[];
   assay?: string[];
-  coverage__gte?: string;
-  coverage__lte?: string;
-  projectName?: string[];
-  projectOwner?: string[];
+  'coverage[gte]'?: string;
+  'coverage[lte]'?: string;
+  project_id?: string[];
   phenotype?: PhenotypeEnum[];
   quality?: QualityEnum[];
   type?: TypeEnum[];
@@ -100,24 +99,19 @@ export const LibraryTableFilter = () => {
         handleFilterChange={handleFilterChange}
       />
       <FilterTextInput
-        title='Project Name *'
-        keyFilter='projectName'
-        defaultInput={filter.projectName ? filter.projectName : []}
+        title='Project Id *'
+        keyFilter='project_id'
+        defaultInput={filter.project_id ? filter.project_id : []}
         handleFilterChange={handleFilterChange}
       />
-      <FilterTextInput
-        title='Project Owner *'
-        keyFilter='projectOwner'
-        defaultInput={filter.projectOwner ? filter.projectOwner : []}
-        handleFilterChange={handleFilterChange}
-      />
+
       <div className='border-b-2 mb-2 pb-2 italic text-s	text-gray-700 font-thin	'>
         {`*Text input support multi value with comma separated value. E.g. "L000001,L000002"`}
       </div>
       <CoverageFilter
         handleFilterChange={handleFilterChange}
-        defaultMaxInput={filter.coverage__lte ? parseInt(filter.coverage__lte) : undefined}
-        defaultMinInput={filter.coverage__gte ? parseInt(filter.coverage__gte) : undefined}
+        defaultMaxInput={filter['coverage[lte]'] ? parseInt(filter['coverage[lte]']) : undefined}
+        defaultMinInput={filter['coverage[gte]'] ? parseInt(filter['coverage[gte]']) : undefined}
       />
 
       <CheckboxGroup
@@ -179,15 +173,17 @@ export const LibraryTableFilter = () => {
             </Button>
           </ClosePopoverWrapper>
 
-          <Button
-            className='w-full justify-center mt-2'
-            type='primary'
-            onClick={() => {
-              setQueryParams({ ...filter }, true);
-            }}
-          >
-            Apply
-          </Button>
+          <ClosePopoverWrapper>
+            <Button
+              className='w-full justify-center mt-2'
+              type='primary'
+              onClick={() => {
+                setQueryParams({ ...filter }, true);
+              }}
+            >
+              Apply
+            </Button>
+          </ClosePopoverWrapper>
         </div>
       }
     />
@@ -221,11 +217,14 @@ const CoverageFilter = ({
         </label>
         <input
           disabled={disabled}
-          value={minInput}
-          onChange={(e) => setMinInput(parseInt(e.target.value))}
+          value={minInput && !isNaN(minInput) ? minInput : ''}
+          onChange={(e) => setMinInput(e.target.value ? parseInt(e.target.value) : undefined)}
           onBlur={() => {
+            console.log(minInput);
             if (minInput) {
-              handleFilterChange('coverage__gte', [minInput.toString()]);
+              handleFilterChange('coverage[gte]', [minInput.toString()]);
+            } else {
+              handleFilterChange('coverage[gte]', []);
             }
           }}
           type='number'
@@ -242,11 +241,13 @@ const CoverageFilter = ({
         </label>
         <input
           disabled={disabled}
-          value={maxInput}
-          onChange={(e) => setMaxInput(parseInt(e.target.value))}
+          value={maxInput && !isNaN(maxInput) ? maxInput : ''}
+          onChange={(e) => setMaxInput(e.target.value ? parseInt(e.target.value) : undefined)}
           onBlur={() => {
             if (maxInput) {
-              handleFilterChange('coverage__lte', [maxInput.toString()]);
+              handleFilterChange('coverage[lte]', [maxInput.toString()]);
+            } else {
+              handleFilterChange('coverage[lte]', []);
             }
           }}
           type='number'
