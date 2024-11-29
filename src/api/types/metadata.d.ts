@@ -1023,6 +1023,10 @@ export interface operations {
             query?: {
                 assay?: string | null;
                 coverage?: number | null;
+                /** @description Filter based on 'coverage' that is greater than or equal to the given value. */
+                "coverage[gte]"?: number;
+                /** @description Filter based on 'coverage' that is less than or equal to the given value. */
+                "coverage[lte]"?: number;
                 libraryId?: string | null;
                 orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
@@ -1033,6 +1037,8 @@ export interface operations {
                  *     * `tumor` - Tumor
                  *     * `negative-control` - Negative Control */
                 phenotype?: "normal" | "tumor" | "negative-control" | "" | null;
+                /** @description Filter where the associated the project has the given 'project_id'. */
+                projectId?: number;
                 /** @description * `very-poor` - VeryPoor
                  *     * `poor` - Poor
                  *     * `good` - Good
