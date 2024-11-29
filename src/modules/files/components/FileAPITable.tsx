@@ -31,7 +31,7 @@ export const FileAPITable = ({
     params: {
       query: {
         currentState: true,
-        key: searchBox == '' ? undefined : searchBox,
+        key: searchBox == '' ? undefined : `*${searchBox}*`,
         ...getPaginationParams(),
         ...additionalQueryParam,
       },
@@ -89,11 +89,11 @@ export const SearchBox = ({
             </div>
             <input
               onBlur={() => {
-                onSearch(`*${searchBox}*`);
+                onSearch(`${searchBox}`);
               }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  onSearch(`*${searchBox}*`);
+                  onSearch(`${searchBox}`);
                 }
               }}
               onChange={(e) => {
@@ -113,8 +113,7 @@ export const SearchBox = ({
         </div>
         <div className='text-xs italic font-light my-2'>
           The search matches values within S3 keys. Use an asterisk (*) as a wildcard to match any
-          sequence of characters. By default, an asterisk is added at the beginning and end of the
-          search term.
+          sequence of characters. An asterisk is added at the beginning and end of the search term.
         </div>
       </div>
     </div>

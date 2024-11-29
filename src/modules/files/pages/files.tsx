@@ -23,7 +23,7 @@ export default function FilesPage() {
         <Suspense fallback={<SpinnerWithText className='mt-4' text='Fetching related files ...' />}>
           <FileAPITable
             additionalQueryParam={{
-              key: searchKey,
+              key: `*${searchKey}*`,
             }}
             tableColumn={getTableColumn({ isHideKeyPrefix: false })}
           />

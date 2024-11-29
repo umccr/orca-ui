@@ -59,7 +59,7 @@ export const FilePreviewDrawer = ({ s3Record }: { s3Record: S3Record }) => {
       ) : (
         <div className='relative group'>
           <span className='invisible absolute rounded shadow-lg p-1 bg-gray-100 text-red-500 -mt-8 group-hover:visible group-hover:z-50'>
-            {!isFileSizeAllowed ? 'File size is too large' : 'File type is not supported'}
+            {!isFileAllowed ? 'File type is not supported' : 'File size is too large'}
           </span>
           <Button className='!p-2 !m-0 !shadow-none' rounded size='md' type='gray' disabled={true}>
             <EyeSlashIcon className='size-4 ' />
