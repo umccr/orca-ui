@@ -40,7 +40,7 @@ export const LibraryTableDetails: FC<LibraryTableDetailsProps> = ({ libraryDetai
           Project: library.projectSet.map((project) => (
             <Link
               key={project.orcabusId}
-              to={`/lab/?tab=project&orcabusId=${project.orcabusId}`}
+              to={`/lab/?tab=library&project_id=${project.projectId}`}
               className={classNames('hover:text-blue-700 text-blue-500')}
             >
               {project.projectId ?? '-'}

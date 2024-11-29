@@ -9,7 +9,7 @@ import { useQueryParams } from '@/hooks/useQueryParams';
 import { useWorkflowRunListModel } from '@/api/workflow';
 import { Link } from 'react-router-dom';
 
-const WorkflowRunTable = () => {
+const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) => {
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
 
   // Api call to get workflow runs
@@ -33,6 +33,12 @@ const WorkflowRunTable = () => {
         is_ongoing: getQueryParams().workflowRunStatus == 'ongoing' || undefined,
         start_time: getQueryParams().startDate || undefined,
         end_time: getQueryParams().endDate || undefined,
+        libraries__orcabusId: libraryOrcabusId
+          ? // WFM-FIXME: Library Orcabus Prefix
+            libraryOrcabusId.split('.').length > 1
+            ? libraryOrcabusId.split('.')[1]
+            : libraryOrcabusId.split('.')[0]
+          : undefined,
       },
     },
     reactQuery: {
@@ -57,7 +63,7 @@ const WorkflowRunTable = () => {
           } else {
             return (
               <Link
-                to={`${id}`}
+                to={`/runs/workflow/${id}`}
                 className={classNames(
                   'cursor-pointer flex flex-row items-center text-sm font-medium hover:text-blue-700 text-blue-500'
                 )}

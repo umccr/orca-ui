@@ -11,9 +11,9 @@ import { DocumentArrowUpIcon } from '@heroicons/react/24/outline';
 import { ProjectListAPITable } from '../components/project/ProjectListAPITable';
 
 const selectedClassName =
-  'inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500';
+  'inline-block p-4 text-blue-500 border-b-2 border-blue-500 rounded-t-lg active';
 const regularClassName =
-  'cursor-pointer	inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300';
+  'cursor-pointer	inline-block p-4 border-b-2 border-transparent rounded-t-lg text-gray-500 border-transparent hover:border-gray-200 hover:text-gray-700';
 
 export default function MetadataPage() {
   const { getQueryParams, setQueryParams } = useQueryParams();
@@ -74,7 +74,7 @@ export default function MetadataPage() {
           <DocumentArrowUpIcon className='h-5 w-5' />
         </Button>
       </div>
-      <div className='text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700'>
+      <div className='capitalize text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400'>
         <ul className='flex flex-wrap -mb-px'>
           {tabs.map((tab, index) => {
             const isSelected = currentTabSelection === tab.label;

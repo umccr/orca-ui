@@ -1,9 +1,11 @@
 import React, { Suspense } from 'react';
 import { PortalRunIdDropdown } from '../../components/library/PortalRunIdDropdown';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { SpinnerWithText } from '@/components/common/spinner';
 import { WorkflowVersion } from '../../components/library/WorkflowVersion';
 import { FileAPITable, getTableColumn } from '@/modules/files/components/FileAPITable';
+import { classNames } from '@/utils/commonUtils';
+import { DocumentMagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 export default function LibraryWorkflowPage() {
   const { libraryOrcabusId, portalRunId, workflowType } = useParams();
@@ -21,11 +23,22 @@ export default function LibraryWorkflowPage() {
             <WorkflowVersion portalRunId={portalRunId} libraryOrcabusId={libraryOrcabusId} />
           )}
         </div>
-        <PortalRunIdDropdown
-          workflowType={workflowType}
-          portalRunId={portalRunId}
-          libraryOrcabusId={libraryOrcabusId}
-        />
+
+        <div className='flex flex-row '>
+          <Link
+            to={`/runs/workflow?search=${portalRunId}`}
+            className={classNames('text-sm font-medium hover:text-blue-700 mt-4')}
+          >
+            <div className='items-center mr-4'>
+              <DocumentMagnifyingGlassIcon className='h-5 w-5' />
+            </div>
+          </Link>
+          <PortalRunIdDropdown
+            workflowType={workflowType}
+            portalRunId={portalRunId}
+            libraryOrcabusId={libraryOrcabusId}
+          />
+        </div>
       </div>
 
       {/* Body */}
