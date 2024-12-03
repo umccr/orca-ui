@@ -10,7 +10,7 @@ export interface TabsProps {
   selectedLabel?: string;
 }
 
-export const Tabs: FC<TabsProps> = ({ tabs, selectedLabel = tabs[0].label }) => {
+export const Tabs: FC<TabsProps> = ({ tabs, selectedLabel = tabs[0]?.label ?? '' }) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(
     tabs.findIndex((tab) => tab.label === selectedLabel)
   );

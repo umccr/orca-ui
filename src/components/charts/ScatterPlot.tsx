@@ -2,8 +2,7 @@ import { useEffect, useRef, FC } from 'react';
 import * as d3 from 'd3';
 
 interface DataItem {
-  [key: string]: number | string;
-  species: string;
+  [key: string]: number | string | null;
 }
 
 interface ScatterplotMatrixProps {
@@ -33,7 +32,7 @@ const ScatterplotMatrix: FC<ScatterplotMatrixProps> = ({ data, width, height }) 
 
     const color = d3
       .scaleOrdinal<string>()
-      .domain(data.map((d) => d.species))
+      .domain(data.map((d) => d.species as string))
       .range(d3.schemeCategory10);
 
     const axisx = d3
@@ -107,7 +106,7 @@ const ScatterplotMatrix: FC<ScatterplotMatrixProps> = ({ data, width, height }) 
         .attr('cy', (d) => y[j](d[columns[j]] as number))
         .attr('r', 3.5)
         .attr('fill-opacity', 0.7)
-        .attr('fill', (d) => color(d.species));
+        .attr('fill', (d) => color(d.species as string));
     });
 
     const circle = cell.selectAll('circle');
