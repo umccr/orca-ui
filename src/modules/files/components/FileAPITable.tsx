@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { S3Record, useSuspenseFileObject, useQueryPresignedFileObjectId } from '@/api/file';
 import { Table } from '@/components/tables';
 import { Column } from '@/components/tables/Table';
-import { Bars3Icon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, InformationCircleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import dayjs from 'dayjs';
 import { IconDropdown } from '@/components/common/dropdowns';
 import toaster from '@/components/common/toaster';
@@ -13,6 +13,7 @@ import { FileDownloadButton } from './FileDownloadButton';
 import { DOWNLOADABLE_FILETYPE_LIST } from '@/components/files';
 import { getFilenameFromKey } from '@/utils/commonUtils';
 import { useQueryParams } from '@/hooks/useQueryParams';
+import { Tooltip } from '@/components/common/tooltips';
 
 export const FileAPITable = ({
   additionalQueryParam,
@@ -21,7 +22,7 @@ export const FileAPITable = ({
 }: {
   isSearchBoxKey?: boolean;
   tableColumn?: Column[];
-  additionalQueryParam?: Record<string, string>;
+  additionalQueryParam?: Record<string, string | string[] | undefined>;
 }) => {
   const [searchBox, setSearchBox] = useState('');
 
@@ -69,21 +70,23 @@ export const SearchBox = ({
   initValue = '',
   placeholder = 'Search',
   onSearch,
+  searchInfoText,
 }: {
   initValue?: string;
   placeholder?: string;
   onSearch: (s: string) => void;
+  searchInfoText?: string;
 }) => {
   const [searchBox, setSearchBox] = useState<string>(initValue);
 
   return (
     <div className='flex flex-col md:flex-row font-normal'>
       <div className='flex flex-col flex-1 items-start pt-2'>
-        <div className='w-full'>
+        <div className='w-full flex flex-row items-center'>
           <label htmlFor='search' className='sr-only'>
             Search
           </label>
-          <div className='relative'>
+          <div className='relative w-full'>
             <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
               <MagnifyingGlassIcon className='h-5 w-5 text-gray-400' aria-hidden='true' />
             </div>
@@ -110,11 +113,16 @@ export const SearchBox = ({
               type='search'
             />
           </div>
+          {searchInfoText && (
+            <Tooltip text={searchInfoText} position='left' background='white'>
+              <InformationCircleIcon className='ml-3 h-5 2-5' />
+            </Tooltip>
+          )}
         </div>
-        <div className='text-xs italic font-light my-2'>
+        {/* <div className='text-xs italic font-light my-2'>
           The search matches values within S3 keys. Use an asterisk (*) as a wildcard to match any
           sequence of characters. An asterisk is added at the beginning and end of the search term.
-        </div>
+        </div> */}
       </div>
     </div>
   );
