@@ -158,28 +158,6 @@ export default function FilesPage() {
             />
           </div>
         </div>
-        <div className='w-full flex justify-end mt-2'>
-          <Button
-            onClick={() => {
-              setQueryParams({ key: [], bucket: [] });
-              setSearchS3KeyInput([]);
-              setS3KeyCustomInputField('');
-            }}
-            className='mr-3 border'
-            type='gray'
-          >
-            Clear
-          </Button>
-          <Button
-            onClick={() => {
-              setQueryParams({ key: searchS3KeyInput, bucket: searchBucketInput });
-            }}
-            type='green'
-          >
-            Search
-          </Button>
-        </div>
-
         {/* Shortcut filter */}
         <div className='my-2'>
           {[...WORKFLOW_FILTER, ...FILE_TYPE_FILTER].map((name, idx) => (
@@ -199,6 +177,27 @@ export default function FilesPage() {
               </Badge>
             </div>
           ))}
+        </div>
+        <div className='w-full flex justify-end'>
+          <Button
+            onClick={() => {
+              setQueryParams({ key: [], bucket: [] });
+              setSearchS3KeyInput([]);
+              setS3KeyCustomInputField('');
+            }}
+            className='mr-3 border'
+            type='gray'
+          >
+            Clear
+          </Button>
+          <Button
+            onClick={() => {
+              setQueryParams({ key: searchS3KeyInput, bucket: searchBucketInput });
+            }}
+            type='green'
+          >
+            Search
+          </Button>
         </div>
       </div>
 
