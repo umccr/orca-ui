@@ -23,7 +23,15 @@ const WORKFLOW_FILTER = [
   '*/wgtsQc/*',
   '*/wts/*',
 ];
-const FILE_TYPE_FILTER = ['*vcf.gz', '*fastq.gz', '*fastq.ora', '*bam', '*pdf', '*png', '*.html'];
+const FILE_TYPE_FILTER = [
+  '*.vcf.gz',
+  '*.fastq.gz',
+  '*.fastq.ora',
+  '*.bam',
+  '*.pdf',
+  '*.png',
+  '*.html',
+];
 
 const getBadgeType = (name: string) => {
   if (WORKFLOW_FILTER.includes(name)) {
