@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Timeline } from '@/components/common/timelines';
 import type { TimelineEvent } from '@/components/common/timelines';
 import { ContentTabs } from '@/components/navigation/tabs';
@@ -30,7 +30,7 @@ import { useAuthContext } from '@/context/AmplifyAuthContext';
 import { Badge } from '@/components/common/badges';
 import { getBadgeType, statusBackgroundColor } from '@/components/common/badges';
 import { dayjs } from '@/utils/dayjs';
-import { getUsername } from '@/utils/commonUtils';
+import { classNames, getUsername } from '@/utils/commonUtils';
 import { BackdropWithText } from '@/components/common/backdrop';
 
 const WorkflowRunTimeline = () => {
@@ -537,6 +537,7 @@ const WorkflowRunTimeline = () => {
                 label: 'List',
                 content: (
                   <JsonToNestedList
+                    cellValueFormat={cellValueFormat}
                     data={selectedWorkflowPayloadData?.data as Record<string, unknown>}
                     isFetchingData={isFetching}
                   />
@@ -560,3 +561,25 @@ const WorkflowRunTimeline = () => {
 };
 
 export default WorkflowRunTimeline;
+
+/**
+ * This is an EXPERIMENTAL approach where want to be able to redirect to the `/files` page
+ * with filter to a specific key prefix if an s3 uri path is found as the value
+ */
+const cellValueFormat = {
+  condition: (value: unknown) => typeof value === 'string' && value.startsWith('s3://'),
+  cell: (value: string) => {
+    const s3Bucket = value.split('s3://')[1].split('/')[0];
+    const s3Key = value.split(`s3://${s3Bucket}/`)[1];
+
+    return (
+      <Link
+        // asterisk (*) is added to the end of the key to filter the path prefix
+        to={`/files?bucket=${encodeURIComponent(s3Bucket)}&key=${encodeURIComponent(s3Key)}*`}
+        className={classNames('text-sm capitalize font-medium hover:text-blue-700 text-blue-500')}
+      >
+        {value}
+      </Link>
+    );
+  },
+};

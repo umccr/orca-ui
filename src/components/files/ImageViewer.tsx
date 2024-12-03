@@ -13,7 +13,7 @@ export const ImageViewer = ({ s3ObjectId, s3Key }: Props) => {
   return (
     <div className='w-full h-full text-center'>
       <img
-        className='max-w-full max-h-full bg-white'
+        className='mx-auto max-w-full max-h-[1000px] bg-white cursor-pointer'
         onClick={() => window.open(url, '_blank')}
         src={url}
       />

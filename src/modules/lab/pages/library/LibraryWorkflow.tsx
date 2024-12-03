@@ -3,12 +3,16 @@ import { PortalRunIdDropdown } from '../../components/library/PortalRunIdDropdow
 import { Link, useParams } from 'react-router-dom';
 import { SpinnerWithText } from '@/components/common/spinner';
 import { WorkflowVersion } from '../../components/library/WorkflowVersion';
-import { FileAPITable, getTableColumn } from '@/modules/files/components/FileAPITable';
+import { FileAPITable, getTableColumn, SearchBox } from '@/modules/files/components/FileAPITable';
 import { classNames } from '@/utils/commonUtils';
 import { DocumentMagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { useQueryParams } from '@/hooks/useQueryParams';
 
 export default function LibraryWorkflowPage() {
   const { libraryOrcabusId, portalRunId, workflowType } = useParams();
+  const { setQueryParams, getQueryParams } = useQueryParams();
+  const searchKey = getQueryParams().key;
+
   if (!libraryOrcabusId || !workflowType) {
     throw new Error('Invalid URL!');
   }
@@ -44,9 +48,19 @@ export default function LibraryWorkflowPage() {
       {/* Body */}
       {portalRunId && (
         <Suspense fallback={<SpinnerWithText text='Fetching related files ...' />}>
+          <SearchBox
+            initValue={searchKey}
+            placeholder='S3 key pattern search (wildcard supported)'
+            onSearch={(s) => {
+              setQueryParams({ key: s });
+            }}
+            searchInfoText='The search matches values within S3 keys. Use an asterisk (*) as a wildcard to match any sequence of characters. An asterisk is added at the beginning and end of the search term.'
+          />
           <FileAPITable
-            isSearchBoxKey={true}
-            additionalQueryParam={{ 'attributes[portalRunId]': portalRunId }}
+            additionalQueryParam={{
+              'attributes[portalRunId]': portalRunId,
+              key: `*${searchKey}*`,
+            }}
             tableColumn={getTableColumn({ isHideKeyPrefix: true })}
           />
         </Suspense>
