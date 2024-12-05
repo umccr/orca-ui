@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
-import { Button } from '@/components/common/buttons';
+import { Button, IconButton } from '@/components/common/buttons';
 import { ButtonProps } from '@/components/common/buttons/Button';
-import { CheckCircleIcon, PlusIcon } from '@heroicons/react/20/solid';
+import { IconButtonProps } from '@/components/common/buttons/IconButton';
+import { CheckCircleIcon, PlusIcon, ArrowDownOnSquareIcon } from '@heroicons/react/20/solid';
 import { Spinner } from '@/components/common/spinner';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
@@ -82,4 +83,17 @@ export const CircularButtons: Story = {
     rounded: true,
     className: '!p-2 !m-0',
   },
+};
+
+// Update the story type
+export const IconButtonStory: StoryObj<IconButtonProps> = {
+  render: () => (
+    <IconButton
+      onClick={() => console.log('testing')}
+      icon={<ArrowDownOnSquareIcon className='h-5 w-5' />}
+      tooltip='Export'
+      tooltipPosition='top'
+      tooltipBackground='white'
+    />
+  ),
 };

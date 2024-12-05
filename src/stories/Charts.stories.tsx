@@ -1,12 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { PieChart, GanttChart, ScatterplotMatrix, StackedBarChart } from '@/components/charts';
-
-import {
-  generateMockWorkflowRunData,
-  groupBySubjectAndCount,
-} from '@/api/_mock/mockWorkflowRunData';
-import { workflowTypeData } from '@/api/_mock/mockSeedData';
-import { scatterPlotData } from '@/api/_mock/mockScatterPlotData';
+import { generateMockWorkflowRunData, groupBySubjectAndCount } from './_mock/mockWorkflowRunData';
+import { workflowTypeData } from './_mock/mockSeedData';
+import { scatterPlotData } from './_mock/mockScatterPlotData';
 
 const ganttData = generateMockWorkflowRunData();
 

@@ -1,3 +1,6 @@
+interface ScatterPlotData {
+  [name: string]: string | number | null;
+}
 export const columns = [
   'species',
   'island',
@@ -8,7 +11,7 @@ export const columns = [
   'sex',
 ];
 
-export const scatterPlotData = [
+export const scatterPlotData: ScatterPlotData[] = [
   {
     species: 'Adelie',
     island: 'Torgersen',
