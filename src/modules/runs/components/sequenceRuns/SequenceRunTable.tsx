@@ -3,11 +3,11 @@ import { Table, TableData } from '@/components/tables';
 import { Column } from '@/components/tables/Table';
 import { classNames } from '@/utils/commonUtils';
 import { useState, ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { dayjs } from '@/utils/dayjs';
-import { ClipboardIcon } from '@heroicons/react/24/outline';
+// import { ClipboardIcon } from '@heroicons/react/24/outline';
 import { Badge } from '@/components/common/badges';
 import SequenceRunDetailsDrawer from './SequenceRunDetailsDrawer';
 const SequenceRunTable = () => {
@@ -55,7 +55,7 @@ const SequenceRunTable = () => {
                 )}
                 onClick={() => {
                   setSelectedSequenceRun(sequenceRunRowData as SequenceRunModel);
-                  setQueryParams({ sequenceRunId: sequenceRunRowData.id });
+                  setQueryParams({ sequenceRunId: sequenceRunRowData.orcabusId });
                 }}
               >
                 {instrumentRunId as string}
@@ -98,64 +98,64 @@ const SequenceRunTable = () => {
         );
       },
     },
-    {
-      header: 'Bcl Convert',
-      accessor: 'bclConvertStatus',
-      cell: (status: unknown) => {
-        return (
-          <Badge status={(status as string) || 'UNKNOWN'}>
-            {(status || 'UNKNOWN') as ReactNode}
-          </Badge>
-        );
-      },
-    },
-    {
-      header: '',
-      accessor: 'instrumentRunId',
-      cell: (instrumentRunId: unknown) => {
-        if (!instrumentRunId) {
-          return <div>-</div>;
-        } else {
-          return (
-            <div className='flex flex-row items-center'>
-              {/* <Link
-                to={`sequence/${instrumentRunId}/details`}
-                className={classNames(
-                  'flex flex-row items-center text-sm font-medium hover:text-blue-700 text-blue-500'
-                )}
-              >
-                <TableCellsIcon
-                  className='h-5 w-5 pr-1 shrink-0 text-blue-500'
-                  aria-hidden='true'
-                />
-                Details
-              </Link> */}
-              {/* <Link
-              to={`sequence/${instrumentRunId}/diagram`}
-              className={classNames(
-                'flex flex-row items-center text-sm font-medium hover:text-blue-700 text-blue-500'
-              )}
-            >
-              <RectangleGroupIcon
-                className='h-5 w-5 pr-1 shrink-0 text-blue-500'
-                aria-hidden='true'
-              />
-              Diagram
-            </Link> */}
-              <Link
-                to={`sequence/${instrumentRunId}/report`}
-                className={classNames(
-                  'flex flex-row items-center text-sm font-medium hover:text-blue-700 text-blue-500'
-                )}
-              >
-                <ClipboardIcon className='h-5 w-5 pr-1 shrink-0 text-blue-500' aria-hidden='true' />
-                Report
-              </Link>
-            </div>
-          );
-        }
-      },
-    },
+    // {
+    //   header: 'Bcl Convert',
+    //   accessor: 'bclConvertStatus',
+    //   cell: (status: unknown) => {
+    //     return (
+    //       <Badge status={(status as string) || 'UNKNOWN'}>
+    //         {(status || 'UNKNOWN') as ReactNode}
+    //       </Badge>
+    //     );
+    //   },
+    // },
+    // {
+    //   header: '',
+    //   accessor: 'instrumentRunId',
+    //   cell: (instrumentRunId: unknown) => {
+    //     if (!instrumentRunId) {
+    //       return <div>-</div>;
+    //     } else {
+    //       return (
+    //         <div className='flex flex-row items-center'>
+    //           {/* <Link
+    //             to={`sequence/${instrumentRunId}/details`}
+    //             className={classNames(
+    //               'flex flex-row items-center text-sm font-medium hover:text-blue-700 text-blue-500'
+    //             )}
+    //           >
+    //             <TableCellsIcon
+    //               className='h-5 w-5 pr-1 shrink-0 text-blue-500'
+    //               aria-hidden='true'
+    //             />
+    //             Details
+    //           </Link> */}
+    //           {/* <Link
+    //           to={`sequence/${instrumentRunId}/diagram`}
+    //           className={classNames(
+    //             'flex flex-row items-center text-sm font-medium hover:text-blue-700 text-blue-500'
+    //           )}
+    //         >
+    //           <RectangleGroupIcon
+    //             className='h-5 w-5 pr-1 shrink-0 text-blue-500'
+    //             aria-hidden='true'
+    //           />
+    //           Diagram
+    //         </Link> */}
+    //           <Link
+    //             to={`sequence/${instrumentRunId}/report`}
+    //             className={classNames(
+    //               'flex flex-row items-center text-sm font-medium hover:text-blue-700 text-blue-500'
+    //             )}
+    //           >
+    //             <ClipboardIcon className='h-5 w-5 pr-1 shrink-0 text-blue-500' aria-hidden='true' />
+    //             Report
+    //           </Link>
+    //         </div>
+    //       );
+    //     }
+    //   },
+    // },
   ];
   return (
     <div>
@@ -180,7 +180,6 @@ const SequenceRunTable = () => {
 
       {(getQueryParams().sequenceRunId || selectedSequenceRun) && (
         <SequenceRunDetailsDrawer
-          selectedSequenceRunData={selectedSequenceRun}
           selectedSequenceRunId={getQueryParams().sequenceRunId}
           onCloseDrawer={onCloseDrawer}
         />

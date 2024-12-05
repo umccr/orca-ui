@@ -16,11 +16,11 @@ export interface TimelineEvent {
 
 export interface TimelineProps {
   timeline: TimelineEvent[];
-  handldEventClick: (event: TimelineEvent) => void;
+  handldEventClick: (event: TimelineEvent) => void | undefined;
   selectId?: string;
 }
 
-const Timeline: FC<TimelineProps> = ({ timeline, handldEventClick, selectId = '' }) => {
+const Timeline: FC<TimelineProps> = ({ timeline, handldEventClick = undefined, selectId = '' }) => {
   const [selectedEventId, setSelectedEventId] = useState<string>(timeline[0]?.id || '');
   useEffect(() => {
     if (selectId) {
@@ -39,7 +39,9 @@ const Timeline: FC<TimelineProps> = ({ timeline, handldEventClick, selectId = ''
 
   const handleTimelineEventClick = (event: TimelineEvent) => {
     setSelectedEventId(event.id || '');
-    handldEventClick(event);
+    if (handldEventClick) {
+      handldEventClick(event);
+    }
   };
 
   return (

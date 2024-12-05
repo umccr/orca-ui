@@ -1,8 +1,9 @@
 import { FC, ReactNode, MouseEventHandler } from 'react';
+import { classNames } from '@/utils/commonUtils';
 
 export interface ButtonProps {
   type?: 'primary' | 'secondary' | 'light' | 'green' | 'red' | 'yellow' | 'gray';
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   rounded?: boolean;
   children: ReactNode;
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -58,6 +59,7 @@ const Button: FC<ButtonProps> = ({
   };
 
   const sizeStyles: { [key: string]: string } = {
+    xs: ' text-xs px-2 py-1 ',
     sm: ' text-sm px-3 py-1.5 ',
     md: ' text-md px-4 py-2 ',
     lg: ' text-lg px-5 py-2.5 ',
@@ -69,7 +71,14 @@ const Button: FC<ButtonProps> = ({
   return (
     <button
       type='button'
-      className={`${className} ${baseStyles} ${typeStyles[type]} ${sizeStyles[size]} ${roundedStyles} ${disabledStyles} `}
+      className={classNames(
+        baseStyles,
+        typeStyles[type],
+        sizeStyles[size],
+        roundedStyles,
+        disabledStyles,
+        className
+      )}
       onClick={onClick}
       disabled={disabled}
     >
