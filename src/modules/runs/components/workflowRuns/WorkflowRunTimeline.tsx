@@ -32,11 +32,12 @@ import { getBadgeType, statusBackgroundColor } from '@/components/common/badges'
 import { dayjs } from '@/utils/dayjs';
 import { classNames, getUsername } from '@/utils/commonUtils';
 import { BackdropWithText } from '@/components/common/backdrop';
+import { useWorkflowRunContext } from './WorkflowRunContext';
 
 const WorkflowRunTimeline = () => {
   const { orcabusId } = useParams();
   const { user } = useAuthContext();
-
+  const { refreshWorkflowRuns, setRefreshWorkflowRuns } = useWorkflowRunContext();
   const [currentState, setCurrentState] = useState<string | null>(null);
   const [selectedPayloadId, setSelectedPayloadId] = useState<string | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);
@@ -61,6 +62,13 @@ const WorkflowRunTimeline = () => {
       enabled: !!orcabusId,
     },
   });
+
+  useEffect(() => {
+    if (refreshWorkflowRuns) {
+      refetchWorkflowState();
+      setRefreshWorkflowRuns(false);
+    }
+  }, [refreshWorkflowRuns, refetchWorkflowState, setRefreshWorkflowRuns]);
 
   const {
     data: workflowCommentData,
