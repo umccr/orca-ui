@@ -204,7 +204,9 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
     reset: resetDeleteSequenceRunComment,
   } = useSequenceRunCommentDeleteModel({
     params: { path: { orcabusId: selectedSequenceRunID as string, id: commentId as string } },
-    body: {},
+    body: {
+      createdBy: user?.email,
+    },
   });
 
   const handleDeleteComment = () => {
@@ -306,7 +308,11 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
         TitleIcon={ChatBubbleBottomCenterTextIcon}
         open={isOpenDeleteCommentDialog}
         title='Delete Comment'
-        content={<div>Delete Comment</div>}
+        content={
+          <div>
+            <div>Are you sure you want to delete this comment?</div>
+          </div>
+        }
         onClose={() => {
           setIsOpenDeleteCommentDialog(false);
         }}

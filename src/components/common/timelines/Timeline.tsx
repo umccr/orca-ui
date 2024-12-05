@@ -16,7 +16,7 @@ export interface TimelineEvent {
 
 export interface TimelineProps {
   timeline: TimelineEvent[];
-  handldEventClick: (event: TimelineEvent) => void | undefined;
+  handldEventClick?: (event: TimelineEvent) => void;
   selectId?: string;
 }
 
