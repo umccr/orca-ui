@@ -92,13 +92,13 @@ export function createSequenceRunPatchMutationHook<K extends keyof paths>(path: 
 }
 
 export function createSequenceRunDeleteMutationHook<K extends keyof paths>(path: K) {
-  return function ({ params, reactQuery }: UseMutationOptions<paths[typeof path]['delete']>) {
+  return function ({ params, reactQuery, body }: UseMutationOptions<paths[typeof path]['delete']>) {
     const versionedPath = getVersionedPath(path);
     return useMutation({
       ...reactQuery,
       mutationFn: async () => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.DELETE(versionedPath, { params });
+        const { data } = await client.DELETE(versionedPath, { params, body: body });
         return data;
       },
     });
