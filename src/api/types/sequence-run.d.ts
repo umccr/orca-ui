@@ -151,7 +151,7 @@ export interface components {
             readonly orcabusId: string;
             instrumentRunId: string;
             runVolumeName: string;
-            runFolderPath: string;
+            runFolderPath?: string | null;
             runDataUri: string;
             status: components["schemas"]["StatusEnum"];
             /** Format: date-time */
@@ -209,7 +209,7 @@ export interface operations {
                 /** @description Number of results to return per page. */
                 rowsPerPage?: number;
                 runDataUri?: string;
-                runFolderPath?: string;
+                runFolderPath?: string | null;
                 runVolumeName?: string;
                 sampleSheetName?: string | null;
                 /** @description A search term. */

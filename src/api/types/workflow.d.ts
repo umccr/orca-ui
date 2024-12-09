@@ -299,23 +299,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/workflowrun/count_by_status/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Returns the count of records for each status: 'SUCCEEDED', 'ABORTED', 'FAILED', and 'Onging' State. */
-        get: operations["/api/v1/workflowRun/countByStatus/"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/workflowrun/ongoing/": {
         parameters: {
             query?: never;
@@ -324,6 +307,55 @@ export interface paths {
             cookie?: never;
         };
         get: operations["workflowrunOngoingRetrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/stats/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["workflowrunStatsList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/stats/count_by_status/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Returns the count of records for each status: 'SUCCEEDED', 'ABORTED', 'FAILED', and 'Onging' State based on the query params. */
+        get: operations["workflowrunStatsCountByStatusRetrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/stats/list_all/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["workflowrunStatsListAllList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1200,7 +1232,45 @@ export interface operations {
             };
         };
     };
-    "/api/v1/workflowRun/countByStatus/": {
+    workflowrunOngoingRetrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunDetail"];
+                };
+            };
+        };
+    };
+    workflowrunStatsList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunDetail"][];
+                };
+            };
+        };
+    };
+    workflowrunStatsCountByStatusRetrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1219,7 +1289,7 @@ export interface operations {
             };
         };
     };
-    workflowrunOngoingRetrieve: {
+    workflowrunStatsListAllList: {
         parameters: {
             query?: never;
             header?: never;
@@ -1233,7 +1303,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["WorkflowRunDetail"];
+                    "application/json": components["schemas"]["WorkflowRunDetail"][];
                 };
             };
         };
