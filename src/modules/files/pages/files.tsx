@@ -93,7 +93,7 @@ export default function FilesPage() {
           inputDraft={portalRunIdInput.inputDraft}
           setInput={setPortalRunIdInput}
           placeholder='Enter matching portal run id'
-          badgeType={getBadgeType}
+          badgeType={() => 'success'}
           operator={portalRunIdInput.operator}
           setOperator={(operator) => setPortalRunIdInput((prev) => ({ ...prev, operator }))}
           allowedOperator={['or']}
@@ -106,7 +106,7 @@ export default function FilesPage() {
           inputDraft={bucketInput.inputDraft}
           setInput={setBucketInput}
           placeholder='Enter matching bucket'
-          badgeType={getBadgeType}
+          badgeType={() => 'warning'}
           operator={bucketInput.operator}
           setOperator={(operator) => setBucketInput((prev) => ({ ...prev, operator }))}
           allowedOperator={['and', 'or']}

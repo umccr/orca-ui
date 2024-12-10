@@ -18,7 +18,7 @@ interface InputBadgeBoxProps {
   inputDraft: string;
   setInput: React.Dispatch<React.SetStateAction<InputBadgeBoxType>>;
   placeholder: string;
-  badgeType: (value: string) => 'primary' | 'secondary' | 'warning' | 'unknown';
+  badgeType: (value: string) => 'primary' | 'secondary' | 'warning' | 'success' | 'unknown';
   operator: 'and' | 'or';
   setOperator: (operator: 'and' | 'or') => void;
   allowedOperator: ('and' | 'or')[];
