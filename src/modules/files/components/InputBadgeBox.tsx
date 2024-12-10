@@ -81,36 +81,38 @@ const InputBadgeBox: React.FC<InputBadgeBoxProps> = ({
             </div>
           </Badge>
         ))}
-        <input
-          className='flex-grow min-w-60 text-sm px-2 py-2 focus-visible:outline-none border-none'
-          onBlur={handleAddInput}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleAddInput();
-            }
-          }}
-          onChange={(e) => {
-            setInput((prev) => ({
-              ...prev,
-              inputDraft: e.target.value.trim(),
-            }));
-          }}
-          value={inputDraft}
-          placeholder={placeholder}
-        />
-        <Dropdown
-          value={operator.toUpperCase()}
-          items={[
-            {
-              label: 'AND',
-              onClick: () => setOperator('and'),
-            },
-            {
-              label: 'OR',
-              onClick: () => setOperator('or'),
-            },
-          ].filter((item) => allowedOperator.includes(item.label.toLowerCase() as 'and' | 'or'))}
-        />
+        <span className='min-w-80 flex flex-row flex-grow'>
+          <input
+            className='flex-grow min-w-60 text-sm px-2 py-2 focus-visible:outline-none border-none'
+            onBlur={handleAddInput}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleAddInput();
+              }
+            }}
+            onChange={(e) => {
+              setInput((prev) => ({
+                ...prev,
+                inputDraft: e.target.value.trim(),
+              }));
+            }}
+            value={inputDraft}
+            placeholder={placeholder}
+          />
+          <Dropdown
+            value={operator.toUpperCase()}
+            items={[
+              {
+                label: 'AND',
+                onClick: () => setOperator('and'),
+              },
+              {
+                label: 'OR',
+                onClick: () => setOperator('or'),
+              },
+            ].filter((item) => allowedOperator.includes(item.label.toLowerCase() as 'and' | 'or'))}
+          />
+        </span>
       </div>
     </div>
   );
