@@ -45,3 +45,43 @@ export const FilterTextInput = <T,>({
     </>
   );
 };
+
+interface CheckboxGroupInputProps<T> {
+  title?: string;
+  keyFilter: keyof T;
+  options: string[];
+  handleIsCheckedFunc: (key: keyof T, value: string) => void;
+  isCheckedFunc: (key: keyof T, value: string) => boolean;
+}
+export const CheckboxGroupInput = <T,>({
+  title,
+  keyFilter,
+  options,
+  handleIsCheckedFunc,
+  isCheckedFunc,
+}: CheckboxGroupInputProps<T>) => {
+  return (
+    <>
+      {title && <div className='font-medium'>{title}</div>}
+      {options.map((item, key) => (
+        <div
+          key={`${title}-${key}`}
+          className='flex items-center ps-2 rounded hover:bg-gray-100 cursor-pointer'
+          onClick={() => {
+            handleIsCheckedFunc(keyFilter, item);
+          }}
+        >
+          <input
+            readOnly
+            checked={isCheckedFunc(keyFilter, item)}
+            type='checkbox'
+            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500/50 focus:ring-2 cursor-pointer'
+          />
+          <label className='w-full py-2 ms-2 text-sm font-normal text-gray-900 rounded cursor-pointer'>
+            {item}
+          </label>
+        </div>
+      ))}
+    </>
+  );
+};

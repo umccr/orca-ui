@@ -24,7 +24,7 @@ export const getSubjectTableColumn = ({
         <div>Subject Id</div>
         <Tooltip
           text={`This is now the 'ExternalSubjectID' from the tracking sheet`}
-          position='top'
+          position='right'
         >
           <InformationCircleIcon className='h-4	ml-2' />
         </Tooltip>
