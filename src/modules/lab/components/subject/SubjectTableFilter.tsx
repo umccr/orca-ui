@@ -9,6 +9,7 @@ import { FilterTextInput } from '../utils';
 type FilterType = {
   orcabusId?: string[];
   subjectId?: string[];
+  isLibraryNone?: boolean;
 };
 
 export const SubjectTableFilter = () => {
@@ -60,6 +61,24 @@ export const SubjectTableFilter = () => {
         <div className='z-10 bg-white rounded-lg w-80'>
           <div className='max-h-[250px] px-3 pb-3 overflow-y-auto text-sm text-gray-700 '>
             <SubjectFilter />
+
+            <div className='font-medium'>{`Library`}</div>
+            <div
+              className='flex items-center ps-2 rounded hover:bg-gray-100 cursor-pointer'
+              onClick={() => {
+                setFilter((prev) => ({ ...prev, isLibraryNone: !prev['isLibraryNone'] }));
+              }}
+            >
+              <input
+                readOnly
+                checked={filter['isLibraryNone']}
+                type='checkbox'
+                className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500/50 focus:ring-2 cursor-pointer'
+              />
+              <label className='w-full py-2 ms-2 text-sm font-normal text-gray-900 rounded cursor-pointer'>
+                Empty library
+              </label>
+            </div>
           </div>
           <ClosePopoverWrapper className='mt-4'>
             <Button

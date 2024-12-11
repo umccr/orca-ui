@@ -3,10 +3,8 @@ import { Suspense, useState } from 'react';
 import { FileAPITable, getTableColumn } from '../components/FileAPITable';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { Badge } from '@/components/common/badges';
-import { XMarkIcon } from '@heroicons/react/16/solid';
 import { Button } from '@/components/common/buttons';
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
-import { Tooltip } from '@/components/common/tooltips';
+import InputBadgeBox from '../components/InputBadgeBox';
 
 const WORKFLOW_FILTER = [
   '*/bclconvert-interop-qc/*',
@@ -43,129 +41,91 @@ const getBadgeType = (name: string) => {
   return 'unknown';
 };
 
+interface InputBadgeBoxType {
+  operator: 'and' | 'or';
+  inputState: string[];
+  inputDraft: string;
+}
+
 export default function FilesPage() {
   const { setQueryParams, getQueryParams } = useQueryParams();
-  const searchS3Key = getQueryParams().key as string | string[] | undefined;
-  const searchBucket = getQueryParams().bucket as string | string[] | undefined;
-  const [searchBucketInput, setSearchBucketInput] = useState<string[]>(
-    !searchBucket ? [] : Array.isArray(searchBucket) ? searchBucket : [searchBucket]
-  );
-  const [bucketCustomInputField, setBucketCustomInputField] = useState<string>('');
+  const s3KeyParam = getQueryParams().key as string | string[] | undefined;
+  const s3KeyOpParam = getQueryParams().keyOp as string | undefined;
 
-  const [searchS3KeyInput, setSearchS3KeyInput] = useState<string[]>(
-    !searchS3Key ? [] : Array.isArray(searchS3Key) ? searchS3Key : [searchS3Key]
-  );
-  const [s3KeyCustomInputField, setS3KeyCustomInputField] = useState<string>('');
+  const bucketParam = getQueryParams().bucket as string | string[] | undefined;
+  const bucketOpParam = getQueryParams().bucketOp as string | undefined;
 
-  const descKeyWidth = 'w-16';
+  const portalRunIdParam = getQueryParams().portalRunId as string | string[] | undefined;
+
+  // For PortalRunId
+  const [portalRunIdInput, setPortalRunIdInput] = useState<InputBadgeBoxType>({
+    operator: 'or',
+    inputState: !portalRunIdParam
+      ? []
+      : Array.isArray(portalRunIdParam)
+        ? portalRunIdParam
+        : [portalRunIdParam],
+    inputDraft: '',
+  });
+
+  // For S3 bucket
+  const [bucketInput, setBucketInput] = useState<InputBadgeBoxType>({
+    operator: 'or',
+    inputState: !bucketParam ? [] : Array.isArray(bucketParam) ? bucketParam : [bucketParam],
+    inputDraft: '',
+  });
+
+  // For S3 key
+  const [s3KeyInput, setS3KeyInput] = useState<InputBadgeBoxType>({
+    operator: 'and',
+    inputState: !s3KeyParam ? [] : Array.isArray(s3KeyParam) ? s3KeyParam : [s3KeyParam],
+    inputDraft: '',
+  });
+
   return (
     <div className='flex flex-col'>
       <h1 className='mb-4 font-bold'>File Browser</h1>
       <div className='flex flex-col'>
+        {/* PortalRunId */}
+        <InputBadgeBox
+          label='Portal Run Id'
+          inputState={portalRunIdInput.inputState}
+          inputDraft={portalRunIdInput.inputDraft}
+          setInput={setPortalRunIdInput}
+          placeholder='Enter matching portal run id'
+          badgeType={() => 'success'}
+          operator={portalRunIdInput.operator}
+          setOperator={(operator) => setPortalRunIdInput((prev) => ({ ...prev, operator }))}
+          allowedOperator={['or']}
+        />
+
         {/* Bucket */}
-        <div className='flex flex-row items-center'>
-          <div className={`${descKeyWidth} text-sm flex flex-row`}>Bucket</div>
-          <div className='rounded-lg w-full border py-1 px-1 flex flex-wrap'>
-            {searchBucketInput.map((key, index) => (
-              <Badge className='mx-1 my-1' key={`key-filter-${index}`} type='warning'>
-                {key}
-                <div className='pl-2 '>
-                  <XMarkIcon />
-                </div>
-                <div
-                  className='inline cursor-pointer'
-                  onClick={() => {
-                    setSearchBucketInput((prv) => prv.filter((val) => val !== key));
-                  }}
-                >
-                  <XMarkIcon aria-hidden='true' className='h-3 w-3' />
-                </div>
-              </Badge>
-            ))}
-            <input
-              className='flex-grow min-w-60 text-sm px-2 py-2 focus-visible:outline-none border-none'
-              onBlur={() => {
-                if (bucketCustomInputField && !searchBucketInput.includes(bucketCustomInputField)) {
-                  setSearchBucketInput((prv) => [...prv, bucketCustomInputField]);
-                }
-                setBucketCustomInputField('');
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  if (!searchBucketInput.includes(bucketCustomInputField)) {
-                    setSearchBucketInput((prv) => [...prv, bucketCustomInputField]);
-                  }
-                  setBucketCustomInputField('');
-                }
-              }}
-              onChange={(e) => {
-                setBucketCustomInputField(e.target.value.trim());
-              }}
-              value={bucketCustomInputField}
-              id='search'
-              name='search'
-              placeholder={'Enter matching bucket'}
-              type='search'
-            />
-          </div>
-        </div>
+        <InputBadgeBox
+          label='Bucket'
+          inputState={bucketInput.inputState}
+          inputDraft={bucketInput.inputDraft}
+          setInput={setBucketInput}
+          placeholder='Enter matching bucket'
+          badgeType={() => 'warning'}
+          operator={bucketInput.operator}
+          setOperator={(operator) => setBucketInput((prev) => ({ ...prev, operator }))}
+          allowedOperator={['and', 'or']}
+        />
 
         {/* S3 Key */}
-        <div className='flex flex-row items-center mt-2'>
-          <div className={`${descKeyWidth} text-sm flex flex-row`}>
-            Key
-            <Tooltip
-              text={`The search matches values within S3 keys. Use an asterisk (*) as a wildcard to match any sequence of characters. For example, to search based on a portalRunId folder, use '*/123456/*'. Some shortcut filters are provided below.`}
-              position='right'
-              background='white'
-            >
-              <InformationCircleIcon className='mx-2 h-5 2-5' />
-            </Tooltip>
-          </div>
-          <div className='rounded-lg w-full border py-1 px-1 flex flex-wrap'>
-            {searchS3KeyInput.map((key, index) => (
-              <Badge className='mx-1 my-1' key={`key-filter-${index}`} type={getBadgeType(key)}>
-                {key}
-                <div className='pl-2 '>
-                  <XMarkIcon />
-                </div>
-                <div
-                  className='inline cursor-pointer'
-                  onClick={() => {
-                    setSearchS3KeyInput((prv) => prv.filter((val) => val !== key));
-                  }}
-                >
-                  <XMarkIcon aria-hidden='true' className='h-3 w-3' />
-                </div>
-              </Badge>
-            ))}
-            <input
-              className='flex-grow min-w-60 text-sm px-2 py-2 focus-visible:outline-none border-none'
-              onBlur={() => {
-                if (s3KeyCustomInputField && !searchS3KeyInput.includes(s3KeyCustomInputField)) {
-                  setSearchS3KeyInput((prv) => [...prv, s3KeyCustomInputField]);
-                }
-                setS3KeyCustomInputField('');
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  if (!searchS3KeyInput.includes(s3KeyCustomInputField)) {
-                    setSearchS3KeyInput((prv) => [...prv, s3KeyCustomInputField]);
-                  }
-                  setS3KeyCustomInputField('');
-                }
-              }}
-              onChange={(e) => {
-                setS3KeyCustomInputField(e.target.value.trim());
-              }}
-              value={s3KeyCustomInputField}
-              id='search'
-              name='search'
-              placeholder={'Enter S3 key pattern (wildcard supported)'}
-              type='search'
-            />
-          </div>
-        </div>
+        <InputBadgeBox
+          label='Key'
+          tooltipText={`The search matches values within S3 keys. Use an asterisk (*) as a wildcard to match any sequence of characters. For example, to search based on a portalRunId folder, use '*/123456/*'. Some shortcut filters are provided below.`}
+          inputState={s3KeyInput.inputState}
+          inputDraft={s3KeyInput.inputDraft}
+          setInput={setS3KeyInput}
+          placeholder='Enter S3 key pattern (wildcard supported)'
+          badgeType={getBadgeType}
+          operator={s3KeyInput.operator}
+          setOperator={(operator) => setS3KeyInput((prev) => ({ ...prev, operator }))}
+          allowedOperator={['and', 'or']}
+        />
+
         {/* Shortcut filter */}
         <div className='my-2'>
           {[...WORKFLOW_FILTER, ...FILE_TYPE_FILTER].map((name, idx) => (
@@ -173,10 +133,11 @@ export default function FilesPage() {
               className='inline cursor-pointer'
               key={`key-add-filter-${idx}`}
               onClick={() => {
-                if (!searchS3KeyInput.includes(name)) {
-                  setSearchS3KeyInput((prv) => {
-                    return [...prv, name];
-                  });
+                if (!s3KeyInput['inputState'].includes(name)) {
+                  setS3KeyInput((prv) => ({
+                    ...prv,
+                    inputState: [...prv['inputState'], name],
+                  }));
                 }
               }}
             >
@@ -190,8 +151,22 @@ export default function FilesPage() {
           <Button
             onClick={() => {
               setQueryParams({ key: [], bucket: [] });
-              setSearchS3KeyInput([]);
-              setS3KeyCustomInputField('');
+
+              setS3KeyInput((prv) => ({
+                ...prv,
+                inputState: [],
+                inputDraft: '',
+              }));
+              setBucketInput((prv) => ({
+                ...prv,
+                inputState: [],
+                inputDraft: '',
+              }));
+              setPortalRunIdInput((prv) => ({
+                ...prv,
+                inputState: [],
+                inputDraft: '',
+              }));
             }}
             className='mr-3 border'
             type='gray'
@@ -200,7 +175,13 @@ export default function FilesPage() {
           </Button>
           <Button
             onClick={() => {
-              setQueryParams({ key: searchS3KeyInput, bucket: searchBucketInput });
+              setQueryParams({
+                key: s3KeyInput['inputState'],
+                keyOp: s3KeyInput['operator'],
+                bucket: bucketInput['inputState'],
+                bucketOp: bucketInput['operator'],
+                portalRunId: portalRunIdInput['inputState'],
+              });
             }}
             type='green'
           >
@@ -208,14 +189,14 @@ export default function FilesPage() {
           </Button>
         </div>
       </div>
-
-      {/* Only show the table if the key filter exist! */}
-      {searchS3Key && (
+      {/* Only show the table if the key or portalRunId filter exist! */}
+      {(s3KeyParam || portalRunIdParam) && (
         <Suspense fallback={<SpinnerWithText className='mt-4' text='Fetching related files ...' />}>
           <FileAPITable
             additionalQueryParam={{
-              'key[]': searchS3Key,
-              'bucket[]': searchBucket,
+              [`key[${s3KeyOpParam ?? s3KeyInput['operator']}][]`]: s3KeyParam,
+              [`bucket[${bucketOpParam ?? bucketInput['operator']}][]`]: bucketParam,
+              [`attributes[portalRunId][]`]: portalRunIdParam,
             }}
             tableColumn={getTableColumn({ isHideKeyPrefix: false })}
           />

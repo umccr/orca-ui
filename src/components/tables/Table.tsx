@@ -114,9 +114,8 @@ const Table: FC<TableProps> = ({
                             {column.sortDirection && (
                               <span className='visible ml-2 flex-none rounded text-gray-400'>
                                 <ChevronDownIcon
-                                  aria-hidden='true'
                                   className={classNames(
-                                    'w-5 h-5 cursor-pointer stroke-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200',
+                                    'w-5 h-5 cursor-pointer stroke-gray-500 opacity-100 transition-opacity duration-200',
                                     column.sortDirection === 'asc' ? '-rotate-180' : 'rotate-0'
                                   )}
                                 />

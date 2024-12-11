@@ -6,7 +6,7 @@ import type { PhenotypeEnum, QualityEnum, TypeEnum, WorkflowEnum } from '@/api/m
 import { Button } from '@/components/common/buttons';
 import { FunnelIcon } from '@heroicons/react/24/outline';
 import { classNames } from '@/utils/commonUtils';
-import { FilterTextInput } from '../utils';
+import { FilterTextInput, CheckboxGroupInput } from '../utils';
 
 type FilterType = {
   orcabusId?: string[];
@@ -14,7 +14,7 @@ type FilterType = {
   assay?: string[];
   'coverage[gte]'?: string;
   'coverage[lte]'?: string;
-  project_id?: string[];
+  projectId?: string[];
   phenotype?: PhenotypeEnum[];
   quality?: QualityEnum[];
   type?: TypeEnum[];
@@ -100,8 +100,8 @@ export const LibraryTableFilter = () => {
       />
       <FilterTextInput
         title='Project Id *'
-        keyFilter='project_id'
-        defaultInput={filter.project_id ? filter.project_id : []}
+        keyFilter='projectId'
+        defaultInput={filter.projectId ? filter.projectId : []}
         handleFilterChange={handleFilterChange}
       />
 
@@ -114,28 +114,28 @@ export const LibraryTableFilter = () => {
         defaultMinInput={filter['coverage[gte]'] ? parseInt(filter['coverage[gte]']) : undefined}
       />
 
-      <CheckboxGroup
+      <CheckboxGroupInput
         title='Phenotype'
         keyFilter='phenotype'
         options={PHENOTYPE_OPTION}
         handleIsCheckedFunc={handleIsCheckedFunc}
         isCheckedFunc={isCheckedFilterActive}
       />
-      <CheckboxGroup
+      <CheckboxGroupInput
         title='Quality'
         keyFilter='quality'
         options={QUALITY_OPTION}
         handleIsCheckedFunc={handleIsCheckedFunc}
         isCheckedFunc={isCheckedFilterActive}
       />
-      <CheckboxGroup
+      <CheckboxGroupInput
         title='Type'
         keyFilter='type'
         options={TYPE_OPTION}
         handleIsCheckedFunc={handleIsCheckedFunc}
         isCheckedFunc={isCheckedFilterActive}
       />
-      <CheckboxGroup
+      <CheckboxGroupInput
         title='Workflow'
         keyFilter='workflow'
         options={WORKFLOW_OPTION}
@@ -254,45 +254,6 @@ const CoverageFilter = ({
           className='my-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500/50 focus:border-blue-500/50 block w-full p-2.5'
         />
       </div>
-    </>
-  );
-};
-
-const CheckboxGroup = ({
-  title,
-  keyFilter,
-  options,
-  handleIsCheckedFunc,
-  isCheckedFunc,
-}: {
-  title: string;
-  keyFilter: keyof FilterType;
-  options: string[];
-  handleIsCheckedFunc: (key: keyof FilterType, value: string) => void;
-  isCheckedFunc: (key: keyof FilterType, value: string) => boolean;
-}) => {
-  return (
-    <>
-      <div className='font-medium'>{title}</div>
-      {options.map((item, key) => (
-        <div
-          key={`${keyFilter}-${key}`}
-          className='flex items-center ps-2 rounded hover:bg-gray-100 cursor-pointer'
-          onClick={() => {
-            handleIsCheckedFunc(keyFilter, item);
-          }}
-        >
-          <input
-            readOnly
-            checked={isCheckedFunc(keyFilter, item)}
-            type='checkbox'
-            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500/50 focus:ring-2 cursor-pointer'
-          />
-          <label className='w-full py-2 ms-2 text-sm font-normal text-gray-900 rounded cursor-pointer'>
-            {item}
-          </label>
-        </div>
-      ))}
     </>
   );
 };

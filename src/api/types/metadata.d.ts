@@ -31,10 +31,10 @@ export interface paths {
         get: operations["contactRetrieve"];
         put?: never;
         post?: never;
-        delete?: never;
+        delete: operations["contactDestroy"];
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["contactPartialUpdate"];
         trace?: never;
     };
     "/api/v1/contact/{orcabusId}/history/": {
@@ -81,10 +81,10 @@ export interface paths {
         get: operations["individualRetrieve"];
         put?: never;
         post?: never;
-        delete?: never;
+        delete: operations["individualDestroy"];
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["individualPartialUpdate"];
         trace?: never;
     };
     "/api/v1/individual/{orcabusId}/history/": {
@@ -131,10 +131,10 @@ export interface paths {
         get: operations["libraryRetrieve"];
         put?: never;
         post?: never;
-        delete?: never;
+        delete: operations["libraryDestroy"];
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["libraryPartialUpdate"];
         trace?: never;
     };
     "/api/v1/library/{orcabusId}/history/": {
@@ -181,10 +181,10 @@ export interface paths {
         get: operations["projectRetrieve"];
         put?: never;
         post?: never;
-        delete?: never;
+        delete: operations["projectDestroy"];
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["projectPartialUpdate"];
         trace?: never;
     };
     "/api/v1/project/{orcabusId}/history/": {
@@ -231,10 +231,10 @@ export interface paths {
         get: operations["sampleRetrieve"];
         put?: never;
         post?: never;
-        delete?: never;
+        delete: operations["sampleDestroy"];
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["samplePartialUpdate"];
         trace?: never;
     };
     "/api/v1/sample/{orcabusId}/history/": {
@@ -281,10 +281,10 @@ export interface paths {
         get: operations["subjectRetrieve"];
         put?: never;
         post?: never;
-        delete?: never;
+        delete: operations["subjectDestroy"];
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["subjectPartialUpdate"];
         trace?: never;
     };
     "/api/v1/subject/{orcabusId}/history/": {
@@ -693,6 +693,48 @@ export interface components {
             };
             results: components["schemas"]["SubjectHistory"][];
         };
+        PatchedContact: {
+            readonly orcabusId?: string;
+            contactId?: string | null;
+            name?: string | null;
+            description?: string | null;
+            /** Format: email */
+            email?: string | null;
+        };
+        PatchedIndividual: {
+            readonly orcabusId?: string;
+            individualId?: string | null;
+            source?: string | null;
+        };
+        PatchedLibrary: {
+            readonly orcabusId?: string;
+            libraryId?: string | null;
+            phenotype?: (components["schemas"]["PhenotypeEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+            workflow?: (components["schemas"]["WorkflowEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+            quality?: (components["schemas"]["QualityEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+            type?: (components["schemas"]["TypeEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+            assay?: string | null;
+            /** Format: double */
+            coverage?: number | null;
+            sample?: string | null;
+            subject?: string | null;
+        };
+        PatchedProject: {
+            readonly orcabusId?: string;
+            projectId?: string | null;
+            name?: string | null;
+            description?: string | null;
+        };
+        PatchedSample: {
+            readonly orcabusId?: string;
+            sampleId?: string | null;
+            externalSampleId?: string | null;
+            source?: (components["schemas"]["SourceEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+        };
+        PatchedSubject: {
+            readonly orcabusId?: string;
+            subjectId?: string | null;
+        };
         /**
          * @description * `normal` - Normal
          *     * `tumor` - Tumor
@@ -902,6 +944,55 @@ export interface operations {
             };
         };
     };
+    contactDestroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique value identifying this contact. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    contactPartialUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique value identifying this contact. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedContact"];
+                "multipart/form-data": components["schemas"]["PatchedContact"];
+                "application/json": components["schemas"]["PatchedContact"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Contact"];
+                };
+            };
+        };
+    };
     contactHistoryList: {
         parameters: {
             query?: {
@@ -983,6 +1074,55 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["IndividualDetail"];
+                };
+            };
+        };
+    };
+    individualDestroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique value identifying this individual. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    individualPartialUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique value identifying this individual. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedIndividual"];
+                "multipart/form-data": components["schemas"]["PatchedIndividual"];
+                "application/json": components["schemas"]["PatchedIndividual"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Individual"];
                 };
             };
         };
@@ -1110,6 +1250,55 @@ export interface operations {
             };
         };
     };
+    libraryDestroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique value identifying this library. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    libraryPartialUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique value identifying this library. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedLibrary"];
+                "multipart/form-data": components["schemas"]["PatchedLibrary"];
+                "application/json": components["schemas"]["PatchedLibrary"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Library"];
+                };
+            };
+        };
+    };
     libraryHistoryList: {
         parameters: {
             query?: {
@@ -1195,6 +1384,55 @@ export interface operations {
             };
         };
     };
+    projectDestroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique value identifying this project. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    projectPartialUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique value identifying this project. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedProject"];
+                "multipart/form-data": components["schemas"]["PatchedProject"];
+                "application/json": components["schemas"]["PatchedProject"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Project"];
+                };
+            };
+        };
+    };
     projectHistoryList: {
         parameters: {
             query?: {
@@ -1230,6 +1468,8 @@ export interface operations {
         parameters: {
             query?: {
                 externalSampleId?: string | null;
+                /** @description Filter where it is not linked to a library. */
+                isLibraryNone?: boolean;
                 orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
@@ -1299,6 +1539,55 @@ export interface operations {
             };
         };
     };
+    sampleDestroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique value identifying this sample. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    samplePartialUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique value identifying this sample. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedSample"];
+                "multipart/form-data": components["schemas"]["PatchedSample"];
+                "application/json": components["schemas"]["PatchedSample"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Sample"];
+                };
+            };
+        };
+    };
     sampleHistoryList: {
         parameters: {
             query?: {
@@ -1333,6 +1622,8 @@ export interface operations {
     subjectList: {
         parameters: {
             query?: {
+                /** @description Filter where it is not linked to a library. */
+                isLibraryNone?: boolean;
                 /** @description Filter based on 'library_id' of the library associated with the subject. */
                 libraryId?: string;
                 /** @description Filter based on 'orcabus_id' of the library associated with the subject. */
@@ -1382,6 +1673,55 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SubjectDetail"];
+                };
+            };
+        };
+    };
+    subjectDestroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique value identifying this subject. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    subjectPartialUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique value identifying this subject. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedSubject"];
+                "multipart/form-data": components["schemas"]["PatchedSubject"];
+                "application/json": components["schemas"]["PatchedSubject"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Subject"];
                 };
             };
         };
