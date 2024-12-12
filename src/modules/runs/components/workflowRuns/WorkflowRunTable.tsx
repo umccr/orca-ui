@@ -25,7 +25,7 @@ const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) =
         rowsPerPage: getPaginationParams().rowsPerPage || DEFAULT_PAGE_SIZE,
         search: getQueryParams().search || undefined,
         workflow__orcabus_id: getQueryParams().workflowTypeId || undefined,
-        status: ['succeeded', 'failed', 'aborted', 'resolved'].includes(
+        status: ['succeeded', 'failed', 'aborted', 'resolved', 'deprecated'].includes(
           getQueryParams().workflowRunStatus
         )
           ? getQueryParams().workflowRunStatus

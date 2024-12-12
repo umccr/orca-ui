@@ -242,6 +242,8 @@ export interface paths {
         };
         get: operations["workflowrunStateList"];
         put?: never;
+        /** @description Create a customed new state for a workflow run.
+         *     Currently we support "Resolved", "Deprecated" */
         post: operations["workflowrunStateCreate"];
         delete?: never;
         options?: never;
@@ -263,6 +265,23 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["workflowrunStatePartialUpdate"];
+        trace?: never;
+    };
+    "/api/v1/workflowrun/{orcabusId}/state/valid_states_map/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Valid states map for new state creation, update */
+        get: operations["workflowrunStateValidStatesMapRetrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v1/workflowrun/{orcabusId}/": {
@@ -299,15 +318,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/workflowrun/count_by_status/": {
+    "/api/v1/workflowrun/{orcabusId}/validate_rerun_workflows/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** @description Returns the count of records for each status: 'SUCCEEDED', 'ABORTED', 'FAILED', and 'Onging' State. */
-        get: operations["/api/v1/workflowRun/countByStatus/"];
+        /** @description Allowed rerun workflows */
+        get: operations["workflowrunValidateRerunWorkflowsRetrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -324,6 +343,55 @@ export interface paths {
             cookie?: never;
         };
         get: operations["workflowrunOngoingRetrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/stats/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["workflowrunStatsList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/stats/count_by_status/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Returns the count of records for each status: 'SUCCEEDED', 'ABORTED', 'FAILED', and 'Onging' State based on the query params. */
+        get: operations["workflowrunStatsCountByStatusRetrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/stats/list_all/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["workflowrunStatsListAllList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -352,6 +420,11 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AllowedRerunWorkflow: {
+            isValid: boolean;
+            allowedDatasetChoice: string[];
+            validWorkflows: string[];
+        };
         AnalysisContext: {
             readonly orcabusId: string;
             name: string;
@@ -636,6 +709,7 @@ export interface components {
             failed: number;
             resolved: number;
             ongoing: number;
+            deprecated: number;
         };
         WorkflowRunDetail: {
             readonly orcabusId: string;
@@ -941,11 +1015,7 @@ export interface operations {
             query?: {
                 analysisRun?: string | null;
                 comment?: string | null;
-                currentState?: {
-                    [key: string]: unknown;
-                };
                 executionId?: string | null;
-                libraries?: string[];
                 orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
@@ -1148,6 +1218,29 @@ export interface operations {
             };
         };
     };
+    workflowrunStateValidStatesMapRetrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
     workflowrunRetrieve: {
         parameters: {
             query?: never;
@@ -1200,11 +1293,14 @@ export interface operations {
             };
         };
     };
-    "/api/v1/workflowRun/countByStatus/": {
+    workflowrunValidateRerunWorkflowsRetrieve: {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                /** @description A unique value identifying this workflow run. */
+                orcabusId: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -1214,7 +1310,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["WorkflowRunCountByStatus"];
+                    "application/json": components["schemas"]["AllowedRerunWorkflow"];
                 };
             };
         };
@@ -1234,6 +1330,63 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkflowRunDetail"];
+                };
+            };
+        };
+    };
+    workflowrunStatsList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunDetail"][];
+                };
+            };
+        };
+    };
+    workflowrunStatsCountByStatusRetrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunCountByStatus"];
+                };
+            };
+        };
+    };
+    workflowrunStatsListAllList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunDetail"][];
                 };
             };
         };

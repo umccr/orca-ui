@@ -35,10 +35,8 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /**
-         * Update the attributes for a collection of s3_objects using a JSON patch request.
-         * @description This updates all attributes matching the filter params with the same JSON patch.
-         */
+        /** Update the attributes for a collection of s3_objects using a JSON patch request.
+         *     This updates all attributes matching the filter params with the same JSON patch. */
         patch: operations["update_s3_collection_attributes"];
         trace?: never;
     };
@@ -49,14 +47,12 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /**
-         * List all S3 objects according to a set of attribute filter parameters.
-         * @description This route is a convenience for querying using top-level attributes and accepts arbitrary
+        /** List all S3 objects according to a set of attribute filter parameters.
+         *     This route is a convenience for querying using top-level attributes and accepts arbitrary
          *     parameters. For example, instead of using `/api/v1/s3?attributes[attributeId]=...`, this route
          *     can express the same query as `/api/v1/s3/attributes?attributeId=...`. Similar to the
          *     `attributes` filter parameter, nested JSON queries are supported using the bracket notation.
-         *     Note that regular filtering parameters, like `key` or `bucket` are not supported on this route.
-         */
+         *     Note that regular filtering parameters, like `key` or `bucket` are not supported on this route. */
         get: operations["attributes_s3"];
         put?: never;
         post?: never;
@@ -90,12 +86,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /**
-         * Generate AWS presigned URLs for s3_objects according to the parameters.
-         * @description This route implies `currentState=true` because only existing objects can be presigned.
+        /** Generate AWS presigned URLs for s3_objects according to the parameters.
+         *     This route implies `currentState=true` because only existing objects can be presigned.
          *     Less presigned URLs may be returned than the amount of objects in the database because some
-         *     objects may be over the `FILEMANAGER_API_PRESIGN_LIMIT`.
-         */
+         *     objects may be over the `FILEMANAGER_API_PRESIGN_LIMIT`. */
         get: operations["presign_s3"];
         put?: never;
         post?: never;
@@ -112,11 +106,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /**
-         * Generate AWS presigned URLs for a single S3 object using its `s3_object_id`.
-         * @description This route will not return an object if it has been deleted from the database, or its size
-         *     is greater than `FILEMANAGER_API_PRESIGN_LIMIT`.
-         */
+        /** Generate AWS presigned URLs for a single S3 object using its `s3_object_id`.
+         *     This route will not return an object if it has been deleted from the database, or its size
+         *     is greater than `FILEMANAGER_API_PRESIGN_LIMIT`. */
         get: operations["presign_s3_by_id"];
         put?: never;
         post?: never;
@@ -164,11 +156,56 @@ export interface components {
         };
         /** @enum {string} */
         EventType: "Created" | "Deleted" | "Other";
+        /** @description Specifies how to join multiple queries with the same key. Either with
+         *     'or' or 'and' logic. The default is combining using `or` logic for multiple
+         *     keys. For example, use `?key[]=123&key[]=456` to query where `key=123`
+         *     or `key=456`. The same query can be expressed more explicitly as
+         *     `?key[or][]=123&key[or][]=456`. `and` logic can be expressed using the `and`
+         *     keyword. For example, use`?key[and][]=*123*&key[and][]=*345` to query where
+         *     the key contains `123` and ends with `345`. */
+        FilterJoin_StorageClass: ("DeepArchive" | "Glacier" | "GlacierIr" | "IntelligentTiering" | "OnezoneIa" | "Outposts" | "ReducedRedundancy" | "Snow" | "Standard" | "StandardIa") | Record<string, never>[] | {
+            [key: string]: Record<string, never>[];
+        };
+        /** @description Specifies how to join multiple queries with the same key. Either with
+         *     'or' or 'and' logic. The default is combining using `or` logic for multiple
+         *     keys. For example, use `?key[]=123&key[]=456` to query where `key=123`
+         *     or `key=456`. The same query can be expressed more explicitly as
+         *     `?key[or][]=123&key[or][]=456`. `and` logic can be expressed using the `and`
+         *     keyword. For example, use`?key[and][]=*123*&key[and][]=*345` to query where
+         *     the key contains `123` and ends with `345`. */
+        FilterJoin_String: string | Record<string, never>[] | {
+            [key: string]: Record<string, never>[];
+        };
+        /** @description Specifies how to join multiple queries with the same key. Either with
+         *     'or' or 'and' logic. The default is combining using `or` logic for multiple
+         *     keys. For example, use `?key[]=123&key[]=456` to query where `key=123`
+         *     or `key=456`. The same query can be expressed more explicitly as
+         *     `?key[or][]=123&key[or][]=456`. `and` logic can be expressed using the `and`
+         *     keyword. For example, use`?key[and][]=*123*&key[and][]=*345` to query where
+         *     the key contains `123` and ends with `345`. */
+        FilterJoin_Wildcard: string | Record<string, never>[] | {
+            [key: string]: Record<string, never>[];
+        };
+        /** @description Specifies how to join multiple queries with the same key. Either with
+         *     'or' or 'and' logic. The default is combining using `or` logic for multiple
+         *     keys. For example, use `?key[]=123&key[]=456` to query where `key=123`
+         *     or `key=456`. The same query can be expressed more explicitly as
+         *     `?key[or][]=123&key[or][]=456`. `and` logic can be expressed using the `and`
+         *     keyword. For example, use`?key[and][]=*123*&key[and][]=*345` to query where
+         *     the key contains `123` and ends with `345`. */
+        FilterJoin_i64: number | Record<string, never>[] | {
+            [key: string]: Record<string, never>[];
+        };
         /** @description The return value for ingest endpoints indicating how many records were processed. */
         IngestCount: {
             /** @description The number of events processed. This potentially includes duplicate records. */
             nRecords: number;
         };
+        /**
+         * @description The logical query join type.
+         * @enum {string}
+         */
+        Join: "or" | "and";
         /** @description A newtype equivalent to an arbitrary JSON `Value`. */
         Json: unknown;
         /** @description The paginated links to the next and previous page. */
@@ -193,15 +230,48 @@ export interface components {
             nRecords: number;
         };
         /** @description The response type for list operations. */
-        ListResponseS3: {
+        ListResponse_S3: {
+            /** @description Links to next and previous page. */
             links: components["schemas"]["Links"];
+            /** @description The pagination response component. */
             pagination: components["schemas"]["PaginatedResponse"];
             /** @description The results of the list operation. */
-            results: components["schemas"]["S3"][];
+            results: {
+                attributes?: null | components["schemas"]["Value"];
+                bucket: string;
+                /** Format: date-time */
+                deletedDate?: string | null;
+                deletedSequencer?: string | null;
+                eTag?: string | null;
+                /** Format: date-time */
+                eventTime?: string | null;
+                eventType: components["schemas"]["EventType"];
+                /** Format: uuid */
+                ingestId?: string | null;
+                isCurrentState: boolean;
+                isDeleteMarker: boolean;
+                key: string;
+                /** Format: date-time */
+                lastModifiedDate?: string | null;
+                /** Format: int64 */
+                numberDuplicateEvents: number;
+                /** Format: int64 */
+                numberReordered: number;
+                /** Format: uuid */
+                s3ObjectId: string;
+                sequencer?: string | null;
+                sha256?: string | null;
+                /** Format: int64 */
+                size?: number | null;
+                storageClass?: null | components["schemas"]["StorageClass"];
+                versionId: string;
+            }[];
         };
         /** @description The response type for list operations. */
-        ListResponseUrl: {
+        ListResponse_String: {
+            /** @description Links to next and previous page. */
             links: components["schemas"]["Links"];
+            /** @description The pagination response component. */
             pagination: components["schemas"]["PaginatedResponse"];
             /** @description The results of the list operation. */
             results: string[];
@@ -252,22 +322,26 @@ export interface components {
          *     ]
          */
         PatchBody: {
+            /** @description The JSON patch for a record's attributes. */
             attributes: components["schemas"]["Patch"];
         } | components["schemas"]["Patch"];
         S3: {
-            attributes?: components["schemas"]["Json"] | null;
+            attributes?: null | components["schemas"]["Value"];
             bucket: string;
-            deletedDate?: components["schemas"]["DateTimeWithTimeZone"] | null;
+            /** Format: date-time */
+            deletedDate?: string | null;
             deletedSequencer?: string | null;
             eTag?: string | null;
-            eventTime?: components["schemas"]["DateTimeWithTimeZone"] | null;
+            /** Format: date-time */
+            eventTime?: string | null;
             eventType: components["schemas"]["EventType"];
             /** Format: uuid */
             ingestId?: string | null;
             isCurrentState: boolean;
             isDeleteMarker: boolean;
             key: string;
-            lastModifiedDate?: components["schemas"]["DateTimeWithTimeZone"] | null;
+            /** Format: date-time */
+            lastModifiedDate?: string | null;
             /** Format: int64 */
             numberDuplicateEvents: number;
             /** Format: int64 */
@@ -278,11 +352,12 @@ export interface components {
             sha256?: string | null;
             /** Format: int64 */
             size?: number | null;
-            storageClass?: components["schemas"]["StorageClass"] | null;
+            storageClass?: null | components["schemas"]["StorageClass"];
             versionId: string;
         };
         /** @enum {string} */
         StorageClass: "DeepArchive" | "Glacier" | "GlacierIr" | "IntelligentTiering" | "OnezoneIa" | "Outposts" | "ReducedRedundancy" | "Snow" | "Standard" | "StandardIa";
+        Value: unknown;
         /** @description A wildcard type represents a filter to match arbitrary characters. Use '%' for multiple characters
          *     and '_' for a single character. Use '\\' to escape these characters. Wildcards are converted to
          *     postgres `like` or `ilike` queries. */
@@ -367,45 +442,55 @@ export interface operations {
                  *     `?current_state=true` would return only the last `Created` event. */
                 currentState?: boolean;
                 /** @description Query by event type. */
-                eventType?: components["schemas"]["EventType"] | null;
+                eventType?: null | components["schemas"]["EventType"];
                 /** @description Query by bucket. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                bucket?: components["schemas"]["Wildcard"][];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                bucket?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by key. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                key?: components["schemas"]["Wildcard"][];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                key?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by version_id. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                versionId?: components["schemas"]["Wildcard"][];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                versionId?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by event_time. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                eventTime?: components["schemas"]["Wildcard"];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                eventTime?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by size.
-                 *     Repeated parameters are joined with an `or` condition. */
-                size?: number[];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                size?: components["schemas"]["FilterJoin_i64"];
                 /** @description Query by the sha256 checksum.
-                 *     Repeated parameters are joined with an `or` condition. */
-                sha256?: string[];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                sha256?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by the last modified date. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                lastModifiedDate?: components["schemas"]["Wildcard"];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                lastModifiedDate?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by the e_tag.
-                 *     Repeated parameters are joined with an `or` condition. */
-                eTag?: string[];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                eTag?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by the storage class.
-                 *     Repeated parameters are joined with an `or` condition. */
-                storageClass?: components["schemas"]["StorageClass"][];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                storageClass?: components["schemas"]["FilterJoin_StorageClass"];
                 /** @description Query by the object delete marker. */
                 isDeleteMarker?: boolean | null;
                 /** @description Query by the ingest id that objects get tagged with.
-                 *     Repeated parameters are joined with an `or` condition. */
-                ingestId?: string[];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                ingestId?: components["schemas"]["FilterJoin_String"];
                 /** @description Query by JSON attributes. Supports nested syntax to access inner
                  *     fields, e.g. `attributes[attribute_id]=...`. This only deserializes
                  *     into string fields, and does not support other JSON types. E.g.
                  *     `attributes[attribute_id]=1` converts to `{ "attribute_id" = "1" }`
                  *     rather than `{ "attribute_id" = 1 }`. Supports wildcards. */
-                attributes?: components["schemas"]["Json"] | null;
+                attributes?: null | components["schemas"]["Value"];
             };
             header?: never;
             path?: never;
@@ -419,7 +504,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ListResponseS3"];
+                    "application/json": components["schemas"]["ListResponse_S3"];
                 };
             };
             /** @description the request could not be parsed or the request triggered a constraint error in the database */
@@ -468,45 +553,55 @@ export interface operations {
                  *     `?current_state=true` would return only the last `Created` event. */
                 currentState?: boolean;
                 /** @description Query by event type. */
-                eventType?: components["schemas"]["EventType"] | null;
+                eventType?: null | components["schemas"]["EventType"];
                 /** @description Query by bucket. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                bucket?: components["schemas"]["Wildcard"][];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                bucket?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by key. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                key?: components["schemas"]["Wildcard"][];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                key?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by version_id. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                versionId?: components["schemas"]["Wildcard"][];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                versionId?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by event_time. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                eventTime?: components["schemas"]["Wildcard"];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                eventTime?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by size.
-                 *     Repeated parameters are joined with an `or` condition. */
-                size?: number[];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                size?: components["schemas"]["FilterJoin_i64"];
                 /** @description Query by the sha256 checksum.
-                 *     Repeated parameters are joined with an `or` condition. */
-                sha256?: string[];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                sha256?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by the last modified date. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                lastModifiedDate?: components["schemas"]["Wildcard"];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                lastModifiedDate?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by the e_tag.
-                 *     Repeated parameters are joined with an `or` condition. */
-                eTag?: string[];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                eTag?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by the storage class.
-                 *     Repeated parameters are joined with an `or` condition. */
-                storageClass?: components["schemas"]["StorageClass"][];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                storageClass?: components["schemas"]["FilterJoin_StorageClass"];
                 /** @description Query by the object delete marker. */
                 isDeleteMarker?: boolean | null;
                 /** @description Query by the ingest id that objects get tagged with.
-                 *     Repeated parameters are joined with an `or` condition. */
-                ingestId?: string[];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                ingestId?: components["schemas"]["FilterJoin_String"];
                 /** @description Query by JSON attributes. Supports nested syntax to access inner
                  *     fields, e.g. `attributes[attribute_id]=...`. This only deserializes
                  *     into string fields, and does not support other JSON types. E.g.
                  *     `attributes[attribute_id]=1` converts to `{ "attribute_id" = "1" }`
                  *     rather than `{ "attribute_id" = 1 }`. Supports wildcards. */
-                attributes?: components["schemas"]["Json"] | null;
+                attributes?: null | components["schemas"]["Value"];
             };
             header?: never;
             path?: never;
@@ -580,7 +675,7 @@ export interface operations {
                  *     `?current_state=true` would return only the last `Created` event. */
                 currentState?: boolean;
                 params?: {
-                    [key: string]: components["schemas"]["Json"];
+                    [key: string]: components["schemas"]["Value"];
                 };
             };
             header?: never;
@@ -595,7 +690,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ListResponseS3"];
+                    "application/json": components["schemas"]["ListResponse_S3"];
                 };
             };
             /** @description the request could not be parsed or the request triggered a constraint error in the database */
@@ -644,45 +739,55 @@ export interface operations {
                  *     `?current_state=true` would return only the last `Created` event. */
                 currentState?: boolean;
                 /** @description Query by event type. */
-                eventType?: components["schemas"]["EventType"] | null;
+                eventType?: null | components["schemas"]["EventType"];
                 /** @description Query by bucket. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                bucket?: components["schemas"]["Wildcard"][];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                bucket?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by key. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                key?: components["schemas"]["Wildcard"][];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                key?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by version_id. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                versionId?: components["schemas"]["Wildcard"][];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                versionId?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by event_time. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                eventTime?: components["schemas"]["Wildcard"];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                eventTime?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by size.
-                 *     Repeated parameters are joined with an `or` condition. */
-                size?: number[];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                size?: components["schemas"]["FilterJoin_i64"];
                 /** @description Query by the sha256 checksum.
-                 *     Repeated parameters are joined with an `or` condition. */
-                sha256?: string[];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                sha256?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by the last modified date. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                lastModifiedDate?: components["schemas"]["Wildcard"];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                lastModifiedDate?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by the e_tag.
-                 *     Repeated parameters are joined with an `or` condition. */
-                eTag?: string[];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                eTag?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by the storage class.
-                 *     Repeated parameters are joined with an `or` condition. */
-                storageClass?: components["schemas"]["StorageClass"][];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                storageClass?: components["schemas"]["FilterJoin_StorageClass"];
                 /** @description Query by the object delete marker. */
                 isDeleteMarker?: boolean | null;
                 /** @description Query by the ingest id that objects get tagged with.
-                 *     Repeated parameters are joined with an `or` condition. */
-                ingestId?: string[];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                ingestId?: components["schemas"]["FilterJoin_String"];
                 /** @description Query by JSON attributes. Supports nested syntax to access inner
                  *     fields, e.g. `attributes[attribute_id]=...`. This only deserializes
                  *     into string fields, and does not support other JSON types. E.g.
                  *     `attributes[attribute_id]=1` converts to `{ "attribute_id" = "1" }`
                  *     rather than `{ "attribute_id" = 1 }`. Supports wildcards. */
-                attributes?: components["schemas"]["Json"] | null;
+                attributes?: null | components["schemas"]["Value"];
             };
             header?: never;
             path?: never;
@@ -746,45 +851,55 @@ export interface operations {
                  *     This sets the `response-content-disposition` for the presigned `GetObject` request. */
                 responseContentDisposition?: components["schemas"]["ContentDisposition"];
                 /** @description Query by event type. */
-                eventType?: components["schemas"]["EventType"] | null;
+                eventType?: null | components["schemas"]["EventType"];
                 /** @description Query by bucket. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                bucket?: components["schemas"]["Wildcard"][];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                bucket?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by key. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                key?: components["schemas"]["Wildcard"][];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                key?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by version_id. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                versionId?: components["schemas"]["Wildcard"][];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                versionId?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by event_time. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                eventTime?: components["schemas"]["Wildcard"];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                eventTime?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by size.
-                 *     Repeated parameters are joined with an `or` condition. */
-                size?: number[];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                size?: components["schemas"]["FilterJoin_i64"];
                 /** @description Query by the sha256 checksum.
-                 *     Repeated parameters are joined with an `or` condition. */
-                sha256?: string[];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                sha256?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by the last modified date. Supports wildcards.
-                 *     Repeated parameters are joined with an `or` condition. */
-                lastModifiedDate?: components["schemas"]["Wildcard"];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                lastModifiedDate?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by the e_tag.
-                 *     Repeated parameters are joined with an `or` condition. */
-                eTag?: string[];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                eTag?: components["schemas"]["FilterJoin_Wildcard"];
                 /** @description Query by the storage class.
-                 *     Repeated parameters are joined with an `or` condition. */
-                storageClass?: components["schemas"]["StorageClass"][];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                storageClass?: components["schemas"]["FilterJoin_StorageClass"];
                 /** @description Query by the object delete marker. */
                 isDeleteMarker?: boolean | null;
                 /** @description Query by the ingest id that objects get tagged with.
-                 *     Repeated parameters are joined with an `or` condition. */
-                ingestId?: string[];
+                 *     Repeated parameters with `[]` are joined with an `or` conditions by default.
+                 *     Use `[or][]` or `[and][]` to explicitly set the joining logic. */
+                ingestId?: components["schemas"]["FilterJoin_String"];
                 /** @description Query by JSON attributes. Supports nested syntax to access inner
                  *     fields, e.g. `attributes[attribute_id]=...`. This only deserializes
                  *     into string fields, and does not support other JSON types. E.g.
                  *     `attributes[attribute_id]=1` converts to `{ "attribute_id" = "1" }`
                  *     rather than `{ "attribute_id" = 1 }`. Supports wildcards. */
-                attributes?: components["schemas"]["Json"] | null;
+                attributes?: null | components["schemas"]["Value"];
             };
             header?: never;
             path?: never;
@@ -798,7 +913,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ListResponseUrl"];
+                    "application/json": components["schemas"]["ListResponse_String"];
                 };
             };
             /** @description the request could not be parsed or the request triggered a constraint error in the database */

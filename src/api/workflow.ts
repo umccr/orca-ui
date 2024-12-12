@@ -138,7 +138,7 @@ export const useWorkflowStateModel = createWorkflowQueryHook(
 export const useWorkflowPayloadModel = createWorkflowQueryHook('/api/v1/payload/{id}/');
 
 export const useWorkflowRunStatusCountModel = createWorkflowQueryHook(
-  '/api/v1/workflowrun/count_by_status/'
+  '/api/v1/workflowrun/stats/count_by_status/'
 );
 
 export const useWorkflowRunCommentModel = createWorkflowQueryHook(
@@ -155,13 +155,15 @@ export const useWorkflowRunCommentDeleteModel = createWorkflowDeleteMutationHook
   '/api/v1/workflowrun/{orcabusId}/comment/{id}/soft_delete/'
 );
 
-// workflow run state "RESOLVED"
-export const useWorkflowRunResolvedStateCreateModel = createWorkflowPostMutationHook(
+// workflow run state creation
+export const useWorkflowRunStateCreateModel = createWorkflowPostMutationHook(
   '/api/v1/workflowrun/{orcabusId}/state/'
 );
-
-export const useWorkflowRunResolvedStateUpdateModel = createWorkflowPatchMutationHook(
+export const useWorkflowRunStateUpdateModel = createWorkflowPatchMutationHook(
   '/api/v1/workflowrun/{orcabusId}/state/{id}/'
+);
+export const useWorkflowRunStateValidMapModel = createWorkflowQueryHook(
+  '/api/v1/workflowrun/{orcabusId}/state/valid_states_map/'
 );
 
 // Use suspenseQuery hook for fetching data
@@ -178,4 +180,7 @@ export const useAnalysisRunDetailModel = createWorkflowQueryHook(
 // rerun
 export const useWorkflowRunRerunModel = createWorkflowPostMutationHook(
   '/api/v1/workflowrun/{orcabusId}/rerun/'
+);
+export const useWorkflowRunRerunValidateModel = createWorkflowQueryHook(
+  '/api/v1/workflowrun/{orcabusId}/validate_rerun_workflows/'
 );

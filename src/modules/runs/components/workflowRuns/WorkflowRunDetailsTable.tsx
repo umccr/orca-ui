@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { useWorkflowRunDetailModel, useWorkflowRunRerunModel } from '@/api/workflow';
+import {
+  useWorkflowRunDetailModel,
+  useWorkflowRunRerunValidateModel,
+  useWorkflowRunRerunModel,
+} from '@/api/workflow';
 import { JsonToList } from '@/components/common/json-to-table';
 import { Table } from '@/components/tables';
 import { classNames } from '@/utils/commonUtils';
@@ -10,15 +14,19 @@ import toaster from '@/components/common/toaster';
 import { Dialog } from '@/components/dialogs';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { useWorkflowRunContext } from './WorkflowRunContext';
+import { Checkbox } from '@/components/common/checkbox';
 
 const WorkflowRunDetailsTable = () => {
   const { orcabusId } = useParams();
   const [isOpenRerunWorkflowDialog, setIsOpenRerunWorkflowDialog] = useState<boolean>(false);
   const { setRefreshWorkflowRuns } = useWorkflowRunContext();
 
+  const [isDeprecated, setIsDeprecated] = useState<boolean>(false);
+  const [selectedDataset, setSelectedDataset] = useState<string | null>(null);
+
   const { data: workflowRunDetail, isFetching: isFetchingWorkflowRunDetail } =
     useWorkflowRunDetailModel({
-      params: { path: { orcabusId: orcabusId as string } },
+      params: { path: { orcabusId: (orcabusId as string).split('.')[1] } },
       reactQuery: {
         enabled: !!orcabusId,
       },
@@ -51,29 +59,45 @@ const WorkflowRunDetailsTable = () => {
     reset: resetRerunWorkflow,
   } = useWorkflowRunRerunModel({
     params: { path: { orcabusId: orcabusId as string } },
-    body: {},
+    body: {
+      dataset: selectedDataset,
+    },
+    reactQuery: {
+      enabled: !!orcabusId,
+    },
+  });
+
+  const {
+    data: workflowRunRerunValidateDetail,
+    isFetching: isFetchingWorkflowRunRerunAllowedWorkflows,
+  } = useWorkflowRunRerunValidateModel({
+    params: { path: { orcabusId: (orcabusId as string).split('.')[1] } },
     reactQuery: {
       enabled: !!orcabusId,
     },
   });
 
   const handleRerunWorkflow = () => {
-    setIsOpenRerunWorkflowDialog(false);
     rerunWorkflow();
-    resetRerunWorkflow();
+    setIsOpenRerunWorkflowDialog(false);
   };
 
   useEffect(() => {
+    console.log('isRerunWorkflowSuccess', isRerunWorkflowSuccess);
     if (isRerunWorkflowSuccess) {
       toaster.success({ title: 'Workflow rerun successfully' });
       setIsOpenRerunWorkflowDialog(false);
       resetRerunWorkflow();
       setRefreshWorkflowRuns(true);
+      setSelectedDataset(null);
+      setIsDeprecated(false);
     }
     if (isErrorRerunWorkflow) {
       toaster.error({ title: 'Error rerunning workflow' });
       setIsOpenRerunWorkflowDialog(false);
       resetRerunWorkflow();
+      setSelectedDataset(null);
+      setIsDeprecated(false);
     }
   }, [isRerunWorkflowSuccess, isErrorRerunWorkflow, resetRerunWorkflow, setRefreshWorkflowRuns]);
 
@@ -116,6 +140,13 @@ const WorkflowRunDetailsTable = () => {
     []
   );
 
+  const handleCloseRerunWorkflowDialog = () => {
+    setIsOpenRerunWorkflowDialog(false);
+    resetRerunWorkflow();
+    setSelectedDataset(null);
+    setIsDeprecated(false);
+  };
+
   return (
     <div className='pt-4 w-full flex flex-col gap-2'>
       {/* title */}
@@ -129,8 +160,15 @@ const WorkflowRunDetailsTable = () => {
         )}
         <div>
           <IconDropdown
-            items={[{ label: 'Rerun', onClick: () => setIsOpenRerunWorkflowDialog(true) }]}
-            className='bg-magpie-light-50'
+            items={[
+              {
+                label: 'Rerun',
+                onClick: () => setIsOpenRerunWorkflowDialog(true),
+                disabled: isFetchingWorkflowRunRerunAllowedWorkflows,
+              },
+            ]}
+            className='bg-magpie-light-50 hover:text-magpie-light-500'
+            type='square'
           />
         </div>
       </div>
@@ -164,23 +202,101 @@ const WorkflowRunDetailsTable = () => {
         content={
           <div>
             <div className='text-lg font-medium'>{workflowRunDetail?.workflowRunName || ''}</div>
-            <div className='mt-2 text-sm text-red-500'>
-              <span className='font-medium'>Note:</span> This action will rerun this workflow and
-              mark the current run as &apos;DEPRECATED&apos;.
-            </div>
-            <div className='mt-2 text-sm text-gray-500 font-medium'>
-              Are you sure you want to rerun this workflow?
-            </div>
+
+            {!workflowRunRerunValidateDetail?.isValid ? (
+              <div className='mt-2 text-sm flex flex-col gap-1'>
+                <div className='flex flex-row gap-1 text-red-500'>
+                  <span className='font-medium'>Warning:</span>
+                  <span>This workflow is not allowed to rerun.</span>
+                </div>
+                <div className='flex flex-row gap-1 text-gray-500'>
+                  <span className='font-medium'>Reason:</span>
+                  <span>
+                    Current workflow is not in the allowed workflows:{' '}
+                    {workflowRunRerunValidateDetail?.validWorkflows.join(', ')}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className='mt-2 text-sm flex flex-col gap-1'>
+                  <div>
+                    <div className='text-xs font-medium pt-1 mb-1'>
+                      Please select the dataset to rerun:
+                    </div>
+                    <div className='flex gap-1 flex-wrap'>
+                      {workflowRunRerunValidateDetail?.allowedDatasetChoice.map((dataset, idx) => (
+                        <label
+                          key={idx}
+                          className={classNames(
+                            'flex items-center px-2 py-1 rounded-md border cursor-pointer transition-colors',
+                            'hover:bg-gray-50',
+                            selectedDataset === dataset
+                              ? 'border-blue-500 bg-blue-50 text-blue-700'
+                              : 'border-gray-200'
+                          )}
+                        >
+                          <input
+                            type='radio'
+                            name='dataset'
+                            value={dataset}
+                            checked={selectedDataset === dataset}
+                            onChange={() => setSelectedDataset(dataset)}
+                            className='h-3 w-3 text-blue-600 border-gray-300 focus:ring-blue-500'
+                          />
+                          <span className='ml-1 text-xs font-medium'>{dataset}</span>
+                        </label>
+                      ))}
+                    </div>
+                    {!selectedDataset && (
+                      <div className='text-xs text-red-500'>Please select a dataset.</div>
+                    )}
+                  </div>
+                  <div className='h-px bg-gray-200 my-2'></div>
+                  <div>
+                    <Checkbox
+                      className='flex flex-row gap-2 text-sm font-medium'
+                      checked={isDeprecated}
+                      onChange={() => setIsDeprecated(!isDeprecated)}
+                      disabled={
+                        !selectedDataset || workflowRunDetail?.workflow.workflowName !== 'RNASUM'
+                      }
+                      label="Mark the current run as 'DEPRECATED'."
+                    />
+
+                    {workflowRunDetail?.workflow.workflowName !== 'RNASUM' ? (
+                      <div className='text-xs text-red-500'>
+                        This feature is not available for RNASUM workflow.
+                      </div>
+                    ) : (
+                      <div>
+                        <div className='text-xs text-gray-500'>
+                          This action will mark the current run as &apos;DEPRECATED&apos;, and is
+                          irreversible.
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className='mt-2 text-sm text-red-500 font-medium pt-2'>
+                  Are you sure you want to rerun this workflow?
+                </div>
+              </>
+            )}
           </div>
         }
-        onClose={() => setIsOpenRerunWorkflowDialog(false)}
+        onClose={handleCloseRerunWorkflowDialog}
         closeBtn={{
           label: 'Close',
-          onClick: () => setIsOpenRerunWorkflowDialog(false),
+          onClick: handleCloseRerunWorkflowDialog,
         }}
         confirmBtn={{
           label: 'Rerun',
           onClick: handleRerunWorkflow,
+          disabled:
+            isFetchingWorkflowRunRerunAllowedWorkflows ||
+            !workflowRunRerunValidateDetail?.isValid ||
+            !selectedDataset,
         }}
       />
     </div>
