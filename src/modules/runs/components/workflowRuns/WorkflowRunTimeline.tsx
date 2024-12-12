@@ -54,12 +54,6 @@ const WorkflowRunTimeline = () => {
 
   const [isReverseOrder, setIsReverseOrder] = useState<boolean>(false);
 
-  // we are now support multiple state creation, not only for resolved state
-  // so we need change resolved to add a new state type to the state timeline
-  //  valid_states_map = {
-  //     'RESOLVED': ['FAILED'],
-  //     'DEPRECATED': ['SUCCEEDED']
-  // }
   const [isOpenAddStateDialog, setIsOpenAddStateDialog] = useState<boolean>(false);
   const [stateStatus, setStateStatus] = useState<string | null>(null);
   const [isOpenUpdateStateDialog, setIsOpenUpdateStateDialog] = useState<boolean>(false);
@@ -104,10 +98,7 @@ const WorkflowRunTimeline = () => {
 
   const workflowLastState = workflowStateData?.[workflowStateData.length - 1]?.status;
 
-  //  valid_states_map = {
-  //     'RESOLVED': ['FAILED'],
-  //     'DEPRECATED': ['SUCCEEDED']
-  // }
+  // check if the last state is valid for state creation
   const isValidCreateState = Object.entries(workflowRunStateValidMapData || {}).some(([, value]) =>
     (value as string[]).includes(workflowLastState || '')
   );
@@ -120,43 +111,41 @@ const WorkflowRunTimeline = () => {
   const workflowStateTimelineData = useMemo(
     () =>
       workflowStateData
-        ? workflowStateData
-            .map((state) => ({
-              id: state.orcabusId,
-              content: (
-                <div className='flex flex-row gap-2 text-sm text-gray-500 group'>
-                  <div>Status Updated</div>
-                  <Badge status={state.status}>{state.status}</Badge>
-                  {Object.keys(workflowRunStateValidMapData || {}).includes(state.status) && (
-                    <div className='opacity-0 group-hover:opacity-100'>
-                      <Tooltip
-                        text='Update the Resolved Event Comment'
-                        position='top'
-                        background='white'
-                      >
-                        <WrenchIcon
-                          className='w-4 h-4 cursor-pointer stroke-gray-500'
-                          onClick={() => {
-                            setStateId(state.orcabusId);
-                            setStateComment(state.comment || '');
-                            setIsOpenUpdateStateDialog(true);
-                          }}
-                        />
-                      </Tooltip>
-                    </div>
-                  )}
-                </div>
-              ),
-              datetime: dayjs(state.timestamp).format('YYYY-MM-DD HH:mm'),
-              comment: state.comment || '',
-              status: state.status,
-              iconBackground: statusBackgroundColor(getBadgeType(state.status)),
-              payloadId: state?.payload || '',
-              eventType: 'stateChange' as const,
-            }))
-            .reverse()
+        ? workflowStateData.map((state) => ({
+            id: state.orcabusId,
+            content: (
+              <div className='flex flex-row gap-2 text-sm text-gray-500 group'>
+                <div>Status Updated</div>
+                <Badge status={state.status}>{state.status}</Badge>
+                {Object.keys(workflowRunStateValidMapData || {}).includes(state.status) && (
+                  <div className='opacity-0 group-hover:opacity-100'>
+                    <Tooltip
+                      text='Update the Resolved Event Comment'
+                      position='top'
+                      background='white'
+                    >
+                      <WrenchIcon
+                        className='w-4 h-4 cursor-pointer stroke-gray-500'
+                        onClick={() => {
+                          setStateId(state.orcabusId);
+                          setStateComment(state.comment || '');
+                          setIsOpenUpdateStateDialog(true);
+                        }}
+                      />
+                    </Tooltip>
+                  </div>
+                )}
+              </div>
+            ),
+            datetime: dayjs(state.timestamp).format('YYYY-MM-DD HH:mm'),
+            comment: state.comment || '',
+            status: state.status,
+            iconBackground: statusBackgroundColor(getBadgeType(state.status)),
+            payloadId: state?.payload || '',
+            eventType: 'stateChange' as const,
+          }))
         : [],
-    [workflowStateData]
+    [workflowStateData, workflowRunStateValidMapData]
   );
   const workflowCommentTimelineData = useMemo(
     () =>
@@ -270,7 +259,7 @@ const WorkflowRunTimeline = () => {
   } = useWorkflowRunStateCreateModel({
     params: { path: { orcabusId: orcabusId?.split('.')[1] as string } },
     body: {
-      status: validState,
+      status: stateStatus,
       comment: stateComment,
       createdBy: user?.email,
     },
@@ -433,8 +422,6 @@ const WorkflowRunTimeline = () => {
     isErrorUpdatingWorkflowRunState,
   ]);
 
-  console.log(validState);
-
   return (
     <div>
       {(isFetchingWorkflowState || isFetchingWorkflowComment) && (
@@ -443,17 +430,21 @@ const WorkflowRunTimeline = () => {
       <div className='flex flex-row pb-4'>
         <div className='flex-1'>
           <div className='pb-4 flex flex-col gap-2'>
-            <div className='flex flex-row gap-2 items-center'>
-              <div className='text-base font-semibold '>Timeline</div>
-              <Tooltip text='Reverse order' position='top' background='white'>
-                {/* TODO: toggle reverse order */}
-                <ArrowsUpDownIcon
-                  className='w-4 h-4 cursor-pointer stroke-gray-500'
-                  onClick={() => {
-                    setIsReverseOrder(!isReverseOrder);
-                  }}
-                />
-              </Tooltip>
+            <div className='flex items-center gap-3'>
+              <h2 className='text-lg font-semibold text-gray-900'>Timeline</h2>
+              <div className='flex items-center gap-1'>
+                <span className='text-sm text-gray-500'>
+                  {workflowRuntimelineData.length} events
+                </span>
+                <span className='text-sm text-gray-400'>•</span>
+                <button
+                  onClick={() => setIsReverseOrder(!isReverseOrder)}
+                  className='inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors'
+                >
+                  <ArrowsUpDownIcon className='w-4 h-4' />
+                  <span>{isReverseOrder ? 'Oldest First' : 'Latest First'}</span>
+                </button>
+              </div>
             </div>
 
             <div className='flex flex-row gap-2 items-end'>
@@ -607,6 +598,7 @@ const WorkflowRunTimeline = () => {
             onClose={() => {
               setIsOpenAddStateDialog(false);
               setStateComment('');
+              setStateStatus(null);
             }}
             closeBtn={{
               label: 'Close',
@@ -743,15 +735,14 @@ const WorkflowRunTimeline = () => {
                     value={stateComment}
                     onChange={(e) => setStateComment(e.target.value)}
                     placeholder='Write your state comment here...'
-                    className='min-h-[120px] w-full rounded-lg border border-gray-300 shadow-sm 
-           focus:border-blue-500 focus:ring-blue-500 
-           text-sm text-gray-900 p-3'
+                    className='min-h-[120px] w-full rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-gray-900 p-3'
                   />
                 </div>
               </div>
             }
             onClose={() => {
               setIsOpenUpdateStateDialog(false);
+              setStateComment('');
             }}
             confirmBtn={{ label: 'Update State', onClick: handleUpdateState }}
           ></Dialog>

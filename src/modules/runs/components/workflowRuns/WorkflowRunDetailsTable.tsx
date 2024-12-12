@@ -4,6 +4,7 @@ import {
   useWorkflowRunDetailModel,
   useWorkflowRunRerunValidateModel,
   useWorkflowRunRerunModel,
+  useWorkflowRunStateCreateModel,
 } from '@/api/workflow';
 import { JsonToList } from '@/components/common/json-to-table';
 import { Table } from '@/components/tables';
@@ -15,8 +16,10 @@ import { Dialog } from '@/components/dialogs';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { useWorkflowRunContext } from './WorkflowRunContext';
 import { Checkbox } from '@/components/common/checkbox';
+import { useAuthContext } from '@/context/AmplifyAuthContext';
 
 const WorkflowRunDetailsTable = () => {
+  const { user } = useAuthContext();
   const { orcabusId } = useParams();
   const [isOpenRerunWorkflowDialog, setIsOpenRerunWorkflowDialog] = useState<boolean>(false);
   const { setRefreshWorkflowRuns } = useWorkflowRunContext();
@@ -79,11 +82,13 @@ const WorkflowRunDetailsTable = () => {
 
   const handleRerunWorkflow = () => {
     rerunWorkflow();
+    if (isDeprecated) {
+      handleMarkAsDeprecated();
+    }
     setIsOpenRerunWorkflowDialog(false);
   };
 
   useEffect(() => {
-    console.log('isRerunWorkflowSuccess', isRerunWorkflowSuccess);
     if (isRerunWorkflowSuccess) {
       toaster.success({ title: 'Workflow rerun successfully' });
       setIsOpenRerunWorkflowDialog(false);
@@ -100,6 +105,35 @@ const WorkflowRunDetailsTable = () => {
       setIsDeprecated(false);
     }
   }, [isRerunWorkflowSuccess, isErrorRerunWorkflow, resetRerunWorkflow, setRefreshWorkflowRuns]);
+
+  const {
+    mutate: createWorkflowRunState,
+    isSuccess: isCreatedWorkflowRunState,
+    isError: isErrorCreatingWorkflowRunState,
+    reset: resetCreateWorkflowRunState,
+  } = useWorkflowRunStateCreateModel({
+    params: { path: { orcabusId: orcabusId?.split('.')[1] as string } },
+    body: {
+      status: 'DEPRECATED',
+      comment: 'Workflow run marked as DEPRECATED as rerun this workflow',
+      createdBy: user?.email,
+    },
+  });
+
+  const handleMarkAsDeprecated = () => {
+    createWorkflowRunState();
+  };
+
+  useEffect(() => {
+    if (isCreatedWorkflowRunState) {
+      toaster.success({ title: 'Workflow run marked as DEPRECATED' });
+      resetCreateWorkflowRunState();
+    }
+    if (isErrorCreatingWorkflowRunState) {
+      toaster.error({ title: 'Error marking workflow run as DEPRECATED' });
+      resetCreateWorkflowRunState();
+    }
+  }, [isCreatedWorkflowRunState, resetCreateWorkflowRunState, isErrorCreatingWorkflowRunState]);
 
   const librariesTableData = useMemo(
     () =>
