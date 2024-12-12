@@ -14,19 +14,23 @@ export interface IconDropdownProps {
   BtnIcon?: FunctionComponent<SVGProps<SVGSVGElement>>;
   className?: string;
   items: DropdownItemProps[];
+  type?: 'rounded' | 'square';
 }
 
 const IconDropdown: FC<IconDropdownProps> = ({
   BtnIcon = EllipsisVerticalIcon,
   className = '',
   items,
+  type = 'rounded',
 }) => {
+  const roundedClass = type === 'rounded' ? 'rounded-full' : 'rounded-md';
   return (
     <Menu as='div' className='relative inline-block text-left'>
       <MenuButton
         className={classNames(
-          'flex items-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-magpie-light-50 data-[open]:bg-magpie-light-50 data-[open]:ring-2 data-[open]:ring-offset-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 focus:ring-offset-gray-100',
-          className
+          'flex items-center p-0.5 text-gray-400 hover:text-gray-600 hover:bg-magpie-light-50 data-[open]:bg-magpie-light-50 data-[open]:ring-2 data-[open]:ring-offset-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 focus:ring-offset-gray-100',
+          className,
+          roundedClass
         )}
       >
         <span className='sr-only'>Open options</span>
@@ -46,7 +50,7 @@ const IconDropdown: FC<IconDropdownProps> = ({
                 <button
                   className={classNames(
                     item.disabled
-                      ? 'bg-gray-100 text-gray-900 cursor-not-allowed'
+                      ? 'bg-gray-100 text-gray-300 cursor-not-allowed'
                       : 'text-gray-700',
                     'group flex w-full px-4 py-2 text-left text-sm data-[focus]:bg-gray-100 data-[focus]:text-gray-900'
                   )}

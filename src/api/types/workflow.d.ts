@@ -242,6 +242,8 @@ export interface paths {
         };
         get: operations["workflowrunStateList"];
         put?: never;
+        /** @description Create a customed new state for a workflow run.
+         *     Currently we support "Resolved", "Deprecated" */
         post: operations["workflowrunStateCreate"];
         delete?: never;
         options?: never;
@@ -263,6 +265,23 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["workflowrunStatePartialUpdate"];
+        trace?: never;
+    };
+    "/api/v1/workflowrun/{orcabusId}/state/valid_states_map/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Valid states map for new state creation, update */
+        get: operations["workflowrunStateValidStatesMapRetrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v1/workflowrun/{orcabusId}/": {
@@ -293,6 +312,23 @@ export interface paths {
         put?: never;
         /** @description Trigger a workflow run rerun by emitting an event to EventBridge with an overridden workflow input payload. Current supported workflow: 'rnasum' */
         post: operations["workflowrunRerunCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workflowrun/{orcabusId}/validate_rerun_workflows/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Allowed rerun workflows */
+        get: operations["workflowrunValidateRerunWorkflowsRetrieve"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -384,6 +420,11 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AllowedRerunWorkflow: {
+            isValid: boolean;
+            allowedDatasetChoice: string[];
+            validWorkflows: string[];
+        };
         AnalysisContext: {
             readonly orcabusId: string;
             name: string;
@@ -668,6 +709,7 @@ export interface components {
             failed: number;
             resolved: number;
             ongoing: number;
+            deprecated: number;
         };
         WorkflowRunDetail: {
             readonly orcabusId: string;
@@ -973,11 +1015,7 @@ export interface operations {
             query?: {
                 analysisRun?: string | null;
                 comment?: string | null;
-                currentState?: {
-                    [key: string]: unknown;
-                };
                 executionId?: string | null;
-                libraries?: string[];
                 orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
@@ -1180,6 +1218,29 @@ export interface operations {
             };
         };
     };
+    workflowrunStateValidStatesMapRetrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
     workflowrunRetrieve: {
         parameters: {
             query?: never;
@@ -1228,6 +1289,28 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+        };
+    };
+    workflowrunValidateRerunWorkflowsRetrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique value identifying this workflow run. */
+                orcabusId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AllowedRerunWorkflow"];
                 };
             };
         };

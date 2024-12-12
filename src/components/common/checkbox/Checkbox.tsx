@@ -3,7 +3,7 @@ import { useState, FC, useEffect } from 'react';
 import { classNames } from '@/utils/commonUtils';
 
 interface CheckboxProps {
-  className?: string;
+  className: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
   disabled?: boolean;
