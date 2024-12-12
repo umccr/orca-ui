@@ -1,6 +1,6 @@
 import { WorkflowDiagram } from '@/components/diagrams';
 import type { Meta, StoryObj } from '@storybook/react';
-import { mockStatusData } from '@/api/_mock/mockWorkflowStatusData';
+import { mockStatusData } from './_mock/mockWorkflowStatusData';
 
 const meta: Meta = {
   title: 'Components/Diagrams',

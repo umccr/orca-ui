@@ -44,14 +44,14 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
   }, [selectedItemValues]);
 
   const hasSelected = useMemo(
-    () => selected.length > 0 && selected.some((item) => item !== selectAllOptionValue),
+    () => selected?.length > 0 && selected.some((item) => item !== selectAllOptionValue),
     [selected, selectAllOptionValue]
   );
 
   const selectedValues = useMemo(
     () =>
       options
-        .filter((option) => selected.includes(option.value))
+        .filter((option) => selected?.includes(option.value?.toString().split('.')[1]))
         .map(
           (option) => option.label + (option.secondaryLabel ? ` (${option.secondaryLabel})` : '')
         ),
@@ -105,7 +105,7 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
               <Field className={classNames('flex items-center w-full', 'hover:bg-gray-100')}>
                 <Checkbox
                   as='button'
-                  checked={selected.some((item) => item === option.value)}
+                  checked={selected?.some((item) => item === option.value)}
                   onChange={(checked) => {
                     if (checked) {
                       const isSelectAll = option.value === selectAllOptionValue;

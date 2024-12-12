@@ -155,13 +155,15 @@ export const useWorkflowRunCommentDeleteModel = createWorkflowDeleteMutationHook
   '/api/v1/workflowrun/{orcabusId}/comment/{id}/soft_delete/'
 );
 
-// workflow run state "RESOLVED"
-export const useWorkflowRunResolvedStateCreateModel = createWorkflowPostMutationHook(
+// workflow run state creation
+export const useWorkflowRunStateCreateModel = createWorkflowPostMutationHook(
   '/api/v1/workflowrun/{orcabusId}/state/'
 );
-
-export const useWorkflowRunResolvedStateUpdateModel = createWorkflowPatchMutationHook(
+export const useWorkflowRunStateUpdateModel = createWorkflowPatchMutationHook(
   '/api/v1/workflowrun/{orcabusId}/state/{id}/'
+);
+export const useWorkflowRunStateValidMapModel = createWorkflowQueryHook(
+  '/api/v1/workflowrun/{orcabusId}/state/valid_states_map/'
 );
 
 // Use suspenseQuery hook for fetching data
@@ -173,4 +175,12 @@ export const useSuspensePayloadListModel = createWorkflowFetchingHook('/api/v1/p
 export const useAnalysisRunListModel = createWorkflowQueryHook('/api/v1/analysisrun/');
 export const useAnalysisRunDetailModel = createWorkflowQueryHook(
   '/api/v1/analysisrun/{orcabusId}/'
+);
+
+// rerun
+export const useWorkflowRunRerunModel = createWorkflowPostMutationHook(
+  '/api/v1/workflowrun/{orcabusId}/rerun/'
+);
+export const useWorkflowRunRerunValidateModel = createWorkflowQueryHook(
+  '/api/v1/workflowrun/{orcabusId}/validate_rerun_workflows/'
 );

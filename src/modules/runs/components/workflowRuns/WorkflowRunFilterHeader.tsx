@@ -127,6 +127,13 @@ const WorkflowRunFilterHeader = () => {
               },
             },
             {
+              label: 'Deprecated',
+              subLabel: '',
+              onClick: () => {
+                setQueryParams({ workflowRunStatus: 'deprecated' });
+              },
+            },
+            {
               label: 'Ongoing',
               subLabel: '',
               onClick: () => {

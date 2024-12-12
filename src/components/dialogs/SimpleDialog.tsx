@@ -1,5 +1,5 @@
 import { FC, ReactNode, FunctionComponent, SVGProps } from 'react';
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
+import { Dialog, DialogBackdrop, DialogPanel, DialogTitle, Description } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { classNames } from '@/utils/commonUtils';
 
@@ -7,24 +7,29 @@ export interface DialogButtonProps {
   label: string;
   onClick: () => void;
   className?: string;
+  disabled?: boolean;
 }
 export interface DialogProps {
   TitleIcon?: FunctionComponent<SVGProps<SVGSVGElement>>;
   title: string;
+  description?: string;
   content?: string | ReactNode;
   open: boolean;
   onClose: () => void;
   closeBtn?: DialogButtonProps;
   confirmBtn?: DialogButtonProps;
+  children?: ReactNode;
 }
 const SimpleDialog: FC<DialogProps> = ({
   TitleIcon,
   title,
+  description,
   content,
   open,
   onClose,
   closeBtn,
   confirmBtn,
+  children,
 }) => {
   return (
     <Dialog open={open} onClose={onClose} className='relative z-10'>
@@ -60,8 +65,12 @@ const SimpleDialog: FC<DialogProps> = ({
                   <DialogTitle as='h3' className='text-base font-semibold leading-6 text-gray-900'>
                     {title}
                   </DialogTitle>
+                  {description && (
+                    <Description className='text-sm text-gray-500'>{description}</Description>
+                  )}
                   <div className='mt-2 text-sm text-gray-500 overflow-auto'>
                     {!!content && content}
+                    {!!children && children}
                   </div>
                 </div>
               </div>
@@ -87,8 +96,10 @@ const SimpleDialog: FC<DialogProps> = ({
                     onClick={confirmBtn.onClick}
                     className={classNames(
                       'mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto',
-                      confirmBtn.className ? confirmBtn.className : ''
+                      confirmBtn.className ? confirmBtn.className : '',
+                      confirmBtn.disabled ? 'text-gray-500 opacity-50 cursor-not-allowed' : ''
                     )}
+                    disabled={confirmBtn.disabled}
                   >
                     {confirmBtn.label}
                   </button>
