@@ -16,11 +16,7 @@ export const PortalRunIdDropdown = ({
   const workflowRun = useSuspenseWorkflowRunListModel({
     params: {
       query: {
-        // WFM-FIXME: Library Orcabus Prefix
-        libraries__orcabusId:
-          libraryOrcabusId.split('.').length > 1
-            ? libraryOrcabusId.split('.')[1]
-            : libraryOrcabusId.split('.')[0],
+        libraries__orcabusId: libraryOrcabusId,
         workflow__workflowName: workflowType,
         ordering: '-portalRunId',
         rowsPerPage: DEFAULT_NON_PAGINATE_PAGE_SIZE,

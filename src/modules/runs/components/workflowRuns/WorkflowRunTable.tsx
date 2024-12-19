@@ -33,12 +33,7 @@ const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) =
         is_ongoing: getQueryParams().workflowRunStatus == 'ongoing' || undefined,
         start_time: getQueryParams().startDate || undefined,
         end_time: getQueryParams().endDate || undefined,
-        libraries__orcabusId: libraryOrcabusId
-          ? // WFM-FIXME: Library Orcabus Prefix
-            libraryOrcabusId.split('.').length > 1
-            ? libraryOrcabusId.split('.')[1]
-            : libraryOrcabusId.split('.')[0]
-          : undefined,
+        libraries__orcabusId: libraryOrcabusId ? libraryOrcabusId : undefined,
       },
     },
     reactQuery: {

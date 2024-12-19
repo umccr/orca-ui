@@ -1,9 +1,8 @@
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { LibraryTableDetails } from '../../components/library/LibraryTableDetails';
 import { LibraryAnalysisReportTable } from '../../components/library/LibraryAnalysisReportTable';
 import { useSuspenseMetadataDetailLibraryModel } from '@/api/metadata';
 import WorkflowRunTable from '@/modules/runs/components/workflowRuns/WorkflowRunTable';
-import { DocumentMagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { classNames } from '@/utils/commonUtils';
 
 export default function LibraryOverviewPage() {
@@ -29,22 +28,9 @@ export default function LibraryOverviewPage() {
         <div className='pb-3 text-lg font-bold xl:pt-3'>Library Details</div>
         <LibraryTableDetails libraryDetail={libraryDetailRes} />
 
-        <Link
-          to={`/runs/workflow?search=${
-            // WFM-FIXME: Library Orcabus Prefix
-            libraryOrcabusId.split('.').length > 1
-              ? libraryOrcabusId.split('.')[1]
-              : libraryOrcabusId.split('.')[0]
-          }`}
-          className={classNames('ml-2 mt-4 text-sm font-medium hover:text-blue-700')}
-        >
-          <div className='flex flex-row items-center'>
-            <div className='text-lg font-bold'>Workflow Run</div>
-            <div className='ml-2'>
-              <DocumentMagnifyingGlassIcon className='h-5 w-5' />
-            </div>
-          </div>
-        </Link>
+        <div className={classNames('ml-2 mt-4 text-sm font-medium hover:text-blue-700')}>
+          <div className='text-lg font-bold'>Workflow Run</div>
+        </div>
         <WorkflowRunTable libraryOrcabusId={libraryOrcabusId} />
       </div>
 
