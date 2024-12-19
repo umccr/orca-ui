@@ -32,21 +32,26 @@ const JsonToNestedList: FC<JsonToNestedListProps> = ({
   const renderValue = (value: any) => {
     if (Array.isArray(value)) {
       return (
-        <ul className='list-disc pl-4'>
+        <ul className='list-disc space-y-1 pl-4'>
           {value.map((item, index) => (
-            <li key={index}>{renderValue(item)}</li>
+            <li key={index} className='dark:text-gray-300'>
+              {renderValue(item)}
+            </li>
           ))}
         </ul>
       );
     } else if (typeof value === 'object' && value !== null) {
       return (
-        <dl className='divide-y divide-gray-100'>
+        <dl className='divide-y divide-gray-100 dark:divide-gray-700'>
           {Object.entries(value).map(([key, val], index) => (
-            <div key={index} className='px-4 py-1 sm:grid sm:grid-cols-5 sm:gap-1 sm:px-0'>
-              <dt className='mt-1 text-sm font-medium leading-6 text-gray-900 text-pretty break-words'>
+            <div
+              key={index}
+              className='px-4 py-2 transition-colors sm:grid sm:grid-cols-5 sm:gap-4 sm:px-0'
+            >
+              <dt className='text-pretty break-words text-sm font-medium text-gray-900 dark:text-gray-100'>
                 {key}
               </dt>
-              <dd className='mt-1 text-sm leading-6 text-gray-600 break-words sm:col-span-4 '>
+              <dd className='mt-1 break-words text-sm text-gray-600 sm:col-span-4 sm:mt-0 dark:text-gray-300'>
                 {renderValue(val)}
               </dd>
             </div>
@@ -56,44 +61,57 @@ const JsonToNestedList: FC<JsonToNestedListProps> = ({
     } else if (cellValueFormat && cellValueFormat.condition(value)) {
       return cellValueFormat.cell(value);
     } else {
-      return <span className='break-words'>{value}</span>;
+      return <span className='break-words dark:text-gray-300'>{value}</span>;
     }
   };
 
   if (!listData && isFetchingData) {
     return (
-      <div>
+      <div className='space-y-4'>
         <div className='px-4 sm:px-0'>
-          <Skeleton className='h-7 w-full' />
+          <Skeleton className='h-7 w-full dark:bg-gray-700' />
         </div>
         <div>
-          <Skeleton count={8} />
+          <Skeleton count={8} className='dark:bg-gray-700' />
         </div>
       </div>
     );
   }
 
   return (
-    <div>
-      <div className='px-4 pb-2 sm:px-0'>
-        {title && <p className='text-base font-semibold leading-7 text-gray-900'>{title}</p>}
-        {subtitle && <p className='mt-1 max-w-2xl text-sm leading-6 text-gray-500'>{subtitle}</p>}
+    <div className='space-y-4'>
+      <div className='px-4 sm:px-0'>
+        {title && (
+          <h3 className='text-lg font-semibold leading-7 text-gray-900 dark:text-white'>{title}</h3>
+        )}
+        {subtitle && (
+          <p className='mt-1 max-w-2xl text-sm leading-6 text-gray-500 dark:text-gray-400'>
+            {subtitle}
+          </p>
+        )}
       </div>
       <div
         className={classNames(
-          'relative',
-          inCard ? 'overflow-hidden border-2 border-black border-opacity-5 sm:rounded-lg' : ''
+          'relative bg-white transition-colors dark:bg-gray-900',
+          inCard
+            ? 'overflow-hidden rounded-lg border border-gray-200 shadow-sm dark:border-gray-700'
+            : ''
         )}
       >
         {listData && isFetchingData ? (
           <BackdropWithText text='Loading data...' isVisible={true} />
         ) : null}
-        <div className={classNames('px-4', inCard ? '' : 'sm:px-0 border-t border-gray-100')}>
+        <div
+          className={classNames(
+            'px-4',
+            inCard ? '' : 'border-t border-gray-100 sm:px-0 dark:border-gray-800'
+          )}
+        >
           {listData ? (
             renderValue(listData)
           ) : (
-            <div className='px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-              <dt className='mt-1 text-sm font-medium leading-6 text-gray-900'>No data found</dt>
+            <div className='px-4 py-6 text-center sm:px-0'>
+              <p className='text-sm text-gray-500 dark:text-gray-400'>No data found</p>
             </div>
           )}
         </div>

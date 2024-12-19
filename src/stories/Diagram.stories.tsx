@@ -17,7 +17,7 @@ type Story = StoryObj<typeof meta>;
 export const WorkflowOverviewDiagram: Story = {
   render: () => {
     return (
-      <div className='w-[1200px] h-[800px]'>
+      <div className='h-[800px] w-[1200px]'>
         <WorkflowDiagram pipelineType='overview' statusData={mockStatusData} />
       </div>
     );
@@ -28,7 +28,7 @@ export const WorkflowOverviewDiagram: Story = {
 export const workflowsDiagram: Story = {
   render: () => {
     return (
-      <div className='w-[1200px] h-[800px]'>
+      <div className='h-[800px] w-[1200px]'>
         <WorkflowDiagram pipelineType='workflows' statusData={mockStatusData} />
       </div>
     );
@@ -38,7 +38,7 @@ export const workflowsDiagram: Story = {
 export const WGSWorkflowDiagram: Story = {
   render: () => {
     return (
-      <div className='w-[1200px] h-[500px]'>
+      <div className='h-[500px] w-[1200px]'>
         <WorkflowDiagram pipelineType='wgs' statusData={mockStatusData} />
       </div>
     );
@@ -48,7 +48,7 @@ export const WGSWorkflowDiagram: Story = {
 export const WTSWorkflowDiagram: Story = {
   render: () => {
     return (
-      <div className='w-[1200px] h-[500px]'>
+      <div className='h-[500px] w-[1200px]'>
         <WorkflowDiagram pipelineType='wts' statusData={mockStatusData} />
       </div>
     );
@@ -59,7 +59,7 @@ export const WTSWorkflowDiagram: Story = {
 export const ctTSOWorkflowDiagram: Story = {
   render: () => {
     return (
-      <div className='w-[1000px] h-[500px]'>
+      <div className='h-[500px] w-[1000px]'>
         <WorkflowDiagram pipelineType='ctTSO' statusData={mockStatusData} />
       </div>
     );
@@ -70,7 +70,7 @@ export const ctTSOWorkflowDiagram: Story = {
 export const ctDNAWorkflowDiagram: Story = {
   render: () => {
     return (
-      <div className='w-[1000px] h-[500px]'>
+      <div className='h-[500px] w-[1000px]'>
         <WorkflowDiagram pipelineType='ctDNA' statusData={mockStatusData} />
       </div>
     );

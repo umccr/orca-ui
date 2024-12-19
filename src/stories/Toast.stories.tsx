@@ -18,7 +18,7 @@ type Story = StoryObj<typeof meta>;
 export const ToastTester: Story = {
   render: () => {
     return (
-      <div className='w-full h-full'>
+      <div className='h-full w-full'>
         <Button
           onClick={() =>
             toaster.success({

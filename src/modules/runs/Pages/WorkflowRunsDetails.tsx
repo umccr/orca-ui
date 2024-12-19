@@ -5,7 +5,7 @@ import { WorkflowRunProvider } from '../components/workflowRuns/WorkflowRunConte
 const WorkflowRunDetails = () => {
   return (
     <WorkflowRunProvider>
-      <div className='flex flex-col gap-4 h-full w-full'>
+      <div className='flex h-full w-full flex-col gap-4'>
         <WorkflowRunDetailsTable />
 
         <WorkflowRunTimeline />

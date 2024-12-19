@@ -7,22 +7,28 @@ type ErrorBoundaryProps = PropsWithChildren & { errorTitle?: string; onCloseErro
 const DetailedErrorBoundary = ({ children, errorTitle, onCloseError }: ErrorBoundaryProps) => {
   function Fallback({ error, resetErrorBoundary }: FallbackProps) {
     return (
-      <div className='my-4 relative p-4 rounded-lg bg-gray-50'>
-        <div className='flex justify-between w-full'>
-          <pre className='font-bold	inline'>{errorTitle ?? `Something went wrong`}</pre>
+      <div className='relative my-4 rounded-lg border border-red-100 bg-white p-6 shadow-sm dark:border-red-900 dark:bg-gray-800'>
+        <div className='mb-4 flex w-full items-center justify-between'>
+          <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
+            {errorTitle ?? 'An error occurred'}
+          </h3>
           <button
             type='button'
-            className='rounded-md text-gray-400 hover:text-gray-500 border-2 focus:outline-none	focus:ring-2 focus:ring-inherit focus:ring-offset-2'
+            className='rounded-full p-1 text-gray-400 transition-colors duration-200 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-gray-500 dark:hover:bg-gray-700 dark:hover:text-gray-400 dark:focus:ring-red-400'
             onClick={() => {
               resetErrorBoundary();
               if (onCloseError) onCloseError();
             }}
           >
-            <span className='sr-only'>Close</span>
-            <XMarkIcon className='h-6 w-6' aria-hidden='true' />
+            <span className='sr-only'>Dismiss error</span>
+            <XMarkIcon className='h-5 w-5' aria-hidden='true' />
           </button>
         </div>
-        <pre style={{ color: 'red' }}>{error.message}</pre>
+        <div className='rounded-md bg-red-50 p-4 dark:bg-red-900/10'>
+          <pre className='whitespace-pre-wrap break-words font-mono text-sm text-red-600 dark:text-red-400'>
+            {error.message}
+          </pre>
+        </div>
       </div>
     );
   }

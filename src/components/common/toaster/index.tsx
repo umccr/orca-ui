@@ -1,3 +1,6 @@
+/* eslint-disable react-refresh/only-export-components */
+// https://github.com/ArnaudBarre/eslint-plugin-react-refresh/issues/25#issuecomment-1729071347
+
 import { FC } from 'react';
 import { Bounce, toast, ToastOptions } from 'react-toastify';
 
@@ -18,22 +21,23 @@ export const Msg: FC<MsgProps> = ({ title, message, type }) => {
   const typeClass = (type: ToastType) => {
     switch (type) {
       case ToastType.success:
-        return 'text-green-500';
+        return 'text-green-600 dark:text-green-400';
       case ToastType.error:
-        return 'text-red-500';
+        return 'text-red-600 dark:text-red-400';
       case ToastType.info:
-        return 'text-blue-500';
+        return 'text-blue-600 dark:text-blue-400';
       case ToastType.warning:
-        return 'text-yellow-500';
+        return 'text-yellow-600 dark:text-yellow-400';
       default:
-        return 'text-gray-500';
+        return 'text-gray-700 dark:text-gray-300';
     }
   };
+
   return (
     <div className={`flex items-start ${typeClass(type || ToastType.default)}`}>
-      <div className='ml-2 w-0 flex-1 '>
-        <p className='text-base font-medium '>{title}</p>
-        <p className='mt-1 text-sm '>{message}</p>
+      <div className='w-full'>
+        <h3 className='text-sm font-medium text-current'>{title}</h3>
+        {message && <p className='mt-1 text-sm opacity-90'>{message}</p>}
       </div>
     </div>
   );
@@ -49,6 +53,7 @@ const defaultToastProps: ToastOptions = {
   progress: undefined,
   theme: 'light',
   transition: Bounce,
+  className: 'dark:bg-gray-800',
 };
 
 const createToast =

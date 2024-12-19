@@ -39,7 +39,7 @@ export const IndividualTableFilter = () => {
         defaultInput={filter.individualId ? filter.individualId : []}
         handleFilterChange={handleFilterChange}
       />
-      <div className='border-b-2 mb-2 pb-2 italic text-s	text-gray-700 font-thin	'>
+      <div className='text-s mb-2 border-b-2 pb-2 font-thin italic text-gray-700'>
         {`*Text input support multi value with comma separated value. E.g. "L000001,L000002"`}
       </div>
     </>
@@ -51,14 +51,14 @@ export const IndividualTableFilter = () => {
         <Button
           type='gray'
           size='sm'
-          className='w-full justify-center rounded-md ring-gray-300 ring-1'
+          className='w-full justify-center rounded-md ring-1 ring-gray-300'
         >
           <FunnelIcon className='h-5 w-5' />
         </Button>
       }
       content={
-        <div className='z-10 bg-white rounded-lg w-80'>
-          <div className='max-h-[250px] px-3 pb-3 overflow-y-auto text-sm text-gray-700 '>
+        <div className='z-10 w-80 rounded-lg bg-white'>
+          <div className='max-h-[250px] overflow-y-auto px-3 pb-3 text-sm text-gray-700'>
             <IndividualFilter />
           </div>
           <ClosePopoverWrapper className='mt-4'>
@@ -74,7 +74,7 @@ export const IndividualTableFilter = () => {
           </ClosePopoverWrapper>
 
           <Button
-            className='w-full justify-center mt-2'
+            className='mt-2 w-full justify-center'
             type='primary'
             onClick={() => {
               setQueryParams({ ...filter }, true);

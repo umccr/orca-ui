@@ -51,7 +51,7 @@ export default function CustomEdge({
             // if you have an interactive element, set pointer-events: all
             pointerEvents: 'all',
           }}
-          className='nodrag nopan '
+          className='nodrag nopan'
         >
           <button className='edgebutton' onClick={onEdgeClick}>
             x

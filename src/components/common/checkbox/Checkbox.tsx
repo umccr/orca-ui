@@ -23,7 +23,7 @@ const Checkbox: FC<CheckboxProps> = ({ className, checked, onChange, disabled, l
         checked={isChecked}
         onChange={onChange}
         disabled={disabled || false}
-        className='group p-[1px] size-4 rounded border bg-gray-100 border-gray-300 cursor-pointer data-[checked]:bg-blue-600 data-[disabled]:bg-gray-100 data-[disabled]:text-gray-400 data-[disabled]:cursor-not-allowed'
+        className='group size-4 cursor-pointer rounded border border-gray-300 bg-gray-100 p-[1px] data-[disabled]:cursor-not-allowed data-[checked]:bg-blue-600 data-[disabled]:bg-gray-100 data-[disabled]:text-gray-400'
       >
         <svg
           className='stroke-white opacity-0 group-data-[checked]:opacity-100'
@@ -40,8 +40,8 @@ const Checkbox: FC<CheckboxProps> = ({ className, checked, onChange, disabled, l
       </CheckboxComponent>
       <Label
         className={classNames(
-          'py-2 text-sm font-normal rounded',
-          disabled ? 'text-gray-500 cursor-not-allowed ' : 'text-gray-900 cursor-pointer '
+          'rounded py-2 text-sm font-normal',
+          disabled ? 'cursor-not-allowed text-gray-500' : 'cursor-pointer text-gray-900'
         )}
       >
         {label}

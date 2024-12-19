@@ -14,8 +14,8 @@ export const IFrameViewer = ({ s3ObjectId, s3Key }: Props) => {
   if (!url) throw new Error('Unable to create presigned url');
 
   return (
-    <div className='w-full h-full'>
-      <iframe className='w-full h-full bg-white' src={url} />
+    <div className='h-full w-full'>
+      <iframe className='h-full w-full bg-white' src={url} />
     </div>
   );
 };

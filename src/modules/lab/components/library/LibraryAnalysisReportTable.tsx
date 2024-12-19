@@ -142,7 +142,7 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
 
   return (
     <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
-      <div className='font-bold py-3 text-lg'>Workflow Results</div>
+      <div className='py-3 text-lg font-bold'>Workflow Results</div>
       {libraryDetail.type === 'WGS' ? (
         <>
           <DetailedErrorBoundary errorTitle={`Unable to load 'umccrise' report files`}>
@@ -260,14 +260,14 @@ export const AnalysisTable = ({
     <>
       <GroupedTable
         tableHeader={
-          <div className='flex flex-row justify-between items-center'>
+          <div className='flex flex-row items-center justify-between'>
             <div>{workflowType}</div>
-            <div className='flex flex-row '>
+            <div className='flex flex-row'>
               <Link
                 to={`/runs/workflow?search=${portalRunId}`}
-                className={classNames('text-sm font-medium hover:text-blue-700 mt-4')}
+                className={classNames('mt-4 text-sm font-medium hover:text-blue-700')}
               >
-                <div className='items-center mr-4'>
+                <div className='mr-4 items-center'>
                   <DocumentMagnifyingGlassIcon className='h-5 w-5' />
                 </div>
               </Link>
@@ -287,7 +287,7 @@ export const AnalysisTable = ({
         tableData={getTableDataFormat(tableData)}
       />
       {filesApiData.results.length > DEFAULT_NON_PAGINATE_PAGE_SIZE && (
-        <div className='p-4 text-slate-400 text-xs italic'>
+        <div className='p-4 text-xs italic text-slate-400'>
           {`*Only show ${DEFAULT_NON_PAGINATE_PAGE_SIZE} files per portalRunId.`}
         </div>
       )}

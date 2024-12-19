@@ -1,38 +1,53 @@
-import { ReactNode, useState, FC, useEffect } from 'react';
+import { ReactNode, useState, FC, useEffect, useRef } from 'react';
 import { Transition } from '@headlessui/react';
 import { classNames } from '@/utils/commonUtils';
 
 interface TooltipProps {
   text: string | ReactNode;
-  position?:
-    | 'top'
-    | 'bottom'
-    | 'left'
-    | 'right'
-    | 'top left'
-    | 'top right'
-    | 'bottom left'
-    | 'bottom right';
+  position?: 'top' | 'bottom' | 'left' | 'right';
   size?: 'small' | 'medium' | 'large';
-  background?: 'gray' | 'white';
-  children: ReactNode;
+  background?: 'dark' | 'light';
   isShow?: boolean;
+  children: ReactNode;
+  delay?: number;
 }
 
 const Tooltip: FC<TooltipProps> = ({
   text,
   position = 'top',
   size = 'medium',
-  background = 'gray',
+  background = 'dark',
   children,
   isShow = true,
+  delay = 200,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isShowTooltips, setIsShowTooltips] = useState(true);
+  const timeoutRef = useRef<NodeJS.Timeout>();
+
+  // Add cleanup effect
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     setIsShowTooltips(isShow);
   }, [isShow]);
+
+  const getVariantClasses = () => {
+    switch (background) {
+      case 'light':
+        return 'bg-white text-slate-600 border-slate-200';
+      case 'dark':
+        return 'bg-slate-700 text-slate-100 border-slate-600';
+      default:
+        return 'text-slate-600 bg-white dark:bg-slate-700 dark:text-slate-100 border-slate-200 dark:border-slate-600';
+    }
+  };
 
   const getPositionClasses = () => {
     switch (position) {
@@ -46,6 +61,17 @@ const Tooltip: FC<TooltipProps> = ({
         return 'left-full top-1/2 transform -translate-y-1/2 ml-2';
       default:
         return '';
+    }
+  };
+
+  const getSizeClasses = () => {
+    switch (size) {
+      case 'small':
+        return 'text-xs py-1.5 px-2.5 max-w-72';
+      case 'large':
+        return 'text-sm py-3 px-4 max-w-72';
+      default:
+        return 'text-sm py-2 px-3 max-w-72';
     }
   };
 
@@ -64,50 +90,44 @@ const Tooltip: FC<TooltipProps> = ({
     }
   };
 
-  const getSizeClasses = () => {
-    switch (size) {
-      case 'small':
-        return 'text-xs p-2';
-      case 'large':
-        return 'text-base p-2';
-      default:
-        return 'text-sm p-2'; // medium by default
-    }
-  };
-
-  const getBackgroundClasses = () => {
-    return background === 'white' ? 'bg-white text-gray-500' : 'bg-gray-600 text-white';
-  };
-
   return (
     <div
-      className='relative flex items-center'
-      onMouseEnter={() => setIsVisible(true)}
-      onMouseLeave={() => setIsVisible(false)}
+      className='relative inline-flex'
+      onMouseEnter={() => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+        timeoutRef.current = setTimeout(() => setIsVisible(true), delay);
+      }}
+      onMouseLeave={() => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+        timeoutRef.current = setTimeout(() => setIsVisible(false), delay);
+      }}
     >
       {children}
 
-      <Transition show={isVisible && isShowTooltips}>
+      <Transition
+        show={isVisible && isShowTooltips}
+        enter='transition duration-200 ease-out'
+        enterFrom='opacity-0 scale-95'
+        enterTo='opacity-100 scale-100'
+        leave='transition duration-150 ease-in'
+        leaveFrom='opacity-100 scale-100'
+        leaveTo='opacity-0 scale-95'
+      >
         <div
           className={classNames(
-            // Base styles
-            'absolute z-10 w-max max-w-xs rounded-lg shadow-lg border transition ease-in-out',
-            // Shared closed styles
-            'data-[closed]:opacity-0',
-            // Entering styles
-            'data-[enter]:duration-200 ',
-            // Leaving styles
-            'data-[leave]:duration-200 ',
-            // Position classes
-            ` ${getSizeClasses()} ${getBackgroundClasses()} ${getPositionClasses()}`
+            'absolute z-50',
+            'whitespace-normal break-words rounded-md shadow-lg',
+            getPositionClasses(),
+            getVariantClasses(),
+            getSizeClasses()
           )}
         >
-          <div className='relative'>
-            {text}
-            <div
-              className={`absolute w-3 h-3 transform rotate-45 ${getBackgroundClasses()} ${getArrowClasses()}`}
-            />
-          </div>
+          {text}
+          <div className={getArrowClasses()} />
         </div>
       </Transition>
     </div>

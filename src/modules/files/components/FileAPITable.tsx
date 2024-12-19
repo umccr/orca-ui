@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+// https://github.com/ArnaudBarre/eslint-plugin-react-refresh/issues/25#issuecomment-1729071347
+
+import { useEffect, useState } from 'react';
 import { S3Record, useSuspenseFileObject, useQueryPresignedFileObjectId } from '@/api/file';
 import { Table } from '@/components/tables';
 import { Column } from '@/components/tables/Table';
@@ -7,7 +10,7 @@ import dayjs from 'dayjs';
 import { IconDropdown } from '@/components/common/dropdowns';
 import toaster from '@/components/common/toaster';
 import { FilePreviewDrawer } from './FilePreviewDrawer';
-import { Dialog } from '@/components/dialogs';
+import { Dialog } from '@/components/common/dialogs';
 import { JsonToTable } from '@/components/common/json-to-table';
 import { FileDownloadButton } from './FileDownloadButton';
 import { DOWNLOADABLE_FILETYPE_LIST } from '@/components/files';
@@ -80,9 +83,9 @@ export const SearchBox = ({
   const [searchBox, setSearchBox] = useState<string>(initValue);
 
   return (
-    <div className='flex flex-col md:flex-row font-normal'>
-      <div className='flex flex-col flex-1 items-start pt-2'>
-        <div className='w-full flex flex-row items-center'>
+    <div className='flex flex-col font-normal md:flex-row'>
+      <div className='flex flex-1 flex-col items-start pt-2'>
+        <div className='flex w-full flex-row items-center'>
           <label htmlFor='search' className='sr-only'>
             Search
           </label>
@@ -115,7 +118,7 @@ export const SearchBox = ({
           </div>
           {searchInfoText && (
             <Tooltip text={searchInfoText} position='left' background='white'>
-              <InformationCircleIcon className='ml-3 h-5 2-5' />
+              <InformationCircleIcon className='2-5 ml-3 h-5' />
             </Tooltip>
           )}
         </div>

@@ -25,8 +25,8 @@ export default function LibraryOverviewPage() {
   }
   return (
     <div className='flex flex-col xl:flex-row'>
-      <div className='w-full xl:w-96 min-w-[575px]'>
-        <div className='font-bold xl:pt-3 pb-3 text-lg'>Library Details</div>
+      <div className='w-full min-w-[575px] xl:w-96'>
+        <div className='pb-3 text-lg font-bold xl:pt-3'>Library Details</div>
         <LibraryTableDetails libraryDetail={libraryDetailRes} />
 
         <Link
@@ -36,10 +36,10 @@ export default function LibraryOverviewPage() {
               ? libraryOrcabusId.split('.')[1]
               : libraryOrcabusId.split('.')[0]
           }`}
-          className={classNames('ml-2 text-sm font-medium hover:text-blue-700 mt-4')}
+          className={classNames('ml-2 mt-4 text-sm font-medium hover:text-blue-700')}
         >
           <div className='flex flex-row items-center'>
-            <div className='font-bold text-lg'>Workflow Run</div>
+            <div className='text-lg font-bold'>Workflow Run</div>
             <div className='ml-2'>
               <DocumentMagnifyingGlassIcon className='h-5 w-5' />
             </div>
@@ -48,7 +48,7 @@ export default function LibraryOverviewPage() {
         <WorkflowRunTable libraryOrcabusId={libraryOrcabusId} />
       </div>
 
-      <div className='w-full mt-4 xl:mt-0 xl:ml-10 xl:pl-10 xl:border-l-2 xl:border-gray-100'>
+      <div className='mt-4 w-full xl:ml-10 xl:mt-0 xl:border-l-2 xl:border-gray-100 xl:pl-10'>
         <LibraryAnalysisReportTable libraryDetail={libraryDetailRes} />
       </div>
     </div>

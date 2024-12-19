@@ -3,13 +3,13 @@ import { Tooltip } from '@/components/common/tooltips';
 
 export interface IconButtonProps {
   icon: ReactNode;
-  tooltip?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   type?: 'primary' | 'secondary' | 'light' | 'green' | 'red' | 'yellow' | 'gray';
   disabled?: boolean;
   className?: string;
+  tooltip?: string;
   tooltipPosition?: 'top' | 'bottom' | 'left' | 'right';
-  tooltipBackground?: 'gray' | 'white';
+  tooltipBackground?: 'light' | 'dark';
 }
 
 const IconButton: FC<IconButtonProps> = ({
@@ -19,7 +19,7 @@ const IconButton: FC<IconButtonProps> = ({
   disabled = false,
   className = '',
   tooltipPosition = 'top',
-  tooltipBackground = 'white',
+  tooltipBackground = 'dark',
 }) => {
   const baseIconButtonStyles =
     'p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100';

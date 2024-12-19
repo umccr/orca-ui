@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSuspenseWorkflowModel } from '@/api/workflow';
 import { JsonToTable } from '@/components/common/json-to-table';
-import { Dialog } from '@/components/dialogs';
+import { Dialog } from '@/components/common/dialogs';
 
 export const WorkflowVersion = ({
   portalRunId,
@@ -35,7 +35,7 @@ export const WorkflowVersion = ({
 
   return (
     <div
-      className='ml-6 flex h-full items-center font-light text-xs cursor-pointer text-blue-500 hover:text-blue-700'
+      className='ml-6 flex h-full cursor-pointer items-center text-xs font-light text-blue-500 hover:text-blue-700'
       onClick={() => setIsOpenWorkflowDetails(true)}
     >
       {wf.workflowVersion}

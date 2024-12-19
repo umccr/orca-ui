@@ -62,9 +62,9 @@ export const TableViewer = ({ s3ObjectId, s3Key }: Props) => {
   });
 
   return (
-    <div className='w-full h-full flex flex-col mb-2'>
+    <div className='mb-2 flex h-full w-full flex-col'>
       {allRows.length > 1000 && (
-        <div className='w-full bg-amber-100 text-amber-700 p-2 border mb-3'>
+        <div className='mb-3 w-full border bg-amber-100 p-2 text-amber-700'>
           Only showing the first 1000 rows
         </div>
       )}
@@ -74,7 +74,7 @@ export const TableViewer = ({ s3ObjectId, s3Key }: Props) => {
           type='checkbox'
           onChange={(e) => setIsPrettify(e.target.checked)}
           checked={isPrettify}
-          className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+          className='h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600'
         />
         <label className='ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
           Table View
@@ -84,7 +84,7 @@ export const TableViewer = ({ s3ObjectId, s3Key }: Props) => {
       {isPrettify ? (
         <Table tableData={jsonData} columns={headerTableProps} />
       ) : (
-        <pre className='overflow-auto inline-block m-0 mt-4 p-3 w-full bg-white border border-solid border-current border-round-xs'>
+        <pre className='border-round-xs m-0 mt-4 inline-block w-full overflow-auto border border-solid border-current bg-white p-3'>
           {viewableRows.join('\n')}
         </pre>
       )}

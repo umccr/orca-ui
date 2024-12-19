@@ -61,21 +61,21 @@ export default function MetadataPage() {
 
   return (
     <>
-      <div className='w-full flex justify-end'>
+      <div className='flex w-full justify-end'>
         <Button
           onClick={() => {
             navigate('./sync');
           }}
           type='green'
           size='sm'
-          className='justify-center rounded-md ring-gray-300 ring-1'
+          className='justify-center rounded-md ring-1 ring-gray-300'
         >
           Import
           <DocumentArrowUpIcon className='h-5 w-5' />
         </Button>
       </div>
-      <div className='capitalize text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400'>
-        <ul className='flex flex-wrap -mb-px'>
+      <div className='border-b border-gray-200 text-center text-sm font-medium capitalize text-gray-500 dark:text-gray-400'>
+        <ul className='-mb-px flex flex-wrap'>
           {tabs.map((tab, index) => {
             const isSelected = currentTabSelection === tab.label;
             return (
