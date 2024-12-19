@@ -15,11 +15,7 @@ export const LibrarySideNavBar = () => {
   const workflow = useSuspenseWorkflowModel({
     params: {
       query: {
-        // WFM-FIXME: Library Orcabus Prefix
-        workflowrun__libraries__orcabusId:
-          libraryOrcabusId.split('.').length > 1
-            ? libraryOrcabusId.split('.')[1]
-            : libraryOrcabusId.split('.')[0],
+        workflowrun__libraries__orcabusId: libraryOrcabusId,
         ordering: 'id',
         rowsPerPage: DEFAULT_NON_PAGINATE_PAGE_SIZE,
       },
