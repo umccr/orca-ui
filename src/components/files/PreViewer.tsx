@@ -27,11 +27,11 @@ export const PreViewer = ({ s3ObjectId, s3Key }: Props) => {
   return (
     <>
       {viewableRows.length > 1000 && (
-        <div className='w-full bg-amber-100 text-amber-700 p-2 border mb-3'>
+        <div className='mb-3 w-full border bg-amber-100 p-2 text-amber-700'>
           Only showing the first 1000 rows
         </div>
       )}
-      <pre className='overflow-auto inline-block m-0 mt-4 p-3 w-full bg-white border border-solid border-current border-round-xs'>
+      <pre className='border-round-xs m-0 mt-4 inline-block w-full overflow-auto border border-solid border-current bg-white p-3'>
         {viewableRows.join('\n')}
       </pre>
     </>

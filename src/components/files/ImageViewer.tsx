@@ -11,9 +11,9 @@ export const ImageViewer = ({ s3ObjectId, s3Key }: Props) => {
   if (!url) throw new Error('Unable to create presigned url');
 
   return (
-    <div className='w-full h-full text-center'>
+    <div className='h-full w-full text-center'>
       <img
-        className='mx-auto max-w-full max-h-[1000px] bg-white cursor-pointer'
+        className='mx-auto max-h-[1000px] max-w-full cursor-pointer bg-white'
         onClick={() => window.open(url, '_blank')}
         src={url}
       />

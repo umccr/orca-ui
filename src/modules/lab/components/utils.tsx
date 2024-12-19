@@ -39,7 +39,7 @@ export const FilterTextInput = <T,>({
             }
           }}
           type='text'
-          className='my-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500/50 focus:border-blue-500/50 block w-full p-2.5'
+          className='my-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500/50 focus:ring-blue-500/50'
         />
       </div>
     </>
@@ -66,7 +66,7 @@ export const CheckboxGroupInput = <T,>({
       {options.map((item, key) => (
         <div
           key={`${title}-${key}`}
-          className='flex items-center ps-2 rounded hover:bg-gray-100 cursor-pointer'
+          className='flex cursor-pointer items-center rounded ps-2 hover:bg-gray-100'
           onClick={() => {
             handleIsCheckedFunc(keyFilter, item);
           }}
@@ -75,9 +75,9 @@ export const CheckboxGroupInput = <T,>({
             readOnly
             checked={isCheckedFunc(keyFilter, item)}
             type='checkbox'
-            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500/50 focus:ring-2 cursor-pointer'
+            className='h-4 w-4 cursor-pointer rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500/50'
           />
-          <label className='w-full py-2 ms-2 text-sm font-normal text-gray-900 rounded cursor-pointer'>
+          <label className='ms-2 w-full cursor-pointer rounded py-2 text-sm font-normal text-gray-900'>
             {item}
           </label>
         </div>

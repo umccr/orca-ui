@@ -53,7 +53,7 @@ const AnalysisRunTable = () => {
               <div>
                 <div
                   className={classNames(
-                    'cursor-pointer flex flex-row items-center ml-2 text-sm lowercase font-medium hover:text-blue-700 text-blue-500'
+                    'ml-2 flex cursor-pointer flex-row items-center text-sm font-medium lowercase text-blue-500 hover:text-blue-700'
                   )}
                   // onClick={() => {
                   //   setSelectedWorkflowRun(workflowRunRowData as WorkflowRunModel);
@@ -63,7 +63,7 @@ const AnalysisRunTable = () => {
                   <Link
                     to={`${id}`}
                     className={classNames(
-                      'cursor-pointer flex flex-row items-center ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+                      'ml-2 flex cursor-pointer flex-row items-center text-sm font-medium capitalize text-blue-500 hover:text-blue-700'
                     )}
                   >
                     {(analysisRunName as string).toLocaleLowerCase()}
@@ -91,10 +91,10 @@ const AnalysisRunTable = () => {
         cell: (analysis: unknown) => {
           return (
             <div className='flex flex-row items-center'>
-              <div className='px-2 text-sm font-normal rounded text-gray-900'>
+              <div className='rounded px-2 text-sm font-normal text-gray-900'>
                 {(analysis as AnalysisModel).analysisName}
               </div>
-              <div className='px-2 text-sm font-normal rounded text-gray-500'>
+              <div className='rounded px-2 text-sm font-normal text-gray-500'>
                 {`v ${(analysis as AnalysisModel).analysisVersion}`}
               </div>
             </div>

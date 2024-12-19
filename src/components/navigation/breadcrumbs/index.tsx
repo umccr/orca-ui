@@ -3,13 +3,13 @@ import { classNames } from '@/utils/commonUtils';
 import { FC } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-export type BreadcrumbProps = {
-  pages: {
-    name: string;
-    href: string;
-    current: boolean;
-  }[];
-};
+// export type BreadcrumbProps = {
+//   pages: {
+//     name: string;
+//     href: string;
+//     current: boolean;
+//   }[];
+// };
 
 const LocationBreadcrumb: FC = () => {
   // const { pages } = props;
@@ -32,24 +32,34 @@ const LocationBreadcrumb: FC = () => {
   const splitPath = fullPath.split('/');
   const currentPage = splitPath[splitPath.length - 1];
   return (
-    <nav className='flex mb-6 pb-4 border-b-4' aria-label='Breadcrumb'>
-      <ol role='list' className='flex items-center space-x-2 -ml-2'>
+    <nav
+      className='mb-6 flex border-b border-gray-200 pb-3 transition-colors duration-200 dark:border-gray-700'
+      aria-label='Breadcrumb'
+    >
+      <ol
+        role='list'
+        className='scrollbar-hide -ml-2 flex max-w-full flex-wrap items-center space-x-2 overflow-x-auto'
+      >
         {splitPath.map((path, key) => (
           <li key={key}>
             <div className='flex items-center'>
-              {key != 0 && (
+              {key > 0 && (
                 <ChevronRightIcon
-                  className='h-5 w-5 flex-shrink-0 text-gray-400'
+                  className='h-4 w-4 flex-shrink-0 text-gray-400 dark:text-gray-600'
                   aria-hidden='true'
                 />
               )}
               <Link
                 to={`/${splitPath.slice(0, key + 1).join('/')}`}
                 className={classNames(
-                  'ml-2 text-sm uppercase font-medium hover:text-blue-700',
-                  currentPage == path ? 'text-blue-500' : 'text-grey-500'
+                  'ml-2 text-sm font-medium transition-colors duration-200',
+                  'hover:text-blue-600 dark:hover:text-blue-400',
+                  currentPage === path
+                    ? 'text-blue-600 dark:text-blue-400'
+                    : 'text-gray-500 dark:text-gray-400',
+                  'max-w-[150px] truncate sm:max-w-[200px] md:max-w-none'
                 )}
-                aria-current={currentPage == path ? 'page' : undefined}
+                aria-current={currentPage === path ? 'page' : undefined}
               >
                 {path}
               </Link>

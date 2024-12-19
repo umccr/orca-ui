@@ -63,7 +63,7 @@ const HorizontalTimeline: FC<TimelineProps> = ({ timeline, handldEventClick, sel
     <div className='relative'>
       <button
         onClick={() => scroll('left')}
-        className='absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-1 shadow-md z-10'
+        className='absolute left-0 top-1/2 z-10 -translate-y-1/2 transform rounded-full bg-white p-1 shadow-md'
         aria-label='Scroll left'
       >
         <ChevronLeftIcon className='h-6 w-6 text-gray-600' />
@@ -72,15 +72,15 @@ const HorizontalTimeline: FC<TimelineProps> = ({ timeline, handldEventClick, sel
         <ul
           ref={timelineRef}
           role='list'
-          className='flex space-x-2 py-2 px-4 transition-transform duration-300 ease-in-out'
+          className='flex space-x-2 px-4 py-2 transition-transform duration-300 ease-in-out'
           style={{ transform: `translateX(${translateX}px)` }}
         >
           {timeline.map((event, eventIdx) => (
-            <li key={event.id} className='relative flex-shrink-0 px-4 '>
+            <li key={event.id} className='relative flex-shrink-0 px-4'>
               {eventIdx !== timeline.length - 1 ? (
                 <span
                   aria-hidden='true'
-                  className='absolute top-4 left-24 h-0.5 w-full bg-gray-200'
+                  className='absolute left-24 top-4 h-0.5 w-full bg-gray-200'
                 />
               ) : null}
 
@@ -95,7 +95,7 @@ const HorizontalTimeline: FC<TimelineProps> = ({ timeline, handldEventClick, sel
                   <div
                     className={classNames(
                       event.iconBackground,
-                      'flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white '
+                      'flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white'
                     )}
                   >
                     {event.icon ? (
@@ -107,7 +107,7 @@ const HorizontalTimeline: FC<TimelineProps> = ({ timeline, handldEventClick, sel
                 </div>
                 <div
                   className={classNames(
-                    'flex flex-col items-center ',
+                    'flex flex-col items-center',
                     selectedEventPayloadId === event.payloadId
                       ? 'border-b-2 border-indigo-500'
                       : 'hover:border-b-2 hover:border-indigo-200'
@@ -135,7 +135,7 @@ const HorizontalTimeline: FC<TimelineProps> = ({ timeline, handldEventClick, sel
       </div>
       <button
         onClick={() => scroll('right')}
-        className='absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-1 shadow-md z-10'
+        className='absolute right-0 top-1/2 z-10 -translate-y-1/2 transform rounded-full bg-white p-1 shadow-md'
         aria-label='Scroll right'
       >
         <ChevronRightIcon className='h-6 w-6 text-gray-600' />

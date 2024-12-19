@@ -1,3 +1,6 @@
+/* eslint-disable react-refresh/only-export-components */
+// https://github.com/ArnaudBarre/eslint-plugin-react-refresh/issues/25#issuecomment-1729071347
+
 import {
   createContext,
   useContext,
@@ -8,6 +11,7 @@ import {
   ReactElement,
   FC,
   PropsWithChildren,
+  useMemo,
 } from 'react';
 import {
   fetchUserAttributes,
@@ -19,6 +23,7 @@ import { SpinnerWithText } from '@/components/common/spinner';
 import { Hub } from 'aws-amplify/utils';
 import { Amplify } from 'aws-amplify';
 import awsConfig from '../config';
+import toaster from '@/components/common/toaster';
 
 // configure amplify settings
 Amplify.configure({
@@ -37,18 +42,21 @@ Amplify.configure({
 enum AuthActionTypes {
   INIT = 'INIT',
   LOGOUT = 'LOGOUT',
+  SET_LOADING = 'SET_LOADING',
 }
 
 interface AuthState {
   isInitialized: boolean; // used
   isAuthenticated: boolean;
   user: FetchUserAttributesOutput;
+  isLoading: boolean;
 }
 
 const initialAuthState: AuthState = {
   isInitialized: false,
   isAuthenticated: false,
   user: {},
+  isLoading: false,
 };
 
 interface AuthAction {
@@ -56,6 +64,7 @@ interface AuthAction {
   payload?: {
     user?: FetchUserAttributesOutput;
     isAuthenticated?: boolean;
+    isLoading?: boolean;
   };
 }
 
@@ -74,6 +83,11 @@ const reducer = (state: AuthState, action: AuthAction): AuthState => {
         isAuthenticated: false,
         user: {},
       };
+    case AuthActionTypes.SET_LOADING:
+      return {
+        ...state,
+        isLoading: action.payload?.isLoading || false,
+      };
     default:
       return state;
   }
@@ -88,6 +102,7 @@ export const AuthContext = createContext<AuthContextProps>({
   isInitialized: false,
   isAuthenticated: false,
   user: {},
+  isLoading: false,
   signInWithGoogle: async () => {},
   logout: async () => {},
 });
@@ -105,6 +120,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement 
       dispatch({ type: AuthActionTypes.INIT, payload: { isAuthenticated: true, user } });
     } catch (e) {
       console.error('initializeAuth Error: ', e);
+      toaster.error({ title: 'Error', message: 'Failed to authenticate user' });
       dispatch({ type: AuthActionTypes.INIT, payload: { isAuthenticated: false, user: {} } });
     }
 
@@ -160,9 +176,15 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement 
   //best practice: useCallback ensures that these functions are only recreated when necessary, optimizing performance.
   const signInWithGoogle = useCallback(async () => {
     try {
+      dispatch({ type: AuthActionTypes.SET_LOADING, payload: { isLoading: true } });
       await signInWithRedirect({ provider: 'Google' });
     } catch (e) {
-      console.error('signInWithGoogle Error: ', e); //backlog: add error boundary for error handling
+      // error handling
+      const error = e as Error;
+      console.error('signInWithGoogle Error: ', error.message); //backlog: add error boundary for error handling
+      toaster.error({ title: 'Error', message: error.message });
+    } finally {
+      dispatch({ type: AuthActionTypes.SET_LOADING, payload: { isLoading: false } });
     }
   }, []);
 
@@ -175,6 +197,15 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement 
     }
   }, []);
 
+  const contextValue = useMemo(
+    () => ({
+      ...state,
+      signInWithGoogle,
+      logout,
+    }),
+    [state, signInWithGoogle, logout]
+  );
+
   return (
     <>
       {isAuthenticating ? (
@@ -182,9 +213,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement 
           <SpinnerWithText text='Authenticating...' />
         </div>
       ) : (
-        <AuthContext.Provider value={{ ...state, signInWithGoogle, logout }}>
-          {children}
-        </AuthContext.Provider>
+        <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
       )}
     </>
   );

@@ -26,14 +26,14 @@ const WorkflowNode: FC<WorkflowNodeProps> = ({ data }) => {
   // console.log('WorkflowNode:', data, positionAbsoluteX, positionAbsoluteY, backgroundColor);
 
   return (
-    <div className='shadow-md rounded-md bg-white border-2 border-stone-400'>
-      <div className='flex flex-col h-full w-full'>
-        <div className={classNames('text-lg font-bold px-4 py-2 ', backgroundColor)}>
+    <div className='rounded-md border-2 border-stone-400 bg-white shadow-md'>
+      <div className='flex h-full w-full flex-col'>
+        <div className={classNames('px-4 py-2 text-lg font-bold', backgroundColor)}>
           {data.title}
         </div>
-        <div className='flex items-center px-4 py-1 p-2 '>
+        <div className='flex items-center p-2 px-4 py-1'>
           <StatusCircleIcon status={data.detail.status} className='text-lg' />
-          <div className='pl-2 pr-4 max-w-[200px]'>
+          <div className='max-w-[200px] pl-2 pr-4'>
             <div className='text-lg'>{data.detail?.status}</div>
             <span className='text-gray-500'>{data.detail?.description}</span>
           </div>

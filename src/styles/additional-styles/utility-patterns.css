@@ -30,7 +30,7 @@
 .btn-lg,
 .btn-sm,
 .btn-xs {
-  @apply font-medium text-sm inline-flex items-center justify-center border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out;
+  @apply inline-flex items-center justify-center rounded border border-transparent text-sm font-medium leading-5 shadow-sm transition duration-150 ease-in-out;
 }
 
 .btn {
@@ -63,7 +63,7 @@ input[type='search']::-webkit-search-results-decoration {
 .form-select,
 .form-checkbox,
 .form-radio {
-  @apply bg-white dark:bg-slate-900/30 border focus:ring-0 focus:ring-offset-0 dark:disabled:bg-slate-700/30 dark:disabled:border-slate-700 dark:disabled:hover:border-slate-700;
+  @apply border bg-white focus:ring-0 focus:ring-offset-0 dark:bg-slate-900/30 dark:disabled:border-slate-700 dark:disabled:bg-slate-700/30 dark:disabled:hover:border-slate-700;
 }
 
 .form-input,
@@ -78,7 +78,7 @@ input[type='search']::-webkit-search-results-decoration {
 .form-textarea,
 .form-multiselect,
 .form-select {
-  @apply text-sm text-slate-800 dark:text-slate-100 leading-5 py-2 px-3 border-slate-200 hover:border-slate-300 focus:border-slate-300 dark:border-slate-700 dark:hover:border-slate-600 dark:focus:border-slate-600 shadow-sm;
+  @apply border-slate-200 px-3 py-2 text-sm leading-5 text-slate-800 shadow-sm hover:border-slate-300 focus:border-slate-300 dark:border-slate-700 dark:text-slate-100 dark:hover:border-slate-600 dark:focus:border-slate-600;
 }
 
 .form-input,
@@ -92,7 +92,7 @@ input[type='search']::-webkit-search-results-decoration {
 
 .form-checkbox,
 .form-radio {
-  @apply text-indigo-500 checked:bg-indigo-500 dark:checked:border-transparent border border-slate-300 focus:border-indigo-300 dark:border-slate-700 dark:focus:border-indigo-500/50;
+  @apply border border-slate-300 text-indigo-500 checked:bg-indigo-500 focus:border-indigo-300 dark:border-slate-700 dark:checked:border-transparent dark:focus:border-indigo-500/50;
 }
 
 /* Switch element */
@@ -102,7 +102,7 @@ input[type='search']::-webkit-search-results-decoration {
 }
 
 .form-switch label {
-  @apply block overflow-hidden cursor-pointer h-6 rounded-full;
+  @apply block h-6 cursor-pointer overflow-hidden rounded-full;
 }
 
 .form-switch label > span:first-child {
@@ -124,7 +124,7 @@ input[type='search']::-webkit-search-results-decoration {
 }
 
 .form-switch input[type='checkbox']:disabled + label {
-  @apply cursor-not-allowed bg-slate-100 dark:bg-slate-700/20 border border-slate-200 dark:border-slate-700;
+  @apply cursor-not-allowed border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-700/20;
 }
 
 .form-switch input[type='checkbox']:disabled + label > span:first-child {

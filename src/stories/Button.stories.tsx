@@ -93,7 +93,7 @@ export const IconButtonStory: StoryObj<IconButtonProps> = {
       icon={<ArrowDownOnSquareIcon className='h-5 w-5' />}
       tooltip='Export'
       tooltipPosition='top'
-      tooltipBackground='white'
+      tooltipBackground='light'
     />
   ),
 };

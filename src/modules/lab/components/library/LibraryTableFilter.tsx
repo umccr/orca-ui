@@ -105,7 +105,7 @@ export const LibraryTableFilter = () => {
         handleFilterChange={handleFilterChange}
       />
 
-      <div className='border-b-2 mb-2 pb-2 italic text-s	text-gray-700 font-thin	'>
+      <div className='text-s mb-2 border-b-2 pb-2 font-thin italic text-gray-700'>
         {`*Text input support multi value with comma separated value. E.g. "L000001,L000002"`}
       </div>
       <CoverageFilter
@@ -151,14 +151,14 @@ export const LibraryTableFilter = () => {
         <Button
           type='gray'
           size='sm'
-          className='w-full justify-center rounded-md ring-gray-300 ring-1'
+          className='w-full justify-center rounded-md ring-1 ring-gray-300'
         >
           <FunnelIcon className='h-5 w-5' />
         </Button>
       }
       content={
-        <div className='z-10 bg-white rounded-lg w-80'>
-          <div className='max-h-[500px] px-3 pb-3 overflow-y-auto text-sm text-gray-700 '>
+        <div className='z-10 w-80 rounded-lg bg-white'>
+          <div className='max-h-[500px] overflow-y-auto px-3 pb-3 text-sm text-gray-700'>
             <LibraryFilter />
           </div>
           <ClosePopoverWrapper className='mt-4'>
@@ -175,7 +175,7 @@ export const LibraryTableFilter = () => {
 
           <ClosePopoverWrapper>
             <Button
-              className='w-full justify-center mt-2'
+              className='mt-2 w-full justify-center'
               type='primary'
               onClick={() => {
                 setQueryParams({ ...filter }, true);
@@ -206,11 +206,11 @@ const CoverageFilter = ({
 
   return (
     <>
-      <div className='font-medium mb-2'>{`Coverage`}</div>
-      <div className='relative inline-block text-left cursor-pointer w-24'>
+      <div className='mb-2 font-medium'>{`Coverage`}</div>
+      <div className='relative inline-block w-24 cursor-pointer text-left'>
         <label
           className={classNames(
-            'absolute text-sm text-gray-500 -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 start-1'
+            'absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 bg-white px-2 text-sm text-gray-500'
           )}
         >
           {`Minimum`}
@@ -228,13 +228,13 @@ const CoverageFilter = ({
             }
           }}
           type='number'
-          className='my-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500/50 focus:border-blue-500/50 block w-full p-2.5'
+          className='my-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500/50 focus:ring-blue-500/50'
         />
       </div>
-      <div className='ml-2 relative inline-block text-left cursor-pointer w-24'>
+      <div className='relative ml-2 inline-block w-24 cursor-pointer text-left'>
         <label
           className={classNames(
-            'absolute text-sm text-gray-500 -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 start-1'
+            'absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 bg-white px-2 text-sm text-gray-500'
           )}
         >
           {`Maximum`}
@@ -251,7 +251,7 @@ const CoverageFilter = ({
             }
           }}
           type='number'
-          className='my-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500/50 focus:border-blue-500/50 block w-full p-2.5'
+          className='my-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500/50 focus:ring-blue-500/50'
         />
       </div>
     </>

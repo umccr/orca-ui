@@ -54,7 +54,7 @@ export const SampleTableFilter = () => {
         defaultInput={filter.source ? filter.source : []}
         handleFilterChange={handleFilterChange}
       />
-      <div className='border-b-2 mb-2 pb-2 italic text-s	text-gray-700 font-thin	'>
+      <div className='text-s mb-2 border-b-2 pb-2 font-thin italic text-gray-700'>
         {`*Text input support multi value with comma separated value. E.g. "L000001,L000002"`}
       </div>
     </>
@@ -66,18 +66,18 @@ export const SampleTableFilter = () => {
         <Button
           type='gray'
           size='sm'
-          className='w-full justify-center rounded-md ring-gray-300 ring-1'
+          className='w-full justify-center rounded-md ring-1 ring-gray-300'
         >
           <FunnelIcon className='h-5 w-5' />
         </Button>
       }
       content={
-        <div className='z-10 bg-white rounded-lg w-80'>
-          <div className='max-h-[250px] px-3 pb-3 overflow-y-auto text-sm text-gray-700 '>
+        <div className='z-10 w-80 rounded-lg bg-white'>
+          <div className='max-h-[250px] overflow-y-auto px-3 pb-3 text-sm text-gray-700'>
             <SampleFilter />
             <div className='font-medium'>{`Library`}</div>
             <div
-              className='flex items-center ps-2 rounded hover:bg-gray-100 cursor-pointer'
+              className='flex cursor-pointer items-center rounded ps-2 hover:bg-gray-100'
               onClick={() => {
                 setFilter((prev) => ({ ...prev, isLibraryNone: !prev['isLibraryNone'] }));
               }}
@@ -86,9 +86,9 @@ export const SampleTableFilter = () => {
                 readOnly
                 checked={filter['isLibraryNone']}
                 type='checkbox'
-                className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500/50 focus:ring-2 cursor-pointer'
+                className='h-4 w-4 cursor-pointer rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500/50'
               />
-              <label className='w-full py-2 ms-2 text-sm font-normal text-gray-900 rounded cursor-pointer'>
+              <label className='ms-2 w-full cursor-pointer rounded py-2 text-sm font-normal text-gray-900'>
                 Empty library
               </label>
             </div>
@@ -107,7 +107,7 @@ export const SampleTableFilter = () => {
 
           <ClosePopoverWrapper>
             <Button
-              className='w-full justify-center mt-2'
+              className='mt-2 w-full justify-center'
               type='primary'
               onClick={() => {
                 setQueryParams({ ...filter }, true);

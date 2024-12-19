@@ -160,7 +160,7 @@ const WorkflowRunFilterHeader = () => {
 
   return (
     <>
-      <div className='w-full flex flex-row gap-1  md:flex-row items-center  justify-between p-2'>
+      <div className='flex w-full flex-row items-center justify-between gap-1 p-2 md:flex-row'>
         <div>
           <Search
             onSearch={(searchContent) => setQueryParams({ search: searchContent })}
@@ -189,13 +189,13 @@ const WorkflowRunFilterHeader = () => {
             />
           </div>
 
-          <div className='px-0 flex-none'>
+          <div className='flex-none px-0'>
             <Button
               size='md'
               onClick={() => {
                 clearQueryParams(['tab']);
               }}
-              className=' text-gray-400 hover:text-white'
+              className='text-gray-400 hover:text-white'
             >
               Clear all
             </Button>

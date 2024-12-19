@@ -5,7 +5,7 @@ import WorkflowRunTable from '../components/workflowRuns/WorkflowRunTable';
 const WorkflowRuns = () => {
   return (
     <DetailedErrorBoundary errorTitle='Unable to load workflow runs data'>
-      <div className='w-full h-full'>
+      <div className='h-full w-full'>
         {/* <div className='text-2xl font-bold py-2'>Workflow</div> */}
         {/* workflow run filter header */}
         <WorkflowRunFilterHeader />

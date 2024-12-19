@@ -60,7 +60,7 @@ const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) =
               <Link
                 to={`/runs/workflow/${id}`}
                 className={classNames(
-                  'cursor-pointer flex flex-row items-center text-sm font-medium hover:text-blue-700 text-blue-500'
+                  'flex cursor-pointer flex-row items-center text-sm font-medium text-blue-500 hover:text-blue-700'
                 )}
               >
                 <div>{workflowRunName as string}</div>

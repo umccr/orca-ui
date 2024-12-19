@@ -1,4 +1,3 @@
-import React from 'react';
 import { Column } from '@/components/tables';
 import { getCurrentSortDirection, getSortValue } from '@/components/tables/Table';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
@@ -22,7 +21,7 @@ export const getIndividualTableColumn = ({
       <div className='flex flex-row items-center'>
         <div>Individual Id</div>
         <Tooltip text={`This is now the 'SubjectID' from the tracking sheet`} position='right'>
-          <InformationCircleIcon className='h-4	ml-2' />
+          <InformationCircleIcon className='ml-2 h-4' />
         </Tooltip>
       </div>
     ),

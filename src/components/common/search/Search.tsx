@@ -7,9 +7,16 @@ interface SearchProps {
   hasTooltip?: boolean;
   tooltipText?: string;
   onSearch: (search: string | null) => void;
+  placeholder?: string;
 }
 
-const Search: FC<SearchProps> = ({ onSearch, searchBoxContent, hasTooltip, tooltipText }) => {
+const Search: FC<SearchProps> = ({
+  onSearch,
+  searchBoxContent,
+  hasTooltip,
+  tooltipText,
+  placeholder,
+}) => {
   const [searchBox, setSearchBox] = useState<string>('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -23,18 +30,21 @@ const Search: FC<SearchProps> = ({ onSearch, searchBoxContent, hasTooltip, toolt
   }, [searchBoxContent, hasTooltip]);
 
   return (
-    <div className='flex flex-row items-center'>
-      <div className='flex-1 '>
+    <div className='flex flex-row items-center gap-2'>
+      <div className='relative flex-1'>
         <label htmlFor='search' className='sr-only'>
           Search
         </label>
         <div
-          className='relative inline-flex justify-center items-center'
+          className='relative inline-flex w-full rounded-lg shadow-sm transition-shadow duration-200 hover:shadow-md dark:shadow-gray-800'
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
           <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
-            <MagnifyingGlassIcon className='h-5 w-5 text-gray-400' aria-hidden='true' />
+            <MagnifyingGlassIcon
+              className='h-5 w-5 text-gray-400 dark:text-gray-500'
+              aria-hidden='true'
+            />
           </div>
           <input
             onKeyDown={(e) => {
@@ -50,19 +60,19 @@ const Search: FC<SearchProps> = ({ onSearch, searchBoxContent, hasTooltip, toolt
             value={searchBox}
             id='search'
             name='search'
-            className='block w-full h-8 rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 ring-1  ring-gray-300 placeholder:text-gray-400 focus:ring-2  focus:ring-indigo-600 sm:text-sm sm:leading-6'
-            placeholder='Search'
+            className='block h-8 w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-sm text-gray-900 ring-1 ring-gray-300 transition-all duration-200 ease-in-out placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-700 dark:placeholder:text-gray-500 dark:focus:ring-blue-500'
+            placeholder={placeholder}
             type='search'
           />
           {showXMark && (
             <div
-              className='pointer-events-auto cursor-pointer absolute inset-y-0 right-0 flex items-center pr-3 z-10'
+              className='absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3 transition-opacity duration-200 hover:opacity-80'
               onClick={() => {
                 setSearchBox('');
                 onSearch(null);
               }}
             >
-              <XMarkIcon className='h-5 w-5 text-gray-400' aria-hidden='true' />
+              <XMarkIcon className='h-5 w-5 text-gray-400 dark:text-gray-500' aria-hidden='true' />
             </div>
           )}
         </div>
@@ -71,12 +81,11 @@ const Search: FC<SearchProps> = ({ onSearch, searchBoxContent, hasTooltip, toolt
         <Tooltip
           text={
             tooltipText ||
-            'Available Search Items:  workflowRunName, comment, libraryId, orcabusId, workflowName'
+            'Available Search Items: workflowRunName, comment, libraryId, orcabusId, workflowName'
           }
           position='top'
-          background='white'
         >
-          <QuestionMarkCircleIcon className='h-7 w-7 text-slate-300 pl-1 cursor-pointer' />
+          <QuestionMarkCircleIcon className='h-7 w-7 cursor-pointer pl-1 text-slate-300 transition-opacity duration-200 hover:opacity-80 dark:text-gray-600' />
         </Tooltip>
       )}
     </div>

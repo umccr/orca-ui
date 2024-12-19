@@ -104,14 +104,14 @@ export const DropdownWithDisabledItems: Story = {
 
 export const IconDropdownStory: Story = {
   render: () => {
-    return <IconDropdown items={exampleItems} className='!text-white !bg-blue-700' />;
+    return <IconDropdown items={exampleItems} className='!bg-blue-700 !text-white' />;
   },
 };
 
 export const IconDropdownWithPlusIcon: Story = {
   render: () => {
     return (
-      <IconDropdown items={exampleItems} BtnIcon={PlusIcon} className='!text-white !bg-blue-700' />
+      <IconDropdown items={exampleItems} BtnIcon={PlusIcon} className='!bg-blue-700 !text-white' />
     );
   },
 };
@@ -119,7 +119,7 @@ export const CheckboxDropdown: Story = {
   render: () => {
     return (
       <PopoverDropdown
-        btnChildren={<FunnelIcon className='h-5 w-5 mr-2' />}
+        btnChildren={<FunnelIcon className='mr-2 h-5 w-5' />}
         content={<div className='flex flex-row items-center'>{3}</div>}
       ></PopoverDropdown>
     );

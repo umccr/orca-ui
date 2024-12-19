@@ -26,7 +26,7 @@ export const getSubjectTableColumn = ({
           text={`This is now the 'ExternalSubjectID' from the tracking sheet`}
           position='right'
         >
-          <InformationCircleIcon className='h-4	ml-2' />
+          <InformationCircleIcon className='ml-2 h-4' />
         </Tooltip>
       </div>
     ),
@@ -58,7 +58,7 @@ export const getSubjectTableColumn = ({
               <Link
                 to={`/lab/?tab=subject&orcabusId=${sbj.subjectOrcabusId}`}
                 className={classNames(
-                  'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+                  'ml-2 text-sm font-medium capitalize text-blue-500 hover:text-blue-700'
                 )}
               >
                 {sbj.subjectId ?? '-'}

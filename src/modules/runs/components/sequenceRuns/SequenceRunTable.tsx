@@ -51,7 +51,7 @@ const SequenceRunTable = () => {
             <div>
               <div
                 className={classNames(
-                  'cursor-pointer flex flex-row items-center ml-2 text-sm uppercase font-medium hover:text-blue-700 text-blue-500'
+                  'ml-2 flex cursor-pointer flex-row items-center text-sm font-medium uppercase text-blue-500 hover:text-blue-700'
                 )}
                 onClick={() => {
                   setSelectedSequenceRun(sequenceRunRowData as SequenceRunModel);

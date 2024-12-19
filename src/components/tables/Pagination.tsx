@@ -39,7 +39,7 @@ const PaginationDirectionButton = ({
       onClick={onClick}
       className={classNames(
         disabled ? 'bg-gray-50' : 'hover:bg-gray-100',
-        'relative inline-flex items-center rounded-full !p-0 h-7 text-gray-400 focus:z-20 focus:outline-offset-0',
+        'relative inline-flex h-7 items-center rounded-full !p-0 text-gray-400 focus:z-20 focus:outline-offset-0',
         className ?? ''
       )}
     >
@@ -70,15 +70,20 @@ export default function Pagination({
   const to = Math.min((currentPage - 1) * rowsPerPage + rowsPerPage, totalCount);
 
   return (
-    <div className='flex items-center justify-between pt-4 mt-2'>
+    <div className='flex items-center justify-between border-t py-4 dark:border-gray-700'>
       {/* mobile pagination */}
       <div className='flex flex-1 justify-between md:hidden'>
         <Button
           disabled={currentPage === 1}
           onClick={() => setPage(currentPage - 1)}
           className={classNames(
-            currentPage === 1 ? '' : 'hover:bg-gray-50',
-            'relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700'
+            'relative inline-flex items-center rounded-md px-4 py-2 text-sm font-medium',
+            'border dark:border-gray-600',
+            'bg-white dark:bg-gray-800',
+            'text-gray-700 dark:text-gray-200',
+            currentPage === 1
+              ? 'cursor-not-allowed opacity-50'
+              : 'hover:bg-gray-50 dark:hover:bg-gray-700'
           )}
         >
           Previous
@@ -87,19 +92,28 @@ export default function Pagination({
           disabled={currentPage >= maxPage}
           onClick={() => setPage(currentPage + 1)}
           className={classNames(
-            currentPage === 1 ? '' : 'hover:bg-gray-50',
-            'relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700'
+            'relative inline-flex items-center rounded-md px-4 py-2 text-sm font-medium',
+            'border dark:border-gray-600',
+            'bg-white dark:bg-gray-800',
+            'text-gray-700 dark:text-gray-200',
+            currentPage === 1
+              ? 'cursor-not-allowed opacity-50'
+              : 'hover:bg-gray-50 dark:hover:bg-gray-700'
           )}
         >
           Next
         </Button>
       </div>
+
       {/* Pagination */}
-      <div className='hidden md:flex md:flex-1 md:items-center md:justify-end md:gap-3'>
+      <div className='hidden md:flex md:flex-1 md:items-center md:justify-end md:gap-4'>
         <div className='flex flex-row'>
-          <p className='text-sm text-gray-700 font-medium text-nowrap pl-2 pr-1'>
-            <span className='font-medium'>{from}</span> to <span className='font-medium'>{to}</span>{' '}
-            of <span className='font-medium'>{totalCount}</span> {countUnit}
+          <p className='text-sm font-medium text-gray-700 dark:text-gray-300'>
+            <span className='font-medium'>{from}</span>
+            {' - '}
+            <span className='font-medium'>{to}</span>
+            {' of '}
+            <span className='font-medium'>{totalCount}</span> {countUnit}
           </p>
         </div>
 
@@ -107,18 +121,16 @@ export default function Pagination({
         <div className='flex flex-row items-center'>
           <label
             htmlFor='rows-per-page'
-            className='text-sm text-gray-700 font-medium text-nowrap pl-2 pr-1'
+            className='whitespace-nowrap px-2 text-sm font-medium text-gray-700 dark:text-gray-300'
           >
             Rows per page:
           </label>
           <select
             id='rows-per-page'
             name='rows-per-page'
-            className='block text-sm my-1 w-16 h-7 p-1 pl-2 rounded border-gray-300 bg-white text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-500/75'
+            className='block h-8 w-16 rounded-md border-2 border-gray-500/5 bg-white text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400 dark:focus:ring-blue-400'
             value={rowsPerPageNumber}
-            onChange={(e) => {
-              setRowsPerPage(parseInt(e.target.value));
-            }}
+            onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
           >
             {pageSizeOptions.map((size) => (
               <option key={size} value={size}>
@@ -131,7 +143,7 @@ export default function Pagination({
         <div>
           <nav
             aria-label='Pagination'
-            className='isolate inline-flex space-x-2 rounded-md items-center'
+            className='isolate inline-flex items-center gap-2 rounded-md'
           >
             <PaginationDirectionButton disabled={currentPage === 1} onClick={() => setPage(1)}>
               <span className='sr-only'>First Page</span>
@@ -151,13 +163,15 @@ export default function Pagination({
               name='set-page'
               min={1}
               max={maxPage}
-              className='block w-16 h-7 my-1 text-sm rounded-md border-0 bg-white px-4 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-500/75'
+              className='block h-8 w-16 rounded-md border-2 border-gray-500/5 bg-white text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400 dark:focus:ring-blue-400'
               value={inputPageNumber}
               onChange={(e) => {
-                if (e.target.value === '') {
+                const value = e.target.value;
+                if (value === '') {
                   setInputPageNumber(1);
                 } else {
-                  setInputPageNumber(parseInt(e.target.value ?? 1));
+                  const page = Math.min(Math.max(1, parseInt(value)), maxPage);
+                  setInputPageNumber(page);
                 }
               }}
               onKeyDown={(e) => {
@@ -165,9 +179,7 @@ export default function Pagination({
                   setPage(inputPageNumber);
                 }
               }}
-              onBlur={() => {
-                setPage(inputPageNumber);
-              }}
+              onBlur={() => setPage(inputPageNumber)}
             />
 
             <PaginationDirectionButton

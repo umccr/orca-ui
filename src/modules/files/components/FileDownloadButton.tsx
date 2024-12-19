@@ -26,7 +26,7 @@ export const FileDownloadButton = ({ s3Record }: { s3Record: S3Record }) => {
         <Spinner />
       ) : (
         <Button
-          className='!p-2 !m-0 !shadow-none'
+          className='!m-0 !p-2 !shadow-none'
           rounded
           size='md'
           onClick={() => {
@@ -38,7 +38,7 @@ export const FileDownloadButton = ({ s3Record }: { s3Record: S3Record }) => {
           }}
           type='gray'
         >
-          <ArrowDownTrayIcon className='size-4 ' />
+          <ArrowDownTrayIcon className='size-4' />
         </Button>
       )}
     </>

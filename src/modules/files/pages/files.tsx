@@ -147,7 +147,7 @@ export default function FilesPage() {
             </div>
           ))}
         </div>
-        <div className='w-full flex justify-end'>
+        <div className='flex w-full justify-end'>
           <Button
             onClick={() => {
               setQueryParams({ key: [], bucket: [] });

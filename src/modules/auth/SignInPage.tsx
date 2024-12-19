@@ -39,7 +39,7 @@ function SignInContainer() {
     signInWithGoogle();
   };
   const header = (
-    <div className='flex justify-center items-center p-[20px]' style={{ padding: '20px' }}>
+    <div className='flex items-center justify-center p-[20px]' style={{ padding: '20px' }}>
       <img
         src='/assets/logo/uomlogo.png'
         style={{ width: '30%', height: 'auto' }}
@@ -54,7 +54,7 @@ function SignInContainer() {
         {isLoading ? (
           <>
             <Spinner />
-            <div className='w-full text-center pr-6'>Signing</div>
+            <div className='w-full pr-6 text-center'>Signing</div>
           </>
         ) : (
           <div className='w-full text-center'>Sign in</div>
@@ -65,8 +65,8 @@ function SignInContainer() {
   );
 
   return (
-    <div className='flex justify-center items-center h-full w-full bg-transparent'>
-      <Card className='w-[40rem] shadow-inner-lg bg-opacity-10 bg-white backdrop-blur-sm p-5 border border-transparent  rounded-lg'>
+    <div className='flex h-full w-full items-center justify-center bg-transparent'>
+      <Card className='w-[40rem] rounded-lg border border-transparent bg-white bg-opacity-10 p-5 shadow-inner-lg backdrop-blur-sm'>
         {header}
         <div style={{ textAlign: 'justify', color: 'white' }}>
           <h1 style={{ fontSize: '2em', textAlign: 'center' }}>UMCCR Orcabus</h1>
@@ -123,10 +123,10 @@ function SignInPage() {
   }
 
   return (
-    <div className='absolute overflow-hidden h-full w-full'>
+    <div className='absolute h-full w-full overflow-hidden'>
       {!imageUrl && <Spinner className='w-[6px]' />}
       <div
-        className='absolute bg-grey h-full w-full -z-1  bg-[url(imageUrl) bg-no-repeat bg-cover bg-center]'
+        className='bg-grey -z-1 bg-[url(imageUrl) bg-center] absolute h-full w-full bg-cover bg-no-repeat'
         style={{
           backgroundColor: 'grey',
           height: '100%',
@@ -139,7 +139,7 @@ function SignInPage() {
           backgroundPosition: 'center',
         }}
       />
-      <div className='z-1 flex justify-center items-center h-full'>
+      <div className='z-1 flex h-full items-center justify-center'>
         <SignInContainer />
       </div>
       {userLink && (

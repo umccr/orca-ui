@@ -5,7 +5,7 @@ import { Button } from '@/components/common/buttons';
 const AnalysisRunFilterHeader = () => {
   const { setQueryParams, clearQueryParams, getQueryParams } = useQueryParams();
   return (
-    <div className='w-full flex flex-row gap-1  md:flex-row items-center  justify-between p-2'>
+    <div className='flex w-full flex-row items-center justify-between gap-1 p-2 md:flex-row'>
       <div>
         <Search
           onSearch={(searchContent) => setQueryParams({ search: searchContent })}
@@ -15,13 +15,13 @@ const AnalysisRunFilterHeader = () => {
       </div>
 
       <div className='flex flex-row items-center gap-2'>
-        <div className='px-0 flex-none'>
+        <div className='flex-none px-0'>
           <Button
             size='md'
             onClick={() => {
               clearQueryParams();
             }}
-            className=' text-gray-400 hover:text-white'
+            className='text-gray-400 hover:text-white'
           >
             Clear all
           </Button>

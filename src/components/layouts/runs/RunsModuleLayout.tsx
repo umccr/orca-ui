@@ -6,7 +6,7 @@ import { runsModuleNavigation } from '@/utils/navigation';
 
 const RunsModuleLayout = ({ children }: PropsWithChildren) => {
   return (
-    <div className='flex flex-row w-full h-full'>
+    <div className='flex h-full w-full flex-row'>
       <ModuleNavbar navigation={runsModuleNavigation} />
       {children || <Outlet />}
     </div>

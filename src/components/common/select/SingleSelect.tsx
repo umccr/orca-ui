@@ -36,17 +36,17 @@ const SingleSelect: FC<SelectProps> = ({ groupLabel, value, options, onChange })
       <div className='relative mt-2'>
         <ListboxButton
           className={classNames(
-            'relative w-full rounded-lg bg-white py-1.5 pr-10 pl-3 text-left text-sm/6 text-gray-900 ',
-            'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 ',
-            'focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6 ',
-            'shadow-sm ring-1 ring-inset ring-gray-300 '
+            'relative w-full rounded-lg bg-white py-1.5 pl-3 pr-10 text-left text-sm/6 text-gray-900',
+            'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2',
+            'focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6',
+            'shadow-sm ring-1 ring-inset ring-gray-300'
           )}
         >
           <div className='flex flex-row text-sm/6 font-normal'>
             {/* <div className='text-black '>{selected.label}</div> */}
             <span className='block truncate'>{selected.label}</span>
             {selected.secondaryLabel && (
-              <div className='text-gray-500 pl-4'>{selected.secondaryLabel}</div>
+              <div className='pl-4 text-gray-500'>{selected.secondaryLabel}</div>
             )}
           </div>
 
@@ -62,7 +62,7 @@ const SingleSelect: FC<SelectProps> = ({ groupLabel, value, options, onChange })
           anchor='bottom end'
           transition
           className={classNames(
-            'relative z-10 mt-2 min-w-fitorigin-top-right  overflow-auto rounded-md border border-white/5 bg-white p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none',
+            'min-w-fitorigin-top-right relative z-10 mt-2 overflow-auto rounded-md border border-white/5 bg-white p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none',
             'transition duration-200 ease-in-out data-[leave]:data-[closed]:opacity-0',
             'mt-1 ring-1 ring-black ring-opacity-5'
           )}
@@ -71,16 +71,16 @@ const SingleSelect: FC<SelectProps> = ({ groupLabel, value, options, onChange })
             <ListboxOption
               key={index}
               value={option}
-              className=' group relative flex cursor-pointer items-center gap-2 rounded-lg py-1.5 px-3 select-none text-gray-900  data-[focus]:bg-indigo-600 data-[focus]:text-white'
+              className='group relative flex cursor-pointer select-none items-center gap-2 rounded-lg px-3 py-1.5 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white'
             >
               <CheckIcon
                 className={classNames(
-                  option.value == selected.value ? ' visible ' : ' invisible ',
-                  ' size-4 fill-gray-900 data-[focus]:text-indigo-600 '
+                  option.value == selected.value ? 'visible' : 'invisible',
+                  'size-4 fill-gray-900 data-[focus]:text-indigo-600'
                 )}
               />
 
-              <div className='text-sm/6 font-normal group-data-[selected]:font-semibold '>
+              <div className='text-sm/6 font-normal group-data-[selected]:font-semibold'>
                 {option.label}
               </div>
               {option.secondaryLabel && (

@@ -1,5 +1,5 @@
-import { lazy, Suspense } from 'react';
-import { useRoutes, Navigate, Outlet } from 'react-router-dom';
+import { lazy, Suspense, useEffect } from 'react';
+import { useRoutes, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
 import { AppURLs } from '@/utils/appURLs';
 import { SpinnerWithText } from '@/components/common/spinner';
@@ -13,6 +13,17 @@ import modulesRouters from './modules';
 
 export default function AppRoutes() {
   const { isAuthenticated } = useAuthContext();
+  const location = useLocation();
+
+  useEffect(() => {
+    const htmlElement = document.querySelector('html');
+    if (htmlElement) {
+      htmlElement.style.scrollBehavior = 'auto';
+      window.scroll({ top: 0 });
+      htmlElement.style.scrollBehavior = '';
+    }
+  }, [location.pathname]); // triggered on route change
+
   const routes = [
     {
       path: '/',

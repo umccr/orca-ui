@@ -61,7 +61,7 @@ const AnalysisRunDetailsTable = () => {
               <Link
                 to={`/lab/library/${orcabusId}`}
                 className={classNames(
-                  'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+                  'ml-2 text-sm font-medium capitalize text-blue-500 hover:text-blue-700'
                 )}
               >
                 {orcabusId as string}
@@ -76,7 +76,7 @@ const AnalysisRunDetailsTable = () => {
 
   return (
     <div>
-      <div className='pt-4 w-full flex flex-row gap-2'>
+      <div className='flex w-full flex-row gap-2 pt-4'>
         <div className='flex-2'>
           {/* <div className='text-sm font-medium'>Compute Context</div> */}
           <JsonToNestedList data={analysisRunDetail || {}} isFetchingData={isFetchingAnalysisRun} />

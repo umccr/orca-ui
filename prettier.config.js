@@ -14,4 +14,7 @@ export default {
   trailingComma: 'es5',
   useTabs: false,
   endOfLine: 'lf',
+
+  // tailwindcss
+  plugins: ['prettier-plugin-tailwindcss'],
 };

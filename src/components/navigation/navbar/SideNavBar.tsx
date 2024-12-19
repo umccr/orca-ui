@@ -24,33 +24,33 @@ const SideNavbar: FC<SideNavbarProps> = ({ navigation, className }) => {
   }, [location.pathname, navigation]);
 
   return (
-    <div className={`bg-heritage-blue-100 border-0 ${className ?? ''}`}>
+    <div className={`border-0 bg-heritage-blue-100 ${className ?? ''}`}>
       {/* slide indicator */}
       <div
-        className='absolute z-50 left-[1px] top-0 w-[2px] h-[48px] bg-white transition-transform duration-300 '
+        className='absolute left-[1px] top-0 z-50 h-[48px] w-[2px] bg-white transition-transform duration-300'
         style={{ transform: `translateY(${activeIndex * 56 + 40 + 2}px)` }} // header height 44px + mt-10 + space -y-2 + padding 4px + space -y-2
       />
 
       {/* list of module navigation */}
 
       <nav className='mt-10'>
-        <ul role='list' className='flex flex-1 flex-col items-center w-full'>
+        <ul role='list' className='flex w-full flex-1 flex-col items-center'>
           {navigation.map((item, index) => (
-            <li key={index} className='w-full h-[56px] ' onClick={() => setActiveIndex(index)}>
+            <li key={index} className='h-[56px] w-full' onClick={() => setActiveIndex(index)}>
               <Link
                 to={item.href}
                 className={classNames(
-                  'group flex flex-1 flex-col items-center text-2xs leading-5 p-[4px] transition-colors duration-300 transform hover:bg-heritage-blue-50',
+                  'group flex flex-1 transform flex-col items-center p-[4px] text-2xs leading-5 transition-colors duration-300 hover:bg-heritage-blue-50',
                   location.pathname.includes(item.href)
-                    ? ' text-white font-semibold '
-                    : ' text-gray-300 font-normal '
+                    ? 'font-semibold text-white'
+                    : 'font-normal text-gray-300'
                 )}
               >
                 {location.pathname.includes(item.href) ? (
                   <item.solidIcon className='h-6 w-5 shrink-0 text-white' aria-hidden='true' />
                 ) : (
                   <item.icon
-                    className='h-6 w-5 shrink-0 text-gray-300 stroke-2'
+                    className='h-6 w-5 shrink-0 stroke-2 text-gray-300'
                     aria-hidden='true'
                   />
                 )}

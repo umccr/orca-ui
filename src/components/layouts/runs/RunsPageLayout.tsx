@@ -6,7 +6,7 @@ import { DetailedErrorBoundary } from '@/components/common/error';
 
 const RunsPageLayout = ({ children }: PropsWithChildren) => {
   return (
-    <div className='w-full sm:px-4 lg:px-8 lg:py-6 p-4 !rounded-none'>
+    <div className='w-full !rounded-none p-4 sm:px-4 lg:px-8 lg:py-6'>
       <LocationBreadcrumb />
       <Suspense fallback={<SpinnerWithText text='Loading runs page ...' />}>
         <DetailedErrorBoundary errorTitle='Unable to load runs page'>

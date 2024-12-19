@@ -40,7 +40,7 @@ export const Tabs: FC<TabsProps> = ({ tabs, selectedLabel = tabs[0]?.label ?? ''
           id='tabs'
           name='tabs'
           defaultValue={selectedTabIndex}
-          className='block rounded-md text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700'
+          className='block rounded-md border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400'
         >
           {tabs.map((tab, index) => (
             <option key={index}>{tab.label}</option>
@@ -49,16 +49,16 @@ export const Tabs: FC<TabsProps> = ({ tabs, selectedLabel = tabs[0]?.label ?? ''
       </div>
 
       {/* Desktop tab selector */}
-      <div className='hidden sm:block  '>
+      <div className='hidden sm:block'>
         <TabGroup selectedIndex={selectedTabIndex} onChange={onChangeTabs}>
-          <TabList className='flex text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700'>
+          <TabList className='flex border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400'>
             {tabs.map(({ label }, index) => (
               <Tab
                 as='div'
                 key={index}
                 className={classNames(
                   selectedTabIndex === index ? selectedClassName : regularClassName,
-                  'cursor-pointer	inline-block p-4 border-b-2 '
+                  'inline-block cursor-pointer border-b-2 p-4'
                 )}
               >
                 {label}
@@ -67,7 +67,7 @@ export const Tabs: FC<TabsProps> = ({ tabs, selectedLabel = tabs[0]?.label ?? ''
           </TabList>
           <TabPanels className='mt-3'>
             {tabs.map(({ content }, index) => (
-              <TabPanel key={index} className='rounded-xl mt-2'>
+              <TabPanel key={index} className='mt-2 rounded-xl'>
                 {content}
               </TabPanel>
             ))}

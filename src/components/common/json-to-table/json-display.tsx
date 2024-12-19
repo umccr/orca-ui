@@ -12,27 +12,44 @@ interface JsonDisplayProps {
 
 const JsonDisplay: FC<JsonDisplayProps> = ({ isFetchingData, data }) => {
   return (
-    <div className='relative bg-gray-50 border border-gray-300 rounded-md m-2 p-2 shadow-sm '>
+    <div className='relative m-2 rounded-lg border border-gray-300 bg-gray-50 p-4 shadow-md transition-colors duration-200 dark:border-gray-700 dark:bg-gray-800'>
       {isFetchingData ? <BackdropWithText text='Loading data...' isVisible={true} /> : null}
       {data ? (
-        <div className='group flex flex-row justify-between'>
-          <pre className='whitespace-pre-wrap text-wrap break-all text-xs text-gray-800'>
+        <div className='group flex flex-row justify-between gap-4'>
+          <pre className='w-full whitespace-pre-wrap text-wrap break-all font-mono text-sm text-gray-800 dark:text-gray-200'>
             {JSON.stringify(data || {}, null, 2)}
           </pre>
-          <ClipboardDocumentIcon
-            className='w-5 h-5 cursor-pointer stroke-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200'
-            onClick={() => {
-              navigator.clipboard.writeText(JSON.stringify(data || {}, null, 2));
-              toaster.success({
-                title: `Copied data to clipboard`,
-              });
-            }}
-          />
+          <div className='flex-shrink-0'>
+            <ClipboardDocumentIcon
+              className='h-5 w-5 cursor-pointer stroke-gray-500 opacity-0 transition-all duration-200 hover:stroke-blue-500 group-hover:opacity-100 dark:stroke-gray-400 dark:hover:stroke-blue-400'
+              onClick={() => {
+                navigator.clipboard.writeText(JSON.stringify(data || {}, null, 2));
+                toaster.success({
+                  title: 'Copied to clipboard',
+                });
+              }}
+            />
+          </div>
         </div>
       ) : (
-        <div className='flex flex-col gap-2 w-80'>
+        <div className='flex w-full flex-col gap-2'>
           {[...Array(10)].map((_, index) => (
-            <Skeleton key={index} className='h-4 w-full' />
+            <Skeleton
+              key={index}
+              className='h-4 w-full'
+              baseColor={
+                typeof window !== 'undefined' &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches
+                  ? '#374151'
+                  : '#f3f4f6'
+              }
+              highlightColor={
+                typeof window !== 'undefined' &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches
+                  ? '#4B5563'
+                  : '#e5e7eb'
+              }
+            />
           ))}
         </div>
       )}

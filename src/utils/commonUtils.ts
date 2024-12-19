@@ -36,6 +36,10 @@ export function classNames(...classes: ClassValue[]) {
  * @param obj - the object to omit keys from
  * @param keys - the keys to omit
  * @returns the object with the omitted keys
+ * @example
+ * const obj = { name: 'John', age: 30, division: 'HR', department: 'IT' };
+ * const omittedObj = omit(obj, ['age', 'department']);
+ * console.log(omittedObj); // { name: 'John', division: 'HR' }
  */
 export function omit<T extends object, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {
   const result = { ...obj };
@@ -43,15 +47,6 @@ export function omit<T extends object, K extends keyof T>(obj: T, keys: K[]): Om
   return result;
 }
 
-/**
- * Get username from email
- * @param email - the email
- * @returns the username
- * @example
- * const email = 'test.name@example';
- * const username = getUsername(email);
- * console.log(username); // Test Name
- */
 /**
  * Get username from email
  * @param email - the email
@@ -69,15 +64,6 @@ export function getUsername(email: string) {
     .join(' ');
 }
 
-/**
- * Get query params from URLSearchParams
- * @param searchParams - the URLSearchParams object
- * @returns the query params
- * @example
- * const searchParams = new URLSearchParams('?name=John&age=30&division=HR&division=IT');
- * const queryParams = getQueryParams(searchParams);
- * console.log(queryParams); // { name: 'John', age: '30', division: ['HR', 'IT'] }
- */
 /**
  * Get query params from URLSearchParams
  * @param searchParams - the URLSearchParams object
@@ -114,15 +100,6 @@ export const getQueryParams = (searchParams: URLSearchParams) => {
  * const cleanedObj = cleanObject(obj);
  * console.log(cleanedObj); // { name: 'John' }
  */
-/**
- * Clean object from undefined, null, or empty string
- * @param obj - the object to clean
- * @returns the cleaned object
- * @example
- * const obj = { name: 'John', age: '', division: null, department: undefined };
- * const cleanedObj = cleanObject(obj);
- * console.log(cleanedObj); // { name: 'John' }
- */
 export function cleanObject(obj: Record<string, any>) {
   return Object.keys(obj).reduce(
     (prev: Record<string, any>, key) => {
@@ -140,8 +117,10 @@ export function cleanObject(obj: Record<string, any>) {
  * Extract filename from S3 key
  * @param key - the S3 key
  * @returns the filename
- * @param key - the S3 key
- * @returns the filename
+ * @example
+ * const key = 'path/to/file.txt';
+ * const filename = getFilenameFromKey(key);
+ * console.log(filename); // file.txt
  */
 export const getFilenameFromKey = (key: string): string => {
   return key.split('/').pop() || '';
@@ -151,11 +130,9 @@ export const getFilenameFromKey = (key: string): string => {
  * Sleep function to pause the execution for a while
  * @param timeout - the time to sleep in milliseconds
  * @returns a promise that resolves after the sleep
- */
-/**
- * Sleep function to pause the execution for a while
- * @param timeout - the time to sleep in milliseconds
- * @returns a promise that resolves after the sleep
+ * @example
+ * const sleep = (timeout?: number) =>
+ * new Promise((resolve) => setTimeout(resolve, timeout || 0));
  */
 export const sleep = (timeout?: number) =>
   new Promise((resolve) => setTimeout(resolve, timeout || 0));

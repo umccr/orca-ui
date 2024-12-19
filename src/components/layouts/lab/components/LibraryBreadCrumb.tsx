@@ -71,8 +71,8 @@ export const LibraryBreadCrumb: FC = () => {
   }
 
   return (
-    <nav className='flex overflow-auto border-b-4 w-full mb-3 pb-4' aria-label='Breadcrumb'>
-      <ol role='list' className='flex items-center space-x-2 -ml-2'>
+    <nav className='mb-3 flex w-full overflow-auto border-b-4 pb-4' aria-label='Breadcrumb'>
+      <ol role='list' className='-ml-2 flex items-center space-x-2'>
         {libraryBreadCrumbProps.map((p, key) => (
           <li key={key}>
             <div className='flex items-center'>

@@ -37,7 +37,7 @@ export const LinkTabs: FC<LinkTabsProps> = ({ tabs, className }) => {
         </select>
       </div>
       <div className='hidden sm:block'>
-        <div className='border-b border-gray-200 flex flex-row'>
+        <div className='flex flex-row border-b border-gray-200'>
           <nav aria-label='Tabs' className='-mb-px flex space-x-8'>
             {tabs.map((tab, tabIdx) => (
               <Link

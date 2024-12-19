@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { FC, useEffect, useState } from 'react';
 import Flatpickr from 'react-flatpickr';
 import type { DateTimePickerProps } from 'react-flatpickr';
@@ -51,10 +53,12 @@ const DateRangePicker: FC<DateRangePickerProps> = ({ align, startDate, endDate, 
     },
   };
 
+  const FlatpickrComponent = Flatpickr as any;
+
   return (
     <div className='relative'>
-      <Flatpickr
-        className='form-input !pl-9 dark:bg-slate-800  hover:text-slate-600 hover:bg-magpie-light-25 dark:text-slate-300 dark:hover:text-slate-200 font-medium w-[15.5rem] rounded-lg border-0 bg-white py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+      <FlatpickrComponent
+        className='form-input w-[15.5rem] rounded-lg border-0 bg-white py-1.5 !pl-9 font-medium text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 hover:bg-magpie-light-25 hover:text-slate-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-slate-200'
         options={options}
         value={
           selectedStartDate && selectedEndDate
@@ -66,9 +70,9 @@ const DateRangePicker: FC<DateRangePickerProps> = ({ align, startDate, endDate, 
         onOpen={() => setIsOpen(true)}
         onClose={() => setIsOpen(false)}
       />
-      <div className='absolute inset-0 right-auto flex items-center pointer-events-none'>
+      <div className='pointer-events-none absolute inset-0 right-auto flex items-center'>
         <svg
-          className='w-4 h-4 fill-current text-slate-500 dark:text-slate-400 ml-3'
+          className='ml-3 h-4 w-4 fill-current text-slate-500 dark:text-slate-400'
           viewBox='0 0 16 16'
         >
           <path d='M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z' />
