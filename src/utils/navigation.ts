@@ -1,14 +1,14 @@
 import {
   CircleStackIcon,
   ChartBarIcon,
-  // CloudArrowUpIcon,
   FolderIcon,
+  ShieldCheckIcon,
 } from '@heroicons/react/24/outline';
 import {
   CircleStackIcon as SolidCircleStackIcon,
-  // CloudArrowUpIcon as SolidCloudArrowUpIcon,
   ChartBarIcon as SolidChartBarIcon,
   FolderIcon as SolidFolderIcon,
+  ShieldCheckIcon as SolidShieldCheckIcon,
 } from '@heroicons/react/24/solid';
 import { AppURLs } from './appURLs';
 
@@ -16,13 +16,12 @@ const sideNavigation = [
   { name: 'Lab', icon: CircleStackIcon, solidIcon: SolidCircleStackIcon, href: AppURLs.Lab },
   { name: 'Runs', icon: ChartBarIcon, solidIcon: SolidChartBarIcon, href: AppURLs.Runs },
   { name: 'Files', icon: FolderIcon, solidIcon: SolidFolderIcon, href: AppURLs.Files },
-
-  // {
-  //   name: 'sscheck',
-  //   icon: CloudArrowUpIcon,
-  //   solidIcon: SolidCloudArrowUpIcon,
-  //   href: AppURLs.Sscheck,
-  // },
+  {
+    name: 'SSCheck',
+    icon: ShieldCheckIcon,
+    solidIcon: SolidShieldCheckIcon,
+    href: AppURLs.Sscheck,
+  },
 ];
 
 const libraryModuleNavigation = [
