@@ -1,4 +1,3 @@
-import React from 'react';
 import { IndividualListQueryParams, useSuspenseMetadataIndividualModel } from '@/api/metadata';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { components } from '@/api/types/metadata';

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { S3Record, useSuspenseFileObject, useQueryPresignedFileObjectId } from '@/api/file';
 import { Table } from '@/components/tables';
 import { Column } from '@/components/tables/Table';

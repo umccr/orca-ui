@@ -1,4 +1,3 @@
-import React from 'react';
 import { Column } from '@/components/tables';
 import { getCurrentSortDirection, getSortValue } from '@/components/tables/Table';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';

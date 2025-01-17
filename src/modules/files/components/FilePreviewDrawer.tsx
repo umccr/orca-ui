@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import { Suspense, useState } from 'react';
 import { Drawer } from '@/components/common/drawers';
 import {
   FileViewer,

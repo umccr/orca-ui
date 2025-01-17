@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSuspenseWorkflowModel } from '@/api/workflow';
 import { JsonToTable } from '@/components/common/json-to-table';
 import { Dialog } from '@/components/dialogs';
