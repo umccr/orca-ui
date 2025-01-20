@@ -28,7 +28,14 @@ export function createSequenceRunFetchingHook<K extends keyof paths>(path: K) {
       queryKey: [path, params],
       queryFn: async ({ signal }) => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.GET(versionedPath, { params, signal });
+        const { data, error, response } = await client.GET(versionedPath, { params, signal });
+
+        if (error) {
+          if (typeof error === 'object') {
+            throw new Error(JSON.stringify(error));
+          }
+          throw new Error((response as Response).statusText);
+        }
         return data;
       },
     });
@@ -53,10 +60,17 @@ export function createSequenceRunQueryHook<
       queryKey: [versionedPath, params],
       queryFn: async ({ signal: querySignal }) => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.GET(versionedPath, {
+        const { data, error, response } = await client.GET(versionedPath, {
           params: params as ParamsOption<paths[K][M]>,
           signal: signal || querySignal,
         });
+
+        if (error) {
+          if (typeof error === 'object') {
+            throw new Error(JSON.stringify(error));
+          }
+          throw new Error((response as Response).statusText);
+        }
         return data as R;
       },
     });
@@ -70,7 +84,14 @@ export function createSequenceRunPostMutationHook<K extends keyof paths>(path: K
       ...reactQuery,
       mutationFn: async () => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.POST(versionedPath, { params, body: body });
+        const { data, error, response } = await client.POST(versionedPath, { params, body: body });
+
+        if (error) {
+          if (typeof error === 'object') {
+            throw new Error(JSON.stringify(error));
+          }
+          throw new Error((response as Response).statusText);
+        }
         return data;
       },
     });
@@ -84,7 +105,14 @@ export function createSequenceRunPatchMutationHook<K extends keyof paths>(path: 
       ...reactQuery,
       mutationFn: async () => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.PATCH(versionedPath, { params, body: body });
+        const { data, error, response } = await client.PATCH(versionedPath, { params, body: body });
+
+        if (error) {
+          if (typeof error === 'object') {
+            throw new Error(JSON.stringify(error));
+          }
+          throw new Error((response as Response).statusText);
+        }
         return data;
       },
     });
@@ -98,7 +126,17 @@ export function createSequenceRunDeleteMutationHook<K extends keyof paths>(path:
       ...reactQuery,
       mutationFn: async () => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.DELETE(versionedPath, { params, body: body });
+        const { data, error, response } = await client.DELETE(versionedPath, {
+          params,
+          body: body,
+        });
+
+        if (error) {
+          if (typeof error === 'object') {
+            throw new Error(JSON.stringify(error));
+          }
+          throw new Error((response as Response).statusText);
+        }
         return data;
       },
     });
