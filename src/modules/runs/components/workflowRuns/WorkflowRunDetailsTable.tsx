@@ -60,6 +60,7 @@ const WorkflowRunDetailsTable = () => {
     isSuccess: isRerunWorkflowSuccess,
     isError: isErrorRerunWorkflow,
     reset: resetRerunWorkflow,
+    error: rerunWorkflowError,
   } = useWorkflowRunRerunModel({
     params: { path: { orcabusId: orcabusId as string } },
     body: {
@@ -98,13 +99,19 @@ const WorkflowRunDetailsTable = () => {
       setIsDeprecated(false);
     }
     if (isErrorRerunWorkflow) {
-      toaster.error({ title: 'Error rerunning workflow' });
+      toaster.error({ title: 'Error rerunning workflow', message: rerunWorkflowError?.message });
       setIsOpenRerunWorkflowDialog(false);
       resetRerunWorkflow();
       setSelectedDataset(null);
       setIsDeprecated(false);
     }
-  }, [isRerunWorkflowSuccess, isErrorRerunWorkflow, resetRerunWorkflow, setRefreshWorkflowRuns]);
+  }, [
+    isRerunWorkflowSuccess,
+    isErrorRerunWorkflow,
+    rerunWorkflowError,
+    resetRerunWorkflow,
+    setRefreshWorkflowRuns,
+  ]);
 
   const {
     mutate: createWorkflowRunState,

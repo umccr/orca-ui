@@ -40,10 +40,16 @@ export function createWorkflowFetchingHook<
       queryKey: [versionedPath, params],
       queryFn: async () => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.GET(versionedPath, {
+        const { data, error, response } = await client.GET(versionedPath, {
           params: params as ParamsOption<paths[K][M]>,
           signal: signal,
         });
+        if (error) {
+          if (typeof error === 'object') {
+            throw new Error(JSON.stringify(error));
+          }
+          throw new Error((response as Response).statusText);
+        }
         return data as R;
       },
     });
@@ -68,10 +74,16 @@ export function createWorkflowQueryHook<
       queryKey: [versionedPath, params],
       queryFn: async ({ signal: querySignal }) => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.GET(versionedPath, {
+        const { data, error, response } = await client.GET(versionedPath, {
           params: params as ParamsOption<paths[K][M]>,
           signal: signal || querySignal,
         });
+        if (error) {
+          if (typeof error === 'object') {
+            throw new Error(JSON.stringify(error));
+          }
+          throw new Error((response as Response).statusText);
+        }
         return data as R;
       },
     });
@@ -85,7 +97,13 @@ export function createWorkflowPostMutationHook<K extends keyof paths>(path: K) {
       ...reactQuery,
       mutationFn: async () => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.POST(versionedPath, { params, body: body });
+        const { data, error, response } = await client.POST(versionedPath, { params, body: body });
+        if (error) {
+          if (typeof error === 'object') {
+            throw new Error(JSON.stringify(error));
+          }
+          throw new Error((response as Response).statusText);
+        }
         return data;
       },
     });
@@ -99,7 +117,13 @@ export function createWorkflowPatchMutationHook<K extends keyof paths>(path: K) 
       ...reactQuery,
       mutationFn: async () => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.PATCH(versionedPath, { params, body: body });
+        const { data, error, response } = await client.PATCH(versionedPath, { params, body: body });
+        if (error) {
+          if (typeof error === 'object') {
+            throw new Error(JSON.stringify(error));
+          }
+          throw new Error((response as Response).statusText);
+        }
         return data;
       },
     });
@@ -113,7 +137,16 @@ export function createWorkflowDeleteMutationHook<K extends keyof paths>(path: K)
       ...reactQuery,
       mutationFn: async () => {
         // @ts-expect-error: params is dynamic type type for openapi-fetch
-        const { data } = await client.DELETE(versionedPath, { params, body: body });
+        const { data, error, response } = await client.DELETE(versionedPath, {
+          params,
+          body: body,
+        });
+        if (error) {
+          if (typeof error === 'object') {
+            throw new Error(JSON.stringify(error));
+          }
+          throw new Error((response as Response).statusText);
+        }
         return data;
       },
     });
