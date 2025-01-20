@@ -59,6 +59,7 @@ export const IgvViewer = ({ s3ObjectId, bucket, s3Key }: Props) => {
   }).data;
 
   // Additional loader on init IGV
+  // IGV may take a while to load. Display a loader for 3 seconds to indicate that IGV is coming.
   const [isLoadingInitIgv, setIsLoadingInitIgv] = useState(!isInitIgv);
   useEffect(() => {
     setTimeout(() => {
@@ -70,6 +71,13 @@ export const IgvViewer = ({ s3ObjectId, bucket, s3Key }: Props) => {
     <div className='w-full h-full flex flex-col'>
       <div className='w-full flex flex-row items-center	justify-between mb-2'>
         <IgvDesktopButton s3ObjectId={s3ObjectId} bucket={bucket} s3Key={s3Key} />
+        {isLoadingInitIgv && (
+          <div className='flex flex-row items-center'>
+            <SpinnerWithText className='h-fit w-fit' />
+            <div className='ml-4'>Preparing IGV Web</div>
+          </div>
+        )}
+
         <div>
           <p className='inline-block align-middle'>Reference Genome:</p>
           <Dropdown
@@ -84,8 +92,7 @@ export const IgvViewer = ({ s3ObjectId, bucket, s3Key }: Props) => {
           />
         </div>
       </div>
-      {isLoadingInitIgv && <SpinnerWithText text='Preparing IGV Web' />}
-      <div className={isLoadingInitIgv ? 'hidden' : ''} id='igv-div' />
+      <div id='igv-div' />
     </div>
   );
 };
