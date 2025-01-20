@@ -1,4 +1,3 @@
-import React from 'react';
 import { ProjectListQueryParams, useSuspenseMetadataProjectModel } from '@/api/metadata';
 import { components } from '@/api/types/metadata';
 import { useQueryParams } from '@/hooks/useQueryParams';

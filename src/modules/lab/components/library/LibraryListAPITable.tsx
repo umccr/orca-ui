@@ -1,4 +1,3 @@
-import React from 'react';
 import { LibraryListQueryParams, useSuspenseMetadataLibraryModel } from '@/api/metadata';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { components } from '@/api/types/metadata';

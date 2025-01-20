@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@/components/common/buttons/Button';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { Spinner } from '@/components/common/spinner';

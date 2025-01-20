@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { SubjectListQueryParams, useSuspenseMetadataSubjectModel } from '@/api/metadata';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { Column } from '@/components/tables';

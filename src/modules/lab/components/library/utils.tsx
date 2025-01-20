@@ -19,8 +19,8 @@ export const getLibraryTableColumn = ({
   {
     header: 'Library Id',
     headerClassName: headerClassName,
-    // Number '7' is the length of this array
-    headerGroup: { colSpan: 7, label: headerGroupLabel, additionalClassName: headerClassName },
+    // Number '8' is the length of this array
+    headerGroup: { colSpan: 8, label: headerGroupLabel, additionalClassName: headerClassName },
     accessor: 'libraryIds',
     onSort: setSort
       ? () => {
@@ -133,6 +133,19 @@ export const getLibraryTableColumn = ({
         }
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'coverage'),
+    cell: multiRowCell,
+    cellClassName: cellClassName,
+  },
+  {
+    header: 'Override Cycles',
+    headerClassName: headerClassName,
+    accessor: 'overrideCycles',
+    onSort: setSort
+      ? () => {
+          setSort(getSortValue(currentSort, 'overrideCycles'));
+        }
+      : undefined,
+    sortDirection: getCurrentSortDirection(currentSort, 'overrideCycles'),
     cell: multiRowCell,
     cellClassName: cellClassName,
   },

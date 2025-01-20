@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { genomes } from './genomes';
 // @ts-expect-error - IGV is not typed
 import igv from 'igv';
@@ -7,6 +7,7 @@ import { constructIgvNameParameter, createIdxFileKey, createIgvFileTrack } from 
 import { Dropdown } from '@/components/common/dropdowns';
 import { usePresignedFileList, usePresignedFileObjectId } from '@/api/file';
 import { IgvDesktopButton } from './IgvDesktop';
+import { SpinnerWithText } from '@/components/common/spinner';
 
 type Props = { s3ObjectId: string; bucket: string; s3Key: string };
 export const IgvViewer = ({ s3ObjectId, bucket, s3Key }: Props) => {
@@ -57,10 +58,26 @@ export const IgvViewer = ({ s3ObjectId, bucket, s3Key }: Props) => {
     refetchOnMount: 'always',
   }).data;
 
+  // Additional loader on init IGV
+  // IGV may take a while to load. Display a loader for 3 seconds to indicate that IGV is coming.
+  const [isLoadingInitIgv, setIsLoadingInitIgv] = useState(!isInitIgv);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoadingInitIgv(false);
+    }, 3000);
+  }, []);
+
   return (
     <div className='w-full h-full flex flex-col'>
       <div className='w-full flex flex-row items-center	justify-between mb-2'>
         <IgvDesktopButton s3ObjectId={s3ObjectId} bucket={bucket} s3Key={s3Key} />
+        {isLoadingInitIgv && (
+          <div className='flex flex-row items-center'>
+            <SpinnerWithText className='h-fit w-fit' />
+            <div className='ml-4'>Preparing IGV Web</div>
+          </div>
+        )}
+
         <div>
           <p className='inline-block align-middle'>Reference Genome:</p>
           <Dropdown

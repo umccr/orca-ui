@@ -39,3 +39,6 @@ dist-ssr
 
 # ignore Vite visualizer
 stats.html
+
+# ignore lambda response
+response.json
