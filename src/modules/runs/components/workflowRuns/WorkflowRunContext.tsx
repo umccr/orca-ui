@@ -3,7 +3,7 @@ import { createContext, FC, PropsWithChildren, ReactElement, useContext, useStat
 const WorkflowRunContext = createContext({
   refreshWorkflowRuns: false,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setRefreshWorkflowRuns: (value: boolean) => {},
+  setRefreshWorkflowRuns: (_value: boolean) => {},
 });
 
 export const WorkflowRunProvider: FC<PropsWithChildren> = ({ children }): ReactElement => {

@@ -20,3 +20,10 @@ generate-openapi-types:
 
 start:
 	@yarn run start
+
+deploy-dev:
+	@yarn build
+	@aws s3 cp ./dist s3://orcaui-cloudfront-843407916570/ --recursive
+	@aws lambda invoke \
+    --function-name CodeBuildEnvConfigLambdaBeta \
+    response.json

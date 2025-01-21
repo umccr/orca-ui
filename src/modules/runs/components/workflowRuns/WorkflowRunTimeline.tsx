@@ -771,7 +771,7 @@ const cellValueFormat = {
       <Link
         // asterisk (*) is added to the end of the key to filter the path prefix
         to={`/files?bucket=${encodeURIComponent(s3Bucket)}&key=${encodeURIComponent(s3Key)}*`}
-        className={classNames('text-sm font-medium capitalize text-blue-500 hover:text-blue-700')}
+        className={classNames('text-sm font-medium text-blue-500 hover:text-blue-700')}
       >
         {value}
       </Link>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ClosePopoverWrapper, PopoverDropdown } from '@/components/common/dropdowns';
 import { useQueryParams } from '@/hooks/useQueryParams';
 

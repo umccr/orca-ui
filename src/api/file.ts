@@ -26,10 +26,17 @@ export function useSuspenseFileObject({
     ...reactQuery,
     queryKey: ['GET', s3Path, params],
     queryFn: async ({ signal }) => {
-      const { data } = await client.GET(s3Path, {
+      const { data, error, response } = await client.GET(s3Path, {
         params,
         signal, // allows React Query to cancel request
       });
+      if (error) {
+        if (typeof error === 'object') {
+          throw new Error(JSON.stringify(error));
+        }
+        throw new Error((response as Response).statusText);
+      }
+
       return data;
     },
   });
@@ -45,13 +52,19 @@ export function usePresignedFileObjectId({
     ...reactQuery,
     queryKey: ['GET', s3PresignObjIdPath, params],
     queryFn: async ({ signal }) => {
-      const { data } = await client.GET(s3PresignObjIdPath, {
+      const { data, error, response } = await client.GET(s3PresignObjIdPath, {
         params,
         signal, // allows React Query to cancel request
         headers: {
           ...headers,
         },
       });
+      if (error) {
+        if (typeof error === 'object') {
+          throw new Error(JSON.stringify(error));
+        }
+        throw new Error((response as Response).statusText);
+      }
 
       return data;
     },
@@ -67,10 +80,16 @@ export function useQueryPresignedFileObjectId({
     ...reactQuery,
     queryKey: ['GET', s3PresignObjIdPath, params],
     queryFn: async ({ signal }) => {
-      const { data } = await client.GET(s3PresignObjIdPath, {
+      const { data, error, response } = await client.GET(s3PresignObjIdPath, {
         params,
         signal, // allows React Query to cancel request
       });
+      if (error) {
+        if (typeof error === 'object') {
+          throw new Error(JSON.stringify(error));
+        }
+        throw new Error((response as Response).statusText);
+      }
 
       return data;
     },
@@ -87,10 +106,17 @@ export function usePresignedFileList({
     ...reactQuery,
     queryKey: ['GET', s3PresignIdListPath, params],
     queryFn: async ({ signal }) => {
-      const { data } = await client.GET(s3PresignIdListPath, {
+      const { data, error, response } = await client.GET(s3PresignIdListPath, {
         params,
         signal, // allows React Query to cancel request
       });
+      if (error) {
+        if (typeof error === 'object') {
+          throw new Error(JSON.stringify(error));
+        }
+        throw new Error((response as Response).statusText);
+      }
+
       return data;
     },
     staleTime: 300,
@@ -105,10 +131,17 @@ export function useQueryPresignedFileList({
     ...reactQuery,
     queryKey: ['GET', s3PresignIdListPath, params],
     queryFn: async ({ signal }) => {
-      const { data } = await client.GET(s3PresignIdListPath, {
+      const { data, error, response } = await client.GET(s3PresignIdListPath, {
         params,
         signal, // allows React Query to cancel request
       });
+      if (error) {
+        if (typeof error === 'object') {
+          throw new Error(JSON.stringify(error));
+        }
+        throw new Error((response as Response).statusText);
+      }
+
       return data;
     },
     staleTime: 300,

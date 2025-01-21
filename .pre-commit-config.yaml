@@ -28,6 +28,6 @@ repos:
   - repo: local
     hooks:
       - id: prettier
-        name: Prettier Format
+        name: prettier Format
         entry: yarn run prettier-fix
         language: system
