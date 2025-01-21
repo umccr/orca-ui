@@ -17,7 +17,7 @@ const SequenceRunDetailsDrawer: FC<SequenceRunDetailsDrawerProps> = ({
 
   const { data: sequenceRunDetail, isFetching: isFetchingSequenceRunDetail } =
     useSequenceRunDetailModel({
-      params: { path: { id: selectedSequenceRunId } },
+      params: { path: { id: selectedSequenceRunId?.split('.')[1] as string } },
       reactQuery: {
         enabled: !!selectedSequenceRunId,
       },
