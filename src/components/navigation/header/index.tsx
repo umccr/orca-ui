@@ -109,7 +109,7 @@ const Header = ({ className }: { className?: string }) => {
                   <span className='sr-only'>View notifications</span>
                   <BellIcon className='h-6 w-6' aria-hidden='true' />
                 </button> */}
-                <ThemeToggle />
+                {/* <ThemeToggle /> */}
                 {/* divider */}
                 <hr className='mx-2 h-6 w-px border-none bg-slate-200 dark:bg-slate-700' />
 
@@ -144,6 +144,13 @@ const Header = ({ className }: { className?: string }) => {
                     </div>
 
                     <div className='flex flex-col py-1'>
+                      {/* Add ThemeToggle here */}
+                      <MenuItem as='div'>
+                        <span className='flex w-full items-center px-4 py-2 text-sm text-gray-700 transition-colors data-[focus]:bg-gray-50 data-[focus]:text-gray-900 dark:text-gray-200 dark:data-[focus]:bg-gray-700/50 dark:data-[focus]:text-white'>
+                          <ThemeToggle />
+                        </span>
+                      </MenuItem>
+                      {/* buttons for token and logout */}
                       <MenuItem as='button' onClick={openTokenDialogOpen}>
                         <span className='flex w-full items-center px-4 py-2 text-sm text-gray-700 transition-colors data-[focus]:bg-gray-50 data-[focus]:text-gray-900 dark:text-gray-200 dark:data-[focus]:bg-gray-700/50 dark:data-[focus]:text-white'>
                           <KeyIcon className='mr-2 h-5 w-5' />

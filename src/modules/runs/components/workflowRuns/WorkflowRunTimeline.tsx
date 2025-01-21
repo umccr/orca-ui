@@ -37,7 +37,7 @@ import { classNames, getUsername } from '@/utils/commonUtils';
 import { BackdropWithText } from '@/components/common/backdrop';
 import { useWorkflowRunContext } from './WorkflowRunContext';
 import { Button } from '@/components/common/buttons';
-import { SideDrawer } from '@/components/common/drawers';
+// import { SideDrawer } from '@/components/common/drawers';
 
 const WorkflowRunTimeline = () => {
   const { orcabusId } = useParams();
@@ -61,7 +61,7 @@ const WorkflowRunTimeline = () => {
   const [stateId, setStateId] = useState<string | null>(null);
   const [stateComment, setStateComment] = useState<string>('');
 
-  const [isOpenSideDrawer, setIsOpenSideDrawer] = useState<boolean>(false);
+  // const [isOpenSideDrawer, setIsOpenSideDrawer] = useState<boolean>(false);
 
   const {
     data: workflowStateData,
@@ -168,13 +168,13 @@ const WorkflowRunTimeline = () => {
             id: comment.orcabusId,
             title: 'Comment Added',
             content: (
-              <div className='flex items-center justify-between'>
+              <div className='group flex items-center justify-between'>
                 <div className='flex items-center gap-2'>
                   <Badge type='unknown'>Comment</Badge>
                 </div>
                 {comment.comment && (
-                  <div className='flex items-center gap-2'>
-                    <Tooltip text='Edit Comment' position='top' background='dark' size='small'>
+                  <div className='flex items-center gap-2 opacity-0 group-hover:opacity-100'>
+                    <Tooltip text='Edit' position='top' background='dark' size='small'>
                       <button
                         onClick={() => {
                           setCommentId(comment.orcabusId);
@@ -186,7 +186,7 @@ const WorkflowRunTimeline = () => {
                         <WrenchIcon className='h-4 w-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300' />
                       </button>
                     </Tooltip>
-                    <Tooltip text='Delete Comment' position='top' background='dark' size='small'>
+                    <Tooltip text='Delete' position='top' background='dark' size='small'>
                       <button
                         onClick={() => {
                           setCommentId(comment.orcabusId);
@@ -313,7 +313,7 @@ const WorkflowRunTimeline = () => {
     if (event.eventType === 'stateChange') {
       setSelectedPayloadId(event.payloadId || null);
       setSelectedState(event.status || null);
-      setIsOpenSideDrawer(true);
+      // setIsOpenSideDrawer(true);
     }
   };
 
@@ -521,7 +521,7 @@ const WorkflowRunTimeline = () => {
       {(isFetchingWorkflowState || isFetchingWorkflowComment) && (
         <BackdropWithText text='Loading Status data...' />
       )}
-      <div className='flex flex-row pb-4'>
+      <div className='flex flex-row gap-1 pb-4'>
         <div className='flex-1'>
           <div className='flex flex-col gap-2 pb-4'>
             <div className='flex items-center gap-3'>
@@ -740,8 +740,11 @@ const WorkflowRunTimeline = () => {
             handldEventClick={handleTimelineSelect}
           />
         </div>
+        <div className='flex-2'>
+          <PayloadContent selectedState={selectedState || ''} currentState={currentState || ''} />
+        </div>
 
-        <SideDrawer
+        {/* <SideDrawer
           isOpen={isOpenSideDrawer}
           onClose={() => setIsOpenSideDrawer(false)}
           title='Payload Details'
@@ -749,7 +752,7 @@ const WorkflowRunTimeline = () => {
           size='large'
         >
           <PayloadContent selectedState={selectedState || ''} currentState={currentState || ''} />
-        </SideDrawer>
+        </SideDrawer> */}
       </div>
     </div>
   );

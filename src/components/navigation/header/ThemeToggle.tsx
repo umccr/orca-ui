@@ -5,13 +5,25 @@ export default function ThemeToggle() {
   const { currentTheme, changeCurrentTheme } = useTheme();
 
   return (
-    <button
-      onClick={() => changeCurrentTheme(currentTheme === 'light' ? 'dark' : 'light')}
-      className='bg-heritage-blue-200/20 hover:bg-heritage-blue-200/30 relative flex h-9 w-9 items-center justify-center rounded-lg text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/20 dark:bg-gray-700 dark:hover:bg-gray-600'
-      aria-label={`Switch to ${currentTheme === 'light' ? 'dark' : 'light'} mode`}
-    >
-      <SunIcon className='absolute h-5 w-5 transition-opacity dark:opacity-0' />
-      <MoonIcon className='absolute h-5 w-5 opacity-0 transition-opacity dark:opacity-100' />
-    </button>
+    <div className='flex items-center gap-2'>
+      <span className='text-sm text-gray-600 dark:text-gray-300'>Light</span>
+
+      <button
+        onClick={() => changeCurrentTheme(currentTheme === 'light' ? 'dark' : 'light')}
+        className='relative inline-flex h-7 w-14 items-center rounded-full bg-gray-200 transition-colors dark:bg-gray-700'
+        aria-label={`Switch to ${currentTheme === 'light' ? 'dark' : 'light'} mode`}
+      >
+        <span className='sr-only'>{currentTheme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
+        <SunIcon className='absolute left-1 h-5 w-5 text-yellow-500 dark:text-gray-400' />
+        <MoonIcon className='absolute right-1 h-5 w-5 text-gray-400 dark:text-blue-100' />
+        <div
+          className={`${
+            currentTheme === 'light' ? 'translate-x-1' : 'translate-x-8'
+          } inline-block h-5 w-5 transform rounded-full bg-white transition-transform duration-200 ease-in-out`}
+        />
+      </button>
+
+      <span className='text-sm text-gray-600 dark:text-gray-300'>Dark</span>
+    </div>
   );
 }
