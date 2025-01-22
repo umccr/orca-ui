@@ -37,7 +37,7 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
 
   const { data: sequenceRunStateDetail, isFetching: isFetchingSequenceRunStateDetail } =
     useSequenceRunStateListModel({
-      params: { path: { orcabusId: selectedSequenceRunID } },
+      params: { path: { orcabusId: selectedSequenceRunID?.split('.')[1] as string } },
       reactQuery: {
         enabled: !!selectedSequenceRunID,
       },
@@ -48,7 +48,7 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
     isFetching: isFetchingSequenceRunComments,
     refetch: refetchSequenceRunComment,
   } = useSequenceRunCommentListModel({
-    params: { path: { orcabusId: selectedSequenceRunID } },
+    params: { path: { orcabusId: selectedSequenceRunID?.split('.')[1] as string } },
     reactQuery: {
       enabled: !!selectedSequenceRunID,
     },
@@ -58,7 +58,7 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
     return sequenceRunStateDetail?.map((state) => ({
       id: state.orcabusId || '',
       content: (
-        <div className='flex flex-row gap-2 text-sm text-gray-500 group'>
+        <div className='group flex flex-row gap-2 text-sm text-gray-500'>
           <div>Status Updated</div>
           <Badge status={state.status}>{state.status}</Badge>
         </div>
@@ -76,15 +76,15 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
     return sequenceRunCommentsDetail?.map((comment) => ({
       id: comment.orcabusId || '',
       content: (
-        <div className='flex flex-row gap-2 text-sm text-gray-500 group'>
-          <div className='font-medium text-nowrap'>{`${getUsername(comment.createdBy)} `}</div>
-          <div className='text-gray-500 text-nowrap'>made a new</div>
+        <div className='group flex flex-row gap-2 text-sm text-gray-500'>
+          <div className='text-nowrap font-medium'>{`${getUsername(comment.createdBy)} `}</div>
+          <div className='text-nowrap text-gray-500'>made a new</div>
           <Badge type='unknown'>Comment</Badge>
           {comment.comment && (
-            <div className='opacity-0 group-hover:opacity-100 flex flex-row gap-2'>
+            <div className='flex flex-row gap-2 opacity-0 group-hover:opacity-100'>
               <Tooltip text='Update' position='top' background='white'>
                 <WrenchIcon
-                  className='w-4 h-4 cursor-pointer stroke-gray-500'
+                  className='h-4 w-4 cursor-pointer stroke-gray-500'
                   onClick={() => {
                     setCommentId(comment.orcabusId);
                     setComment(comment.comment);
@@ -94,7 +94,7 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
               </Tooltip>
               <Tooltip text='Delete' position='top' background='white'>
                 <TrashIcon
-                  className='w-4 h-4 cursor-pointer stroke-gray-500'
+                  className='h-4 w-4 cursor-pointer stroke-gray-500'
                   onClick={() => {
                     setCommentId(comment.orcabusId);
                     setIsOpenDeleteCommentDialog(true);
@@ -126,7 +126,7 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
     isError: isErrorCreatingSequenceRunComment,
     reset: resetCreateSequenceRunComment,
   } = useSequenceRunCommentCreateModel({
-    params: { path: { orcabusId: selectedSequenceRunID } },
+    params: { path: { orcabusId: selectedSequenceRunID?.split('.')[1] as string } },
     body: {
       comment: comment,
       createdBy: user?.email,
@@ -163,7 +163,12 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
     isError: isErrorUpdatingSequenceRunComment,
     reset: resetUpdateSequenceRunComment,
   } = useSequenceRunCommentUpdateModel({
-    params: { path: { orcabusId: selectedSequenceRunID as string, id: commentId as string } },
+    params: {
+      path: {
+        orcabusId: selectedSequenceRunID?.split('.')[1] as string,
+        id: commentId?.split('.')[1] as string,
+      },
+    },
     body: {
       comment: comment,
       createdBy: user?.email,
@@ -203,7 +208,12 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
     isError: isErrorDeletingSequenceRunComment,
     reset: resetDeleteSequenceRunComment,
   } = useSequenceRunCommentDeleteModel({
-    params: { path: { orcabusId: selectedSequenceRunID as string, id: commentId as string } },
+    params: {
+      path: {
+        orcabusId: selectedSequenceRunID?.split('.')[1] as string,
+        id: commentId?.split('.')[1] as string,
+      },
+    },
     body: {
       createdBy: user?.email,
     },
@@ -248,7 +258,7 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
           }}
           className='ring-2 ring-gray-300'
         >
-          <PlusIcon className='w-4 h-4' />
+          <PlusIcon className='h-4 w-4' />
           Add Comment
         </Button>
       </div>
@@ -263,7 +273,7 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
             <Textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              className='border-gray-400 rounded-md border-[1px] py-1.5 px-3 text-sm/6'
+              className='rounded-md border-[1px] border-gray-400 px-3 py-1.5 text-sm/6'
             />
           </div>
         }
@@ -289,7 +299,7 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
             <Textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              className='border-gray-400 rounded-md border-[1px] py-1.5 px-3 text-sm/6'
+              className='rounded-md border-[1px] border-gray-400 px-3 py-1.5 text-sm/6'
             />
           </div>
         }
