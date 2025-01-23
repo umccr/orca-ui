@@ -290,7 +290,7 @@ export class PipelineStack extends Stack {
               actionName: 'Source',
               owner: 'umccr',
               repo: 'orca-ui',
-              branch: 'feat/openapi-type-check',
+              branch: 'main',
               connectionArn: codeStarArn,
               output: sourceOutput,
               triggerOnPush: true,
