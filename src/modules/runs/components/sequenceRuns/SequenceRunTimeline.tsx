@@ -86,7 +86,7 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
                 <WrenchIcon
                   className='h-4 w-4 cursor-pointer stroke-gray-500'
                   onClick={() => {
-                    setCommentId(comment.orcabusId);
+                    setCommentId(comment.orcabusId as string);
                     setComment(comment.comment);
                     setIsOpenUpdateCommentDialog(true);
                   }}
@@ -96,7 +96,7 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
                 <TrashIcon
                   className='h-4 w-4 cursor-pointer stroke-gray-500'
                   onClick={() => {
-                    setCommentId(comment.orcabusId);
+                    setCommentId(comment.orcabusId as string);
                     setIsOpenDeleteCommentDialog(true);
                   }}
                 />

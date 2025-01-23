@@ -91,7 +91,6 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["apiV1SequenceRetrieve"];
         put?: never;
         post?: never;
@@ -106,9 +105,9 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         Comment: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             comment: string;
-            associationId: string;
+            associationId?: string;
             /** Format: date-time */
             readonly createdAt: string;
             createdBy: string;
@@ -137,7 +136,7 @@ export interface components {
             results: components["schemas"]["Sequence"][];
         };
         PatchedComment: {
-            readonly orcabusId?: string;
+            orcabusId?: string;
             comment?: string;
             associationId?: string;
             /** Format: date-time */
@@ -148,7 +147,7 @@ export interface components {
             isDeleted?: boolean;
         };
         Sequence: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             instrumentRunId: string;
             runVolumeName: string;
             runFolderPath?: string | null;
@@ -168,7 +167,7 @@ export interface components {
             apiUrl?: string | null;
         };
         State: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             status: string;
             /** Format: date-time */
             timestamp: string;

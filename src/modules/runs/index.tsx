@@ -11,7 +11,7 @@ const WorkflowRunPage = lazy(() => import('@/modules/runs/pages/WorkflowRuns'));
 const WorkflowRunDetailsPage = lazy(() => import('@/modules/runs/pages/WorkflowRunsDetails'));
 const AnalysisRunPage = lazy(() => import('@/modules/runs/pages/AnalysisRuns'));
 const AnalysisRunDetailsPage = lazy(() => import('@/modules/runs/pages/AnalysisRunsDetails'));
-const RunsPage = lazy(() => import('@/modules/runs/pages/RunsPage'));
+// const RunsPage = lazy(() => import('@/modules/runs/pages/RunsPage'));
 
 export const Router: RouteObject = {
   path: 'runs',
@@ -25,7 +25,7 @@ export const Router: RouteObject = {
   children: [
     {
       path: '',
-      element: <RunsPage />,
+      // element: <RunsPage />,
       children: [
         { path: '', element: <Navigate to='sequence' replace /> },
         {

@@ -10,7 +10,7 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  currentTheme: 'light',
+  currentTheme: 'system',
   changeCurrentTheme: () => {},
 });
 
@@ -19,8 +19,8 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider = ({ children }: PropsWithChildren) => {
-  const [persistedTheme, setPersistedTheme] = useLocalStorage('theme', 'light');
-  const [currentTheme, setCurrentTheme] = useState<string>(persistedTheme || 'light');
+  const [persistedTheme, setPersistedTheme] = useLocalStorage('theme', 'system');
+  const [currentTheme, setCurrentTheme] = useState<string>(persistedTheme || 'system');
 
   const changeCurrentTheme = (newTheme: string) => {
     setCurrentTheme(newTheme);
@@ -28,20 +28,34 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
   };
 
   useEffect(() => {
-    document.documentElement.classList.add('[&_*]:!transition-none');
-    if (currentTheme === 'light') {
-      document.documentElement.classList.remove('dark');
-      document.documentElement.style.colorScheme = 'light';
-    } else {
-      document.documentElement.classList.add('dark');
-      document.documentElement.style.colorScheme = 'dark';
-    }
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    const transitionTimeout = setTimeout(() => {
-      document.documentElement.classList.remove('[&_*]:!transition-none');
-    }, 1);
+    const handleThemeChange = () => {
+      document.documentElement.classList.add('[&_*]:!transition-none');
 
-    return () => clearTimeout(transitionTimeout);
+      const isDark = currentTheme === 'dark' || (currentTheme === 'system' && mediaQuery.matches);
+
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.style.colorScheme = 'dark';
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.style.colorScheme = 'light';
+      }
+
+      const transitionTimeout = setTimeout(() => {
+        document.documentElement.classList.remove('[&_*]:!transition-none');
+      }, 1);
+
+      return () => clearTimeout(transitionTimeout);
+    };
+
+    handleThemeChange();
+    mediaQuery.addEventListener('change', handleThemeChange);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleThemeChange);
+    };
   }, [currentTheme]);
 
   return (

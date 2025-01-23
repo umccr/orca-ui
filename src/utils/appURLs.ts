@@ -16,12 +16,21 @@ export enum AppURLs {
 
   // Runs
   Runs = '/runs',
+  // Runs Sequence
   RunsSequence = '/runs/sequence',
   RunsSequenceDeatils = '/runs/sequence/:id',
   RunsSequenceDeatilsTable = '/runs/sequence/:id/table',
   RunsSequenceDeatilsDiagram = '/runs/sequence/:id/diagram',
   RunsSequenceDeatilsReport = '/runs/sequence/:id/report',
+  // Runs Analysis
+  RunsAnalysis = '/runs/analysis',
+  RunsAnalysisDeatils = '/runs/analysis/:id',
+  RunsAnalysisDeatilsTable = '/runs/analysis/:id/table',
+  RunsAnalysisDeatilsDiagram = '/runs/analysis/:id/diagram',
+  RunsAnalysisDeatilsReport = '/runs/analysis/:id/report',
+  // Runs Library
   RunsLibrary = '/runs/library',
+  // Runs Workflow
   RunsWorkflow = '/runs/workflow',
 
   // Files

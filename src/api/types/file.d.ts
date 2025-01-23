@@ -305,25 +305,20 @@ export interface components {
         };
         /** @description The JSON patch for attributes. */
         Patch: unknown;
-        /**
-         * @description The attributes to update for the request. This updates attributes according to JSON patch.
+        /** @description The attributes to update for the request. This updates attributes according to JSON patch.
          *     See [JSON patch](https://jsonpatch.com/) and [RFC6902](https://datatracker.ietf.org/doc/html/rfc6902/).
          *
          *     In order to apply the patch, JSON body must contain an array with patch operations. The patch operations
          *     are append-only, which means that only "add" and "test" is supported. If a "test" check fails,
          *     a patch operations that isn't "add" or "test" is used, or if a key already exists, a `BAD_REQUEST`
-         *     is returned and no records are updated.
-         * @example [
-         *       {
-         *         "op": "add",
-         *         "path": "/attributeId",
-         *         "value": "attributeId"
-         *       }
-         *     ]
-         */
+         *     is returned and no records are updated. Use `attributes` to update attributes and `ingestId` to
+         *     update the ingest id. */
         PatchBody: {
             /** @description The JSON patch for a record's attributes. */
             attributes: components["schemas"]["Patch"];
+        } | {
+            /** @description The JSON patch for a record's ingest_id. Only `add` with a `/` path is supported. */
+            ingestId: components["schemas"]["Patch"];
         } | components["schemas"]["Patch"];
         S3: {
             attributes?: null | components["schemas"]["Value"];
@@ -391,6 +386,24 @@ export interface operations {
             };
             /** @description the request could not be parsed or the request triggered a constraint error in the database */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the request lacked valid authentication credentials */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the request lacked valid permissions for the resource */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -516,6 +529,24 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
+            /** @description the request lacked valid authentication credentials */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the request lacked valid permissions for the resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
             /** @description the resource or route could not be found */
             404: {
                 headers: {
@@ -631,6 +662,24 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
+            /** @description the request lacked valid authentication credentials */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the request lacked valid permissions for the resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
             /** @description the resource or route could not be found */
             404: {
                 headers: {
@@ -695,6 +744,24 @@ export interface operations {
             };
             /** @description the request could not be parsed or the request triggered a constraint error in the database */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the request lacked valid authentication credentials */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the request lacked valid permissions for the resource */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -806,6 +873,24 @@ export interface operations {
             };
             /** @description the request could not be parsed or the request triggered a constraint error in the database */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the request lacked valid authentication credentials */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the request lacked valid permissions for the resource */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -925,6 +1010,24 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
+            /** @description the request lacked valid authentication credentials */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the request lacked valid permissions for the resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
             /** @description the resource or route could not be found */
             404: {
                 headers: {
@@ -971,6 +1074,24 @@ export interface operations {
             };
             /** @description the request could not be parsed or the request triggered a constraint error in the database */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the request lacked valid authentication credentials */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the request lacked valid permissions for the resource */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1027,6 +1148,24 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
+            /** @description the request lacked valid authentication credentials */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the request lacked valid permissions for the resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
             /** @description the resource or route could not be found */
             404: {
                 headers: {
@@ -1073,6 +1212,24 @@ export interface operations {
             };
             /** @description the request could not be parsed or the request triggered a constraint error in the database */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the request lacked valid authentication credentials */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description the request lacked valid permissions for the resource */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };

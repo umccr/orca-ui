@@ -114,7 +114,7 @@ const WorkflowRunTimeline = () => {
     () =>
       workflowStateData
         ? workflowStateData.map((state) => ({
-            id: state.orcabusId,
+            id: state.orcabusId as string,
             title: 'Workflow State Update',
             content: (
               <div className='flex items-center gap-3'>
@@ -130,7 +130,7 @@ const WorkflowRunTimeline = () => {
                       >
                         <button
                           onClick={() => {
-                            setStateId(state.orcabusId);
+                            setStateId(state.orcabusId as string);
                             setStateComment(state.comment || '');
                             setIsOpenUpdateStateDialog(true);
                           }}
@@ -165,7 +165,7 @@ const WorkflowRunTimeline = () => {
     () =>
       workflowCommentData
         ? workflowCommentData.map((comment) => ({
-            id: comment.orcabusId,
+            id: comment.orcabusId as string,
             title: 'Comment Added',
             content: (
               <div className='group flex items-center justify-between'>
@@ -177,7 +177,7 @@ const WorkflowRunTimeline = () => {
                     <Tooltip text='Edit' position='top' background='dark' size='small'>
                       <button
                         onClick={() => {
-                          setCommentId(comment.orcabusId);
+                          setCommentId(comment.orcabusId as string);
                           setComment(comment.comment);
                           setIsOpenUpdateCommentDialog(true);
                         }}
@@ -189,7 +189,7 @@ const WorkflowRunTimeline = () => {
                     <Tooltip text='Delete' position='top' background='dark' size='small'>
                       <button
                         onClick={() => {
-                          setCommentId(comment.orcabusId);
+                          setCommentId(comment.orcabusId as string);
                           setIsOpenDeleteCommentDialog(true);
                         }}
                         className='rounded-full p-1 text-red-500 transition-colors hover:bg-gray-100 hover:text-red-600 dark:hover:bg-gray-700'
@@ -646,6 +646,7 @@ const WorkflowRunTimeline = () => {
                   : handleDeleteComment,
             }}
           ></Dialog>
+          {/* state dialog */}
           <Dialog
             TitleIcon={PlusCircleIcon}
             open={isOpenAddStateDialog || isOpenUpdateStateDialog}

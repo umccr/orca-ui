@@ -27,7 +27,6 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["contactRetrieve"];
         put?: never;
         post?: never;
@@ -77,7 +76,6 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["individualRetrieve"];
         put?: never;
         post?: never;
@@ -127,7 +125,6 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["libraryRetrieve"];
         put?: never;
         post?: never;
@@ -177,7 +174,6 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["projectRetrieve"];
         put?: never;
         post?: never;
@@ -227,7 +223,6 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["sampleRetrieve"];
         put?: never;
         post?: never;
@@ -277,7 +272,6 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["subjectRetrieve"];
         put?: never;
         post?: never;
@@ -345,7 +339,7 @@ export interface components {
         /** @enum {unknown} */
         BlankEnum: "";
         Contact: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             contactId?: string | null;
             name?: string | null;
             description?: string | null;
@@ -353,7 +347,7 @@ export interface components {
             email?: string | null;
         };
         ContactDetail: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             readonly projectSet: components["schemas"]["Project"][];
             contactId?: string | null;
             name?: string | null;
@@ -363,7 +357,7 @@ export interface components {
         };
         ContactHistory: {
             readonly historyId: number;
-            readonly orcabusId: string;
+            orcabusId?: string;
             contactId?: string | null;
             name?: string | null;
             description?: string | null;
@@ -383,19 +377,19 @@ export interface components {
          */
         HistoryTypeEnum: "+" | "~" | "-";
         Individual: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             individualId?: string | null;
             source?: string | null;
         };
         IndividualDetail: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             readonly subjectSet: components["schemas"]["Subject"][];
             individualId?: string | null;
             source?: string | null;
         };
         IndividualHistory: {
             readonly historyId: number;
-            readonly orcabusId: string;
+            orcabusId?: string;
             individualId?: string | null;
             source?: string | null;
             historyUserId?: string | null;
@@ -405,7 +399,7 @@ export interface components {
             historyType: components["schemas"]["HistoryTypeEnum"];
         };
         Library: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             libraryId?: string | null;
             phenotype?: (components["schemas"]["PhenotypeEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
             workflow?: (components["schemas"]["WorkflowEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
@@ -414,11 +408,12 @@ export interface components {
             assay?: string | null;
             /** Format: double */
             coverage?: number | null;
+            overrideCycles?: string | null;
             sample?: string | null;
             subject?: string | null;
         };
         LibraryDetail: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             readonly projectSet: components["schemas"]["Project"][];
             readonly sample: components["schemas"]["Sample"];
             readonly subject: components["schemas"]["Subject"];
@@ -430,11 +425,12 @@ export interface components {
             assay?: string | null;
             /** Format: double */
             coverage?: number | null;
+            overrideCycles?: string | null;
         };
         LibraryHistory: {
             readonly historyId: number;
             readonly projectSet: string[];
-            readonly orcabusId: string;
+            orcabusId?: string;
             libraryId?: string | null;
             phenotype?: (components["schemas"]["PhenotypeEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
             workflow?: (components["schemas"]["WorkflowEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
@@ -443,6 +439,7 @@ export interface components {
             assay?: string | null;
             /** Format: double */
             coverage?: number | null;
+            overrideCycles?: string | null;
             historyUserId?: string | null;
             /** Format: date-time */
             historyDate: string;
@@ -694,7 +691,7 @@ export interface components {
             results: components["schemas"]["SubjectHistory"][];
         };
         PatchedContact: {
-            readonly orcabusId?: string;
+            orcabusId?: string;
             contactId?: string | null;
             name?: string | null;
             description?: string | null;
@@ -702,12 +699,12 @@ export interface components {
             email?: string | null;
         };
         PatchedIndividual: {
-            readonly orcabusId?: string;
+            orcabusId?: string;
             individualId?: string | null;
             source?: string | null;
         };
         PatchedLibrary: {
-            readonly orcabusId?: string;
+            orcabusId?: string;
             libraryId?: string | null;
             phenotype?: (components["schemas"]["PhenotypeEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
             workflow?: (components["schemas"]["WorkflowEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
@@ -716,23 +713,24 @@ export interface components {
             assay?: string | null;
             /** Format: double */
             coverage?: number | null;
+            overrideCycles?: string | null;
             sample?: string | null;
             subject?: string | null;
         };
         PatchedProject: {
-            readonly orcabusId?: string;
+            orcabusId?: string;
             projectId?: string | null;
             name?: string | null;
             description?: string | null;
         };
         PatchedSample: {
-            readonly orcabusId?: string;
+            orcabusId?: string;
             sampleId?: string | null;
             externalSampleId?: string | null;
             source?: (components["schemas"]["SourceEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
         };
         PatchedSubject: {
-            readonly orcabusId?: string;
+            orcabusId?: string;
             subjectId?: string | null;
         };
         /**
@@ -743,13 +741,13 @@ export interface components {
          */
         PhenotypeEnum: "normal" | "tumor" | "negative-control";
         Project: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             projectId?: string | null;
             name?: string | null;
             description?: string | null;
         };
         ProjectDetail: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             readonly contactSet: components["schemas"]["Contact"][];
             projectId?: string | null;
             name?: string | null;
@@ -758,7 +756,7 @@ export interface components {
         ProjectHistory: {
             readonly historyId: number;
             readonly contactSet: string[];
-            readonly orcabusId: string;
+            orcabusId?: string;
             projectId?: string | null;
             name?: string | null;
             description?: string | null;
@@ -777,13 +775,13 @@ export interface components {
          */
         QualityEnum: "very-poor" | "poor" | "good" | "borderline";
         Sample: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             sampleId?: string | null;
             externalSampleId?: string | null;
             source?: (components["schemas"]["SourceEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
         };
         SampleDetail: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             readonly librarySet: components["schemas"]["Library"][];
             sampleId?: string | null;
             externalSampleId?: string | null;
@@ -791,7 +789,7 @@ export interface components {
         };
         SampleHistory: {
             readonly historyId: number;
-            readonly orcabusId: string;
+            orcabusId?: string;
             sampleId?: string | null;
             externalSampleId?: string | null;
             source?: (components["schemas"]["SourceEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
@@ -825,11 +823,11 @@ export interface components {
          */
         SourceEnum: "ascites" | "blood" | "bone-marrow" | "buccal" | "cell-line" | "cfDNA" | "cyst-fluid" | "DNA" | "eyebrow-hair" | "FFPE" | "FNA" | "OCT" | "organoid" | "PDX-tissue" | "plasma-serum" | "RNA" | "tissue" | "skin" | "water";
         Subject: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             subjectId?: string | null;
         };
         SubjectDetail: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             readonly individualSet: components["schemas"]["Individual"][];
             readonly librarySet: components["schemas"]["Library"][];
             subjectId?: string | null;
@@ -837,7 +835,7 @@ export interface components {
         SubjectHistory: {
             readonly historyId: number;
             readonly individualSet: string[];
-            readonly orcabusId: string;
+            orcabusId?: string;
             subjectId?: string | null;
             historyUserId?: string | null;
             /** Format: date-time */
@@ -1026,7 +1024,7 @@ export interface operations {
     };
     individualList: {
         parameters: {
-            query?: {
+            query: {
                 individualId?: string | null;
                 orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
@@ -1038,7 +1036,7 @@ export interface operations {
                 /** @description A search term. */
                 search?: string;
                 source?: string | null;
-                subjectSet?: components["schemas"]["Subject"][];
+                subjectSet: components["schemas"]["Subject"][];
             };
             header?: never;
             path?: never;
@@ -1171,6 +1169,7 @@ export interface operations {
                 orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
+                overrideCycles?: string | null;
                 /** @description A page number within the paginated result set. */
                 page?: number;
                 /** @description * `normal` - Normal

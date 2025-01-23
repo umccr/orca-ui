@@ -27,7 +27,7 @@ const SideDrawer: FC<DrawerProps> = ({
   size = 'medium',
 }) => {
   return (
-    <Dialog open={isOpen} onClose={onClose} className='relative z-10'>
+    <Dialog open={isOpen} onClose={onClose} className='relative z-30'>
       {/* <DialogBackdrop
         transition
         className='fixed inset-0 bg-magpie-light-75 bg-opacity-75 data-[closed]:opacity-0' //transition-opacity duration-200 ease-in-out

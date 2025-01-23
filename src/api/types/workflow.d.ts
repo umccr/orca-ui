@@ -27,7 +27,6 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["analysisRetrieve"];
         put?: never;
         post?: never;
@@ -60,7 +59,6 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["analysiscontextRetrieve"];
         put?: never;
         post?: never;
@@ -93,7 +91,6 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["analysisrunRetrieve"];
         put?: never;
         post?: never;
@@ -126,7 +123,6 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["payloadRetrieve"];
         put?: never;
         post?: never;
@@ -159,7 +155,6 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["workflowRetrieve"];
         put?: never;
         post?: never;
@@ -291,7 +286,6 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Since we have custom orcabus_id prefix for each model, we need to remove the prefix before retrieving it. */
         get: operations["workflowrunRetrieve"];
         put?: never;
         post?: never;
@@ -426,21 +420,21 @@ export interface components {
             validWorkflows: string[];
         };
         AnalysisContext: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             name: string;
             usecase: string;
             description: string;
             status: string;
         };
         AnalysisContextMin: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             name: string;
             usecase: string;
         };
         /** @description Serializer to define a detailed representation of an Analysis record,
          *     mainly used in individual record views. */
         AnalysisDetail: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             readonly contexts: components["schemas"]["AnalysisContext"][];
             readonly workflows: components["schemas"]["WorkflowMin"][];
             analysisName: string;
@@ -449,13 +443,13 @@ export interface components {
             status: string;
         };
         AnalysisMin: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             analysisName: string;
             analysisVersion: string;
             status: string;
         };
         AnalysisRun: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             readonly analysis: components["schemas"]["AnalysisMin"];
             readonly storageContext: components["schemas"]["AnalysisContextMin"];
             readonly computeContext: components["schemas"]["AnalysisContextMin"];
@@ -464,7 +458,7 @@ export interface components {
             status?: string | null;
         };
         AnalysisRunDetail: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             readonly libraries: components["schemas"]["Library"][];
             readonly analysis: components["schemas"]["AnalysisDetail"];
             readonly storageContext: components["schemas"]["AnalysisContext"];
@@ -517,7 +511,7 @@ export interface components {
          */
         DatasetEnum: "BRCA" | "THCA" | "HNSC" | "LGG" | "KIRC" | "LUSC" | "LUAD" | "PRAD" | "STAD" | "LIHC" | "COAD" | "KIRP" | "BLCA" | "OV" | "SARC" | "PCPG" | "CESC" | "UCEC" | "PAAD" | "TGCT" | "LAML" | "ESCA" | "GBM" | "THYM" | "SKCM" | "READ" | "UVM" | "ACC" | "MESO" | "KICH" | "UCS" | "DLBC" | "CHOL" | "LUAD-LCNEC" | "BLCA-NET" | "PAAD-IPMN" | "PAAD-NET" | "PAAD-ACC" | "PANCAN";
         Library: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             libraryId: string;
         };
         PaginatedAnalysisContextList: {
@@ -641,7 +635,7 @@ export interface components {
             results: components["schemas"]["WorkflowRunDetail"][];
         };
         PatchedState: {
-            readonly orcabusId?: string;
+            orcabusId?: string;
             status?: string;
             /** Format: date-time */
             timestamp?: string;
@@ -650,7 +644,7 @@ export interface components {
             payload?: string | null;
         };
         PatchedWorkflowRunComment: {
-            readonly orcabusId?: string;
+            orcabusId?: string;
             comment?: string;
             /** Format: date-time */
             readonly createdAt?: string;
@@ -661,7 +655,7 @@ export interface components {
             workflowRun?: string;
         };
         Payload: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             payloadRefId: string;
             version: string;
             data: unknown;
@@ -671,7 +665,7 @@ export interface components {
             dataset: components["schemas"]["DatasetEnum"];
         };
         State: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             status: string;
             /** Format: date-time */
             timestamp: string;
@@ -680,19 +674,19 @@ export interface components {
             payload?: string | null;
         };
         Workflow: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             workflowName: string;
             workflowVersion: string;
             executionEngine: string;
             executionEnginePipelineId: string;
         };
         WorkflowMin: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             workflowName: string;
             workflowVersion: string;
         };
         WorkflowRunComment: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             comment: string;
             /** Format: date-time */
             readonly createdAt: string;
@@ -712,7 +706,7 @@ export interface components {
             deprecated: number;
         };
         WorkflowRunDetail: {
-            readonly orcabusId: string;
+            orcabusId?: string;
             readonly currentState: {
                 [key: string]: unknown;
             };
