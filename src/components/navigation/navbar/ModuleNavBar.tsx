@@ -3,6 +3,7 @@ import { classNames } from '@/utils/commonUtils';
 import { FC, useState, ReactNode, FunctionComponent, SVGProps } from 'react';
 import { XMarkIcon } from '@heroicons/react/16/solid';
 import { Bars3Icon } from '@heroicons/react/24/outline';
+import { Tooltip } from '@/components/common/tooltips';
 
 export interface NavigationChildrenItem {
   name: string;
@@ -28,14 +29,13 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
   return (
     <div
       className={classNames(
-        'relative flex h-full flex-col border-r border-gray-200 bg-white transition-all duration-300 dark:border-gray-700 dark:bg-gray-800',
+        'group relative flex h-full flex-col border-r border-gray-200 bg-white transition-all duration-300 dark:border-gray-700 dark:bg-gray-800',
         isOpen ? 'w-72' : 'w-16'
       )}
     >
       {isOpen ? (
         <>
-          {/* Close button with better positioning and visibility */}
-          <div className='absolute right-0 top-0 z-20 p-4'>
+          <div className='absolute right-0 top-0 z-20 p-4 opacity-0 transition-opacity duration-200 group-hover:opacity-100'>
             <button
               type='button'
               onClick={() => setIsOpen(false)}
@@ -123,8 +123,10 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
                       : 'text-gray-400 hover:bg-gray-50 hover:text-gray-500 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:hover:text-gray-300'
                   )}
                 >
-                  {child.icon && <child.icon className='h-5 w-5' />}
-                  <span className='sr-only'>{child.name}</span>
+                  <Tooltip text={child.name} position='right'>
+                    {child.icon && <child.icon className='h-5 w-5' />}
+                    <span className='sr-only'>{child.name}</span>
+                  </Tooltip>
                 </Link>
               ))
             )}

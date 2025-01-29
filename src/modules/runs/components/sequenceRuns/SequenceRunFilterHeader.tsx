@@ -1,10 +1,79 @@
 import { Search } from '@/components/common/search';
-import { Button } from '@/components/common/buttons';
+import { Button, ButtonGroup } from '@/components/common/buttons';
 import { useQueryParams } from '@/hooks/useQueryParams';
+import { DateRangePicker } from '@/components/common/datepicker';
+// import { keepPreviousData } from '@tanstack/react-query';
+import { useMemo } from 'react';
 
 const SequenceRunFilterHeader = () => {
   const { setQueryParams, clearQueryParams, getQueryParams } = useQueryParams();
+  const handleTimeChange = (startDate: string | null, endDate: string | null) => {
+    setQueryParams({ startDate, endDate });
+  };
 
+  // TODO: uncomment this when the API is ready
+  // const { data: sequenceRunStatusCountData } = useSequenceRunStatusCountModel({
+  //   params: {
+  //     query: {
+  //       search: getQueryParams().search || undefined,
+  //       start_time: getQueryParams().startDate || undefined,
+  //       end_time: getQueryParams().endDate || undefined,
+  //     },
+  //   },
+  //   reactQuery: {
+  //     enabled: true,
+  //     placeholderData: keepPreviousData,
+  //   },
+  // });
+
+  const sequenceRunStatusCountData = null;
+
+  const sequenceRunStatusOptions = useMemo(() => {
+    return sequenceRunStatusCountData
+      ? [
+          ...Object.keys(sequenceRunStatusCountData).map((status) => ({
+            label: status.charAt(0).toUpperCase() + status.slice(1),
+            subLabel:
+              sequenceRunStatusCountData[
+                status as keyof typeof sequenceRunStatusCountData
+              ].toString(),
+            onClick: () => {
+              if (status === 'all') {
+                setQueryParams({ sequenceRunStatus: null });
+              } else {
+                setQueryParams({ sequenceRunStatus: status });
+              }
+            },
+          })),
+        ]
+      : [
+          {
+            label: 'All',
+            subLabel: '',
+            onClick: () => setQueryParams({ sequenceRunStatus: null }),
+          },
+          {
+            label: 'Started',
+            subLabel: '',
+            onClick: () => setQueryParams({ sequenceRunStatus: 'started' }),
+          },
+          {
+            label: 'Succeeded',
+            subLabel: '',
+            onClick: () => setQueryParams({ sequenceRunStatus: 'succeeded' }),
+          },
+          {
+            label: 'Failed',
+            subLabel: '',
+            onClick: () => setQueryParams({ sequenceRunStatus: 'failed' }),
+          },
+          {
+            label: 'Aborted',
+            subLabel: '',
+            onClick: () => setQueryParams({ sequenceRunStatus: 'aborted' }),
+          },
+        ];
+  }, [setQueryParams, sequenceRunStatusCountData]);
   return (
     <>
       <div className='flex w-full flex-row items-center justify-between gap-1 p-2 md:flex-row'>
@@ -17,6 +86,12 @@ const SequenceRunFilterHeader = () => {
         </div>
 
         <div className='flex flex-row items-center gap-2'>
+          <DateRangePicker
+            align='left'
+            startDate={getQueryParams().startDate}
+            endDate={getQueryParams().endDate}
+            onTimeChange={handleTimeChange}
+          />
           {/* <div className='flex-none'>
         <DateRangePicker
           align='left'
@@ -49,12 +124,12 @@ const SequenceRunFilterHeader = () => {
           </div>
         </div>
       </div>
-      {/* <div>
-    <ButtonGroup
-      buttonItems={workflowRunStatusOptions}
-      selectedItemLabel={queryParams.get('workflowRunStatus') || 'all'}
-    />
-  </div> */}
+      <div>
+        <ButtonGroup
+          buttonItems={sequenceRunStatusOptions}
+          selectedItemLabel={getQueryParams().sequenceRunStatus || 'all'}
+        />
+      </div>
     </>
   );
 };

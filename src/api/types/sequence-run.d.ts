@@ -105,7 +105,7 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         Comment: {
-            orcabusId?: string;
+            readonly orcabusId: string;
             comment: string;
             associationId?: string;
             /** Format: date-time */
@@ -113,6 +113,12 @@ export interface components {
             createdBy: string;
             /** Format: date-time */
             readonly updatedAt: string;
+            isDeleted?: boolean;
+        };
+        CommentRequest: {
+            comment: string;
+            associationId?: string;
+            createdBy: string;
             isDeleted?: boolean;
         };
         PaginatedSequenceList: {
@@ -135,19 +141,14 @@ export interface components {
             };
             results: components["schemas"]["Sequence"][];
         };
-        PatchedComment: {
-            orcabusId?: string;
+        PatchedCommentRequest: {
             comment?: string;
             associationId?: string;
-            /** Format: date-time */
-            readonly createdAt?: string;
             createdBy?: string;
-            /** Format: date-time */
-            readonly updatedAt?: string;
             isDeleted?: boolean;
         };
         Sequence: {
-            orcabusId?: string;
+            readonly orcabusId: string;
             instrumentRunId: string;
             runVolumeName: string;
             runFolderPath?: string | null;
@@ -167,7 +168,7 @@ export interface components {
             apiUrl?: string | null;
         };
         State: {
-            orcabusId?: string;
+            readonly orcabusId: string;
             status: string;
             /** Format: date-time */
             timestamp: string;
@@ -199,7 +200,6 @@ export interface operations {
                 flowcellBarcode?: string | null;
                 icaProjectId?: string | null;
                 instrumentRunId?: string;
-                orcabusId?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
@@ -271,9 +271,9 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/x-www-form-urlencoded": components["schemas"]["Comment"];
-                "multipart/form-data": components["schemas"]["Comment"];
-                "application/json": components["schemas"]["Comment"];
+                "application/x-www-form-urlencoded": components["schemas"]["CommentRequest"];
+                "multipart/form-data": components["schemas"]["CommentRequest"];
+                "application/json": components["schemas"]["CommentRequest"];
             };
         };
         responses: {
@@ -299,9 +299,9 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/x-www-form-urlencoded": components["schemas"]["PatchedComment"];
-                "multipart/form-data": components["schemas"]["PatchedComment"];
-                "application/json": components["schemas"]["PatchedComment"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedCommentRequest"];
+                "multipart/form-data": components["schemas"]["PatchedCommentRequest"];
+                "application/json": components["schemas"]["PatchedCommentRequest"];
             };
         };
         responses: {

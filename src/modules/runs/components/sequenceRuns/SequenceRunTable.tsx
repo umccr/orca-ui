@@ -26,6 +26,9 @@ const SequenceRunTable = () => {
         page: getQueryParams().page || 1,
         rowsPerPage: getPaginationParams().rowsPerPage || DEFAULT_PAGE_SIZE,
         search: getQueryParams().search || undefined,
+        status: getQueryParams().sequenceRunStatus || undefined,
+        start_time: getQueryParams().startDate || undefined,
+        end_time: getQueryParams().endDate || undefined,
       },
     },
   });

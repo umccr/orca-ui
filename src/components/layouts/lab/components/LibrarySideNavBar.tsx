@@ -2,6 +2,8 @@ import { ModuleNavbar } from '@/components/navigation/navbar';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSuspenseWorkflowModel } from '@/api/workflow';
 import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
+import { HomeIcon, ClockIcon } from '@heroicons/react/24/outline';
+// import { getWorkflowIcon } from '@/utils/workflows';
 
 export const LibrarySideNavBar = () => {
   const { libraryOrcabusId, portalRunId } = useParams();
@@ -31,8 +33,16 @@ export const LibrarySideNavBar = () => {
         {
           title: 'Library',
           children: [
-            { name: 'Overview', href: `${baseHref}/overview` },
-            { name: 'History', href: `${baseHref}/history` },
+            {
+              name: 'Overview',
+              href: `${baseHref}/overview`,
+              icon: HomeIcon,
+            },
+            {
+              name: 'History',
+              href: `${baseHref}/history`,
+              icon: ClockIcon,
+            },
           ],
         },
         {
@@ -42,7 +52,6 @@ export const LibrarySideNavBar = () => {
               .map((wf) => ({
                 name: `${wf.workflowName}`,
                 href: `${baseHref}/${wf.workflowName}`,
-                // We wanted to know if the workflow name is selected in the NavBar
                 isCurrent: portalRunId
                   ? pathname.split(portalRunId)[0].endsWith(`${wf.workflowName}/`)
                   : undefined,

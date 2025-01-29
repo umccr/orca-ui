@@ -85,28 +85,28 @@ const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) =
           }
         },
       },
-      {
-        header: 'Workflow Type',
-        accessor: 'workflow',
-        cell: (workflow: unknown) => {
-          if (!workflow) {
-            return <div>-</div>;
-          } else {
-            return <div>{(workflow as { workflowName: string }).workflowName}</div>;
-          }
-        },
-      },
-      {
-        header: 'Workflow Version',
-        accessor: 'workflow',
-        cell: (workflow: unknown) => {
-          if (!workflow) {
-            return <div>-</div>;
-          } else {
-            return <div>{(workflow as { workflowVersion: string }).workflowVersion}</div>;
-          }
-        },
-      },
+      // {
+      //   header: 'Workflow Type',
+      //   accessor: 'workflow',
+      //   cell: (workflow: unknown) => {
+      //     if (!workflow) {
+      //       return <div>-</div>;
+      //     } else {
+      //       return <div>{(workflow as { workflowName: string }).workflowName}</div>;
+      //     }
+      //   },
+      // },
+      // {
+      //   header: 'Workflow Version',
+      //   accessor: 'workflow',
+      //   cell: (workflow: unknown) => {
+      //     if (!workflow) {
+      //       return <div>-</div>;
+      //     } else {
+      //       return <div>{(workflow as { workflowVersion: string }).workflowVersion}</div>;
+      //     }
+      //   },
+      // },
 
       {
         header: 'Status',

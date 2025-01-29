@@ -15,14 +15,14 @@ import {
   XMarkIcon,
   // BellIcon,
   UserCircleIcon,
-  PaintBrushIcon,
   KeyIcon,
   ArrowRightStartOnRectangleIcon,
+  Cog6ToothIcon,
 } from '@heroicons/react/24/outline';
 import { getUsername } from '@/utils/commonUtils';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
 import TokenDialog from './TokenDialog';
-import AppearanceDialog from './AppearanceDialog';
+import PreferenceDialog from './PreferenceDialog';
 import { DetailedErrorBoundary } from '@/components/common/error';
 import { Link } from 'react-router-dom';
 
@@ -33,8 +33,8 @@ const Header = ({ className }: { className?: string }) => {
   const [isTokenDialogOpen, setIsTokenDialogOpen] = useState<boolean>(false);
   const openTokenDialogOpen = () => setIsTokenDialogOpen(true);
 
-  const [isAppearanceDialogOpen, setIsAppearanceDialogOpen] = useState<boolean>(false);
-  const openAppearanceDialogOpen = () => setIsAppearanceDialogOpen(true);
+  const [isPreferenceDialogOpen, setIsPreferenceDialogOpen] = useState<boolean>(false);
+  const openPreferenceDialogOpen = () => setIsPreferenceDialogOpen(true);
 
   return (
     <Disclosure as='nav' className={`z-10 w-full bg-heritage-blue-100 shadow ${className ?? ''}`}>
@@ -45,9 +45,9 @@ const Header = ({ className }: { className?: string }) => {
               <TokenDialog onClose={() => setIsTokenDialogOpen(false)} />
             </DetailedErrorBoundary>
           )}
-          {isAppearanceDialogOpen && (
+          {isPreferenceDialogOpen && (
             <DetailedErrorBoundary errorTitle='Unable to change appearance'>
-              <AppearanceDialog onClose={() => setIsAppearanceDialogOpen(false)} />
+              <PreferenceDialog onClose={() => setIsPreferenceDialogOpen(false)} />
             </DetailedErrorBoundary>
           )}
           <div className='max-w-8xl mx-auto sm:px-4 md:divide-y md:divide-gray-700 md:px-8'>
@@ -153,10 +153,10 @@ const Header = ({ className }: { className?: string }) => {
                     </div>
 
                     <div className='flex flex-col py-1'>
-                      <MenuItem as='button' onClick={openAppearanceDialogOpen}>
+                      <MenuItem as='button' onClick={openPreferenceDialogOpen}>
                         <span className='flex w-full items-center px-4 py-2 text-sm text-gray-700 transition-colors data-[focus]:bg-gray-50 data-[focus]:text-gray-900 dark:text-gray-200 dark:data-[focus]:bg-gray-700/50 dark:data-[focus]:text-white'>
-                          <PaintBrushIcon className='mr-2 size-4' />
-                          Appearance
+                          <Cog6ToothIcon className='mr-2 size-4' />
+                          Preferences
                         </span>
                       </MenuItem>
                     </div>
@@ -201,12 +201,12 @@ const Header = ({ className }: { className?: string }) => {
               </div>
               <div className='mx-3 mt-3 space-y-1'>
                 <DisclosureButton
-                  onClick={openAppearanceDialogOpen}
+                  onClick={openPreferenceDialogOpen}
                   as='button'
                   className='hover:bg-heritage-blue-200/30 flex w-full items-center rounded-lg px-4 py-2 text-sm text-white'
                 >
-                  <PaintBrushIcon className='mr-2 h-5 w-5' />
-                  Appearance
+                  <Cog6ToothIcon className='mr-2 h-5 w-5' />
+                  Preferences
                 </DisclosureButton>
                 <DisclosureButton
                   onClick={openTokenDialogOpen}

@@ -3,7 +3,7 @@
 
 import { lazy, Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import RunsPageLayout from '@/components/layouts/runs/RunsPageLayout';
+import RunsModuleLayout from '@/components/layouts/runs/RunsModuleLayout';
 import { RouteObject } from 'react-router-dom';
 
 const SequenceRunPage = lazy(() => import('@/modules/runs/pages/SequenceRuns'));
@@ -16,11 +16,11 @@ const AnalysisRunDetailsPage = lazy(() => import('@/modules/runs/pages/AnalysisR
 export const Router: RouteObject = {
   path: 'runs',
   element: (
-    <RunsPageLayout>
+    <RunsModuleLayout>
       <Suspense fallback={<div>Loading...</div>}>
         <Outlet />
       </Suspense>
-    </RunsPageLayout>
+    </RunsModuleLayout>
   ),
   children: [
     {
