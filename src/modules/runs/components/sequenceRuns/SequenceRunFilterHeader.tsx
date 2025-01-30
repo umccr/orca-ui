@@ -33,10 +33,7 @@ const SequenceRunFilterHeader = () => {
       ? [
           ...Object.keys(sequenceRunStatusCountData).map((status) => ({
             label: status.charAt(0).toUpperCase() + status.slice(1),
-            subLabel:
-              sequenceRunStatusCountData[
-                status as keyof typeof sequenceRunStatusCountData
-              ].toString(),
+            subLabel: sequenceRunStatusCountData[status as keyof typeof sequenceRunStatusCountData],
             onClick: () => {
               if (status === 'all') {
                 setQueryParams({ sequenceRunStatus: null });

@@ -56,7 +56,7 @@ const InputBadgeBox: React.FC<InputBadgeBoxProps> = ({
       <div className='flex w-28 flex-row text-sm'>
         {label}
         {tooltipText && (
-          <Tooltip text={tooltipText} position='right' background='white'>
+          <Tooltip text={tooltipText} position='right' background='light'>
             <InformationCircleIcon className='2-5 mx-2 h-5' />
           </Tooltip>
         )}
