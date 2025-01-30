@@ -255,6 +255,27 @@ export class PipelineStack extends Stack {
       });
     };
 
+    const openApiTsCheck = new PipelineProject(this, 'OpenApiTSCheck', {
+      projectName: 'OrcaUI-OpenApiTSCheck',
+      description: 'Test artifact with OpenAPI schema from relevant STG stage.',
+      buildSpec: BuildSpec.fromObject({
+        version: 0.2,
+        env: { variables: gammaConfig.reactBuildEnvVariables },
+        phases: {
+          install: {
+            'runtime-versions': {
+              nodejs: 20,
+            },
+            commands: ['node -v', 'corepack enable', 'yarn --version', 'yarn install --immutable'],
+          },
+          build: {
+            commands: ['set -eu', 'make generate-openapi-types', 'yarn tsc-check'],
+          },
+        },
+      }),
+      environment: { buildImage: LinuxArmBuildImage.AMAZON_LINUX_2_STANDARD_3_0 },
+    });
+
     /**
      * React Build and Deploy Pipeline
      */
@@ -312,15 +333,21 @@ export class PipelineStack extends Stack {
         {
           stageName: 'DeployToProd',
           actions: [
+            new CodeBuildAction({
+              actionName: 'TSCheckWithStgOpenAPI',
+              project: openApiTsCheck,
+              input: sourceOutput,
+              runOrder: 1,
+            }),
             new ManualApprovalAction({
               actionName: 'DeployToProdApproval',
-              runOrder: 1,
+              runOrder: 2,
             }),
             new CodeBuildAction({
               actionName: 'DeployToProd',
               project: deployProject(AppStage.PROD),
               input: buildOutput,
-              runOrder: 2,
+              runOrder: 3,
             }),
           ],
         },

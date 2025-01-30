@@ -42,3 +42,6 @@ stats.html
 
 # ignore lambda response
 response.json
+
+# ignore openapi types
+src/api/types/*
