@@ -11,7 +11,7 @@ import { useQueryParams } from '@/hooks/useQueryParams';
 export default function LibraryWorkflowPage() {
   const { libraryOrcabusId, portalRunId, workflowType } = useParams();
   const { setQueryParams, getQueryParams } = useQueryParams();
-  const searchKey = getQueryParams().key;
+  const searchKey = getQueryParams().key ?? '';
 
   if (!libraryOrcabusId || !workflowType) {
     throw new Error('Invalid URL!');

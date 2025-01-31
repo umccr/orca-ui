@@ -323,9 +323,16 @@ export class PipelineStack extends Stack {
           stageName: 'DeployToGamma',
           actions: [
             new CodeBuildAction({
+              actionName: 'TSCheckWithStgOpenAPI',
+              project: openApiTsCheck,
+              input: sourceOutput,
+              runOrder: 1,
+            }),
+            new CodeBuildAction({
               actionName: 'DeployToGamma',
               project: deployProject(AppStage.GAMMA),
               input: buildOutput,
+              runOrder: 2,
             }),
           ],
         },
@@ -333,21 +340,15 @@ export class PipelineStack extends Stack {
         {
           stageName: 'DeployToProd',
           actions: [
-            new CodeBuildAction({
-              actionName: 'TSCheckWithStgOpenAPI',
-              project: openApiTsCheck,
-              input: sourceOutput,
-              runOrder: 1,
-            }),
             new ManualApprovalAction({
               actionName: 'DeployToProdApproval',
-              runOrder: 2,
+              runOrder: 1,
             }),
             new CodeBuildAction({
               actionName: 'DeployToProd',
               project: deployProject(AppStage.PROD),
               input: buildOutput,
-              runOrder: 3,
+              runOrder: 2,
             }),
           ],
         },
