@@ -18,7 +18,7 @@ generate-openapi-types:
 	@yarn run -B openapi-typescript ${VITE_WORKFLOW_URL}/schema/openapi.json -o ./src/api/types/workflow.d.ts
 	@yarn run -B openapi-typescript ${VITE_FILE_URL}/schema/openapi.json -o ./src/api/types/file.d.ts
 
-start:
+start: generate-openapi-types
 	@yarn run start
 
 deploy-dev:
