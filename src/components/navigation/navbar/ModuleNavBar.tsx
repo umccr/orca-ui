@@ -7,6 +7,7 @@ import { Bars3Icon } from '@heroicons/react/24/outline';
 export interface NavigationChildrenItem {
   name: string;
   href: string;
+  isCurrent?: boolean;
 }
 
 export interface NavigationItem {
@@ -51,19 +52,22 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
                     <div className='pb-3'></div>
                   )}
 
-                  {item.children.map((item) => (
-                    <div key={item.name} className='py-1'>
-                      <Link
-                        to={item.href}
-                        className={classNames(
-                          'group flex py-2 px-10 text-sm rounded-md leading-6 font-normal text-magpie-dark-75 hover:bg-magpie-light-50',
-                          location.pathname.includes(item.href) ? 'bg-magpie-light-50' : ''
-                        )}
-                      >
-                        {item.name}
-                      </Link>
-                    </div>
-                  ))}
+                  {item.children.map((item) => {
+                    const isSelected = item.isCurrent ?? location.pathname.includes(item.href);
+                    return (
+                      <div key={item.name} className='py-1'>
+                        <Link
+                          to={item.href}
+                          className={classNames(
+                            'group flex py-2 px-10 text-sm rounded-md leading-6 font-normal text-magpie-dark-75 hover:bg-magpie-light-50',
+                            isSelected ? 'bg-magpie-light-50' : ''
+                          )}
+                        >
+                          {item.name}
+                        </Link>
+                      </div>
+                    );
+                  })}
                 </li>
               ))}
             </ul>
