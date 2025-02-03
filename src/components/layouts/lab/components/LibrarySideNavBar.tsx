@@ -45,7 +45,9 @@ export const LibrarySideNavBar = () => {
                 // We wanted to know if the workflow name is selected in the NavBar
                 isCurrent: portalRunId
                   ? pathname.split(portalRunId)[0].endsWith(`${wf.workflowName}/`)
-                  : undefined,
+                  : // In case trailing slash in pathname
+                    pathname.endsWith(`${wf.workflowName}/`) ||
+                    pathname.endsWith(`${wf.workflowName}`),
               }))
               // Filter out duplicate workflows
               .filter((wf) => {
