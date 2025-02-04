@@ -10,6 +10,7 @@ export interface NavigationChildrenItem {
   href: string;
   icon?: FunctionComponent<SVGProps<SVGSVGElement>>;
   badge?: number; // For notification counts
+  isCurrent?: boolean;
 }
 
 export interface NavigationItem {
@@ -50,7 +51,7 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
             {navigation.map((item, index) => (
               <div key={index} className='mb-8 last:mb-0'>
                 {item.title && (
-                  <div className='sticky top-0 z-10 bg-white px-6 py-4 dark:bg-gray-800'>
+                  <div className='sticky top-0 z-10 bg-gray-50 px-6 py-4 dark:bg-gray-800'>
                     <h2 className='text-xl font-semibold text-gray-900 dark:text-white'>
                       {item.title}
                     </h2>
@@ -58,35 +59,38 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
                 )}
 
                 <div className='space-y-2 px-3 py-2'>
-                  {item.children.map((child) => (
-                    <Link
-                      key={child.name}
-                      to={child.href}
-                      className={classNames(
-                        'group flex items-center gap-x-3 rounded-md px-4 py-2 text-sm font-medium transition-colors duration-150',
-                        location.pathname.includes(child.href)
-                          ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/50 dark:text-blue-200'
-                          : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700/50 dark:hover:text-white'
-                      )}
-                    >
-                      {child.icon && (
-                        <child.icon
-                          className={classNames(
-                            'h-5 w-5 shrink-0', // Increased icon size
-                            location.pathname.includes(child.href)
-                              ? 'text-blue-600 dark:text-blue-200'
-                              : 'text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-300'
-                          )}
-                        />
-                      )}
-                      <span className='flex-1'>{child.name}</span>
-                      {child.badge && (
-                        <span className='ml-auto inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-blue-100 px-1.5 text-xs font-medium text-blue-600 dark:bg-blue-900/50 dark:text-blue-200'>
-                          {child.badge}
-                        </span>
-                      )}
-                    </Link>
-                  ))}
+                  {item.children.map((child) => {
+                    const isSelected = child.isCurrent ?? location.pathname.includes(child.href);
+                    return (
+                      <Link
+                        key={child.name}
+                        to={child.href}
+                        className={classNames(
+                          'group flex items-center gap-x-3 rounded-md px-4 py-2 text-sm font-medium transition-colors duration-150',
+                          isSelected
+                            ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/50 dark:text-blue-200'
+                            : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700/50 dark:hover:text-white'
+                        )}
+                      >
+                        {child.icon && (
+                          <child.icon
+                            className={classNames(
+                              'h-5 w-5 shrink-0',
+                              isSelected
+                                ? 'text-blue-600 dark:text-blue-200'
+                                : 'text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-300'
+                            )}
+                          />
+                        )}
+                        <span className='flex-1'>{child.name}</span>
+                        {child.badge && (
+                          <span className='ml-auto inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-blue-100 px-1.5 text-xs font-medium text-blue-600 dark:bg-blue-900/50 dark:text-blue-200'>
+                            {child.badge}
+                          </span>
+                        )}
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
             ))}

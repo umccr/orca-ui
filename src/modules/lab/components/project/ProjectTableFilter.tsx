@@ -41,9 +41,9 @@ export const ProjectTableFilter = () => {
         handleFilterChange={handleFilterChange}
       />
       <FilterTextInput
-        title='Project Id *'
+        title='Name *'
         keyFilter='name'
-        defaultInput={filter.projectId ? filter.projectId : []}
+        defaultInput={filter.name ? filter.name : []}
         handleFilterChange={handleFilterChange}
       />
       <div className='text-s mb-2 border-b-2 pb-2 font-thin italic text-gray-700'>
