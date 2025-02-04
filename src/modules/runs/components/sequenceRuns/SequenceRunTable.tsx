@@ -69,6 +69,17 @@ const SequenceRunTable = () => {
       },
     },
     {
+      header: 'Sequencing',
+      accessor: 'status',
+      cell: (status: unknown) => {
+        return (
+          <Badge status={(status as string) || 'UNKNOWN'}>
+            {(status || 'UNKNOWN') as ReactNode}
+          </Badge>
+        );
+      },
+    },
+    {
       header: 'Start Time',
       accessor: 'startTime',
       cell: (startTime: unknown) => {
@@ -88,17 +99,6 @@ const SequenceRunTable = () => {
         } else {
           return <div>{dayjs(endTime as string).format('YYYY-MM-DD HH:mm:ss')}</div>;
         }
-      },
-    },
-    {
-      header: 'Sequencing',
-      accessor: 'status',
-      cell: (status: unknown) => {
-        return (
-          <Badge status={(status as string) || 'UNKNOWN'}>
-            {(status || 'UNKNOWN') as ReactNode}
-          </Badge>
-        );
       },
     },
     // {
@@ -160,6 +160,7 @@ const SequenceRunTable = () => {
     //   },
     // },
   ];
+
   return (
     <div>
       <Table

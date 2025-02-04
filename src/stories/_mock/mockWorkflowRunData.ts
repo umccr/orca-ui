@@ -1,5 +1,5 @@
 import { mockWorkflowData } from './mockWorkflowData';
-import { dayjs } from '@/utils/dayjs';
+import { dayjs } from '../../utils/dayjs';
 
 // group by portal run id for each workflow task to this format,
 // start, end, and end status should be same as portal_run_id is same
