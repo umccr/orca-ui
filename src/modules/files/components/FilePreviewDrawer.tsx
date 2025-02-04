@@ -44,7 +44,7 @@ export const FilePreviewDrawer = ({ s3Record }: { s3Record: S3Record }) => {
             }
           />
           <Button
-            className='!m-0 !p-2 !shadow-none'
+            className='!m-0 bg-transparent !p-2 !shadow-none focus:ring-0 focus:ring-offset-0'
             onClick={() => {
               setIsFilePreview(true);
             }}
@@ -61,7 +61,13 @@ export const FilePreviewDrawer = ({ s3Record }: { s3Record: S3Record }) => {
           <span className='invisible absolute -mt-8 rounded bg-gray-100 p-1 text-red-500 shadow-lg group-hover:visible group-hover:z-50'>
             {!isFileAllowed ? 'File type is not supported' : 'File size is too large'}
           </span>
-          <Button className='!m-0 !p-2 !shadow-none' rounded size='md' type='gray' disabled={true}>
+          <Button
+            className='!m-0 bg-transparent !p-2 !shadow-none focus:ring-0 focus:ring-offset-0'
+            rounded
+            size='md'
+            type='gray'
+            disabled={true}
+          >
             <EyeSlashIcon className='size-4' />
           </Button>
         </div>

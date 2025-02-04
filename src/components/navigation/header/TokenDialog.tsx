@@ -6,6 +6,8 @@ import toaster from '@/components/common/toaster';
 import { dayjs } from '@/utils/dayjs';
 import { DocumentDuplicateIcon, KeyIcon } from '@heroicons/react/24/outline';
 import { CheckIcon } from '@heroicons/react/20/solid';
+import { Button } from '@/components/common/buttons';
+import { ClipboardIcon } from '@heroicons/react/24/outline';
 
 type Props = { onClose: () => void };
 
@@ -27,7 +29,6 @@ const TokenDialog = ({ onClose }: Props) => {
 
         if (cancel) return;
 
-        console.log(' dayjs.unix(parseInt(exp))', dayjs.unix(parseInt(exp)).format('DD/MM/YYYY'));
         setJWTData({
           token: token.toString(),
           expires: dayjs.unix(parseInt(exp)).format('llll Z'),
@@ -89,11 +90,12 @@ const TokenDialog = ({ onClose }: Props) => {
               </div>
             </div>
 
+            {/* Token field */}
             <div className='space-y-2'>
               <div className='text-sm font-medium text-gray-700 dark:text-gray-300'>Token</div>
               <div className='group relative'>
                 <div className='rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50'>
-                  <div className='max-h-32 overflow-y-auto px-4 py-2.5'>
+                  <div className='max-h-24 overflow-y-auto px-4 py-2'>
                     <code className='break-all font-mono text-sm text-gray-900 dark:text-gray-100'>
                       {jwtData.token}
                     </code>
@@ -101,7 +103,7 @@ const TokenDialog = ({ onClose }: Props) => {
                 </div>
                 <button
                   onClick={handleCopyButton}
-                  className='absolute right-2 top-2 rounded-md border border-gray-200 bg-white px-2 py-1 text-gray-500 shadow-sm transition-all hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                  className='absolute right-5 top-2 rounded-md bg-white/80 p-1.5 text-gray-500 backdrop-blur-sm transition-all hover:bg-white hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:bg-gray-700/80 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200'
                 >
                   {copied ? (
                     <CheckIcon className='h-4 w-4 text-green-500' />
@@ -110,6 +112,19 @@ const TokenDialog = ({ onClose }: Props) => {
                   )}
                 </button>
               </div>
+            </div>
+
+            {/* copy button */}
+            <div className='mt-4'>
+              <Button
+                onClick={handleCopyButton}
+                className='w-full justify-center bg-blue-500 text-white shadow-sm outline-none ring-0 hover:bg-blue-600 focus:ring-0 dark:bg-blue-600 dark:hover:bg-blue-700'
+                size='sm'
+                type='primary'
+              >
+                <ClipboardIcon className='h-5 w-5' />
+                <span className='ml-2 font-medium'>Copy Token to Clipboard</span>
+              </Button>
             </div>
           </div>
         </div>

@@ -29,13 +29,13 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
   return (
     <div
       className={classNames(
-        'group relative flex h-full flex-col border-r border-gray-200 bg-white transition-all duration-300 dark:border-gray-700 dark:bg-gray-800',
+        'group relative flex h-full flex-col border-r border-gray-200 bg-gray-50 transition-all duration-300 dark:border-gray-700 dark:bg-gray-900',
         isOpen ? 'w-72' : 'w-16'
       )}
     >
       {isOpen ? (
         <>
-          <div className='absolute right-0 top-0 z-20 p-4 opacity-0 transition-opacity duration-200 group-hover:opacity-100'>
+          <div className='absolute right-0 top-0 z-20 p-4'>
             <button
               type='button'
               onClick={() => setIsOpen(false)}
@@ -111,25 +111,36 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
           </div>
 
           <nav className='flex-1 space-y-1 px-2 py-4'>
-            {navigation.map((item) =>
-              item.children.map((child) => (
-                <Link
-                  key={child.name}
-                  to={child.href}
-                  className={classNames(
-                    'group flex items-center justify-center rounded-md p-2 transition-colors duration-150',
-                    location.pathname.includes(child.href)
-                      ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/50 dark:text-blue-200'
-                      : 'text-gray-400 hover:bg-gray-50 hover:text-gray-500 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:hover:text-gray-300'
-                  )}
-                >
-                  <Tooltip text={child.name} position='right'>
-                    {child.icon && <child.icon className='h-5 w-5' />}
-                    <span className='sr-only'>{child.name}</span>
-                  </Tooltip>
-                </Link>
-              ))
-            )}
+            {navigation.map((item, index) => (
+              <div key={index}>
+                {item.children.map((child) => (
+                  <Link
+                    key={child.name}
+                    to={child.href}
+                    className={classNames(
+                      'group flex items-center justify-center rounded-md p-2 transition-colors duration-150',
+                      location.pathname.includes(child.href)
+                        ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/50 dark:text-blue-200'
+                        : 'text-gray-400 hover:bg-gray-50 hover:text-gray-500 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:hover:text-gray-300'
+                    )}
+                  >
+                    <Tooltip text={child.name} position='right'>
+                      {child.icon ? (
+                        <child.icon className='h-5 w-5' />
+                      ) : (
+                        <div className='flex h-5 w-5 items-center justify-center rounded-md bg-gray-100 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-300'>
+                          {child.name.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <span className='sr-only'>{child.name}</span>
+                    </Tooltip>
+                  </Link>
+                ))}
+                {index < navigation.length - 1 && (
+                  <div className='my-2 h-px bg-gray-200 dark:bg-gray-700' />
+                )}
+              </div>
+            ))}
           </nav>
         </>
       )}

@@ -26,7 +26,7 @@ export const FileDownloadButton = ({ s3Record }: { s3Record: S3Record }) => {
         <Spinner />
       ) : (
         <Button
-          className='!m-0 !p-2 !shadow-none'
+          className='!m-0 bg-transparent !p-2 !shadow-none focus:ring-0 focus:ring-offset-0'
           rounded
           size='md'
           onClick={() => {
