@@ -12,7 +12,7 @@ import { classNames } from '@/utils/commonUtils';
 import Skeleton from 'react-loading-skeleton';
 import { IconDropdown } from '@/components/common/dropdowns';
 import toaster from '@/components/common/toaster';
-import { Dialog } from '@/components/dialogs';
+import { Dialog } from '@/components/common/dialogs';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { useWorkflowRunContext } from './WorkflowRunContext';
 import { Checkbox } from '@/components/common/checkbox';
@@ -169,7 +169,7 @@ const WorkflowRunDetailsTable = () => {
             return (
               <Link
                 to={`/lab/library/${orcabusId}`}
-                className={classNames('text-sm font-medium hover:text-blue-700 text-blue-500')}
+                className={classNames('text-sm font-medium text-blue-500 hover:text-blue-700')}
               >
                 <div>{orcabusId as string}</div>
               </Link>
@@ -189,9 +189,9 @@ const WorkflowRunDetailsTable = () => {
   };
 
   return (
-    <div className='pt-4 w-full flex flex-col gap-2'>
+    <div className='flex w-full flex-col gap-2 pt-4'>
       {/* title */}
-      <div className='flex-1 flex flex-row gap-2 items-center px-2'>
+      <div className='flex flex-1 flex-row items-center gap-2 px-2'>
         {isFetchingWorkflowRunDetail ? (
           <div className='flex-1'>
             <Skeleton height={20} />
@@ -208,7 +208,7 @@ const WorkflowRunDetailsTable = () => {
                 disabled: isFetchingWorkflowRunRerunAllowedWorkflows,
               },
             ]}
-            className='bg-magpie-light-50 hover:text-magpie-light-500'
+            className='hover:text-magpie-light-500 bg-magpie-light-50'
             type='square'
           />
         </div>
@@ -245,7 +245,7 @@ const WorkflowRunDetailsTable = () => {
             <div className='text-lg font-medium'>{workflowRunDetail?.workflowRunName || ''}</div>
 
             {!workflowRunRerunValidateDetail?.isValid ? (
-              <div className='mt-2 text-sm flex flex-col gap-1'>
+              <div className='mt-2 flex flex-col gap-1 text-sm'>
                 <div className='flex flex-row gap-1 text-red-500'>
                   <span className='font-medium'>Warning:</span>
                   <span>This workflow is not allowed to rerun.</span>
@@ -260,17 +260,17 @@ const WorkflowRunDetailsTable = () => {
               </div>
             ) : (
               <>
-                <div className='mt-2 text-sm flex flex-col gap-1'>
+                <div className='mt-2 flex flex-col gap-1 text-sm'>
                   <div>
-                    <div className='text-xs font-medium pt-1 mb-1'>
+                    <div className='mb-1 pt-1 text-xs font-medium'>
                       Please select the dataset to rerun:
                     </div>
-                    <div className='flex gap-1 flex-wrap'>
+                    <div className='flex flex-wrap gap-1'>
                       {workflowRunRerunValidateDetail?.allowedDatasetChoice.map((dataset, idx) => (
                         <label
                           key={idx}
                           className={classNames(
-                            'flex items-center px-2 py-1 rounded-md border cursor-pointer transition-colors',
+                            'flex cursor-pointer items-center rounded-md border px-2 py-1 transition-colors',
                             'hover:bg-gray-50',
                             selectedDataset === dataset
                               ? 'border-blue-500 bg-blue-50 text-blue-700'
@@ -283,7 +283,7 @@ const WorkflowRunDetailsTable = () => {
                             value={dataset}
                             checked={selectedDataset === dataset}
                             onChange={() => setSelectedDataset(dataset)}
-                            className='h-3 w-3 text-blue-600 border-gray-300 focus:ring-blue-500'
+                            className='h-3 w-3 border-gray-300 text-blue-600 focus:ring-blue-500'
                           />
                           <span className='ml-1 text-xs font-medium'>{dataset}</span>
                         </label>
@@ -293,7 +293,7 @@ const WorkflowRunDetailsTable = () => {
                       <div className='text-xs text-red-500'>Please select a dataset.</div>
                     )}
                   </div>
-                  <div className='h-px bg-gray-200 my-2'></div>
+                  <div className='my-2 h-px bg-gray-200'></div>
                   <div>
                     <Checkbox
                       className='flex flex-row gap-2 text-sm font-medium'
@@ -319,7 +319,7 @@ const WorkflowRunDetailsTable = () => {
                     )}
                   </div>
                 </div>
-                <div className='mt-2 text-sm text-red-500 font-medium pt-2'>
+                <div className='mt-2 pt-2 text-sm font-medium text-red-500'>
                   Are you sure you want to rerun this workflow?
                 </div>
               </>

@@ -1,3 +1,6 @@
+/* eslint-disable react-refresh/only-export-components */
+// https://github.com/ArnaudBarre/eslint-plugin-react-refresh/issues/25#issuecomment-1729071347
+
 import { Fragment } from 'react';
 import { SubjectListQueryParams, useSuspenseMetadataSubjectModel } from '@/api/metadata';
 import { useQueryParams } from '@/hooks/useQueryParams';
@@ -131,7 +134,7 @@ export const individualTableColumn = (): Column[] => {
         <div className='flex flex-row items-center'>
           <div>Individual Id</div>
           <Tooltip text={`This is now the 'SubjectID' from the tracking sheet`} position='right'>
-            <InformationCircleIcon className='h-4	ml-2' />
+            <InformationCircleIcon className='ml-2 h-4' />
           </Tooltip>
         </div>
       ),

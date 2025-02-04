@@ -17,7 +17,7 @@ export const LibraryTableDetails: FC<LibraryTableDetailsProps> = ({ libraryDetai
           'Subject Id': (
             <Link
               to={`/lab/?tab=subject&orcabusId=${library.subject.orcabusId}`}
-              className={classNames('hover:text-blue-700 text-blue-500')}
+              className={classNames('text-blue-500 hover:text-blue-700')}
             >
               {library.subject.subjectId ?? '-'}
             </Link>
@@ -25,7 +25,7 @@ export const LibraryTableDetails: FC<LibraryTableDetailsProps> = ({ libraryDetai
           'Sample Id': (
             <Link
               to={`/lab/?tab=sample&orcabusId=${library.sample.orcabusId}`}
-              className={classNames('hover:text-blue-700 text-blue-500')}
+              className={classNames('text-blue-500 hover:text-blue-700')}
             >
               {library.sample.sampleId ?? '-'}
             </Link>
@@ -41,7 +41,7 @@ export const LibraryTableDetails: FC<LibraryTableDetailsProps> = ({ libraryDetai
             <Link
               key={project.orcabusId}
               to={`/lab/?tab=library&project_id=${project.projectId}`}
-              className={classNames('hover:text-blue-700 text-blue-500')}
+              className={classNames('text-blue-500 hover:text-blue-700')}
             >
               {project.projectId ?? '-'}
             </Link>

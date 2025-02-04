@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Dialog } from '@/components/dialogs';
+import { Dialog } from '@/components/common/dialogs';
 import { Button } from '@/components/common/buttons';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';

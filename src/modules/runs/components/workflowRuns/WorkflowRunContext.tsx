@@ -1,3 +1,6 @@
+/* eslint-disable react-refresh/only-export-components */
+// https://github.com/ArnaudBarre/eslint-plugin-react-refresh/issues/25#issuecomment-1729071347
+
 import { createContext, FC, PropsWithChildren, ReactElement, useContext, useState } from 'react';
 
 const WorkflowRunContext = createContext({

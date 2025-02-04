@@ -1,3 +1,18 @@
+import {
+  ArrowPathIcon,
+  BeakerIcon,
+  ChartBarIcon,
+  CircleStackIcon,
+  CloudArrowDownIcon,
+  DocumentChartBarIcon,
+  DocumentMagnifyingGlassIcon,
+  RectangleStackIcon,
+  Square3Stack3DIcon,
+  WrenchIcon,
+} from '@heroicons/react/24/outline';
+import { FunctionComponent } from 'react';
+import { SVGProps } from 'react';
+
 // Workflow Filter Status Bar
 // Only final status applied, https://help.ica.illumina.com/project/p-flow/f-analyses#lifecycle
 export const WORKFLOW_STATUS = ['Succeeded', 'Aborted', 'Failed'];
@@ -157,4 +172,47 @@ export const WORKFLOW_TYPES = [
   'RNASUM',
   'STAR_ALIGNMENT',
   'ONCOANALYSER_WTS',
-];
+  'BSSH_FASTQ_COPY',
+  'CTTSOV2',
+  'ORA_COMPRESSION',
+  'PIERIANDX',
+  'WGTS_QC',
+  'WTS',
+] as const;
+
+export type WorkflowType = (typeof WORKFLOW_TYPES)[number];
+
+// Workflow icon mapping
+const WORKFLOW_ICONS: Record<WorkflowType, FunctionComponent<SVGProps<SVGSVGElement>>> = {
+  BCL_CONVERT: CircleStackIcon, // Data conversion
+  DRAGEN_WGS_QC: DocumentChartBarIcon, // Quality control
+  TUMOR_NORMAL: BeakerIcon, // Lab analysis
+  DRAGEN_TSO_CTDNA: BeakerIcon, // Lab analysis
+  DRAGEN_WTS: ChartBarIcon, // Analysis
+  UMCCRISE: DocumentMagnifyingGlassIcon, // Analysis report
+  ONCOANALYSER_WGS: ChartBarIcon, // Analysis
+  SASH: Square3Stack3DIcon, // Complex analysis
+  ONCOANALYSER_WGTS_BOTH: ChartBarIcon, // Combined analysis
+  DRAGEN_WTS_QC: DocumentChartBarIcon, // Quality control
+  RNASUM: DocumentChartBarIcon, // Summary report
+  STAR_ALIGNMENT: ArrowPathIcon, // Alignment process
+  ONCOANALYSER_WTS: ChartBarIcon, // Analysis
+  BSSH_FASTQ_COPY: CloudArrowDownIcon, // File copy
+  CTTSOV2: BeakerIcon, // Lab analysis
+  ORA_COMPRESSION: RectangleStackIcon, // Data compression
+  PIERIANDX: DocumentChartBarIcon, // Analysis report
+  WGTS_QC: DocumentChartBarIcon, // Quality control
+  WTS: ChartBarIcon, // Analysis
+};
+
+/**
+ * Get the appropriate icon for a workflow type
+ * @param workflowType The type of workflow
+ * @returns The icon component for the workflow
+ */
+export const getWorkflowIcon = (
+  workflowType: string
+): FunctionComponent<SVGProps<SVGSVGElement>> => {
+  const normalizedType = workflowType.toUpperCase().replace(/-/g, '_') as WorkflowType;
+  return WORKFLOW_ICONS[normalizedType] || WrenchIcon; // Default to WrenchIcon if not found
+};

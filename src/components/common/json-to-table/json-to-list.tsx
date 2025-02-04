@@ -24,41 +24,61 @@ const JsonToList: FC<JsonToListProps> = ({
 
   if (isFetchingData) {
     return (
-      <div>
+      <div className='w-full'>
         <div className='px-4 sm:px-0'>
-          <Skeleton className='h-7 w-full' />
+          <Skeleton className='h-7 w-full dark:bg-gray-700' />
         </div>
         <div>
-          <Skeleton count={8} />
+          <Skeleton count={8} className='dark:bg-gray-700' />
         </div>
       </div>
     );
   }
   return (
-    <div>
-      <div className='px-4 pb-2 sm:px-0'>
-        {title && <p className='text-base font-semibold leading-7 text-gray-900'>{title}</p>}
-        {subtitle && <p className='mt-1 max-w-2xl text-sm leading-6 text-gray-500'>{subtitle}</p>}
+    <div className='w-full'>
+      <div className='px-4 pb-4 sm:px-0'>
+        {title && (
+          <h3 className='text-lg font-semibold leading-7 text-gray-900 dark:text-gray-100'>
+            {title}
+          </h3>
+        )}
+        {subtitle && (
+          <p className='mt-1 max-w-2xl text-sm leading-6 text-gray-500 dark:text-gray-400'>
+            {subtitle}
+          </p>
+        )}
       </div>
       <div
         className={classNames(
-          inCard ? 'overflow-hidden border-2 border-black border-opacity-5 sm:rounded-lg' : ''
+          'bg-white dark:bg-gray-800',
+          inCard
+            ? 'overflow-hidden rounded-lg border border-gray-200 shadow-sm dark:border-gray-700'
+            : ''
         )}
       >
-        <div className={classNames('px-4', inCard ? '' : 'sm:px-0 border-t border-gray-100')}>
-          <dl className='divide-y divide-gray-100'>
+        <div
+          className={classNames(
+            'px-4',
+            inCard ? '' : 'border-t border-gray-200 sm:px-0 dark:border-gray-700'
+          )}
+        >
+          <dl className='divide-y divide-gray-200 dark:divide-gray-700'>
             {listData ? (
               Object.entries(listData).map(([key, value], index) => (
-                <div key={index} className='px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-                  <dt className='mt-1 text-sm font-medium leading-6 text-gray-900'>{key}</dt>
-                  <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
+                <div key={index} className='px-4 py-2.5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                  <dt className='text-sm font-medium leading-5 text-gray-900 dark:text-gray-200'>
+                    {key}
+                  </dt>
+                  <dd className='mt-1 text-sm leading-5 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-300'>
                     {value}
                   </dd>
                 </div>
               ))
             ) : (
-              <div className='px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-                <dt className='mt-1 text-sm font-medium leading-6 text-gray-900'>No data found</dt>
+              <div className='px-4 py-2.5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                <dt className='text-sm font-medium leading-5 text-gray-500 dark:text-gray-400'>
+                  No data found
+                </dt>
               </div>
             )}
           </dl>

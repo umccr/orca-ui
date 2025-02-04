@@ -28,12 +28,12 @@ export default function LibraryWorkflowPage() {
           )}
         </div>
 
-        <div className='flex flex-row '>
+        <div className='flex flex-row'>
           <Link
             to={`/runs/workflow?search=${portalRunId}`}
-            className={classNames('text-sm font-medium hover:text-blue-700 mt-4')}
+            className={classNames('mt-4 text-sm font-medium hover:text-blue-700')}
           >
-            <div className='items-center mr-4'>
+            <div className='mr-4 items-center'>
               <DocumentMagnifyingGlassIcon className='h-5 w-5' />
             </div>
           </Link>

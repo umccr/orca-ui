@@ -1,3 +1,6 @@
+/* eslint-disable react-refresh/only-export-components */
+// https://github.com/ArnaudBarre/eslint-plugin-react-refresh/issues/25#issuecomment-1729071347
+
 import { FC, Fragment, ReactNode } from 'react';
 import { classNames } from '@/utils/commonUtils';
 import { ChevronDownIcon, ClipboardDocumentIcon } from '@heroicons/react/24/outline';
@@ -30,6 +33,7 @@ export interface TableProps {
   stickyHeader?: boolean;
   paginationProps?: PaginationProps;
   isFetchingData?: boolean;
+  headerActions?: ReactNode;
 }
 
 const Table: FC<TableProps> = ({
@@ -42,24 +46,32 @@ const Table: FC<TableProps> = ({
   inCard = true,
   stickyHeader = false,
   isFetchingData = false,
+  headerActions,
 }) => {
   return (
     <div>
       <div className='sm:flex sm:items-center'>
         <div className='sm:flex-auto'>
           {tableHeader && (
-            <h1 className='text-base font-semibold leading-7 text-gray-900'>{tableHeader}</h1>
+            <h1 className='text-base font-semibold leading-7 text-gray-900 dark:text-gray-100'>
+              {tableHeader}
+            </h1>
           )}
-          {tableDescription && <p className='mt-2 text-sm text-gray-700'>{tableDescription}</p>}
+          {tableDescription && (
+            <p className='mt-2 text-sm text-gray-700 dark:text-gray-300'>{tableDescription}</p>
+          )}
         </div>
+        {headerActions && <div className='mt-4 sm:mt-0'>{headerActions}</div>}
       </div>
 
-      <div className='pt-2 flow-root'>
-        <div className={classNames(tableData.length > 0 ? ' overflow-x-auto ' : '')}>
+      <div className='flow-root pt-2'>
+        <div className={classNames(tableData.length > 0 ? 'overflow-x-auto' : '')}>
           <div className='inline-block min-w-full align-middle'>
             <div
               className={classNames(
-                inCard ? 'overflow-hidden border-2 border-black border-opacity-5 sm:rounded-lg' : ''
+                inCard
+                  ? 'overflow-hidden border-2 border-gray-500 border-opacity-5 sm:rounded-lg'
+                  : ''
               )}
             >
               <table className='min-w-full'>
@@ -78,8 +90,10 @@ const Table: FC<TableProps> = ({
                             key={`subheader-${index}`}
                             colSpan={group.colSpan}
                             className={classNames(
-                              'px-3 py-3.5 text-center text-sm font-semibold rounded-t-lg',
-                              group.additionalClassName ? group.additionalClassName : ''
+                              'rounded-t-lg px-3 py-3.5 text-center text-sm font-semibold',
+                              'bg-gray-50 dark:bg-gray-800/50 dark:text-gray-200',
+                              'border-b border-gray-200 dark:border-gray-700',
+                              group.additionalClassName
                             )}
                           >
                             {group.label}
@@ -89,7 +103,7 @@ const Table: FC<TableProps> = ({
                     </tr>
                   )}
                 </thead>
-                <thead className={classNames('bg-gray-50')}>
+                <thead className={classNames('bg-gray-100')}>
                   <tr>
                     {columns &&
                       columns.map((column, index) => (
@@ -97,7 +111,12 @@ const Table: FC<TableProps> = ({
                           key={`idx-${index}-${column.accessor}`}
                           scope='col'
                           className={classNames(
-                            'px-3 py-3 text-left text-sm font-semibold text-gray-900',
+                            'px-3 py-3 text-left text-sm font-semibold',
+                            'text-gray-900 dark:bg-gray-800/50 dark:text-gray-200',
+                            'divide-y divide-gray-200 dark:divide-gray-700',
+                            'transition-colors duration-200',
+                            column.onSort &&
+                              '!cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700/50',
                             index == 0 ? 'pl-4 sm:pl-6 lg:pl-8' : '',
                             index == columns.length - 1 ? 'pr-4 sm:pr-6 lg:pr-8' : '',
                             stickyHeader
@@ -115,7 +134,7 @@ const Table: FC<TableProps> = ({
                               <span className='visible ml-2 flex-none rounded text-gray-400'>
                                 <ChevronDownIcon
                                   className={classNames(
-                                    'w-5 h-5 cursor-pointer stroke-gray-500 opacity-100 transition-opacity duration-200',
+                                    'h-5 w-5 cursor-pointer stroke-gray-500 opacity-100 transition-opacity duration-200',
                                     column.sortDirection === 'asc' ? '-rotate-180' : 'rotate-0'
                                   )}
                                 />
@@ -129,8 +148,8 @@ const Table: FC<TableProps> = ({
 
                 <tbody
                   className={classNames(
-                    'relative min-h-10 divide-y divide-gray-200 last:divide-gray-300',
-                    inCard ? 'bg-white' : ' bg-transparent'
+                    'relative divide-y divide-gray-200 last:divide-gray-300 dark:divide-gray-700',
+                    inCard ? 'bg-white dark:bg-gray-900' : 'bg-transparent'
                   )}
                 >
                   {tableData.length > 0 && isFetchingData && (
@@ -145,8 +164,11 @@ const Table: FC<TableProps> = ({
                         <tr
                           key={index}
                           className={classNames(
-                            striped ? 'even:bg-gray-50' : '',
-                            inCard ? 'hover:bg-gray-50' : ' hover:bg-gray-100'
+                            'transition-colors duration-200',
+                            striped ? 'even:bg-gray-50 dark:even:bg-gray-800/50' : '',
+                            inCard
+                              ? 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                              : 'hover:bg-gray-100 dark:hover:bg-gray-800'
                           )}
                         >
                           {columns &&
@@ -154,7 +176,8 @@ const Table: FC<TableProps> = ({
                               <td
                                 key={index}
                                 className={classNames(
-                                  'whitespace-nowrap py-2 px-3 text-sm font-medium text-gray-900',
+                                  'whitespace-nowrap px-3 py-2 text-sm',
+                                  'text-gray-900 dark:text-gray-400',
                                   index == 0 ? 'pl-4 sm:pl-6' : '',
                                   index == columns.length - 1 ? 'pr-4 sm:pr-6' : '',
                                   column.cellClassName ? column.cellClassName : ''
@@ -171,7 +194,13 @@ const Table: FC<TableProps> = ({
                                     : (data[column.accessor] as ReactNode)}
                                   {column.copyable && (
                                     <ClipboardDocumentIcon
-                                      className='w-5 h-5 cursor-pointer stroke-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200'
+                                      className={classNames(
+                                        'h-5 w-5 !cursor-pointer',
+                                        'stroke-gray-600 dark:stroke-gray-400',
+                                        'opacity-0 group-hover:opacity-100',
+                                        'transition-all duration-200',
+                                        'hover:stroke-gray-700 dark:hover:stroke-gray-400'
+                                      )}
                                       onClick={() => {
                                         navigator.clipboard.writeText(
                                           data[column.accessor] as string
@@ -193,7 +222,7 @@ const Table: FC<TableProps> = ({
                           {columns.map((_column, index) => (
                             <td
                               key={index}
-                              className='whitespace-nowrap py-2 px-3 text-sm font-medium text-gray-900'
+                              className='whitespace-nowrap px-3 py-2 text-sm font-medium text-gray-900'
                             >
                               <Skeleton />
                             </td>

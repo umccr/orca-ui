@@ -162,3 +162,7 @@ export const useSequenceRunCommentUpdateModel = createSequenceRunPatchMutationHo
 export const useSequenceRunCommentDeleteModel = createSequenceRunDeleteMutationHook(
   '/api/v1/sequence/{orcabusId}/comment/{id}/soft_delete/'
 );
+
+export const useSequenceRunStatusCountModel = createSequenceRunQueryHook(
+  '/api/v1/sequence/stats/status_counts/'
+);

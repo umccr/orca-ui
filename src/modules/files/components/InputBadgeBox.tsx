@@ -52,20 +52,20 @@ const InputBadgeBox: React.FC<InputBadgeBoxProps> = ({
   };
 
   return (
-    <div className='flex flex-row items-center mt-2'>
-      <div className='w-28 text-sm flex flex-row'>
+    <div className='mt-2 flex flex-row items-center'>
+      <div className='flex w-28 flex-row text-sm'>
         {label}
         {tooltipText && (
-          <Tooltip text={tooltipText} position='right' background='white'>
-            <InformationCircleIcon className='mx-2 h-5 2-5' />
+          <Tooltip text={tooltipText} position='right' background='light'>
+            <InformationCircleIcon className='2-5 mx-2 h-5' />
           </Tooltip>
         )}
       </div>
-      <div className='rounded-lg w-full border py-1 px-1 flex flex-wrap'>
+      <div className='flex w-full flex-wrap rounded-lg border px-1 py-1'>
         {inputState.map((key, index) => (
           <Badge className='mx-1 my-1' key={`key-filter-${index}`} type={badgeType(key)}>
             {key}
-            <div className='pl-2 '>
+            <div className='pl-2'>
               <XMarkIcon />
             </div>
             <div
@@ -81,9 +81,9 @@ const InputBadgeBox: React.FC<InputBadgeBoxProps> = ({
             </div>
           </Badge>
         ))}
-        <span className='min-w-80 flex flex-row flex-grow'>
+        <span className='flex min-w-80 flex-grow flex-row'>
           <input
-            className='flex-grow min-w-60 text-sm px-2 py-2 focus-visible:outline-none border-none'
+            className='min-w-60 flex-grow border-none px-2 py-2 text-sm focus-visible:outline-none'
             onBlur={handleAddInput}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {

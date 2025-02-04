@@ -1,12 +1,15 @@
 import { Link, useLocation } from 'react-router-dom';
 import { classNames } from '@/utils/commonUtils';
-import { FC, useState, ReactNode } from 'react';
+import { FC, useState, ReactNode, FunctionComponent, SVGProps } from 'react';
 import { XMarkIcon } from '@heroicons/react/16/solid';
 import { Bars3Icon } from '@heroicons/react/24/outline';
+import { Tooltip } from '@/components/common/tooltips';
 
 export interface NavigationChildrenItem {
   name: string;
   href: string;
+  icon?: FunctionComponent<SVGProps<SVGSVGElement>>;
+  badge?: number; // For notification counts
   isCurrent?: boolean;
 }
 
@@ -27,63 +30,123 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
   return (
     <div
       className={classNames(
-        'relative flex grow-0 flex-col gap-y-5 overflow-y-auto',
-        isOpen ? 'bg-magpie-light-25 min-w-40' : 'bg-gray-50 min-w-14'
+        'group relative flex h-full flex-col border-r border-gray-200 bg-gray-50 transition-all duration-300 dark:border-gray-700 dark:bg-gray-900',
+        isOpen ? 'w-72' : 'w-16'
       )}
     >
       {isOpen ? (
         <>
-          <button
-            type='button'
-            onClick={() => setIsOpen((p) => !p)}
-            className='absolute right-0 top-0 m-4 mt-6 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2'
-          >
-            <span className='absolute -inset-2.5' />
-            <span className='sr-only'>Close panel</span>
-            <XMarkIcon aria-hidden='true' className='h-6 w-6' />
-          </button>
-          <nav className='flex flex-1 flex-col'>
-            <ul role='list' className='flex flex-1 flex-col space-y-1 px-2'>
-              {navigation.map((item, index) => (
-                <li key={index} className='gap-2'>
-                  {item.title ? (
-                    <div className='pt-6 pb-3 pl-5 pr-6 text-xl font-medium'>{item.title}</div>
-                  ) : (
-                    <div className='pb-3'></div>
-                  )}
+          <div className='absolute right-0 top-0 z-20 p-4'>
+            <button
+              type='button'
+              onClick={() => setIsOpen(false)}
+              className='rounded-lg bg-gray-50 p-1.5 text-gray-400 ring-1 ring-gray-200 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 dark:bg-gray-700 dark:ring-gray-600 dark:hover:bg-gray-600 dark:hover:text-gray-300'
+            >
+              <span className='sr-only'>Close sidebar</span>
+              <XMarkIcon className='h-5 w-5' />
+            </button>
+          </div>
 
-                  {item.children.map((item) => {
-                    const isSelected = item.isCurrent ?? location.pathname.includes(item.href);
+          <nav className='flex-1'>
+            {navigation.map((item, index) => (
+              <div key={index} className='mb-8 last:mb-0'>
+                {item.title && (
+                  <div className='sticky top-0 z-10 bg-gray-50 px-6 py-4 dark:bg-gray-800'>
+                    <h2 className='text-xl font-semibold text-gray-900 dark:text-white'>
+                      {item.title}
+                    </h2>
+                  </div>
+                )}
+
+                <div className='space-y-2 px-3 py-2'>
+                  {item.children.map((child) => {
+                    const isSelected = child.isCurrent ?? location.pathname.includes(child.href);
                     return (
-                      <div key={item.name} className='py-1'>
-                        <Link
-                          to={item.href}
-                          className={classNames(
-                            'group flex py-2 px-10 text-sm rounded-md leading-6 font-normal text-magpie-dark-75 hover:bg-magpie-light-50',
-                            isSelected ? 'bg-magpie-light-50' : ''
-                          )}
-                        >
-                          {item.name}
-                        </Link>
-                      </div>
+                      <Link
+                        key={child.name}
+                        to={child.href}
+                        className={classNames(
+                          'group flex items-center gap-x-3 rounded-md px-4 py-2 text-sm font-medium transition-colors duration-150',
+                          isSelected
+                            ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/50 dark:text-blue-200'
+                            : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700/50 dark:hover:text-white'
+                        )}
+                      >
+                        {child.icon && (
+                          <child.icon
+                            className={classNames(
+                              'h-5 w-5 shrink-0',
+                              isSelected
+                                ? 'text-blue-600 dark:text-blue-200'
+                                : 'text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-300'
+                            )}
+                          />
+                        )}
+                        <span className='flex-1'>{child.name}</span>
+                        {child.badge && (
+                          <span className='ml-auto inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-blue-100 px-1.5 text-xs font-medium text-blue-600 dark:bg-blue-900/50 dark:text-blue-200'>
+                            {child.badge}
+                          </span>
+                        )}
+                      </Link>
                     );
                   })}
-                </li>
-              ))}
-            </ul>
+                </div>
+              </div>
+            ))}
           </nav>
 
-          {footer && footer}
+          {footer && (
+            <div className='sticky bottom-0 border-t border-gray-200 bg-white px-3 py-3 dark:border-gray-700 dark:bg-gray-800'>
+              {footer}
+            </div>
+          )}
         </>
       ) : (
-        <button
-          onClick={() => setIsOpen((p) => !p)}
-          className='h-full hover:bg-magpie-light-25 z-10'
-        >
-          <div className='absolute right-0 top-0 m-4 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2'>
-            <Bars3Icon aria-hidden='true' className='h-6 w-6' />
+        <>
+          <div className='sticky top-0 z-10 flex h-16 items-center justify-center border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800'>
+            <button
+              onClick={() => setIsOpen(true)}
+              className='rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 dark:hover:bg-gray-700 dark:hover:text-gray-300'
+            >
+              <span className='sr-only'>Open sidebar</span>
+              <Bars3Icon className='h-5 w-5' aria-hidden='true' />
+            </button>
           </div>
-        </button>
+
+          <nav className='flex-1 space-y-1 px-2 py-4'>
+            {navigation.map((item, index) => (
+              <div key={index}>
+                {item.children.map((child) => (
+                  <Link
+                    key={child.name}
+                    to={child.href}
+                    className={classNames(
+                      'group flex items-center justify-center rounded-md p-2 transition-colors duration-150',
+                      location.pathname.includes(child.href)
+                        ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/50 dark:text-blue-200'
+                        : 'text-gray-400 hover:bg-gray-50 hover:text-gray-500 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:hover:text-gray-300'
+                    )}
+                  >
+                    <Tooltip text={child.name} position='right'>
+                      {child.icon ? (
+                        <child.icon className='h-5 w-5' />
+                      ) : (
+                        <div className='flex h-5 w-5 items-center justify-center rounded-md bg-gray-100 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-300'>
+                          {child.name.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <span className='sr-only'>{child.name}</span>
+                    </Tooltip>
+                  </Link>
+                ))}
+                {index < navigation.length - 1 && (
+                  <div className='my-2 h-px bg-gray-200 dark:bg-gray-700' />
+                )}
+              </div>
+            ))}
+          </nav>
+        </>
       )}
     </div>
   );

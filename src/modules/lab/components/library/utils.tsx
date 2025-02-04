@@ -46,7 +46,7 @@ export const getLibraryTableColumn = ({
               <Link
                 to={`/lab/library/${lib.libraryOrcabusId}/overview`}
                 className={classNames(
-                  'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+                  'ml-2 text-sm font-medium capitalize text-blue-500 hover:text-blue-700'
                 )}
               >
                 {lib.libraryId}

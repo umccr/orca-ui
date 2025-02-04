@@ -27,3 +27,6 @@ deploy-dev:
 	@aws lambda invoke \
     --function-name CodeBuildEnvConfigLambdaBeta \
     response.json
+
+storybook:
+	@yarn run storybook

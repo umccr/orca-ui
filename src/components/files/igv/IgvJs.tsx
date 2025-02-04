@@ -68,8 +68,8 @@ export const IgvViewer = ({ s3ObjectId, bucket, s3Key }: Props) => {
   }, []);
 
   return (
-    <div className='w-full h-full flex flex-col'>
-      <div className='w-full flex flex-row items-center	justify-between mb-2'>
+    <div className='flex h-full w-full flex-col'>
+      <div className='mb-2 flex w-full flex-row items-center justify-between'>
         <IgvDesktopButton s3ObjectId={s3ObjectId} bucket={bucket} s3Key={s3Key} />
         {isLoadingInitIgv && (
           <div className='flex flex-row items-center'>

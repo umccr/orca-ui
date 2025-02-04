@@ -43,12 +43,12 @@ export default function DisplayResult({ validationResponse, onClose }: DisplayRe
   function DisplayFile({ strFile, filename }: { strFile: string; filename: string }) {
     return (
       <>
-        <pre className='overflow-auto p-4 bg-gray-100' style={{ maxHeight: '350px' }}>
+        <pre className='overflow-auto bg-gray-100 p-4' style={{ maxHeight: '350px' }}>
           {strFile}
         </pre>
-        <div className='grid mt-2'>
+        <div className='mt-2 grid'>
           <button
-            className='border border-current text-gray-700 py-2 px-4 rounded hover:bg-gray-200'
+            className='rounded border border-current px-4 py-2 text-gray-700 hover:bg-gray-200'
             onClick={() => download({ filename, content: strFile })}
           >
             Save as file
@@ -67,8 +67,8 @@ export default function DisplayResult({ validationResponse, onClose }: DisplayRe
   }
 
   return (
-    <div className={`relative p-4 rounded ${alertVariant}`}>
-      <div className='font-bold text-lg'>
+    <div className={`relative rounded p-4 ${alertVariant}`}>
+      <div className='text-lg font-bold'>
         Check Result: <b>{validationResponse.check_status}</b>
       </div>
 
@@ -85,7 +85,7 @@ export default function DisplayResult({ validationResponse, onClose }: DisplayRe
             ) : (
               <div className='italic'>None</div>
             )}
-            <div className='mt-3 text-sm font-thin font-serif'>
+            <div className='mt-3 font-serif text-sm font-thin'>
               *If you want to see more logging, try changing logger option to INFO or DEBUG
             </div>
           </div>
@@ -102,7 +102,7 @@ export default function DisplayResult({ validationResponse, onClose }: DisplayRe
       {onClose && (
         <button
           onClick={onClose}
-          className='absolute top-4 right-4 text-green-800 hover:text-green-600'
+          className='absolute right-4 top-4 text-green-800 hover:text-green-600'
         >
           <XMarkIcon className='h-5 w-5' />
         </button>

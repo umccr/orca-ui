@@ -38,8 +38,8 @@ export const PortalRunIdDropdown = ({
   }
 
   return (
-    <div className='flex '>
-      <div className='flex flex-row font-medium flex-wrap content-center'>
+    <div className='flex'>
+      <div className='flex flex-row flex-wrap content-center font-medium'>
         <Dropdown
           floatingLabel='Portal Run Id'
           value={portalRunId}
@@ -52,7 +52,7 @@ export const PortalRunIdDropdown = ({
       {/* In case portalRunId return is beyond the first page, at least some warning as we do not have
       pagination implemented */}
       {workflowRun?.links.next ? (
-        <div className='p-4 text-slate-400 text-xs italic'>
+        <div className='p-4 text-xs italic text-slate-400'>
           *Some portal run id may not be listed.
         </div>
       ) : undefined}

@@ -2,6 +2,7 @@ import { FC, useState, useEffect, ReactNode } from 'react';
 import { classNames } from '@/utils/commonUtils';
 import { ChatBubbleBottomCenterTextIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 // import { Badge } from '@/components/common/badges';
+import { dayjs } from '@/utils/dayjs';
 
 export interface TimelineEvent {
   id: string;
@@ -12,6 +13,14 @@ export interface TimelineEvent {
   iconBackground?: string;
   payloadId?: string;
   eventType?: 'stateChange' | 'comment';
+
+  title?: string;
+  subtitle?: string;
+  tags?: string[];
+  user?: {
+    name: string;
+    avatar?: string;
+  };
 }
 
 export interface TimelineProps {
@@ -53,52 +62,89 @@ const Timeline: FC<TimelineProps> = ({ timeline, handldEventClick = undefined, s
               {eventIdx !== timeline.length - 1 ? (
                 <span
                   aria-hidden='true'
-                  className='absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200'
+                  className='absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200 dark:bg-gray-700'
                 />
               ) : null}
 
               <div
-                className={classNames('relative flex space-x-3', 'cursor-pointer')}
+                className={classNames(
+                  'relative flex space-x-3',
+                  'cursor-pointer rounded-lg p-0 transition-all duration-200'
+                )}
                 onClick={() => handleTimelineEventClick(event)}
               >
                 <div>
                   <div
                     className={classNames(
-                      event.iconBackground,
-                      'flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white',
-                      selectedEventId === event.id ? ' ring-2 ring-indigo-500' : ''
+                      event.iconBackground || 'bg-gray-100 dark:bg-gray-700',
+                      'flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white dark:ring-gray-900',
+                      selectedEventId === event.id
+                        ? 'ring-2 ring-indigo-500 dark:ring-indigo-400'
+                        : ''
                     )}
                   >
                     {event.eventType ? (
                       eventIcon(event.eventType)
                     ) : (
-                      <CheckCircleIcon aria-hidden='true' className='h-5 w-5 text-green-500' />
+                      <CheckCircleIcon
+                        aria-hidden='true'
+                        className='h-5 w-5 text-green-500 dark:text-green-400'
+                      />
                     )}
-                    {/* {event.icon} */}
-                    {/* <p className='text-sm text-gray-500 px-4 py-2'>{event.content} </p> */}
-                  </div>{' '}
+                  </div>
                 </div>
-                <div>
-                  <div className='flex flex-col min-w-0 flex-1 justify-between py-1 pr-4'>
-                    <div>
-                      {/* <Badge
-                      status={event.content}
-                      className={
-                        selectedEventPayloadId === event.payloadId ? 'ring-2 ring-indigo-500' : ''
-                      }
-                    > */}
-                      {event.content}
 
-                      {/* <div className='text-sm text-gray-500'>{event.content} </div> */}
+                <div className='flex min-w-0 flex-1 flex-col'>
+                  {/* Header Section */}
+                  <div className='flex items-center justify-between space-x-4'>
+                    <div className='flex items-center space-x-2'>
+                      {event.user?.avatar && (
+                        <img
+                          src={event.user.avatar}
+                          alt={event.user.name}
+                          className='h-6 w-6 rounded-full'
+                        />
+                      )}
+                      <div>
+                        {event.title && (
+                          <p className='text-sm font-medium text-gray-900 dark:text-gray-100'>
+                            {event.title}
+                          </p>
+                        )}
+                        <p className='text-sm text-gray-500 dark:text-gray-400'>
+                          {event.user?.name && `${event.user.name} • `}
+                          <time dateTime={event.datetime} className='font-mono'>
+                            {dayjs(event.datetime).format('MMM DD, YYYY hh:mm A')}
+                          </time>
+                        </p>
+                      </div>
                     </div>
-                    <div className='whitespace-nowrap text-left text-sm text-gray-500 '>
-                      <time dateTime={event.datetime}>{event.datetime}</time>
-                    </div>
+                  </div>
+
+                  {/* Content Section */}
+                  <div className='mt-2 space-y-3'>
+                    <div className='text-sm text-gray-700 dark:text-gray-300'>{event.content}</div>
+
+                    {/* Tags */}
+                    {event.tags && event.tags.length > 0 && (
+                      <div className='flex flex-wrap gap-2'>
+                        {event.tags.map((tag, index) => (
+                          <span
+                            key={index}
+                            className='inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800 dark:bg-gray-700 dark:text-gray-200'
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Comment Section */}
                     {event.comment && (
-                      <div className='flex-auto rounded-md py-1 px-2 ring-1 ring-inset ring-gray-200'>
-                        <div className='whitespace-nowrap text-left text-sm text-gray-500 max-w-sm text-wrap'>
+                      <div className='rounded-md bg-gray-50 p-3 ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700'>
+                        <p className='whitespace-pre-wrap text-sm text-gray-600 dark:text-gray-300'>
                           {event.comment}
-                        </div>
+                        </p>
                       </div>
                     )}
                   </div>

@@ -6,7 +6,7 @@ import { DetailedErrorBoundary } from '@/components/common/error';
 
 const FilesLayout = ({ children }: PropsWithChildren) => {
   return (
-    <div className='w-full h-full sm:px-4 lg:px-8 lg:py-6 p-4 !rounded-none'>
+    <div className='h-full w-full !rounded-none p-4 sm:px-4 lg:px-8 lg:py-6'>
       <LocationBreadcrumb />
       <Suspense fallback={<SpinnerWithText text='Loading ...' />}>
         <DetailedErrorBoundary errorTitle='Unable to load files page'>

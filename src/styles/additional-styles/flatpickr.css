@@ -18,7 +18,7 @@
 
 .flatpickr-calendar {
   border: inherit;
-  @apply bg-white dark:bg-slate-800 rounded shadow-lg border border-slate-200 dark:border-slate-700 left-1/2;
+  @apply left-1/2 rounded border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800;
   margin-left: calc(calc(var(--daysWidth) + calc(var(--calendarPadding) * 2)) * 0.5 * -1);
   padding: var(--calendarPadding);
   width: calc(var(--daysWidth) + calc(var(--calendarPadding) * 2));
@@ -32,7 +32,7 @@
 }
 
 .flatpickr-right.flatpickr-calendar {
-  @apply right-0 left-auto;
+  @apply left-auto right-0;
   margin-left: 0;
 }
 
@@ -60,7 +60,7 @@
 }
 
 .flatpickr-day {
-  @apply bg-slate-50 dark:bg-slate-700/20 text-sm font-medium text-slate-600 dark:text-slate-100;
+  @apply bg-slate-50 text-sm font-medium text-slate-600 dark:bg-slate-700/20 dark:text-slate-100;
   max-width: var(--daySize);
   height: var(--daySize);
   line-height: var(--daySize);
@@ -205,7 +205,7 @@
 }
 
 .flatpickr-current-month span.cur-month {
-  @apply font-medium m-0;
+  @apply m-0 font-medium;
 }
 
 .flatpickr-current-month span.cur-month:hover {
@@ -226,7 +226,7 @@
 }
 
 span.flatpickr-weekday {
-  @apply text-slate-400 dark:text-slate-500 font-medium text-xs;
+  @apply text-xs font-medium text-slate-400 dark:text-slate-500;
 }
 
 .flatpickr-calendar.arrowTop::before,

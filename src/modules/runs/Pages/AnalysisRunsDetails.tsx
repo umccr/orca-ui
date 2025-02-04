@@ -14,7 +14,7 @@ const AnalysisRunsDetails = () => {
     },
   ];
   return (
-    <div className='flex flex-col gap-4 h-full w-full'>
+    <div className='flex h-full w-full flex-col gap-4'>
       <ContentTabs tabs={tabs} />
     </div>
   );

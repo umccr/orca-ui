@@ -18,7 +18,7 @@ export default function SyncPage() {
       </div>
 
       {syncType && (
-        <div className='pt-6 border-t-2 max-w-screen-sm'>
+        <div className='max-w-screen-sm border-t-2 pt-6'>
           <DetailedErrorBoundary>
             {syncType === 'gsheet' ? (
               <GsheetTrigger />
@@ -50,12 +50,12 @@ const SyncSelector = ({
     onChange: () => void;
     label: string;
   }) => (
-    <div onClick={onChange} className='flex items-center cursor-pointer	my-4'>
+    <div onClick={onChange} className='my-4 flex cursor-pointer items-center'>
       <input
         readOnly
         checked={checked}
         type='radio'
-        className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500'
+        className='h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-blue-500'
       />
       <label className='ms-2 text-sm'>{label}</label>
     </div>
@@ -84,13 +84,13 @@ const SuccessTriggerWrapper = ({
   children: React.ReactNode;
   onClose?: () => void;
 }) => (
-  <div className='flex flex-col items-center bg-green-100 text-green-800 h-18 p-4 relative'>
+  <div className='h-18 relative flex flex-col items-center bg-green-100 p-4 text-green-800'>
     {children}
-    <div className='italic mt-2 text-xs'>*sync may take up to 15 minutes</div>
+    <div className='mt-2 text-xs italic'>*sync may take up to 15 minutes</div>
     {onClose && (
       <button
         onClick={onClose}
-        className='absolute top-2 right-2 text-green-800 hover:text-green-600'
+        className='absolute right-2 top-2 text-green-800 hover:text-green-600'
       >
         <XMarkIcon className='h-5 w-5' />
       </button>
@@ -133,11 +133,11 @@ const GsheetTrigger = () => {
   return (
     <>
       <div>Year</div>
-      <div className='text-xs font-light mb-2'>The Google sheet tab</div>
+      <div className='mb-2 text-xs font-light'>The Google sheet tab</div>
       <select
         value={yearSelected}
         onChange={(e) => setYearSelected(parseInt(e.target.value))}
-        className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'
+        className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
       >
         {yearsArray.map((year) => (
           <option key={year} value={year}>
@@ -152,7 +152,7 @@ const GsheetTrigger = () => {
         }}
         type='green'
         size='sm'
-        className='w-full mt-6 justify-center'
+        className='mt-6 w-full justify-center'
       >
         <ArrowPathIcon className='h-5 w-5' />
         SYNC
@@ -196,11 +196,11 @@ const PresignedCsvTrigger = () => {
       <div className='mb-4'>CSV Presigned URL</div>
 
       {/* URL input */}
-      <div className='text-xs font-medium mt-4'>Presigned URL of the CSV file.</div>
-      <div className='text-xs font-light mb-2'>
+      <div className='mt-4 text-xs font-medium'>Presigned URL of the CSV file.</div>
+      <div className='mb-2 text-xs font-light'>
         Format:{' '}
         <a
-          className='hover:text-blue-700 text-blue-500'
+          className='text-blue-500 hover:text-blue-700'
           href='https://github.com/umccr/orcabus/blob/main/lib/workload/stateless/stacks/metadata-manager/README.md#custom-csv-file-loader'
         >
           GitHub
@@ -210,16 +210,16 @@ const PresignedCsvTrigger = () => {
       <input
         value={urlInput}
         onChange={(e) => setUrlInput(e.target.value)}
-        className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'
+        className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
       />
 
       {/* Reason input */}
-      <div className='text-xs font-medium mt-4'>Reason</div>
-      <div className='text-xs font-light mb-2'>Optional reason or comment for the sync </div>
+      <div className='mt-4 text-xs font-medium'>Reason</div>
+      <div className='mb-2 text-xs font-light'>Optional reason or comment for the sync </div>
       <input
         value={reason}
         onChange={(e) => setReason(e.target.value)}
-        className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'
+        className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
       />
 
       <Button
@@ -228,7 +228,7 @@ const PresignedCsvTrigger = () => {
         }}
         type='green'
         size='sm'
-        className='w-full mt-6 justify-center'
+        className='mt-6 w-full justify-center'
       >
         <ArrowPathIcon className='h-5 w-5' />
         SYNC

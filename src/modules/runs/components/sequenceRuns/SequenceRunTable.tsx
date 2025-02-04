@@ -26,6 +26,9 @@ const SequenceRunTable = () => {
         page: getQueryParams().page || 1,
         rowsPerPage: getPaginationParams().rowsPerPage || DEFAULT_PAGE_SIZE,
         search: getQueryParams().search || undefined,
+        status: getQueryParams().sequenceRunStatus || undefined,
+        start_time: getQueryParams().startDate || undefined,
+        end_time: getQueryParams().endDate || undefined,
       },
     },
   });
@@ -51,7 +54,7 @@ const SequenceRunTable = () => {
             <div>
               <div
                 className={classNames(
-                  'cursor-pointer flex flex-row items-center ml-2 text-sm uppercase font-medium hover:text-blue-700 text-blue-500'
+                  'ml-2 flex cursor-pointer flex-row items-center text-sm font-medium uppercase text-blue-500 hover:text-blue-700'
                 )}
                 onClick={() => {
                   setSelectedSequenceRun(sequenceRunRowData as SequenceRunModel);
@@ -63,6 +66,17 @@ const SequenceRunTable = () => {
             </div>
           );
         }
+      },
+    },
+    {
+      header: 'Sequencing',
+      accessor: 'status',
+      cell: (status: unknown) => {
+        return (
+          <Badge status={(status as string) || 'UNKNOWN'}>
+            {(status || 'UNKNOWN') as ReactNode}
+          </Badge>
+        );
       },
     },
     {
@@ -85,17 +99,6 @@ const SequenceRunTable = () => {
         } else {
           return <div>{dayjs(endTime as string).format('YYYY-MM-DD HH:mm:ss')}</div>;
         }
-      },
-    },
-    {
-      header: 'Sequencing',
-      accessor: 'status',
-      cell: (status: unknown) => {
-        return (
-          <Badge status={(status as string) || 'UNKNOWN'}>
-            {(status || 'UNKNOWN') as ReactNode}
-          </Badge>
-        );
       },
     },
     // {
@@ -157,6 +160,7 @@ const SequenceRunTable = () => {
     //   },
     // },
   ];
+
   return (
     <div>
       <Table

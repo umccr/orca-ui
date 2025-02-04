@@ -31,7 +31,7 @@ const Toggle: FC<ToggleProps> = ({ label, description, onChange, checked }) => {
       <Switch
         checked={isChecked}
         onChange={onChange}
-        className='group  inline-flex h-5 w-10 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-1 data-[checked]:bg-indigo-600'
+        className='group inline-flex h-5 w-10 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-1 data-[checked]:bg-indigo-600'
       >
         <span
           aria-hidden='true'

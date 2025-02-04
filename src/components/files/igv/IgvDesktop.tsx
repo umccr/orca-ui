@@ -73,14 +73,14 @@ export const IgvDesktopButton = ({ s3ObjectId, bucket, s3Key, className }: Props
         <Spinner />
       ) : (
         <Button
-          className='!p-2 !m-0 '
+          className='!m-0 !p-2'
           size='md'
           onClick={() => {
             setIsEnabled(true);
           }}
           type='light'
         >
-          <ComputerDesktopIcon className='size-4 ' />
+          <ComputerDesktopIcon className='size-4' />
           Add track to IGV desktop
         </Button>
       )}
