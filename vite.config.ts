@@ -14,7 +14,13 @@ export default defineConfig({
     },
   },
   build: {
+    outDir: 'dist',
+    sourcemap: true,
+    emptyOutDir: true,
     rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+      },
       output: {
         manualChunks: {
           'aws-amplify': ['aws-amplify'],

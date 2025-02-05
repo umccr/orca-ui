@@ -12,7 +12,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { AppURLs } from './appURLs';
 import { SequenceIcon } from '@/components/icons/SequenceIcon';
-import { AnalysisIcon } from '@/components/icons/AnalysisIcon';
+// import { AnalysisIcon } from '@/components/icons/AnalysisIcon';
 import { WorkflowIcon } from '@/components/icons/WorkflowIcon';
 // import { ReportIcon } from '@/components/icons/ReportIcon';
 
@@ -55,7 +55,8 @@ const runsModuleNavigation = [
     title: 'Runs',
     children: [
       { name: 'Sequence', href: AppURLs.RunsSequence, icon: SequenceIcon },
-      { name: 'Analysis', href: AppURLs.RunsAnalysis, icon: AnalysisIcon },
+      // umcomment when analysis is ready
+      // { name: 'Analysis', href: AppURLs.RunsAnalysis, icon: AnalysisIcon },
       { name: 'Workflow', href: AppURLs.RunsWorkflow, icon: WorkflowIcon },
     ],
   },
