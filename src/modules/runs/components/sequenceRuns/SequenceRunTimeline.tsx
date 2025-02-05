@@ -7,12 +7,12 @@ import {
 } from '@/api/sequenceRun';
 import { useState, useEffect, useMemo } from 'react';
 import { dayjs } from '@/utils/dayjs';
-import Badge, { getBadgeType } from '@/components/common/badges/Badge';
+import Badge from '@/components/common/badges/Badge';
 import { Tooltip } from '@/components/common/tooltips';
 import { WrenchIcon, TrashIcon, ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
 import { getUsername } from '@/utils/commonUtils';
 import { Timeline } from '@/components/common/timelines';
-import { statusBackgroundColor } from '@/components/common/badges/StatusBadge';
+import { getBadgeStatusType, statusBackgroundColor } from '@/utils/statusUtils';
 import { BackdropWithText } from '@/components/common/backdrop';
 import { Button } from '@/components/common/buttons';
 import { PlusIcon } from '@heroicons/react/20/solid';
@@ -66,7 +66,7 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
       datetime: dayjs(state.timestamp).format('YYYY-MM-DD HH:mm'),
       comment: state.comment || '',
       status: state.status,
-      iconBackground: statusBackgroundColor(getBadgeType(state.status)),
+      iconBackground: statusBackgroundColor(getBadgeStatusType(state.status)),
       payloadId: '',
       eventType: 'stateChange' as const,
     }));

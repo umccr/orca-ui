@@ -31,7 +31,7 @@ import { Dialog } from '@/components/common/dialogs';
 import { Textarea } from '@headlessui/react';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
 import { Badge } from '@/components/common/badges';
-import { getBadgeType, statusBackgroundColor } from '@/components/common/badges';
+import { getBadgeStatusType, statusBackgroundColor } from '@/utils/statusUtils';
 import { dayjs } from '@/utils/dayjs';
 import { classNames, getUsername } from '@/utils/commonUtils';
 import { BackdropWithText } from '@/components/common/backdrop';
@@ -147,7 +147,7 @@ const WorkflowRunTimeline = () => {
             datetime: state.timestamp,
             comment: state.comment || '',
             status: state.status,
-            iconBackground: statusBackgroundColor(getBadgeType(state.status)),
+            iconBackground: statusBackgroundColor(getBadgeStatusType(state.status)),
             payloadId: state?.payload || '',
             eventType: 'stateChange' as const,
             // user: {

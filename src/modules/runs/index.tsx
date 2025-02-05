@@ -1,16 +1,13 @@
-/* eslint-disable react-refresh/only-export-components */
-// https://github.com/ArnaudBarre/eslint-plugin-react-refresh/issues/25#issuecomment-1729071347
-
 import { lazy, Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import RunsModuleLayout from '@/components/layouts/runs/RunsModuleLayout';
 import { RouteObject } from 'react-router-dom';
 
-const SequenceRunPage = lazy(() => import('@/modules/runs/pages/SequenceRuns'));
-const WorkflowRunPage = lazy(() => import('@/modules/runs/pages/WorkflowRuns'));
-const WorkflowRunDetailsPage = lazy(() => import('@/modules/runs/pages/WorkflowRunsDetails'));
-const AnalysisRunPage = lazy(() => import('@/modules/runs/pages/AnalysisRuns'));
-const AnalysisRunDetailsPage = lazy(() => import('@/modules/runs/pages/AnalysisRunsDetails'));
+const SequenceRunPage = lazy(() => import('./pages/SequenceRuns'));
+const WorkflowRunPage = lazy(() => import('./pages/WorkflowRuns'));
+const WorkflowRunDetailsPage = lazy(() => import('./pages/WorkflowRunsDetails'));
+const AnalysisRunPage = lazy(() => import('./pages/AnalysisRuns'));
+const AnalysisRunDetailsPage = lazy(() => import('./pages/AnalysisRunsDetails'));
 // const RunsPage = lazy(() => import('@/modules/runs/pages/RunsPage'));
 
 export const Router: RouteObject = {

@@ -1,6 +1,7 @@
 import { RequireAtLeastOne } from 'type-fest';
 import { ReactNode } from 'react';
 import { classNames } from '@/utils/commonUtils';
+import { getBadgeStatusType } from '@/utils/statusUtils';
 export interface BadgePropsInterface {
   children: ReactNode;
   type: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'abort' | 'unknown' | 'runing';
@@ -13,7 +14,7 @@ type BadgeProps = RequireAtLeastOne<BadgePropsInterface, 'type' | 'status'>;
 const Badge = ({ children, type = 'primary', status, className }: BadgeProps) => {
   const baseStyles = 'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ';
 
-  const badgetype = status ? getBadgeType(status) : type;
+  const badgetype = status ? getBadgeStatusType(status) : type;
   const colorStyles: { [key: string]: string } = {
     primary: 'text-indigo-700 bg-indigo-100 ring-1 ring-inset ring-indigo-700/10 ',
     secondary: 'text-sky-700 bg-sky-100 ring-1 ring-inset ring-sky-700/10 ',
@@ -28,33 +29,6 @@ const Badge = ({ children, type = 'primary', status, className }: BadgeProps) =>
   return (
     <span className={classNames(baseStyles, colorStyles[badgetype], className)}>{children}</span>
   );
-};
-
-export const getBadgeType = (status: string) => {
-  switch (status.toUpperCase()) {
-    case 'REQUESTED':
-    case 'QUEUED':
-      return 'primary';
-
-    case 'INITIALIZING':
-    case 'PREPARING_INPUTS':
-    case 'IN PROGRESS':
-    case 'READY':
-    case 'GENERATING_OUTPUTS':
-      return 'running';
-
-    case 'ABORTING':
-      return 'abort';
-    case 'ABORTED':
-      return 'abort';
-
-    case 'FAILED':
-      return 'fail';
-    case 'SUCCEEDED':
-      return 'success';
-    default:
-      return 'unknown';
-  }
 };
 
 export default Badge;

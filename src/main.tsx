@@ -14,7 +14,13 @@ import './styles/additional-styles/flatpickr.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Router>
+    <Router
+      // remove when react router v7 is integrated
+      future={{
+        v7_relativeSplatPath: true,
+        v7_startTransition: true,
+      }}
+    >
       <App />
     </Router>
   </StrictMode>
