@@ -158,7 +158,7 @@ export class PipelineStack extends Stack {
         phases: {
           install: {
             'runtime-versions': {
-              nodejs: 20,
+              nodejs: 22,
             },
             commands: ['node -v', 'corepack enable', 'yarn --version', 'yarn install --immutable'],
           },
