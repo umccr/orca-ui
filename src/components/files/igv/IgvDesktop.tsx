@@ -7,8 +7,20 @@ import { ComputerDesktopIcon } from '@heroicons/react/24/outline';
 import { useQuery } from '@tanstack/react-query';
 import toaster from '@/components/common/toaster';
 
-type Props = { s3ObjectId: string; bucket: string; s3Key: string; className?: string };
-export const IgvDesktopButton = ({ s3ObjectId, bucket, s3Key, className }: Props) => {
+type Props = {
+  s3ObjectId: string;
+  bucket: string;
+  s3Key: string;
+  className?: string;
+  isSimpleRoundedButton?: boolean;
+};
+export const IgvDesktopButton = ({
+  s3ObjectId,
+  bucket,
+  s3Key,
+  className,
+  isSimpleRoundedButton,
+}: Props) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const idxKey = createIdxFileKey(s3Key);
 
@@ -70,7 +82,21 @@ export const IgvDesktopButton = ({ s3ObjectId, bucket, s3Key, className }: Props
   return (
     <div className={className}>
       {isAnyLoading ? (
-        <Spinner />
+        <div className='!m-0 !p-2'>
+          <Spinner size='small' />
+        </div>
+      ) : isSimpleRoundedButton ? (
+        <Button
+          className='!m-0 bg-transparent !p-2 !shadow-none focus:ring-0 focus:ring-offset-0'
+          rounded
+          size='md'
+          type='gray'
+          onClick={() => {
+            setIsEnabled(true);
+          }}
+        >
+          <ComputerDesktopIcon className='size-4' />
+        </Button>
       ) : (
         <Button
           className='!m-0 !p-2'
@@ -78,7 +104,6 @@ export const IgvDesktopButton = ({ s3ObjectId, bucket, s3Key, className }: Props
           onClick={() => {
             setIsEnabled(true);
           }}
-          type='light'
         >
           <ComputerDesktopIcon className='size-4' />
           Add track to IGV desktop

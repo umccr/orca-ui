@@ -74,7 +74,7 @@ export const IgvViewer = ({ s3ObjectId, bucket, s3Key }: Props) => {
         {isLoadingInitIgv && (
           <div className='flex flex-row items-center'>
             <SpinnerWithText className='h-fit w-fit' />
-            <div className='ml-4'>Preparing IGV Web</div>
+            <div className='ml-4 whitespace-nowrap'>Loading IGV Web ...</div>
           </div>
         )}
 

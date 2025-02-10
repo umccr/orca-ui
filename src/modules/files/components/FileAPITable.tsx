@@ -13,10 +13,11 @@ import { FilePreviewDrawer } from './FilePreviewDrawer';
 import { Dialog } from '@/components/common/dialogs';
 import { JsonToTable } from '@/components/common/json-to-table';
 import { FileDownloadButton } from './FileDownloadButton';
-import { DOWNLOADABLE_FILETYPE_LIST } from '@/components/files';
+import { DOWNLOADABLE_FILETYPE_LIST, IGV_FILETYPE_LIST } from '@/components/files';
 import { getFilenameFromKey } from '@/utils/commonUtils';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { Tooltip } from '@/components/common/tooltips';
+import { IgvDesktopButton } from '@/components/files/igv/IgvDesktop';
 
 export const FileAPITable = ({
   additionalQueryParam,
@@ -171,14 +172,23 @@ export const getTableColumn = ({
       header: '',
       accessor: 'fileRecord',
       cell: (data: unknown) => {
-        const { key: s3Key } = data as S3Record;
+        const { key: s3Key, s3ObjectId, bucket } = data as S3Record;
 
         const splitPath = s3Key.split('.');
         const filetype = splitPath[splitPath.length - 1].toLowerCase();
         const isDownloadable = DOWNLOADABLE_FILETYPE_LIST.includes(filetype);
-
+        const isIgvFile = !!IGV_FILETYPE_LIST.find((f) => s3Key.endsWith(f));
+        console.log(isIgvFile);
         return (
           <div className='flex flex-row justify-end'>
+            {isIgvFile && (
+              <IgvDesktopButton
+                s3ObjectId={s3ObjectId}
+                bucket={bucket}
+                s3Key={s3Key}
+                isSimpleRoundedButton
+              />
+            )}
             {isDownloadable && <FileDownloadButton s3Record={data as S3Record} />}
             <FilePreviewDrawer s3Record={data as S3Record} />
           </div>
