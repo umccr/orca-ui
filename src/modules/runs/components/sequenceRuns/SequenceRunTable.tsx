@@ -2,7 +2,7 @@ import { useSequenceRunListModel, SequenceRunModel } from '@/api/sequenceRun';
 import { Table, TableData } from '@/components/tables';
 import { Column } from '@/components/tables/Table';
 import { classNames } from '@/utils/commonUtils';
-import { useState, ReactNode } from 'react';
+import { useState, ReactNode, FC } from 'react';
 // import { Link } from 'react-router-dom';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
@@ -10,6 +10,35 @@ import { dayjs } from '@/utils/dayjs';
 // import { ClipboardIcon } from '@heroicons/react/24/outline';
 import { Badge } from '@/components/common/badges';
 import SequenceRunDetailsDrawer from './SequenceRunDetailsDrawer';
+import { IconDropdown } from '@/components/common/dropdowns';
+import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
+import { useNavigate } from 'react-router-dom';
+
+const SequenceRunActionButton: FC<{ instrumentRunId: string }> = ({ instrumentRunId }) => {
+  const navigate = useNavigate();
+  const iconDropdownItems = [
+    {
+      label: 'View MultiQC report',
+      onClick: () => {
+        // Encode the URL parameters properly
+        const params = new URLSearchParams({
+          key: `*/${instrumentRunId}/multiqc_report.html`,
+          keyOp: 'and',
+          bucketOp: 'or',
+        });
+        navigate(`/files?${params.toString()}`);
+      },
+    },
+  ];
+  return (
+    <IconDropdown
+      className='size-6 items-center justify-center'
+      items={iconDropdownItems}
+      BtnIcon={EllipsisVerticalIcon}
+    />
+  );
+};
+
 const SequenceRunTable = () => {
   const [selectedSequenceRun, setSelectedSequenceRun] = useState<SequenceRunModel | null>(null);
 
@@ -86,7 +115,7 @@ const SequenceRunTable = () => {
         if (!startTime) {
           return <div>-</div>;
         } else {
-          return <div>{dayjs(startTime as string).format('YYYY-MM-DD HH:mm:ss')}</div>;
+          return <div>{startTime ? dayjs(startTime as string).format('lll') : '-'}</div>;
         }
       },
     },
@@ -97,8 +126,15 @@ const SequenceRunTable = () => {
         if (!endTime) {
           return <div>-</div>;
         } else {
-          return <div>{dayjs(endTime as string).format('YYYY-MM-DD HH:mm:ss')}</div>;
+          return <div>{endTime ? dayjs(endTime as string).format('lll') : '-'}</div>;
         }
+      },
+    },
+    {
+      header: '',
+      accessor: 'instrumentRunId',
+      cell: (instrumentRunId: unknown) => {
+        return <SequenceRunActionButton instrumentRunId={instrumentRunId as string} />;
       },
     },
     // {
