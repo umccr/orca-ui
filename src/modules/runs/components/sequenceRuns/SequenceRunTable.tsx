@@ -22,7 +22,7 @@ const SequenceRunActionButton: FC<{ instrumentRunId: string }> = ({ instrumentRu
       onClick: () => {
         // Encode the URL parameters properly
         const params = new URLSearchParams({
-          key: `*/${instrumentRunId}/multiqc_report.html`,
+          key: `*${instrumentRunId}_multiqc_report.html`,
           keyOp: 'and',
           bucketOp: 'or',
         });
