@@ -91,7 +91,7 @@ const Table: FC<TableProps> = ({
                             colSpan={group.colSpan}
                             className={classNames(
                               'rounded-t-lg px-3 py-3.5 text-center text-sm font-semibold',
-                              'bg-gray-50 dark:bg-gray-800/50 dark:text-gray-200',
+                              'dark:bg-gray-800/50 dark:text-gray-200',
                               'border-b border-gray-200 dark:border-gray-700',
                               group.additionalClassName
                             )}
