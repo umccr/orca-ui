@@ -1,8 +1,9 @@
 import { useParams } from 'react-router-dom';
-import { LibraryAnalysisReportTable } from '../../components/library/LibraryAnalysisReportTable';
+import { Sidebar } from '@/components/common/sidebar';
 import { useSuspenseMetadataDetailLibraryModel } from '@/api/metadata';
+import { LibraryTableDetails } from '@/modules/lab/components/library/LibraryTableDetails';
 
-export default function LibraryOverviewPage() {
+export const LibraryDetailBar = () => {
   const { libraryOrcabusId } = useParams();
   if (!libraryOrcabusId) {
     throw new Error('No library id in URL path!');
@@ -19,9 +20,12 @@ export default function LibraryOverviewPage() {
   if (!libraryDetailRes) {
     throw new Error('No library Id found in metadata!');
   }
+
   return (
-    <div className='w-full'>
-      <LibraryAnalysisReportTable libraryDetail={libraryDetailRes} />
-    </div>
+    <Sidebar position='right'>
+      <div className='mt-20'>
+        <LibraryTableDetails libraryDetail={libraryDetailRes} />
+      </div>
+    </Sidebar>
   );
-}
+};

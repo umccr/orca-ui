@@ -2,10 +2,10 @@
 import React from 'react';
 
 const JsonToTable = ({ data }: { data: Record<string, any> }) => {
-  const keyClassName = 'font-medium px-4 py-3 text-sm text-gray-700 dark:text-gray-300';
+  const keyClassName = 'font-bold px-4 py-3 text-sm text-gray-700 dark:text-gray-300';
   const valueClassName = 'px-4 py-3 text-sm text-gray-600 dark:text-gray-400';
   const rowClassName =
-    'border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors';
+    'border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors';
 
   const renderValue = (value: any) => {
     if (!value) {

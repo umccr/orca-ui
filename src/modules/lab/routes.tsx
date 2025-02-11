@@ -12,6 +12,9 @@ const SyncPage = lazy(() => import('@/modules/lab/pages/Sync'));
 const LibraryOverviewPage = lazy(() => import('@/modules/lab/pages/library/LibraryOverview'));
 const LibraryWorkflowPage = lazy(() => import('@/modules/lab/pages/library/LibraryWorkflow'));
 const LibraryHistoryPage = lazy(() => import('@/modules/lab/pages/library/LibraryHistory'));
+const LibraryWorkflowRunsPage = lazy(
+  () => import('@/modules/lab/pages/library/LibraryWorkflowRuns')
+);
 
 export const Router: RouteObject = {
   path: 'lab',
@@ -65,6 +68,10 @@ export const Router: RouteObject = {
             {
               path: 'overview',
               element: <LibraryOverviewPage />,
+            },
+            {
+              path: 'workflow-runs',
+              element: <LibraryWorkflowRunsPage />,
             },
             {
               path: 'history',
