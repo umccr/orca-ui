@@ -12,7 +12,8 @@ import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
 import { SpinnerWithText } from '@/components/common/spinner';
 import { Link } from 'react-router-dom';
 import { classNames } from '@/utils/commonUtils';
-import { DocumentMagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { Badge } from '@/components/common/badges';
 
 const WORKFLOW_ANALYSIS_TABLE = {
   umccrise: {
@@ -142,7 +143,7 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
 
   return (
     <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
-      <div className='py-3 text-lg font-bold'>Workflow Results</div>
+      <div className='py-3 text-lg font-bold'>Overview Highlights</div>
       {libraryDetail.type === 'WGS' ? (
         <>
           <DetailedErrorBoundary errorTitle={`Unable to load 'umccrise' report files`}>
@@ -252,30 +253,43 @@ export const AnalysisTable = ({
     fileRecord: item,
   }));
 
+  const isMultipleRuns = workflowRunResults.length > 1;
+
   return (
     <>
       <GroupedTable
         tableHeader={
           <div className='flex flex-row items-center justify-between'>
-            <div>{workflowType}</div>
             <div className='flex flex-row'>
+              <div>{workflowType}</div>
               <Link
                 to={`/runs/workflow?search=${portalRunId}`}
-                className={classNames('mt-4 text-sm font-medium hover:text-blue-700')}
+                className={classNames(
+                  'flex items-center text-sm font-medium text-blue-500 underline hover:text-blue-700'
+                )}
               >
-                <div className='mr-4 items-center'>
-                  <DocumentMagnifyingGlassIcon className='h-5 w-5' />
+                <div className='ml-6 items-center'>
+                  {portalRunId}
+                  {/* <DocumentMagnifyingGlassIcon className='h-5 w-5' /> */}
                 </div>
               </Link>
-              <Dropdown
-                floatingLabel='Portal Run Id'
-                value={portalRunId}
-                items={workflowRunResults.map((i) => ({
-                  label: i.portalRunId,
-                  onClick: () => setSelectedPortalRunId(i.portalRunId),
-                }))}
-              />
             </div>
+            {isMultipleRuns && (
+              <div className='flex flex-row'>
+                <Badge type='warning' className='mr-2'>
+                  <ExclamationTriangleIcon className='mr-2 h-5 w-5' />
+                  Multiple runs
+                </Badge>
+                <Dropdown
+                  floatingLabel='Portal Run Id'
+                  value={portalRunId}
+                  items={workflowRunResults.map((i) => ({
+                    label: i.portalRunId,
+                    onClick: () => setSelectedPortalRunId(i.portalRunId),
+                  }))}
+                />
+              </div>
+            )}
           </div>
         }
         striped={false}

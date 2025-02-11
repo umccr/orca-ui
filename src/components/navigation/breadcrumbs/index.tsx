@@ -3,14 +3,6 @@ import { classNames } from '@/utils/commonUtils';
 import { FC } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-// export type BreadcrumbProps = {
-//   pages: {
-//     name: string;
-//     href: string;
-//     current: boolean;
-//   }[];
-// };
-
 const LocationBreadcrumb: FC = () => {
   // const { pages } = props;
 

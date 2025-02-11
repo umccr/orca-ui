@@ -3,6 +3,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useSuspenseWorkflowModel } from '@/api/workflow';
 import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
 import { HomeIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { WorkflowIcon } from '@/components/icons/WorkflowIcon';
 // import { getWorkflowIcon } from '@/utils/workflows';
 
 export const LibrarySideNavBar = () => {
@@ -37,6 +38,11 @@ export const LibrarySideNavBar = () => {
               name: 'Overview',
               href: `${baseHref}/overview`,
               icon: HomeIcon,
+            },
+            {
+              name: 'Workflow Runs',
+              href: `${baseHref}/workflow-runs`,
+              icon: WorkflowIcon,
             },
             {
               name: 'History',
