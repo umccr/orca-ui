@@ -4,6 +4,7 @@ import { FC, useState, ReactNode, FunctionComponent, SVGProps } from 'react';
 import { XMarkIcon } from '@heroicons/react/16/solid';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import { Tooltip } from '@/components/common/tooltips';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 export interface NavigationChildrenItem {
   name: string;
@@ -21,11 +22,22 @@ export interface NavigationItem {
 export interface ModuleNavbarProps {
   navigation: NavigationItem[];
   footer?: ReactNode;
+  preferenceStorageKey?: string;
 }
 
-const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
+const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer, preferenceStorageKey }) => {
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpenNavbar, setIsOpenNavbar] = useLocalStorage(
+    preferenceStorageKey ?? 'isOpenNavbar',
+    true
+  );
+
+  const [isOpen, setIsOpen] = useState(isOpenNavbar);
+
+  const toggleIsOpenNavbar = () => {
+    setIsOpen(!isOpenNavbar);
+    setIsOpenNavbar(!isOpenNavbar);
+  };
 
   return (
     <div
@@ -39,7 +51,7 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
           <div className='absolute right-0 top-0 z-20 p-4'>
             <button
               type='button'
-              onClick={() => setIsOpen(false)}
+              onClick={toggleIsOpenNavbar}
               className='rounded-lg bg-gray-50 p-1.5 text-gray-400 ring-1 ring-gray-200 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 dark:bg-gray-700 dark:ring-gray-600 dark:hover:bg-gray-600 dark:hover:text-gray-300'
             >
               <span className='sr-only'>Close sidebar</span>
@@ -106,7 +118,7 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer }) => {
         <>
           <div className='sticky top-0 z-10 flex h-16 items-center justify-center border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800'>
             <button
-              onClick={() => setIsOpen(true)}
+              onClick={toggleIsOpenNavbar}
               className='rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 dark:hover:bg-gray-700 dark:hover:text-gray-300'
             >
               <span className='sr-only'>Open sidebar</span>

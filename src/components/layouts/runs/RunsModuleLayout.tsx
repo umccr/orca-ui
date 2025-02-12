@@ -10,7 +10,10 @@ const RunsModuleLayout = ({ children }: PropsWithChildren) => {
     <Suspense fallback={<SpinnerWithText text='Loading Runs page ...' />}>
       <div className='flex h-full flex-row'>
         <div className='flex h-full'>
-          <ModuleNavbar navigation={runsModuleNavigation} />
+          <ModuleNavbar
+            navigation={runsModuleNavigation}
+            preferenceStorageKey='runs-module-navbar'
+          />
         </div>
         <div className='flex min-w-[450px] flex-1 flex-col overflow-auto overflow-x-auto px-8 py-4'>
           <LocationBreadcrumb />

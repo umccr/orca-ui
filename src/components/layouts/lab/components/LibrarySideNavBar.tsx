@@ -83,6 +83,7 @@ export const LibrarySideNavBar = () => {
           </div>
         ) : undefined
       }
+      preferenceStorageKey='library-module-navbar'
     />
   );
 };
