@@ -1,45 +1,32 @@
 import { Dropdown } from '@/components/common/dropdowns';
-import { useSuspenseWorkflowRunListModel } from '@/api/workflow';
-import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { WorkflowRunPaginatedModel } from '@/api/workflow';
+import { useNavigate } from 'react-router-dom';
+import { Badge } from '@/components/common/badges';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 export const PortalRunIdDropdown = ({
-  libraryOrcabusId,
   portalRunId,
-  workflowType,
+  workflowRunRes: workflowRun,
 }: {
   libraryOrcabusId: string;
   workflowType: string;
-  portalRunId?: string;
+  portalRunId: string;
+  workflowRunRes: WorkflowRunPaginatedModel;
 }) => {
   const navigate = useNavigate();
-  const workflowRun = useSuspenseWorkflowRunListModel({
-    params: {
-      query: {
-        libraries__orcabusId: libraryOrcabusId,
-        workflow__workflowName: workflowType,
-        ordering: '-portalRunId',
-        rowsPerPage: DEFAULT_NON_PAGINATE_PAGE_SIZE,
-      },
-    },
-  }).data;
 
   const workflowRunResults = workflowRun?.results;
   if (!workflowRunResults?.length) {
     throw new Error('No workflow run found!');
   }
-  if (!portalRunId) {
-    return <Navigate to={`${workflowRunResults[0].portalRunId}`} />;
-  }
-
-  // If portalRunId is not found in the list of workflowRun, it is invalid link
-  if (!workflowRunResults.find((i) => i.portalRunId === portalRunId)) {
-    throw new Error('Invalid link!');
-  }
 
   return (
     <div className='flex'>
       <div className='flex flex-row flex-wrap content-center font-medium'>
+        <Badge type='warning' className='mr-2'>
+          <ExclamationTriangleIcon className='mr-2 h-5 w-5' />
+          <p className='mt-0.5'>Multiple runs</p>
+        </Badge>
         <Dropdown
           floatingLabel='Portal Run Id'
           value={portalRunId}

@@ -168,7 +168,7 @@ const WorkflowRunDetailsTable = () => {
           } else {
             return (
               <Link
-                to={`/lab/library/${orcabusId}`}
+                to={`/lab/library/${orcabusId}/overview`}
                 className={classNames('text-sm font-medium text-blue-500 hover:text-blue-700')}
               >
                 <div>{orcabusId as string}</div>

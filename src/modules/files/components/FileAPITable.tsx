@@ -118,7 +118,7 @@ export const SearchBox = ({
             />
           </div>
           {searchInfoText && (
-            <Tooltip text={searchInfoText} position='left' background='light'>
+            <Tooltip text={searchInfoText} position='left' background='light' className='w-96'>
               <InformationCircleIcon className='2-5 ml-3 h-5' />
             </Tooltip>
           )}

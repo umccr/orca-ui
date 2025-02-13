@@ -12,6 +12,7 @@ export const LibraryTableDetails: FC<LibraryTableDetailsProps> = ({ libraryDetai
   return (
     <div>
       <JsonToTable
+        className='shadow-none'
         data={{
           'Library Id': library.libraryId ?? '-',
           'Subject Id': (

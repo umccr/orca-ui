@@ -10,10 +10,11 @@ import { Column, TableData } from '@/components/tables/GroupedRowTable';
 import { Dropdown } from '@/components/common/dropdowns';
 import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
 import { SpinnerWithText } from '@/components/common/spinner';
-import { Link } from 'react-router-dom';
-import { classNames } from '@/utils/commonUtils';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { ExclamationTriangleIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Badge } from '@/components/common/badges';
+import { Tooltip } from '@/components/common/tooltips';
+import { JsonToTable } from '@/components/common/json-to-table';
+import { WorkflowDialogDetail } from './WorkflowDialogDetail';
 
 const WORKFLOW_ANALYSIS_TABLE = {
   umccrise: {
@@ -141,9 +142,31 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
    * ctDNA library type && "ctTSO" assay => "cttsov2" workflow pdf/html reports
    */
 
+  const libraryDisplayNotes = {
+    '"WGS" type': ['UMCCRISE', 'tumor-normal'],
+    '"WTS" type': ['wts', 'rnasum'],
+    '"ctDNA" type, "ctTSO" assay': ['cttsov2'],
+  };
+
   return (
     <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
-      <div className='py-3 text-lg font-bold'>Overview Highlights</div>
+      <div className='mb-3 flex flex-row items-center py-3'>
+        <div className='text-lg font-bold'>Overview Highlights</div>
+        <Tooltip
+          text={
+            <div>
+              <h1 className='font-bold'>What runs to expect here?</h1>
+              <JsonToTable data={libraryDisplayNotes} className='shadow-none' />
+            </div>
+          }
+          position='bottom'
+          background='light'
+          size='large'
+          className='w-96'
+        >
+          <InformationCircleIcon className='2-5 mx-2 h-5' />
+        </Tooltip>
+      </div>
       {libraryDetail.type === 'WGS' ? (
         <>
           <DetailedErrorBoundary errorTitle={`Unable to load 'umccrise' report files`}>
@@ -246,12 +269,20 @@ export const AnalysisTable = ({
     throw new Error('No report found!');
   }
 
-  const tableData = filesApiData.results.map((item) => ({
-    key: item.key,
-    lastModifiedDate: item.lastModifiedDate,
-    size: item.size,
-    fileRecord: item,
-  }));
+  /**
+   * FIX ME
+   * Filter out files that are not intended for output (e.g., files under the 'work/' folder)
+   * and map the remaining files to the desired table data format.
+   * Ideally, if the file manager API supports regex, we should switch to that approach.
+   */
+  const tableData = filesApiData.results
+    .filter(({ key }) => !key.includes('/work/'))
+    .map((item) => ({
+      key: item.key,
+      lastModifiedDate: item.lastModifiedDate,
+      size: item.size,
+      fileRecord: item,
+    }));
 
   const isMultipleRuns = workflowRunResults.length > 1;
 
@@ -259,35 +290,35 @@ export const AnalysisTable = ({
     <>
       <GroupedTable
         tableHeader={
-          <div className='flex flex-row items-center justify-between'>
-            <div className='flex flex-row'>
-              <div>{workflowType}</div>
-              <Link
-                to={`/runs/workflow?search=${portalRunId}`}
-                className={classNames(
-                  'flex items-center text-sm font-medium text-blue-500 underline hover:text-blue-700'
-                )}
-              >
-                <div className='ml-6 items-center'>
-                  {portalRunId}
-                  {/* <DocumentMagnifyingGlassIcon className='h-5 w-5' /> */}
-                </div>
-              </Link>
-            </div>
-            {isMultipleRuns && (
+          <div className='flex flex-col'>
+            <div className='flex flex-row items-center justify-between'>
               <div className='flex flex-row'>
-                <Badge type='warning' className='mr-2'>
-                  <ExclamationTriangleIcon className='mr-2 h-5 w-5' />
-                  Multiple runs
-                </Badge>
-                <Dropdown
-                  floatingLabel='Portal Run Id'
-                  value={portalRunId}
-                  items={workflowRunResults.map((i) => ({
-                    label: i.portalRunId,
-                    onClick: () => setSelectedPortalRunId(i.portalRunId),
-                  }))}
+                <div>{workflowType}</div>
+                <WorkflowDialogDetail
+                  portalRunId={portalRunId}
+                  workflowDetail={workflowRunResults[0]}
                 />
+              </div>
+              {isMultipleRuns && (
+                <div className='flex flex-row'>
+                  <Badge type='warning' className='mr-2'>
+                    <ExclamationTriangleIcon className='mr-2 h-5 w-5' />
+                    <p className='mt-0.5'>Multiple runs</p>
+                  </Badge>
+                  <Dropdown
+                    floatingLabel='Portal Run Id'
+                    value={portalRunId}
+                    items={workflowRunResults.map((i) => ({
+                      label: i.portalRunId,
+                      onClick: () => setSelectedPortalRunId(i.portalRunId),
+                    }))}
+                  />
+                </div>
+              )}
+            </div>
+            {filesApiData.links?.next && (
+              <div className='pt-4 text-xs italic text-slate-400'>
+                *Due to pagination, some files may not be shown here.
               </div>
             )}
           </div>
@@ -296,11 +327,6 @@ export const AnalysisTable = ({
         columns={getTableColumn({ isHideKeyPrefix: true }) as Column[]}
         tableData={getTableDataFormat(tableData)}
       />
-      {filesApiData.results.length > DEFAULT_NON_PAGINATE_PAGE_SIZE && (
-        <div className='p-4 text-xs italic text-slate-400'>
-          {`*Only show ${DEFAULT_NON_PAGINATE_PAGE_SIZE} files per portalRunId.`}
-        </div>
-      )}
     </>
   );
 };
