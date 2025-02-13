@@ -44,7 +44,7 @@ const SimpleDialog: FC<DialogProps> = ({
         <div className='flex min-h-full items-center justify-center'>
           <DialogPanel
             transition
-            className='relative w-full max-w-[calc(100vw-2rem)] transform rounded-xl bg-white shadow-xl ring-1 ring-gray-900/5 transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95 md:max-w-2xl lg:max-w-5xl dark:bg-gray-800 dark:ring-white/5'
+            className='relative w-full max-w-[calc(100vw-2rem)] transform rounded-xl bg-white shadow-xl ring-1 ring-gray-900/5 transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95 md:max-w-2xl lg:max-w-7xl dark:bg-gray-800 dark:ring-white/5'
           >
             {/* Close button */}
             <div className='absolute right-4 top-4'>
