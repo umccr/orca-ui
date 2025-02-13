@@ -145,7 +145,7 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
   const libraryDisplayNotes = {
     '"WGS" type': ['UMCCRISE', 'tumor-normal'],
     '"WTS" type': ['wts', 'rnasum'],
-    '"ctDNA" type and "ctTSO" assay': ['cttsov2'],
+    '"ctDNA" type, "ctTSO" assay': ['cttsov2'],
   };
 
   return (
