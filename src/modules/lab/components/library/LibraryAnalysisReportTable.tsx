@@ -10,12 +10,11 @@ import { Column, TableData } from '@/components/tables/GroupedRowTable';
 import { Dropdown } from '@/components/common/dropdowns';
 import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
 import { SpinnerWithText } from '@/components/common/spinner';
-import { Link } from 'react-router-dom';
-import { classNames } from '@/utils/commonUtils';
 import { ExclamationTriangleIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Badge } from '@/components/common/badges';
 import { Tooltip } from '@/components/common/tooltips';
 import { JsonToTable } from '@/components/common/json-to-table';
+import { WorkflowDialogDetail } from './WorkflowDialogDetail';
 
 const WORKFLOW_ANALYSIS_TABLE = {
   umccrise: {
@@ -144,9 +143,9 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
    */
 
   const libraryDisplayNotes = {
-    '"WGS" library type': ['UMCCRISE', 'tumor-normal'],
-    '"WTS" library type': ['wts', 'rnasum'],
-    '"ctDNA" library type && "ctTSO" assay': ['cttsov2'],
+    '"WGS" type': ['UMCCRISE', 'tumor-normal'],
+    '"WTS" type': ['wts', 'rnasum'],
+    '"ctDNA" type and "ctTSO" assay': ['cttsov2'],
   };
 
   return (
@@ -286,17 +285,10 @@ export const AnalysisTable = ({
           <div className='flex flex-row items-center justify-between'>
             <div className='flex flex-row'>
               <div>{workflowType}</div>
-              <Link
-                to={`/runs/workflow?search=${portalRunId}`}
-                className={classNames(
-                  'flex items-center text-sm font-medium text-blue-500 underline hover:text-blue-700'
-                )}
-              >
-                <div className='ml-6 items-center'>
-                  {portalRunId}
-                  {/* <DocumentMagnifyingGlassIcon className='h-5 w-5' /> */}
-                </div>
-              </Link>
+              <WorkflowDialogDetail
+                portalRunId={portalRunId}
+                workflowDetail={workflowRunResults[0]}
+              />
             </div>
             {isMultipleRuns && (
               <div className='flex flex-row'>

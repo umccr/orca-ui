@@ -12,7 +12,7 @@ export interface DialogButtonProps {
 
 export interface DialogProps {
   TitleIcon?: FunctionComponent<SVGProps<SVGSVGElement>>;
-  title: string;
+  title: string | ReactNode;
   description?: string;
   content?: string | ReactNode;
   open: boolean;
