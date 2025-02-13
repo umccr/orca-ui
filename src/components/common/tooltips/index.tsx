@@ -10,6 +10,7 @@ interface TooltipProps {
   isShow?: boolean;
   children: ReactNode;
   delay?: number;
+  className?: string;
 }
 
 const Tooltip: FC<TooltipProps> = ({
@@ -20,6 +21,7 @@ const Tooltip: FC<TooltipProps> = ({
   children,
   isShow = true,
   delay = 200,
+  className,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isShowTooltips, setIsShowTooltips] = useState(true);
@@ -69,7 +71,7 @@ const Tooltip: FC<TooltipProps> = ({
       case 'small':
         return 'text-xs py-1.5 px-2.5 max-w-72';
       case 'large':
-        return 'text-sm py-3 px-4 max-w-72';
+        return 'text-sm py-3 px-4 max-w-96';
       default:
         return 'text-sm py-2 px-3 max-w-72';
     }
@@ -123,7 +125,8 @@ const Tooltip: FC<TooltipProps> = ({
             'whitespace-normal break-words rounded-md shadow-lg',
             getPositionClasses(),
             getVariantClasses(),
-            getSizeClasses()
+            getSizeClasses(),
+            className
           )}
         >
           {text}

@@ -3,7 +3,9 @@ import { classNames } from '@/utils/commonUtils';
 import { FC } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-const LocationBreadcrumb: FC = () => {
+type LocationBreadcrumbProps = { className?: string };
+
+const LocationBreadcrumb: FC<LocationBreadcrumbProps> = ({ className }) => {
   // const { pages } = props;
 
   let fullPath = useLocation().pathname;
@@ -25,7 +27,10 @@ const LocationBreadcrumb: FC = () => {
   const currentPage = splitPath[splitPath.length - 1];
   return (
     <nav
-      className='mb-6 flex border-b border-gray-200 pb-3 transition-colors duration-200 dark:border-gray-700'
+      className={classNames(
+        'mb-6 flex border-b border-gray-200 pb-3 transition-colors duration-200 dark:border-gray-700',
+        className
+      )}
       aria-label='Breadcrumb'
     >
       <ol

@@ -15,7 +15,7 @@ const LibraryLayout = ({ children }: PropsWithChildren) => {
           <LibrarySideNavBar />
         </div>
         <div className='flex min-w-[450px] flex-1 flex-col overflow-auto overflow-x-auto px-8 py-4'>
-          <LocationBreadcrumb />
+          <LocationBreadcrumb className='mb-4' />
 
           {/* <LibraryBreadCrumb /> */}
           <Suspense fallback={<SpinnerWithText text='Loading library page' />}>

@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { classNames } from '@/utils/commonUtils';
 import React from 'react';
 
-const JsonToTable = ({ data }: { data: Record<string, any> }) => {
-  const keyClassName = 'font-bold px-4 py-3 text-sm text-gray-700 dark:text-gray-300';
-  const valueClassName = 'px-4 py-3 text-sm text-gray-600 dark:text-gray-400';
+const JsonToTable = ({ data, className }: { data: Record<string, any>; className?: string }) => {
+  const keyClassName =
+    'font-bold px-4 py-3 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap';
+  const valueClassName = 'px-4 py-3 text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap';
   const rowClassName =
-    'border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors';
+    'border-none dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors';
 
   const renderValue = (value: any) => {
     if (!value) {
@@ -36,7 +38,12 @@ const JsonToTable = ({ data }: { data: Record<string, any> }) => {
   };
 
   return (
-    <table className='w-full overflow-hidden rounded-lg border border-gray-200 shadow-sm dark:border-gray-700'>
+    <table
+      className={classNames(
+        'w-full overflow-hidden rounded-lg border border-gray-200 shadow-sm dark:border-gray-700',
+        className
+      )}
+    >
       <tbody className='divide-y divide-gray-100 bg-white dark:divide-gray-700 dark:bg-gray-900'>
         {Object.entries(data).map(([key, value]) => (
           <tr className={rowClassName} key={key}>

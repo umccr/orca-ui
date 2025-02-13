@@ -12,8 +12,10 @@ import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
 import { SpinnerWithText } from '@/components/common/spinner';
 import { Link } from 'react-router-dom';
 import { classNames } from '@/utils/commonUtils';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { ExclamationTriangleIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Badge } from '@/components/common/badges';
+import { Tooltip } from '@/components/common/tooltips';
+import { JsonToTable } from '@/components/common/json-to-table';
 
 const WORKFLOW_ANALYSIS_TABLE = {
   umccrise: {
@@ -141,9 +143,31 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
    * ctDNA library type && "ctTSO" assay => "cttsov2" workflow pdf/html reports
    */
 
+  const libraryDisplayNotes = {
+    '"WGS" library type': ['UMCCRISE', 'tumor-normal'],
+    '"WTS" library type': ['wts', 'rnasum'],
+    '"ctDNA" library type && "ctTSO" assay': ['cttsov2'],
+  };
+
   return (
     <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
-      <div className='py-3 text-lg font-bold'>Overview Highlights</div>
+      <div className='mb-3 flex flex-row items-center py-3'>
+        <div className='text-lg font-bold'>Overview Highlights</div>
+        <Tooltip
+          text={
+            <div>
+              <h1 className='font-bold'>What runs to expect here?</h1>
+              <JsonToTable data={libraryDisplayNotes} className='shadow-none' />
+            </div>
+          }
+          position='bottom'
+          background='light'
+          size='large'
+          className='w-96'
+        >
+          <InformationCircleIcon className='2-5 mx-2 h-5' />
+        </Tooltip>
+      </div>
       {libraryDetail.type === 'WGS' ? (
         <>
           <DetailedErrorBoundary errorTitle={`Unable to load 'umccrise' report files`}>
@@ -278,7 +302,7 @@ export const AnalysisTable = ({
               <div className='flex flex-row'>
                 <Badge type='warning' className='mr-2'>
                   <ExclamationTriangleIcon className='mr-2 h-5 w-5' />
-                  Multiple runs
+                  <p className='mt-0.5'>Multiple runs</p>
                 </Badge>
                 <Dropdown
                   floatingLabel='Portal Run Id'
