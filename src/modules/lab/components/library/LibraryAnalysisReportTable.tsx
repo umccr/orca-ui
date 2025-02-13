@@ -269,12 +269,20 @@ export const AnalysisTable = ({
     throw new Error('No report found!');
   }
 
-  const tableData = filesApiData.results.map((item) => ({
-    key: item.key,
-    lastModifiedDate: item.lastModifiedDate,
-    size: item.size,
-    fileRecord: item,
-  }));
+  /**
+   * FIX ME
+   * Filter out files that are not intended for output (e.g., files under the 'work/' folder)
+   * and map the remaining files to the desired table data format.
+   * Ideally, if the file manager API supports regex, we should switch to that approach.
+   */
+  const tableData = filesApiData.results
+    .filter(({ key }) => !key.includes('/work/'))
+    .map((item) => ({
+      key: item.key,
+      lastModifiedDate: item.lastModifiedDate,
+      size: item.size,
+      fileRecord: item,
+    }));
 
   const isMultipleRuns = workflowRunResults.length > 1;
 
@@ -282,28 +290,35 @@ export const AnalysisTable = ({
     <>
       <GroupedTable
         tableHeader={
-          <div className='flex flex-row items-center justify-between'>
-            <div className='flex flex-row'>
-              <div>{workflowType}</div>
-              <WorkflowDialogDetail
-                portalRunId={portalRunId}
-                workflowDetail={workflowRunResults[0]}
-              />
-            </div>
-            {isMultipleRuns && (
+          <div className='flex flex-col'>
+            <div className='flex flex-row items-center justify-between'>
               <div className='flex flex-row'>
-                <Badge type='warning' className='mr-2'>
-                  <ExclamationTriangleIcon className='mr-2 h-5 w-5' />
-                  <p className='mt-0.5'>Multiple runs</p>
-                </Badge>
-                <Dropdown
-                  floatingLabel='Portal Run Id'
-                  value={portalRunId}
-                  items={workflowRunResults.map((i) => ({
-                    label: i.portalRunId,
-                    onClick: () => setSelectedPortalRunId(i.portalRunId),
-                  }))}
+                <div>{workflowType}</div>
+                <WorkflowDialogDetail
+                  portalRunId={portalRunId}
+                  workflowDetail={workflowRunResults[0]}
                 />
+              </div>
+              {isMultipleRuns && (
+                <div className='flex flex-row'>
+                  <Badge type='warning' className='mr-2'>
+                    <ExclamationTriangleIcon className='mr-2 h-5 w-5' />
+                    <p className='mt-0.5'>Multiple runs</p>
+                  </Badge>
+                  <Dropdown
+                    floatingLabel='Portal Run Id'
+                    value={portalRunId}
+                    items={workflowRunResults.map((i) => ({
+                      label: i.portalRunId,
+                      onClick: () => setSelectedPortalRunId(i.portalRunId),
+                    }))}
+                  />
+                </div>
+              )}
+            </div>
+            {filesApiData.links?.next && (
+              <div className='pt-4 text-xs italic text-slate-400'>
+                *Due to pagination, some files may not be shown here.
               </div>
             )}
           </div>
@@ -312,11 +327,6 @@ export const AnalysisTable = ({
         columns={getTableColumn({ isHideKeyPrefix: true }) as Column[]}
         tableData={getTableDataFormat(tableData)}
       />
-      {filesApiData.results.length > DEFAULT_NON_PAGINATE_PAGE_SIZE && (
-        <div className='p-4 text-xs italic text-slate-400'>
-          {`*Only show ${DEFAULT_NON_PAGINATE_PAGE_SIZE} files per portalRunId.`}
-        </div>
-      )}
     </>
   );
 };

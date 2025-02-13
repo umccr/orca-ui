@@ -64,7 +64,7 @@ const GroupedTable: FC<GroupedTableProps> = ({
                           key={index}
                           scope='col'
                           className={classNames(
-                            'px-3 py-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-200',
+                            'px-3 py-2 text-left text-sm font-semibold text-gray-900 dark:text-gray-200',
                             index === 0 ? 'pl-4 sm:pl-6 lg:pl-8' : '',
                             index === columns.length - 1 ? 'pr-4 sm:pr-6 lg:pr-8' : '',
                             stickyHeader
@@ -84,7 +84,7 @@ const GroupedTable: FC<GroupedTableProps> = ({
                         <th
                           scope='colgroup'
                           colSpan={columns.length}
-                          className='bg-gray-50 py-3 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 dark:bg-gray-800 dark:text-gray-200'
+                          className='bg-gray-50 py-2 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 dark:bg-gray-800 dark:text-gray-200'
                         >
                           {data.groupTitle}
                         </th>
@@ -105,7 +105,7 @@ const GroupedTable: FC<GroupedTableProps> = ({
                               <td
                                 key={index}
                                 className={classNames(
-                                  'whitespace-nowrap px-3 py-4 text-sm text-gray-900 dark:text-gray-200',
+                                  'whitespace-nowrap px-3 py-2 text-sm text-gray-900 dark:text-gray-200',
                                   index === 0 ? 'pl-4 sm:pl-6' : '',
                                   index === columns.length - 1 ? 'pr-4 sm:pr-6' : ''
                                 )}
