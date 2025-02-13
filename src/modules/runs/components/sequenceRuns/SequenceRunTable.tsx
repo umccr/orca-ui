@@ -89,6 +89,7 @@ const SequenceRunTable = () => {
           return <div>-</div>;
         } else {
           return <div>{startTime ? dayjs(startTime as string).format('lll') : '-'}</div>;
+          return <div>{startTime ? dayjs(startTime as string).format('lll') : '-'}</div>;
         }
       },
     },
@@ -99,6 +100,7 @@ const SequenceRunTable = () => {
         if (!endTime) {
           return <div>-</div>;
         } else {
+          return <div>{endTime ? dayjs(endTime as string).format('lll') : '-'}</div>;
           return <div>{endTime ? dayjs(endTime as string).format('lll') : '-'}</div>;
         }
       },
