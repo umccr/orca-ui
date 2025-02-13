@@ -6,6 +6,7 @@ interface ButtonItemProps {
   subLabel?: string;
   onClick: () => void;
 }
+
 interface ButtonGroupProps {
   buttonItems: ButtonItemProps[];
   selectedItemLabel: string | null;
@@ -18,31 +19,51 @@ const ButtonGroup: FC<ButtonGroupProps> = ({ buttonItems, selectedItemLabel }) =
     if (selectItemLabel !== selectedItemLabel) setSelectItemLabel(selectedItemLabel);
   }, [selectItemLabel, selectedItemLabel]);
 
-  const baseClassName =
-    'inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-3 py-1 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 shadow-sm dark:bg-slate-800 text-slate-500 dark:text-slate-400 duration-150 ease-in-out';
+  const baseClassName = classNames(
+    'inline-flex items-center justify-center',
+    'px-3.5 py-1.5',
+    'text-sm font-medium leading-5',
+    'rounded-full',
+    'border border-slate-200 dark:border-slate-700',
+    'bg-white dark:bg-slate-800',
+    'text-slate-600 dark:text-slate-300', // Darker text for better contrast
+    'transition-all duration-200 ease-in-out', // Smoother transition
+    'hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900', // Enhanced hover state
+    'dark:hover:bg-slate-700 dark:hover:border-slate-600 dark:hover:text-white',
+    'shadow-sm hover:shadow', // Enhanced shadow on hover
+    'active:scale-95' // Subtle click animation
+  );
+
+  const selectedClassName = classNames(
+    'bg-indigo-500 hover:bg-indigo-600', // Darker hover state
+    'border-transparent', // Remove border when selected
+    'text-white hover:text-white',
+    'shadow-sm hover:shadow-md',
+    'dark:bg-indigo-500 dark:hover:bg-indigo-600',
+    'dark:border-transparent',
+    'focus:ring-indigo-500' // Matching focus ring
+  );
 
   return (
-    <ul className='flex flex-wrap px-2 py-1'>
+    <ul className='flex flex-wrap gap-2 px-2 py-1'>
       {buttonItems &&
         buttonItems.map((item, index) => (
-          <li className='m-1' key={index}>
+          <li key={index}>
             <button
               className={classNames(
                 baseClassName,
-                selectItemLabel?.toUpperCase() == item.label.toUpperCase()
-                  ? 'bg-indigo-500 text-white'
-                  : 'bg-white'
+                selectItemLabel?.toUpperCase() === item.label.toUpperCase() ? selectedClassName : ''
               )}
               onClick={item.onClick}
             >
-              {item.label}
+              <span>{item.label}</span>
               {item.subLabel && (
                 <span
                   className={classNames(
-                    'ml-2',
+                    'ml-2 text-sm',
                     selectItemLabel?.toUpperCase() === item.label.toUpperCase()
-                      ? 'text-indigo-200'
-                      : 'text-slate-400 dark:text-slate-500'
+                      ? 'font-normal text-indigo-200'
+                      : 'font-normal text-slate-400 dark:text-slate-500'
                   )}
                 >
                   {item.subLabel}

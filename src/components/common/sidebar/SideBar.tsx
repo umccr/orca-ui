@@ -10,9 +10,10 @@ export interface SidebarProps {
   title?: string;
   children: ReactNode;
   footer?: ReactNode;
+  className?: string;
 }
 
-const Sidebar: FC<SidebarProps> = ({ title, children, footer, position }) => {
+const Sidebar: FC<SidebarProps> = ({ title, children, footer, position, className }) => {
   const [isOpen, setIsOpen] = useState(true);
   return (
     <div
@@ -20,7 +21,8 @@ const Sidebar: FC<SidebarProps> = ({ title, children, footer, position }) => {
         'group relative flex h-full flex-col border-r border-gray-300 transition-all duration-300 dark:border-gray-700',
         isOpen ? 'w-96' : 'w-16',
         position === 'left' ? 'border-r' : 'border-l',
-        position === 'left' ? 'left-0' : 'right-0'
+        position === 'left' ? 'left-0' : 'right-0',
+        className
       )}
     >
       {isOpen ? (

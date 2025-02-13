@@ -735,11 +735,14 @@ const WorkflowRunTimeline = () => {
               onClick: isOpenAddStateDialog ? handleStateCreationEvent : handleUpdateState,
             }}
           ></Dialog>
-
-          <Timeline
-            timeline={isReverseOrder ? workflowRuntimelineData.reverse() : workflowRuntimelineData}
-            handldEventClick={handleTimelineSelect}
-          />
+          <div className='max-w-[500px] shrink-0'>
+            <Timeline
+              timeline={
+                isReverseOrder ? workflowRuntimelineData.reverse() : workflowRuntimelineData
+              }
+              handldEventClick={handleTimelineSelect}
+            />
+          </div>
         </div>
         <div className='flex-2'>
           <PayloadContent selectedState={selectedState || ''} currentState={currentState || ''} />

@@ -9,6 +9,9 @@ import type { WorkflowModel } from '@/api/workflow';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_NON_PAGINATE_PAGE_SIZE } from '@/utils/constant';
 import { keepPreviousData } from '@tanstack/react-query';
+import { Tooltip } from '@/components/common/tooltips';
+import { XCircleIcon } from '@heroicons/react/24/outline';
+import { classNames } from '@/utils/commonUtils';
 
 const WorkflowRunFilterHeader = () => {
   // bugfix: if set array object to state, it will be refresh the page continuously as the object is always new
@@ -44,9 +47,9 @@ const WorkflowRunFilterHeader = () => {
     () =>
       workflowData
         ? [
-            { value: '-1', label: 'All workflow', secondaryLabel: '' },
+            { value: '-1', label: 'All workflows', secondaryLabel: '' },
             ...workflowData.results.map((workflowType: WorkflowModel) => ({
-              value: workflowType.orcabusId?.toString() || '',
+              value: workflowType.orcabusId?.toString().split('.')[1] || '',
               label: workflowType.workflowName,
               secondaryLabel: 'v' + workflowType.workflowVersion,
             })),
@@ -147,8 +150,7 @@ const WorkflowRunFilterHeader = () => {
     if (selected.length === 0 || selected.includes('-1')) {
       setQueryParams({ workflowTypeId: null });
     } else {
-      const selectedWorkflowTypeIds = selected.map((id) => id.toString().split('.')[1]);
-      console.log(selectedWorkflowTypeIds, selected);
+      const selectedWorkflowTypeIds = selected.map((id) => id.toString());
       setQueryParams({ workflowTypeId: selectedWorkflowTypeIds });
     }
   };
@@ -160,11 +162,12 @@ const WorkflowRunFilterHeader = () => {
   return (
     <>
       <div className='flex w-full flex-row items-center justify-between gap-1 p-2 md:flex-row'>
-        <div>
+        <div className='w-2/5'>
           <Search
             onSearch={(searchContent) => setQueryParams({ search: searchContent })}
             searchBoxContent={getQueryParams().search || ''}
             hasTooltip
+            tooltipText='Available Search Items: workflowRunName, comment, libraryId, orcabusId, workflowName'
           />
         </div>
 
@@ -189,15 +192,24 @@ const WorkflowRunFilterHeader = () => {
           </div>
 
           <div className='flex-none px-0'>
-            <Button
-              size='md'
-              onClick={() => {
-                clearQueryParams(['tab']);
-              }}
-              className='text-gray-400 hover:text-white'
-            >
-              Clear all
-            </Button>
+            <Tooltip text='Clear all filters' size='small' background='light'>
+              <Button
+                size='md'
+                onClick={() => {
+                  clearQueryParams();
+                }}
+                className={classNames(
+                  'inline-flex items-center rounded border border-slate-200 bg-white p-1.5 leading-5 text-gray-400 shadow-sm',
+                  'ring-1 ring-gray-300 ring-offset-0 ring-offset-gray-100',
+                  'hover:bg-magpie-light-50 hover:text-gray-600',
+                  'focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-0 focus:ring-offset-gray-100',
+                  'transition duration-150 ease-in-out'
+                )}
+              >
+                <XCircleIcon className='h-5 w-5' />
+                <span className='sr-only'>Clear all filters</span>
+              </Button>
+            </Tooltip>
           </div>
         </div>
       </div>

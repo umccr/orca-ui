@@ -1,13 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
-  useWorkflowRunDetailModel,
   useWorkflowRunRerunValidateModel,
   useWorkflowRunRerunModel,
   useWorkflowRunStateCreateModel,
 } from '@/api/workflow';
-import { JsonToList } from '@/components/common/json-to-table';
-import { Table } from '@/components/tables';
+
 import { classNames } from '@/utils/commonUtils';
 import Skeleton from 'react-loading-skeleton';
 import { IconDropdown } from '@/components/common/dropdowns';
@@ -18,42 +16,15 @@ import { useWorkflowRunContext } from './WorkflowRunContext';
 import { Checkbox } from '@/components/common/checkbox';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
 
-const WorkflowRunDetailsTable = () => {
+const WorkflowRunDetailsHeader = () => {
   const { user } = useAuthContext();
   const { orcabusId } = useParams();
   const [isOpenRerunWorkflowDialog, setIsOpenRerunWorkflowDialog] = useState<boolean>(false);
-  const { setRefreshWorkflowRuns } = useWorkflowRunContext();
+  const { setRefreshWorkflowRuns, workflowRunDetail, isFetchingWorkflowRunDetail } =
+    useWorkflowRunContext();
 
   const [isDeprecated, setIsDeprecated] = useState<boolean>(false);
   const [selectedDataset, setSelectedDataset] = useState<string | null>(null);
-
-  const { data: workflowRunDetail, isFetching: isFetchingWorkflowRunDetail } =
-    useWorkflowRunDetailModel({
-      params: { path: { orcabusId: (orcabusId as string).split('.')[1] } },
-      reactQuery: {
-        enabled: !!orcabusId,
-      },
-    });
-
-  // format data and disply in the table
-  const detailsData = useMemo(
-    () =>
-      workflowRunDetail
-        ? {
-            workflowName: workflowRunDetail.workflow.workflowName,
-            portalRunId: workflowRunDetail.portalRunId,
-            executionId: workflowRunDetail.executionId || '-',
-            excutionEngine: workflowRunDetail.workflow.executionEngine,
-            workflowType:
-              workflowRunDetail.workflow.workflowName +
-              '  v' +
-              workflowRunDetail.workflow.workflowVersion,
-            timestamp: (workflowRunDetail.currentState.timestamp as string) || '-',
-            comments: workflowRunDetail.comment || '-',
-          }
-        : null,
-    [workflowRunDetail]
-  );
 
   const {
     mutate: rerunWorkflow,
@@ -142,45 +113,6 @@ const WorkflowRunDetailsTable = () => {
     }
   }, [isCreatedWorkflowRunState, resetCreateWorkflowRunState, isErrorCreatingWorkflowRunState]);
 
-  const librariesTableData = useMemo(
-    () =>
-      workflowRunDetail && workflowRunDetail.libraries.length > 0
-        ? workflowRunDetail.libraries.map((library) => ({
-            libraryId: library.libraryId,
-            orcabusId: library.orcabusId,
-          }))
-        : [],
-    [workflowRunDetail]
-  );
-
-  const librariesTableColumns = useMemo(
-    () => [
-      {
-        header: 'Library ID',
-        accessor: 'libraryId',
-      },
-      {
-        header: 'Orcabus ID',
-        accessor: 'orcabusId',
-        cell: (orcabusId: unknown) => {
-          if (!orcabusId) {
-            return <div>-</div>;
-          } else {
-            return (
-              <Link
-                to={`/lab/library/${orcabusId}/overview`}
-                className={classNames('text-sm font-medium text-blue-500 hover:text-blue-700')}
-              >
-                <div>{orcabusId as string}</div>
-              </Link>
-            );
-          }
-        },
-      },
-    ],
-    []
-  );
-
   const handleCloseRerunWorkflowDialog = () => {
     setIsOpenRerunWorkflowDialog(false);
     resetRerunWorkflow();
@@ -216,16 +148,16 @@ const WorkflowRunDetailsTable = () => {
 
       {/* details */}
       <div className='flex flex-row gap-2 px-2'>
-        <div className='flex-1'>
+        {/* <div className='flex-1'>
           <JsonToList
             // title='Details'
             data={detailsData}
             isFetchingData={isFetchingWorkflowRunDetail}
           />
-        </div>
+        </div> */}
 
         {/* libraries */}
-        <div className='flex-1'>
+        {/* <div className='flex-1'>
           <Table
             // tableHeader='Libraries'
             inCard={true}
@@ -233,7 +165,7 @@ const WorkflowRunDetailsTable = () => {
             tableData={librariesTableData}
             isFetchingData={isFetchingWorkflowRunDetail}
           />
-        </div>
+        </div> */}
       </div>
 
       <Dialog
@@ -344,4 +276,4 @@ const WorkflowRunDetailsTable = () => {
   );
 };
 
-export default WorkflowRunDetailsTable;
+export default WorkflowRunDetailsHeader;

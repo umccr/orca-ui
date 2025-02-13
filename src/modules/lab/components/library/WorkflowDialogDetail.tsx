@@ -27,6 +27,7 @@ export const WorkflowDialogDetail = ({
         <>
           <Dialog
             open={isOpenWorkflowDetails}
+            size='lg'
             title={
               <div className='mb-6 flex items-center'>
                 <div className='mr-6'>Workflow Details</div>

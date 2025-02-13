@@ -142,7 +142,7 @@ const Timeline: FC<TimelineProps> = ({ timeline, handldEventClick = undefined, s
                     {/* Comment Section */}
                     {event.comment && (
                       <div className='rounded-md bg-gray-50 p-3 ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700'>
-                        <p className='whitespace-pre-wrap text-sm text-gray-600 dark:text-gray-300'>
+                        <p className='break-all text-sm text-gray-600 dark:text-gray-300'>
                           {event.comment}
                         </p>
                       </div>

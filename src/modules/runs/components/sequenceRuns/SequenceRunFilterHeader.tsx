@@ -5,7 +5,9 @@ import { DateRangePicker } from '@/components/common/datepicker';
 import { useSequenceRunStatusCountModel } from '@/api/sequenceRun';
 import { keepPreviousData } from '@tanstack/react-query';
 import { useMemo } from 'react';
-
+import { XCircleIcon } from '@heroicons/react/24/outline';
+import { Tooltip } from '@/components/common/tooltips';
+import { classNames } from '@/utils/commonUtils';
 const SequenceRunFilterHeader = () => {
   const { setQueryParams, clearQueryParams, getQueryParams } = useQueryParams();
   const handleTimeChange = (startDate: string | null, endDate: string | null) => {
@@ -76,7 +78,7 @@ const SequenceRunFilterHeader = () => {
   return (
     <>
       <div className='flex w-full flex-row items-center justify-between gap-1 p-2 md:flex-row'>
-        <div>
+        <div className='w-2/5'>
           <Search
             onSearch={(searchContent) => setQueryParams({ search: searchContent })}
             searchBoxContent={getQueryParams().search || ''}
@@ -111,15 +113,24 @@ const SequenceRunFilterHeader = () => {
       </div> */}
 
           <div className='flex-none px-0'>
-            <Button
-              size='md'
-              onClick={() => {
-                clearQueryParams();
-              }}
-              className='text-gray-400 hover:text-white'
-            >
-              Clear all
-            </Button>
+            <Tooltip text='Clear all filters' size='small' background='light'>
+              <Button
+                size='md'
+                onClick={() => {
+                  clearQueryParams();
+                }}
+                className={classNames(
+                  'inline-flex items-center rounded border border-slate-200 bg-white p-1.5 leading-5 text-gray-400 shadow-sm',
+                  'ring-1 ring-gray-300 ring-offset-0 ring-offset-gray-100',
+                  'hover:bg-magpie-light-50 hover:text-gray-600',
+                  'focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-0 focus:ring-offset-gray-100',
+                  'transition duration-150 ease-in-out'
+                )}
+              >
+                <XCircleIcon className='h-5 w-5' />
+                <span className='sr-only'>Clear all filters</span>
+              </Button>
+            </Tooltip>
           </div>
         </div>
       </div>
