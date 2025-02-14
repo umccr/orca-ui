@@ -178,7 +178,6 @@ export const getTableColumn = ({
         const filetype = splitPath[splitPath.length - 1].toLowerCase();
         const isDownloadable = DOWNLOADABLE_FILETYPE_LIST.includes(filetype);
         const isIgvFile = !!IGV_FILETYPE_LIST.find((f) => s3Key.endsWith(f));
-        console.log(isIgvFile);
         return (
           <div className='flex flex-row justify-end'>
             {isIgvFile && (
