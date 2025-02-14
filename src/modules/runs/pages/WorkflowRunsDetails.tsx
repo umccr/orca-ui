@@ -10,7 +10,6 @@ const WorkflowRunsDetails = () => {
       <div className='flex h-full w-full flex-row gap-4'>
         <div className='mt-4 flex h-full flex-col gap-4'>
           <WorkflowRunDetailsHeader />
-
           <WorkflowRunDetailsLinkage />
           <WorkflowRunTimeline />
         </div>

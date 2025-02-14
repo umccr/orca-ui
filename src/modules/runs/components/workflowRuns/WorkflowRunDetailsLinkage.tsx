@@ -47,7 +47,7 @@ const WorkflowRunDetailsLinkage = () => {
   );
 
   return (
-    <div className='flex-1'>
+    <div className=''>
       <Accordion
         title={
           <div className='flex items-center gap-2'>

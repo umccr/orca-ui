@@ -26,7 +26,11 @@ const WorkflowRunDetailsSidebar = () => {
   );
 
   return (
-    <Sidebar position='right' className='border-r-0'>
+    <Sidebar
+      position='right'
+      className='border-r-0'
+      preferenceStorageKey='workflow-run-details-sidebar'
+    >
       <div className='mt-20'>
         {detailsData && (
           <JsonToTable

@@ -101,7 +101,6 @@ const SequenceRunTable = () => {
           return <div>-</div>;
         } else {
           return <div>{endTime ? dayjs(endTime as string).format('lll') : '-'}</div>;
-          return <div>{endTime ? dayjs(endTime as string).format('lll') : '-'}</div>;
         }
       },
     },
@@ -117,7 +116,7 @@ const SequenceRunTable = () => {
         });
         return (
           <Tooltip text='MultiQC Report' size='small' background='light'>
-            <Link to={`/files?${params.toString()}`}>
+            <Link to={`/files?${params.toString()}`} className='flex items-center p-1'>
               <MultiqcIcon className='size-4 text-orange-300 hover:text-orange-600' />
             </Link>
           </Tooltip>

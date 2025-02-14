@@ -1,9 +1,10 @@
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import {
   ArrowLeftStartOnRectangleIcon,
   ArrowRightStartOnRectangleIcon,
 } from '@heroicons/react/16/solid';
 import { classNames } from '@/utils/commonUtils';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 export interface SidebarProps {
   position: 'left' | 'right';
@@ -11,10 +12,19 @@ export interface SidebarProps {
   children: ReactNode;
   footer?: ReactNode;
   className?: string;
+  preferenceStorageKey?: string;
 }
 
-const Sidebar: FC<SidebarProps> = ({ title, children, footer, position, className }) => {
-  const [isOpen, setIsOpen] = useState(true);
+const Sidebar: FC<SidebarProps> = ({
+  title,
+  children,
+  footer,
+  position,
+  className,
+  preferenceStorageKey,
+}) => {
+  const [isOpen, setIsOpen] = useLocalStorage(preferenceStorageKey ?? 'sidebar-open', true);
+
   return (
     <div
       className={classNames(
