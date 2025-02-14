@@ -2,95 +2,77 @@ import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { classNames } from '@/utils/commonUtils';
 import { FC } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { useSuspenseMetadataLibraryModel } from '@/api/metadata';
+import { useSuspenseMetadataDetailLibraryModel } from '@/api/metadata';
 
-export const LibraryBreadCrumb: FC = () => {
-  const { pathname } = useLocation();
-  const { libraryOrcabusId, workflowType, portalRunId } = useParams();
+type LibraryBreadcrumbProps = { className?: string };
+
+export const LibraryBreadCrumb: FC<LibraryBreadcrumbProps> = ({ className }) => {
+  const { libraryOrcabusId } = useParams();
+
+  let fullPath = useLocation().pathname;
+  let lastSlashIndex = fullPath.lastIndexOf('/');
+
+  // Remove leading slash ('/')
+  if (fullPath[0] == '/') {
+    fullPath = fullPath.substring(1, fullPath.length);
+    lastSlashIndex = fullPath.lastIndexOf('/');
+  }
+
+  // Remove trailing slash ('/')
+  if (lastSlashIndex == fullPath.length - 1) {
+    fullPath = fullPath.substring(0, lastSlashIndex);
+    lastSlashIndex = fullPath.lastIndexOf('/');
+  }
+
   if (!libraryOrcabusId) {
-    throw new Error('No library orcabus ID in URL path!');
+    throw new Error('No `libraryOrcabusId` in URL path!');
   }
-
-  const fullLibraryModel = useSuspenseMetadataLibraryModel({
-    params: { query: { orcabusId: libraryOrcabusId } },
+  const libraryDetailRes = useSuspenseMetadataDetailLibraryModel({
+    params: {
+      path: {
+        orcabusId: libraryOrcabusId,
+      },
+    },
   }).data;
+  const libraryId = libraryDetailRes?.libraryId;
 
-  if (!fullLibraryModel || fullLibraryModel.results.length == 0) {
-    throw new Error('No library ID found in metadata!');
-  }
-  const library = fullLibraryModel.results[0];
-  const subject = library.subject;
-
-  const libraryBreadCrumbProps = [
-    { name: 'SUBJECT', href: '/lab', isCurrent: false },
-    {
-      name: subject.subjectId ?? '-',
-      href: `/lab/?tab=subject&orcabusId=${subject.orcabusId}`,
-      isCurrent: false,
-    },
-    { name: 'LIBRARY', href: '/lab', isCurrent: false },
-    {
-      name: library.libraryId,
-      href: `/lab/library/${library.orcabusId}`,
-      isCurrent: library.orcabusId ? pathname.endsWith(library.orcabusId) : false,
-    },
-  ];
-
-  if (workflowType) {
-    libraryBreadCrumbProps.push({
-      name: workflowType,
-      href: `/lab/library/${library.orcabusId}/${workflowType}`,
-      isCurrent: pathname.endsWith(workflowType),
-    });
-
-    if (portalRunId) {
-      libraryBreadCrumbProps.push({
-        name: portalRunId,
-        href: `/lab/library/${library.orcabusId}/${workflowType}/${portalRunId}`,
-        isCurrent: pathname.endsWith(portalRunId),
-      });
-    }
-  }
-
-  const isOverviewPage = pathname.endsWith('overview');
-  if (isOverviewPage) {
-    libraryBreadCrumbProps.push({
-      name: 'OVERVIEW',
-      href: `/lab/library/${library.orcabusId}/overview`,
-      isCurrent: !!isOverviewPage,
-    });
-  }
-
-  const isHistoryPage = pathname.endsWith('history');
-  if (isHistoryPage) {
-    libraryBreadCrumbProps.push({
-      name: 'HISTORY',
-      href: `/lab/library/${library.orcabusId}/history`,
-      isCurrent: !!isHistoryPage,
-    });
-  }
-
+  const splitPath = fullPath.split('/');
+  const currentPage = splitPath[splitPath.length - 1];
   return (
-    <nav className='mb-3 flex w-full overflow-auto border-b-4 pb-4' aria-label='Breadcrumb'>
-      <ol role='list' className='-ml-2 flex items-center space-x-2'>
-        {libraryBreadCrumbProps.map((p, key) => (
+    <nav
+      className={classNames(
+        'mb-6 flex border-b border-gray-200 pb-3 transition-colors duration-200 dark:border-gray-700',
+        className
+      )}
+      aria-label='Breadcrumb'
+    >
+      <ol
+        role='list'
+        className='scrollbar-hide -ml-2 flex max-w-full flex-wrap items-center space-x-2 overflow-x-auto'
+      >
+        {splitPath.map((path, key) => (
           <li key={key}>
             <div className='flex items-center'>
-              {key != 0 && (
+              {key > 0 && (
                 <ChevronRightIcon
-                  className='h-5 w-5 flex-shrink-0 text-gray-400'
+                  className='h-4 w-4 flex-shrink-0 text-gray-400 dark:text-gray-600'
                   aria-hidden='true'
                 />
               )}
               <Link
-                to={p.href}
+                to={`/${splitPath.slice(0, key + 1).join('/')}`}
                 className={classNames(
-                  'ml-2 text-sm font-medium hover:text-blue-700',
-                  p.isCurrent ? 'text-blue-500' : 'text-grey-500'
+                  'ml-2 text-sm font-medium transition-colors duration-200',
+                  'hover:text-blue-600 dark:hover:text-blue-400',
+                  currentPage === path
+                    ? 'text-blue-600 dark:text-blue-400'
+                    : 'text-gray-500 dark:text-gray-400',
+                  'max-w-[150px] truncate sm:max-w-[200px] md:max-w-none'
                 )}
-                aria-current={p.isCurrent ? 'page' : undefined}
+                aria-current={currentPage === path ? 'page' : undefined}
               >
-                {p.name}
+                {/* We change the libraryOrcabusId to libraryId */}
+                {path === libraryOrcabusId ? libraryId : path}
               </Link>
             </div>
           </li>
