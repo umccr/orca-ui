@@ -70,7 +70,7 @@ const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) =
         },
       },
       {
-        header: 'Portal Run Id',
+        header: 'Portal Run ID',
         accessor: 'portalRunId',
         copyable: true,
         onSort: () => {

@@ -8,7 +8,7 @@ export const LibraryBreadCrumb: FC = () => {
   const { pathname } = useLocation();
   const { libraryOrcabusId, workflowType, portalRunId } = useParams();
   if (!libraryOrcabusId) {
-    throw new Error('No library orcabus Id in URL path!');
+    throw new Error('No library orcabus ID in URL path!');
   }
 
   const fullLibraryModel = useSuspenseMetadataLibraryModel({
@@ -16,7 +16,7 @@ export const LibraryBreadCrumb: FC = () => {
   }).data;
 
   if (!fullLibraryModel || fullLibraryModel.results.length == 0) {
-    throw new Error('No library Id found in metadata!');
+    throw new Error('No library ID found in metadata!');
   }
   const library = fullLibraryModel.results[0];
   const subject = library.subject;

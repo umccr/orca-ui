@@ -28,13 +28,13 @@ export const IndividualTableFilter = () => {
   const IndividualFilter = () => (
     <>
       <FilterTextInput
-        title='Orcabus Id *'
+        title='Orcabus ID *'
         keyFilter='orcabusId'
         defaultInput={filter.orcabusId ? filter.orcabusId : []}
         handleFilterChange={handleFilterChange}
       />
       <FilterTextInput
-        title='Individual Id *'
+        title='Individual ID *'
         keyFilter='individualId'
         defaultInput={filter.individualId ? filter.individualId : []}
         handleFilterChange={handleFilterChange}
@@ -58,7 +58,7 @@ export const IndividualTableFilter = () => {
       }
       content={
         <div className='z-10 w-80 rounded-lg bg-white'>
-          <div className='max-h-[250px] overflow-y-auto px-3 pb-3 text-sm text-gray-700'>
+          <div className='max-h-[500px] overflow-y-auto px-3 pb-3 text-sm text-gray-700'>
             <IndividualFilter />
           </div>
           <ClosePopoverWrapper className='mt-4'>

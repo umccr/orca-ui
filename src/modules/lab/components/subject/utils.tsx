@@ -21,7 +21,7 @@ export const getSubjectTableColumn = ({
   {
     header: (
       <div className='flex flex-row items-center'>
-        <div>Subject Id</div>
+        <div>Subject ID</div>
         <Tooltip
           text={`This is now the 'ExternalSubjectID' from the tracking sheet`}
           position='right'

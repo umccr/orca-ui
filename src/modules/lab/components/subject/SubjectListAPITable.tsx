@@ -15,7 +15,7 @@ import { getLibraryTableColumn } from '../library/utils';
 import { getSubjectTableColumn } from './utils';
 
 export const SubjectListAPITable = ({ queryParams }: { queryParams: SubjectListQueryParams }) => {
-  const { setQueryParams, getPaginationParams } = useQueryParams();
+  const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
 
   const fullLibraryModel = useSuspenseMetadataSubjectModel({
     params: { query: { ...queryParams, ...getPaginationParams() } },
@@ -33,7 +33,10 @@ export const SubjectListAPITable = ({ queryParams }: { queryParams: SubjectListQ
         <div className='flex flex-col md:flex-row'>
           <div className='flex items-center justify-center'>{'Subject Table'}</div>
           <div className='flex flex-1 items-center justify-end pt-2'>
-            <Search onSearch={(s) => setQueryParams({ search: s })} />
+            <Search
+              onSearch={(s) => setQueryParams({ search: s })}
+              searchBoxContent={getQueryParams().search}
+            />
             <div className='ml-2'>
               <SubjectTableFilter />
             </div>
@@ -132,7 +135,7 @@ export const individualTableColumn = (): Column[] => {
     {
       header: (
         <div className='flex flex-row items-center'>
-          <div>Individual Id</div>
+          <div>Individual ID</div>
           <Tooltip text={`This is now the 'SubjectID' from the tracking sheet`} position='right'>
             <InformationCircleIcon className='ml-2 h-4' />
           </Tooltip>

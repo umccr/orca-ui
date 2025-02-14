@@ -73,7 +73,7 @@ const SequenceRunTable = () => {
 
   const sequenceRunColumn: Column[] = [
     {
-      header: 'Instrument Run Id',
+      header: 'Instrument Run ID',
       accessor: 'instrumentRunId',
       cell: (instrumentRunId: unknown, sequenceRunRowData: TableData) => {
         if (!instrumentRunId) {
