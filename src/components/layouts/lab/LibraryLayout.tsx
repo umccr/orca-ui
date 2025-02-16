@@ -4,8 +4,8 @@ import { Outlet } from 'react-router-dom';
 import { SpinnerWithText } from '@/components/common/spinner';
 import { DetailedErrorBoundary } from '@/components/common/error';
 import { LibrarySideNavBar } from './components/LibrarySideNavBar';
-import LocationBreadcrumb from '@/components/navigation/breadcrumbs';
 import { LibraryDetailBar } from './components/LibraryDetailBar';
+import { LibraryBreadCrumb } from './components/LibraryBreadCrumb';
 
 const LibraryLayout = ({ children }: PropsWithChildren) => {
   return (
@@ -15,7 +15,7 @@ const LibraryLayout = ({ children }: PropsWithChildren) => {
           <LibrarySideNavBar />
         </div>
         <div className='flex min-w-[450px] flex-1 flex-col overflow-auto overflow-x-auto px-8 py-4'>
-          <LocationBreadcrumb className='mb-4' />
+          <LibraryBreadCrumb className='mb-4' />
 
           {/* <LibraryBreadCrumb /> */}
           <Suspense fallback={<SpinnerWithText text='Loading library page' />}>

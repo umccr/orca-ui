@@ -306,7 +306,7 @@ export const AnalysisTable = ({
                     <p className='mt-0.5'>Multiple runs</p>
                   </Badge>
                   <Dropdown
-                    floatingLabel='Portal Run Id'
+                    floatingLabel='Portal Run ID'
                     value={portalRunId}
                     items={workflowRunResults.map((i) => ({
                       label: i.portalRunId,

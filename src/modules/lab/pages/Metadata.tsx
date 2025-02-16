@@ -49,9 +49,7 @@ export default function MetadataPage() {
     },
     {
       label: 'MODEL',
-      content: (
-        <img src='https://raw.githubusercontent.com/umccr/orcabus/refs/heads/main/lib/workload/stateless/stacks/metadata-manager/docs/schema.drawio.svg' />
-      ),
+      content: <img alt=' Metadata Schema' src='public/assets/metadata-schema.svg' />,
     },
   ];
 

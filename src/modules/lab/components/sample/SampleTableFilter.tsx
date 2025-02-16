@@ -31,19 +31,19 @@ export const SampleTableFilter = () => {
   const SampleFilter = () => (
     <>
       <FilterTextInput
-        title='Orcabus Id *'
+        title='Orcabus ID *'
         keyFilter='orcabusId'
         defaultInput={filter.orcabusId ? filter.orcabusId : []}
         handleFilterChange={handleFilterChange}
       />
       <FilterTextInput
-        title='Sample Id *'
+        title='Sample ID *'
         keyFilter='sampleId'
         defaultInput={filter.sampleId ? filter.sampleId : []}
         handleFilterChange={handleFilterChange}
       />
       <FilterTextInput
-        title='External Sample Id *'
+        title='External Sample ID *'
         keyFilter='externalSampleId'
         defaultInput={filter.externalSampleId ? filter.externalSampleId : []}
         handleFilterChange={handleFilterChange}
@@ -73,7 +73,7 @@ export const SampleTableFilter = () => {
       }
       content={
         <div className='z-10 w-80 rounded-lg bg-white'>
-          <div className='max-h-[250px] overflow-y-auto px-3 pb-3 text-sm text-gray-700'>
+          <div className='max-h-[500px] overflow-y-auto px-3 pb-3 text-sm text-gray-700'>
             <SampleFilter />
             <div className='font-medium'>{`Library`}</div>
             <div
