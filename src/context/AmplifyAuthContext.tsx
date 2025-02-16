@@ -160,12 +160,14 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement 
       }
     });
 
-    // check if siginwithgoogle successfily before (local storage will be cleared when logout)
+    // check if siginwithgoogle successfily before (local storage will be cleared when logout, except: theme settings)
     // otherwise no user store or login, stop authenticating and redirect to login page
-    if (localStorage.length) {
-      initializeAuth();
-    } else {
+    // Check authentication state
+    const hasOnlyThemeSettings = Object.keys(localStorage).every((key) => key === 'theme');
+    if (localStorage.length === 0 || hasOnlyThemeSettings) {
       setIsAuthenticating(false);
+    } else {
+      initializeAuth();
     }
 
     // best practice: stop listening for auth events when the component is unmounted
