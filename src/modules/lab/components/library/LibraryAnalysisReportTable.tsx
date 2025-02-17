@@ -170,53 +170,63 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
       {libraryDetail.type === 'WGS' ? (
         <>
           <DetailedErrorBoundary errorTitle={`Unable to load 'umccrise' report files`}>
-            <AnalysisTable
-              libraryOrcabusId={libraryDetail.orcabusId}
-              workflowType='umccrise'
-              keyPatterns={WORKFLOW_ANALYSIS_TABLE['umccrise']['keyPatterns']}
-              getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['umccrise']['getTableData']}
-            />
+            <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
+              <AnalysisTable
+                libraryOrcabusId={libraryDetail.orcabusId}
+                workflowType='umccrise'
+                keyPatterns={WORKFLOW_ANALYSIS_TABLE['umccrise']['keyPatterns']}
+                getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['umccrise']['getTableData']}
+              />
+            </Suspense>
           </DetailedErrorBoundary>
           <div className='py-4'></div>
           <DetailedErrorBoundary errorTitle={`Unable to load 'tumor-normal' report files`}>
-            <AnalysisTable
-              libraryOrcabusId={libraryDetail.orcabusId}
-              workflowType='tumor-normal'
-              keyPatterns={WORKFLOW_ANALYSIS_TABLE['tumor-normal']['keyPatterns']}
-              getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['tumor-normal']['getTableData']}
-            />
+            <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
+              <AnalysisTable
+                libraryOrcabusId={libraryDetail.orcabusId}
+                workflowType='tumor-normal'
+                keyPatterns={WORKFLOW_ANALYSIS_TABLE['tumor-normal']['keyPatterns']}
+                getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['tumor-normal']['getTableData']}
+              />
+            </Suspense>
           </DetailedErrorBoundary>
         </>
       ) : libraryDetail.type === 'WTS' ? (
         <>
           <DetailedErrorBoundary errorTitle={`Unable to load 'wts' report files`}>
-            <AnalysisTable
-              libraryOrcabusId={libraryDetail.orcabusId}
-              workflowType='wts'
-              keyPatterns={WORKFLOW_ANALYSIS_TABLE['wts']['keyPatterns']}
-              getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['wts']['getTableData']}
-            />
+            <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
+              <AnalysisTable
+                libraryOrcabusId={libraryDetail.orcabusId}
+                workflowType='wts'
+                keyPatterns={WORKFLOW_ANALYSIS_TABLE['wts']['keyPatterns']}
+                getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['wts']['getTableData']}
+              />
+            </Suspense>
           </DetailedErrorBoundary>
           <div className='py-4'></div>
           <DetailedErrorBoundary errorTitle={`Unable to load 'rnasum' report files`}>
-            <AnalysisTable
-              libraryOrcabusId={libraryDetail.orcabusId}
-              workflowType='rnasum'
-              keyPatterns={WORKFLOW_ANALYSIS_TABLE['rnasum']['keyPatterns']}
-              getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['rnasum']['getTableData']}
-            />
+            <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
+              <AnalysisTable
+                libraryOrcabusId={libraryDetail.orcabusId}
+                workflowType='rnasum'
+                keyPatterns={WORKFLOW_ANALYSIS_TABLE['rnasum']['keyPatterns']}
+                getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['rnasum']['getTableData']}
+              />
+            </Suspense>
           </DetailedErrorBoundary>
         </>
       ) : libraryDetail.type === 'ctDNA' &&
         (libraryDetail.assay?.toLowerCase() === 'cttso' ||
           libraryDetail.assay?.toLowerCase() == 'cttsov2') ? (
         <DetailedErrorBoundary errorTitle={`Unable to load 'cttsov2' report files`}>
-          <AnalysisTable
-            libraryOrcabusId={libraryDetail.orcabusId}
-            workflowType='cttsov2'
-            keyPatterns={WORKFLOW_ANALYSIS_TABLE['cttsov2']['keyPatterns']}
-            getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['cttsov2']['getTableData']}
-          />
+          <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
+            <AnalysisTable
+              libraryOrcabusId={libraryDetail.orcabusId}
+              workflowType='cttsov2'
+              keyPatterns={WORKFLOW_ANALYSIS_TABLE['cttsov2']['keyPatterns']}
+              getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['cttsov2']['getTableData']}
+            />
+          </Suspense>
         </DetailedErrorBoundary>
       ) : (
         <pre>No file highlights available for this library</pre>
@@ -251,8 +261,8 @@ export const AnalysisTable = ({
   if (!workflowRunResults || workflowRunResults.length <= 0) {
     throw new Error(`No '${workflowType}' run found!`);
   }
-  const portalRunId = workflowRunResults[0].portalRunId;
-  const [selectedPortalRunId, setSelectedPortalRunId] = useState(portalRunId);
+  const initPortalRunId = workflowRunResults[0].portalRunId;
+  const [selectedPortalRunId, setSelectedPortalRunId] = useState(initPortalRunId);
 
   const filesApiData = useSuspenseFileObject({
     params: {
@@ -285,6 +295,12 @@ export const AnalysisTable = ({
     }));
 
   const isMultipleRuns = workflowRunResults.length > 1;
+  const currentSelectedWorkflowDetail = workflowRunResults.find(
+    (w) => w.portalRunId === selectedPortalRunId
+  );
+  if (!currentSelectedWorkflowDetail) {
+    throw new Error('No workflow detail found!');
+  }
 
   return (
     <>
@@ -295,8 +311,8 @@ export const AnalysisTable = ({
               <div className='flex flex-row'>
                 <div>{workflowType}</div>
                 <WorkflowDialogDetail
-                  portalRunId={portalRunId}
-                  workflowDetail={workflowRunResults[0]}
+                  portalRunId={selectedPortalRunId}
+                  workflowDetail={currentSelectedWorkflowDetail}
                 />
               </div>
               {isMultipleRuns && (
@@ -307,7 +323,7 @@ export const AnalysisTable = ({
                   </Badge>
                   <Dropdown
                     floatingLabel='Portal Run ID'
-                    value={portalRunId}
+                    value={selectedPortalRunId}
                     items={workflowRunResults.map((i) => ({
                       label: i.portalRunId,
                       onClick: () => setSelectedPortalRunId(i.portalRunId),
