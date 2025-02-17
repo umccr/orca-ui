@@ -49,7 +49,7 @@ export default function MetadataPage() {
     },
     {
       label: 'MODEL',
-      content: <img alt=' Metadata Schema' src='public/assets/metadata-schema.svg' />,
+      content: <img alt=' Metadata Schema' src='/assets/metadata-schema.svg' />,
     },
   ];
 
