@@ -4,27 +4,44 @@ import {
   useWorkflowRunRerunValidateModel,
   useWorkflowRunRerunModel,
   useWorkflowRunStateCreateModel,
+  useWorkflowRunStateValidMapModel,
+  useWorkflowRunCommentCreateModel,
 } from '@/api/workflow';
-import { classNames } from '@/utils/commonUtils';
 import Skeleton from 'react-loading-skeleton';
-import { IconDropdown } from '@/components/common/dropdowns';
 import toaster from '@/components/common/toaster';
-import { Dialog } from '@/components/common/dialogs';
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { useWorkflowRunContext } from './WorkflowRunContext';
-import { Checkbox } from '@/components/common/checkbox';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
-import { SearchableSelect } from '@/components/common/select';
+import { Button } from '@/components/common/buttons';
+import { ChatBubbleLeftRightIcon, PlusIcon } from '@heroicons/react/24/outline';
+import RerunDialog from '../common/RerunDialog';
+import CommentDialog from '../common/CommentDialog';
+import StatesDialog from '../common/StatesDialog';
+import { classNames } from '@/utils/commonUtils';
 
 const WorkflowRunDetailsHeader = () => {
   const { user } = useAuthContext();
   const { orcabusId } = useParams();
-  const [isOpenRerunWorkflowDialog, setIsOpenRerunWorkflowDialog] = useState<boolean>(false);
-  const { setRefreshWorkflowRuns, workflowRunDetail, isFetchingWorkflowRunDetail } =
-    useWorkflowRunContext();
+  const {
+    setRefreshWorkflowRuns,
+    workflowRunDetail,
+    isFetchingWorkflowRunDetail,
+    refetchWorkflowComment,
+    refetchWorkflowState,
+  } = useWorkflowRunContext();
 
+  // rerun workflow dialog
+  const [isOpenRerunWorkflowDialog, setIsOpenRerunWorkflowDialog] = useState<boolean>(false);
   const [isDeprecated, setIsDeprecated] = useState<boolean>(false);
   const [selectedDataset, setSelectedDataset] = useState<string | null>(null);
+
+  // comment dialog
+  const [isOpenAddCommentDialog, setIsOpenAddCommentDialog] = useState<boolean>(false);
+  const [comment, setComment] = useState<string>('');
+
+  // state dialog
+  const [isOpenAddStateDialog, setIsOpenAddStateDialog] = useState<boolean>(false);
+  const [stateStatus, setStateStatus] = useState<string | null>(null);
+  const [stateComment, setStateComment] = useState<string>('');
 
   const {
     mutate: rerunWorkflow,
@@ -51,6 +68,98 @@ const WorkflowRunDetailsHeader = () => {
       enabled: !!orcabusId,
     },
   });
+
+  const { data: workflowRunStateValidMapData } = useWorkflowRunStateValidMapModel({
+    params: { path: { orcabusId: orcabusId as string } },
+    reactQuery: {
+      enabled: !!orcabusId,
+    },
+  });
+
+  const workflowLastState = workflowRunDetail?.currentState?.status;
+
+  // check if the last state is valid for state creation
+  const isValidCreateState = Object.entries(workflowRunStateValidMapData || {}).some(([, value]) =>
+    (value as string[]).includes(workflowLastState as string)
+  );
+  // find all valid state key who has vale of workflowLastState
+  const validState = Object.entries(workflowRunStateValidMapData || {})
+    .filter(([, value]) => (value as string[]).includes(workflowLastState as string))
+    .map(([key]) => key);
+
+  const {
+    mutate: createWorkflowRunComment,
+    isSuccess: isCreatedWorkflowRunComment,
+    isError: isErrorCreatingWorkflowRunComment,
+    reset: resetCreateWorkflowRunComment,
+  } = useWorkflowRunCommentCreateModel({
+    params: { path: { orcabusId: orcabusId as string } },
+    body: {
+      comment: comment,
+      createdBy: user?.email,
+    },
+  });
+
+  const handleAddComment = () => {
+    createWorkflowRunComment();
+    setIsOpenAddCommentDialog(false);
+  };
+
+  useEffect(() => {
+    if (isCreatedWorkflowRunComment) {
+      toaster.success({ title: 'Comment added successfully' });
+      refetchWorkflowComment();
+      resetCreateWorkflowRunComment();
+      setComment('');
+    }
+
+    if (isErrorCreatingWorkflowRunComment) {
+      toaster.error({ title: 'Error adding comment' });
+      resetCreateWorkflowRunComment();
+    }
+  }, [
+    isCreatedWorkflowRunComment,
+    isErrorCreatingWorkflowRunComment,
+    refetchWorkflowComment,
+    resetCreateWorkflowRunComment,
+  ]);
+
+  const {
+    mutate: createWorkflowRunState,
+    isSuccess: isCreatedWorkflowRunState,
+    isError: isErrorCreatingWorkflowRunState,
+    reset: resetCreateWorkflowRunState,
+  } = useWorkflowRunStateCreateModel({
+    params: { path: { orcabusId: orcabusId as string } },
+    body: {
+      status: stateStatus,
+      comment: stateComment,
+      createdBy: user?.email,
+    },
+  });
+
+  const handleStateCreationEvent = () => {
+    createWorkflowRunState();
+    setIsOpenAddStateDialog(false);
+  };
+  useEffect(() => {
+    if (isCreatedWorkflowRunState) {
+      toaster.success({ title: 'State added' });
+      refetchWorkflowState();
+      resetCreateWorkflowRunState();
+      setStateComment('');
+    }
+
+    if (isErrorCreatingWorkflowRunState) {
+      toaster.error({ title: 'Error adding state status' });
+      resetCreateWorkflowRunState();
+    }
+  }, [
+    isCreatedWorkflowRunState,
+    refetchWorkflowState,
+    resetCreateWorkflowRunState,
+    isErrorCreatingWorkflowRunState,
+  ]);
 
   const handleRerunWorkflow = () => {
     rerunWorkflow();
@@ -84,34 +193,25 @@ const WorkflowRunDetailsHeader = () => {
     setRefreshWorkflowRuns,
   ]);
 
-  const {
-    mutate: createWorkflowRunState,
-    isSuccess: isCreatedWorkflowRunState,
-    isError: isErrorCreatingWorkflowRunState,
-    reset: resetCreateWorkflowRunState,
-  } = useWorkflowRunStateCreateModel({
-    params: { path: { orcabusId: orcabusId?.split('.')[1] as string } },
-    body: {
-      status: 'DEPRECATED',
-      comment: 'Workflow run marked as DEPRECATED as rerun this workflow',
-      createdBy: user?.email,
-    },
-  });
-
   const handleMarkAsDeprecated = () => {
     createWorkflowRunState();
   };
 
   useEffect(() => {
     if (isCreatedWorkflowRunState) {
-      toaster.success({ title: 'Workflow run marked as DEPRECATED' });
+      toaster.success({ title: `Workflow run marked as ${stateStatus}` });
       resetCreateWorkflowRunState();
     }
     if (isErrorCreatingWorkflowRunState) {
-      toaster.error({ title: 'Error marking workflow run as DEPRECATED' });
+      toaster.error({ title: `Error marking workflow run as ${stateStatus}` });
       resetCreateWorkflowRunState();
     }
-  }, [isCreatedWorkflowRunState, resetCreateWorkflowRunState, isErrorCreatingWorkflowRunState]);
+  }, [
+    isCreatedWorkflowRunState,
+    resetCreateWorkflowRunState,
+    isErrorCreatingWorkflowRunState,
+    stateStatus,
+  ]);
 
   const handleCloseRerunWorkflowDialog = () => {
     setIsOpenRerunWorkflowDialog(false);
@@ -121,162 +221,130 @@ const WorkflowRunDetailsHeader = () => {
   };
 
   return (
-    <div className='flex w-full flex-col gap-2 pt-4'>
+    <div className={classNames('flex w-full flex-col gap-3', 'bg-white dark:bg-gray-800')}>
       {/* title */}
-      <div className='flex flex-1 flex-row items-center gap-2 px-2'>
-        {/* header: workflow run name */}
-        {isFetchingWorkflowRunDetail ? (
-          <div className='flex-1'>
-            <Skeleton height={20} />
-          </div>
-        ) : (
-          <div className='flex-1 text-lg font-medium'>
+
+      {/* header: workflow run name */}
+      {isFetchingWorkflowRunDetail ? (
+        <div className='flex-1'>
+          <Skeleton height={20} />
+        </div>
+      ) : (
+        <div>
+          <div className='flex items-center justify-between pt-4'>
             <div className='flex flex-col'>
               <h1 className='truncate text-xl font-semibold text-gray-900 dark:text-white'>
                 {workflowRunDetail?.workflowRunName}
               </h1>
-              <p className='mt-1 text-sm text-gray-500 dark:text-gray-400'>Workflow Run Details</p>
+              <p className='mt-1 text-sm text-gray-500 dark:text-gray-400'>Workflow Run Actions</p>
             </div>
           </div>
-        )}
-        {/* workflow run action:  rerun */}
-        <div>
-          <IconDropdown
-            items={[
-              {
-                label: 'Rerun',
-                onClick: () => setIsOpenRerunWorkflowDialog(true),
-                disabled: isFetchingWorkflowRunRerunAllowedWorkflows,
-              },
-            ]}
-            className={classNames(
-              'inline-flex items-center',
-              'rounded-lg border border-gray-200 dark:border-gray-700',
-              'bg-white dark:bg-gray-800',
-              'text-sm font-medium text-gray-700 dark:text-gray-200',
-              'shadow-sm',
-              'hover:bg-gray-50 dark:hover:bg-gray-700',
-              'focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400',
-              'transition-all duration-200',
-              'disabled:cursor-not-allowed disabled:opacity-50'
-            )}
-            type='square'
-          />
-        </div>
-      </div>
+          <div className='flex flex-wrap items-center gap-2 p-4'>
+            <Button
+              type='gray'
+              size='xs'
+              rounded
+              onClick={() => setIsOpenRerunWorkflowDialog(true)}
+              disabled={isFetchingWorkflowRunRerunAllowedWorkflows}
+              className={classNames(
+                'flex items-center gap-2',
+                'border border-gray-200 dark:border-gray-700',
+                'text-gray-700 dark:text-gray-300',
+                'hover:bg-gray-50 dark:hover:bg-gray-700',
+                'rounded-lg px-4 py-2',
+                'shadow-sm'
+              )}
+            >
+              <PlusIcon className='h-4 w-4' />
+              Rerun
+            </Button>
+            <Button
+              type='gray'
+              size='xs'
+              rounded
+              onClick={() => setIsOpenAddCommentDialog(true)}
+              className={classNames(
+                'flex items-center gap-2',
+                'border border-gray-200 dark:border-gray-700',
+                'text-gray-700 dark:text-gray-300',
+                'hover:bg-gray-50 dark:hover:bg-gray-700',
+                'rounded-lg px-4 py-2',
+                'shadow-sm'
+              )}
+            >
+              <ChatBubbleLeftRightIcon className='h-4 w-4' />
+              Add Comment
+            </Button>
 
-      {/* details */}
-      <div className='flex flex-row gap-2 px-2'>
-        {/* <div className='flex-1'>
-          <JsonToList
-            // title='Details'
-            data={detailsData}
-            isFetchingData={isFetchingWorkflowRunDetail}
-          />
-        </div> */}
-
-        {/* libraries */}
-        {/* <div className='flex-1'>
-          <Table
-            // tableHeader='Libraries'
-            inCard={true}
-            columns={librariesTableColumns}
-            tableData={librariesTableData}
-            isFetchingData={isFetchingWorkflowRunDetail}
-          />
-        </div> */}
-      </div>
-
-      <Dialog
-        TitleIcon={ArrowPathIcon}
-        title='Rerun Workflow'
-        open={isOpenRerunWorkflowDialog}
-        content={
-          <div>
-            <div className='text-lg font-medium'>{workflowRunDetail?.workflowRunName || ''}</div>
-
-            {!workflowRunRerunValidateDetail?.isValid ? (
-              <div className='mt-2 flex flex-col gap-1 text-sm'>
-                <div className='flex flex-row gap-1 text-red-500'>
-                  <span className='font-medium'>Warning:</span>
-                  <span>This workflow is not allowed to rerun.</span>
-                </div>
-                <div className='flex flex-row gap-1 text-gray-500'>
-                  <span className='font-medium'>Reason:</span>
-                  <span>
-                    Current workflow is not in the allowed workflows:{' '}
-                    {workflowRunRerunValidateDetail?.validWorkflows.join(', ')}
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <>
-                <div className='mx-1 mt-2 flex flex-col gap-1 text-sm'>
-                  <div>
-                    <div className='mb-1 pt-1 text-xs font-medium'>
-                      Please select the dataset to rerun:
-                    </div>
-                    <div className='w-full max-w-xs py-2'>
-                      <SearchableSelect
-                        options={workflowRunRerunValidateDetail?.allowedDatasetChoice || []}
-                        value={selectedDataset || null}
-                        onChange={setSelectedDataset}
-                        placeholder='Search datasets...'
-                        examples={
-                          workflowRunRerunValidateDetail?.allowedDatasetChoice.slice(0, 3) || []
-                        }
-                      />
-                    </div>
-                    {!selectedDataset && (
-                      <div className='text-xs text-red-500'>Please select a dataset.</div>
-                    )}
-                  </div>
-                  <div className='my-2 h-px bg-gray-200'></div>
-                  <div>
-                    <Checkbox
-                      className='flex flex-row gap-2 text-sm font-medium'
-                      checked={isDeprecated}
-                      onChange={() => setIsDeprecated(!isDeprecated)}
-                      disabled={
-                        !selectedDataset || workflowRunDetail?.workflow.workflowName !== 'RNASUM'
-                      }
-                      label="Mark the current run as 'DEPRECATED'."
-                    />
-
-                    {workflowRunDetail?.workflow.workflowName !== 'RNASUM' ? (
-                      <div className='text-xs text-red-500'>
-                        This feature is not available for RNASUM workflow.
-                      </div>
-                    ) : (
-                      <div>
-                        <div className='text-xs text-gray-500'>
-                          This action will mark the current run as &apos;DEPRECATED&apos;, and is
-                          irreversible.
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className='mt-2 pt-2 text-sm font-medium text-red-500'>
-                  Are you sure you want to rerun this workflow?
-                </div>
-              </>
+            {isValidCreateState && (
+              <Button
+                type='gray'
+                size='xs'
+                rounded
+                onClick={() => setIsOpenAddStateDialog(true)}
+                className={classNames(
+                  'flex items-center gap-2',
+                  'border border-gray-200 dark:border-gray-700',
+                  'text-gray-700 dark:text-gray-300',
+                  'hover:bg-gray-50 dark:hover:bg-gray-700',
+                  'rounded-lg px-4 py-2',
+                  'shadow-sm'
+                )}
+              >
+                <PlusIcon className='h-4 w-4' />
+                Add New State
+              </Button>
             )}
           </div>
-        }
-        onClose={handleCloseRerunWorkflowDialog}
-        closeBtn={{
-          label: 'Close',
-          onClick: handleCloseRerunWorkflowDialog,
+        </div>
+      )}
+
+      <RerunDialog
+        isOpenRerunWorkflowDialog={isOpenRerunWorkflowDialog}
+        workflowRunName={workflowRunDetail?.workflowRunName || ''}
+        workflowName={workflowRunDetail?.workflow.workflowName || ''}
+        workflowRunRerunValidateDetail={workflowRunRerunValidateDetail || null}
+        selectedDataset={selectedDataset || ''}
+        setSelectedDataset={setSelectedDataset}
+        isDeprecated={isDeprecated}
+        setIsDeprecated={setIsDeprecated}
+        handleCloseRerunWorkflowDialog={handleCloseRerunWorkflowDialog}
+        handleRerunWorkflow={handleRerunWorkflow}
+        isFetchingWorkflowRunRerunAllowedWorkflows={isFetchingWorkflowRunRerunAllowedWorkflows}
+      />
+      {/* comment dialog */}
+      <CommentDialog
+        isOpenAddCommentDialog={isOpenAddCommentDialog}
+        isOpenUpdateCommentDialog={false}
+        isOpenDeleteCommentDialog={false}
+        comment={comment}
+        setComment={setComment}
+        handleClose={() => {
+          setIsOpenAddCommentDialog(false);
+          setComment('');
         }}
-        confirmBtn={{
-          label: 'Rerun',
-          onClick: handleRerunWorkflow,
-          disabled:
-            isFetchingWorkflowRunRerunAllowedWorkflows ||
-            !workflowRunRerunValidateDetail?.isValid ||
-            !selectedDataset,
+        handleAddComment={handleAddComment}
+        handleUpdateComment={() => {}}
+        handleDeleteComment={() => {}}
+        user={user}
+      />
+      {/* state dialog */}
+      <StatesDialog
+        isOpenAddStateDialog={isOpenAddStateDialog}
+        isOpenUpdateStateDialog={false}
+        user={user}
+        validState={validState}
+        stateStatus={stateStatus}
+        setStateStatus={setStateStatus}
+        selectedState={null}
+        currentState={null}
+        handleClose={() => {
+          setIsOpenAddStateDialog(false);
         }}
+        stateComment={stateComment}
+        setStateComment={setStateComment}
+        handleStateCreationEvent={handleStateCreationEvent}
+        handleUpdateState={() => {}}
       />
     </div>
   );

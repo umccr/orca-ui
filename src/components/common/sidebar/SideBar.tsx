@@ -13,6 +13,8 @@ export interface SidebarProps {
   footer?: ReactNode;
   className?: string;
   preferenceStorageKey?: string;
+  openWidth?: string;
+  collapsedWidth?: string;
 }
 
 const Sidebar: FC<SidebarProps> = ({
@@ -22,55 +24,109 @@ const Sidebar: FC<SidebarProps> = ({
   position,
   className,
   preferenceStorageKey,
+  openWidth = 'w-92',
+  collapsedWidth = 'w-16',
 }) => {
   const [isOpen, setIsOpen] = useLocalStorage(preferenceStorageKey ?? 'sidebar-open', true);
 
   return (
-    <div
+    <aside
       className={classNames(
-        'group relative flex h-full flex-col border-r border-gray-300 transition-all duration-300 dark:border-gray-700',
-        isOpen ? 'w-96' : 'w-16',
+        'relative flex h-full flex-col',
+        'border-gray-200 dark:border-gray-700',
+        'bg-white dark:bg-gray-800',
+        'transition-all duration-200 ease-in-out',
         position === 'left' ? 'border-r' : 'border-l',
-        position === 'left' ? 'left-0' : 'right-0',
+        isOpen ? openWidth : collapsedWidth,
         className
       )}
     >
       {isOpen ? (
         <>
-          <div className={`absolute ${position === 'left' ? 'right' : 'left'}-0 top-0 z-20 p-4`}>
+          <div
+            className={classNames(
+              'absolute z-20',
+              'p-2',
+              position === 'left' ? 'right-2' : 'left-2',
+              'top-2'
+            )}
+          >
             <button
               type='button'
               onClick={() => setIsOpen(false)}
-              className='rounded-lg bg-gray-50 p-1.5 text-gray-400 ring-1 ring-gray-200 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 dark:bg-gray-700 dark:ring-gray-600 dark:hover:bg-gray-600 dark:hover:text-gray-300'
+              className={classNames(
+                'rounded-md p-2',
+                'bg-white dark:bg-gray-800',
+                'text-gray-500 dark:text-gray-400',
+                'shadow-lg ring-1 ring-gray-200 dark:ring-gray-700',
+                'hover:bg-gray-50 dark:hover:bg-gray-700',
+                'hover:text-gray-700 dark:hover:text-gray-300',
+                'focus:outline-none focus:ring-2 focus:ring-blue-500/50',
+                'transition-all duration-200'
+              )}
             >
               <span className='sr-only'>Close sidebar</span>
-              <ArrowRightStartOnRectangleIcon className='h-5 w-5' />
+              {position === 'left' ? (
+                <ArrowLeftStartOnRectangleIcon className='h-4 w-4' />
+              ) : (
+                <ArrowRightStartOnRectangleIcon className='h-4 w-4' />
+              )}
             </button>
           </div>
 
           {title && (
-            <div className='sticky top-0 z-10 border-b border-inherit px-6 py-4'>
-              <h2 className='text-xl font-semibold text-gray-900 dark:text-white'>{title ?? ''}</h2>
+            <div className='sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800'>
+              <div className='px-6 py-4'>
+                <h2 className='truncate text-lg font-semibold text-gray-900 dark:text-white'>
+                  {title}
+                </h2>
+              </div>
             </div>
           )}
 
-          <div className='flex-1 space-y-2 px-3 py-2'>{children}</div>
+          <div className='scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 flex-1 overflow-y-auto'>
+            <div className='space-y-2 p-4'>{children}</div>
+          </div>
 
-          {footer && <div className='px-3 py-2'>{footer}</div>}
+          {footer && (
+            <div className='border-t border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800/50'>
+              {footer}
+            </div>
+          )}
         </>
       ) : (
-        <div className={`absolute ${position === 'left' ? 'right' : 'left'}-0 top-0 z-20 p-3`}>
+        <div
+          className={classNames(
+            'absolute z-20',
+            'p-2',
+            position === 'left' ? 'right-2' : 'left-2',
+            'top-2'
+          )}
+        >
           <button
             type='button'
             onClick={() => setIsOpen(true)}
-            className='rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 dark:hover:bg-gray-700 dark:hover:text-gray-300'
+            className={classNames(
+              'rounded-md p-2',
+              'bg-white dark:bg-gray-800',
+              'text-gray-500 dark:text-gray-400',
+              'shadow-lg ring-1 ring-gray-200 dark:ring-gray-700',
+              'hover:bg-gray-50 dark:hover:bg-gray-700',
+              'hover:text-gray-700 dark:hover:text-gray-300',
+              'focus:outline-none focus:ring-2 focus:ring-blue-500/50',
+              'transition-all duration-200'
+            )}
           >
             <span className='sr-only'>Open sidebar</span>
-            <ArrowLeftStartOnRectangleIcon className='h-5 w-5' />
+            {position === 'left' ? (
+              <ArrowRightStartOnRectangleIcon className='h-4 w-4' />
+            ) : (
+              <ArrowLeftStartOnRectangleIcon className='h-4 w-4' />
+            )}
           </button>
         </div>
       )}
-    </div>
+    </aside>
   );
 };
 

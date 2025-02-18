@@ -113,8 +113,9 @@ const WorkflowRunDetailsSidebar = () => {
       position='right'
       className='border-r-0'
       preferenceStorageKey='workflow-run-details-sidebar'
+      openWidth='w-100'
     >
-      <div className='mt-12'>
+      <div className='mt-14'>
         {workflowRunDetailsData ? (
           <div className='space-y-2'>
             <AccordionList

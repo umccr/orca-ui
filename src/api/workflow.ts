@@ -160,6 +160,7 @@ export type AnalysisModel = components['schemas']['AnalysisMin'];
 export type ComputeContextModel = components['schemas']['AnalysisContext'];
 export type StorageContextModel = components['schemas']['AnalysisContext'];
 export type WorkflowRunPaginatedModel = components['schemas']['PaginatedWorkflowRunDetailList'];
+export type WorkflowRunRerunValidateDetailModel = components['schemas']['AllowedRerunWorkflow'];
 
 export const useWorkflowModel = createWorkflowQueryHook('/api/v1/workflow/');
 export const useWorkflowRunListModel = createWorkflowQueryHook('/api/v1/workflowrun/');

@@ -7,14 +7,16 @@ export interface IconButtonProps {
   type?: 'primary' | 'secondary' | 'light' | 'green' | 'red' | 'yellow' | 'gray';
   disabled?: boolean;
   className?: string;
-  tooltip?: string;
+  hasTooltip?: boolean;
+  tooltipText?: string;
   tooltipPosition?: 'top' | 'bottom' | 'left' | 'right';
   tooltipBackground?: 'light' | 'dark';
 }
 
 const IconButton: FC<IconButtonProps> = ({
   icon,
-  tooltip,
+  hasTooltip = false,
+  tooltipText,
   onClick,
   disabled = false,
   className = '',
@@ -34,9 +36,9 @@ const IconButton: FC<IconButtonProps> = ({
     </button>
   );
 
-  if (tooltip) {
+  if (hasTooltip) {
     return (
-      <Tooltip text={tooltip} position={tooltipPosition} background={tooltipBackground}>
+      <Tooltip text={tooltipText} position={tooltipPosition} background={tooltipBackground}>
         {button}
       </Tooltip>
     );
