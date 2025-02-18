@@ -519,7 +519,7 @@ const WorkflowRunTimeline = () => {
   return (
     <div>
       {(isFetchingWorkflowState || isFetchingWorkflowComment) && (
-        <BackdropWithText text='Loading Status data...' />
+        <BackdropWithText text='Loading Timeline data...' />
       )}
       <div className='flex flex-row gap-1 pb-4'>
         <div className='flex-1'>

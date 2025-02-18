@@ -45,3 +45,6 @@ response.json
 
 # ignore openapi types
 src/api/types/*
+
+# ignore cursor rules
+.cursorrules

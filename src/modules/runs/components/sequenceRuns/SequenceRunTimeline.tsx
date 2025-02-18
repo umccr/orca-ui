@@ -256,7 +256,7 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
   return (
     <div>
       {(isFetchingSequenceRunStateDetail || isFetchingSequenceRunComments) && (
-        <BackdropWithText text='Loading Status data...' />
+        <BackdropWithText text='Loading Timeline data...' />
       )}
       <div className='flex flex-row py-4'>
         <Button

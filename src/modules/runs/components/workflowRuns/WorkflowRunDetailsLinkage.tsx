@@ -51,7 +51,7 @@ const WorkflowRunDetailsLinkage = () => {
       <Accordion
         title={
           <div className='flex items-center gap-2'>
-            <span>Linked items</span>
+            <span>Linked Libraries</span>
             <span className='rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600'>
               {librariesTableData.length}
             </span>

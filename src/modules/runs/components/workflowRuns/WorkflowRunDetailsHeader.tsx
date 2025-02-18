@@ -5,7 +5,6 @@ import {
   useWorkflowRunRerunModel,
   useWorkflowRunStateCreateModel,
 } from '@/api/workflow';
-
 import { classNames } from '@/utils/commonUtils';
 import Skeleton from 'react-loading-skeleton';
 import { IconDropdown } from '@/components/common/dropdowns';
@@ -15,6 +14,7 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { useWorkflowRunContext } from './WorkflowRunContext';
 import { Checkbox } from '@/components/common/checkbox';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
+import { SearchableSelect } from '@/components/common/select';
 
 const WorkflowRunDetailsHeader = () => {
   const { user } = useAuthContext();
@@ -124,13 +124,22 @@ const WorkflowRunDetailsHeader = () => {
     <div className='flex w-full flex-col gap-2 pt-4'>
       {/* title */}
       <div className='flex flex-1 flex-row items-center gap-2 px-2'>
+        {/* header: workflow run name */}
         {isFetchingWorkflowRunDetail ? (
           <div className='flex-1'>
             <Skeleton height={20} />
           </div>
         ) : (
-          <div className='flex-1 text-lg font-medium'>{workflowRunDetail?.workflowRunName}</div>
+          <div className='flex-1 text-lg font-medium'>
+            <div className='flex flex-col'>
+              <h1 className='truncate text-xl font-semibold text-gray-900 dark:text-white'>
+                {workflowRunDetail?.workflowRunName}
+              </h1>
+              <p className='mt-1 text-sm text-gray-500 dark:text-gray-400'>Workflow Run Details</p>
+            </div>
+          </div>
         )}
+        {/* workflow run action:  rerun */}
         <div>
           <IconDropdown
             items={[
@@ -140,7 +149,17 @@ const WorkflowRunDetailsHeader = () => {
                 disabled: isFetchingWorkflowRunRerunAllowedWorkflows,
               },
             ]}
-            className='hover:text-magpie-light-500 bg-magpie-light-50'
+            className={classNames(
+              'inline-flex items-center',
+              'rounded-lg border border-gray-200 dark:border-gray-700',
+              'bg-white dark:bg-gray-800',
+              'text-sm font-medium text-gray-700 dark:text-gray-200',
+              'shadow-sm',
+              'hover:bg-gray-50 dark:hover:bg-gray-700',
+              'focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400',
+              'transition-all duration-200',
+              'disabled:cursor-not-allowed disabled:opacity-50'
+            )}
             type='square'
           />
         </div>
@@ -192,34 +211,21 @@ const WorkflowRunDetailsHeader = () => {
               </div>
             ) : (
               <>
-                <div className='mt-2 flex flex-col gap-1 text-sm'>
+                <div className='mx-1 mt-2 flex flex-col gap-1 text-sm'>
                   <div>
                     <div className='mb-1 pt-1 text-xs font-medium'>
                       Please select the dataset to rerun:
                     </div>
-                    <div className='flex flex-wrap gap-1'>
-                      {workflowRunRerunValidateDetail?.allowedDatasetChoice.map((dataset, idx) => (
-                        <label
-                          key={idx}
-                          className={classNames(
-                            'flex cursor-pointer items-center rounded-md border px-2 py-1 transition-colors',
-                            'hover:bg-gray-50',
-                            selectedDataset === dataset
-                              ? 'border-blue-500 bg-blue-50 text-blue-700'
-                              : 'border-gray-200'
-                          )}
-                        >
-                          <input
-                            type='radio'
-                            name='dataset'
-                            value={dataset}
-                            checked={selectedDataset === dataset}
-                            onChange={() => setSelectedDataset(dataset)}
-                            className='h-3 w-3 border-gray-300 text-blue-600 focus:ring-blue-500'
-                          />
-                          <span className='ml-1 text-xs font-medium'>{dataset}</span>
-                        </label>
-                      ))}
+                    <div className='w-full max-w-xs py-2'>
+                      <SearchableSelect
+                        options={workflowRunRerunValidateDetail?.allowedDatasetChoice || []}
+                        value={selectedDataset || null}
+                        onChange={setSelectedDataset}
+                        placeholder='Search datasets...'
+                        examples={
+                          workflowRunRerunValidateDetail?.allowedDatasetChoice.slice(0, 3) || []
+                        }
+                      />
                     </div>
                     {!selectedDataset && (
                       <div className='text-xs text-red-500'>Please select a dataset.</div>

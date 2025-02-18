@@ -29,6 +29,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "vite.config.ts"],
-  "exclude": ["src/stories"]
+  "include": ["src", "vite.config.ts", ".storybook/**/*", "*.d.ts"]
 }

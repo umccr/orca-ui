@@ -1,5 +1,5 @@
 import Select from './SingleSelect';
 import type { SelectItems } from './SingleSelect';
 import IconMultipleSelect from './IconMultipleSelect';
-
-export { Select, SelectItems, IconMultipleSelect };
+import { SearchableSelect } from './SearchableSelect';
+export { Select, SelectItems, IconMultipleSelect, SearchableSelect };
