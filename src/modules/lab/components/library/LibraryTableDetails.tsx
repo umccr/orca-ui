@@ -14,8 +14,17 @@ export const LibraryTableDetails: FC<LibraryTableDetailsProps> = ({ libraryDetai
       <JsonToTable
         className='shadow-none'
         data={{
-          'Library Id': library.libraryId ?? '-',
-          'Subject Id': (
+          'Library ID': library.libraryId ?? '-',
+          'Individual ID': library.subject.individualSet.map((individual) => (
+            <Link
+              key={individual.orcabusId}
+              to={`/lab/?tab=subject&individualId=${individual.individualId}`}
+              className={classNames('text-blue-500 hover:text-blue-700')}
+            >
+              {individual.individualId ?? '-'}
+            </Link>
+          )),
+          'Subject ID': (
             <Link
               to={`/lab/?tab=subject&orcabusId=${library.subject.orcabusId}`}
               className={classNames('text-blue-500 hover:text-blue-700')}
@@ -23,7 +32,7 @@ export const LibraryTableDetails: FC<LibraryTableDetailsProps> = ({ libraryDetai
               {library.subject.subjectId ?? '-'}
             </Link>
           ),
-          'Sample Id': (
+          'Sample ID': (
             <Link
               to={`/lab/?tab=sample&orcabusId=${library.sample.orcabusId}`}
               className={classNames('text-blue-500 hover:text-blue-700')}
@@ -31,8 +40,8 @@ export const LibraryTableDetails: FC<LibraryTableDetailsProps> = ({ libraryDetai
               {library.sample.sampleId ?? '-'}
             </Link>
           ),
-          'External Sample Id': library.sample.externalSampleId ?? '-',
           'Sample Source': library.sample.source ?? '-',
+          'External Sample ID': library.sample.externalSampleId ?? '-',
           Phenotype: library.phenotype ?? '-',
           Workflow: library.workflow ?? '-',
           Quality: library.quality ?? '-',
@@ -41,7 +50,7 @@ export const LibraryTableDetails: FC<LibraryTableDetailsProps> = ({ libraryDetai
           Project: library.projectSet.map((project) => (
             <Link
               key={project.orcabusId}
-              to={`/lab/?tab=library&project_id=${project.projectId}`}
+              to={`/lab/?tab=library&projectId=${project.projectId}`}
               className={classNames('text-blue-500 hover:text-blue-700')}
             >
               {project.projectId ?? '-'}

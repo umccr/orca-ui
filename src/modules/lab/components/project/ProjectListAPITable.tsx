@@ -8,7 +8,7 @@ import { ProjectTableFilter } from './ProjectTableFilter';
 import { getContactTableColumn } from '../contact/utils';
 
 export const ProjectListAPITable = ({ queryParams }: { queryParams: ProjectListQueryParams }) => {
-  const { setQueryParams, getPaginationParams } = useQueryParams();
+  const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
 
   const projectModel = useSuspenseMetadataProjectModel({
     params: { query: { ...queryParams, ...getPaginationParams() } },
@@ -29,7 +29,10 @@ export const ProjectListAPITable = ({ queryParams }: { queryParams: ProjectListQ
         <div className='flex flex-col md:flex-row'>
           <div className='flex items-center justify-center'>{'Subject Table'}</div>
           <div className='flex flex-1 items-center justify-end pt-2'>
-            <Search onSearch={(s) => setQueryParams({ search: s })} />
+            <Search
+              onSearch={(s) => setQueryParams({ search: s })}
+              searchBoxContent={getQueryParams().search}
+            />
             <div className='ml-2'>
               <ProjectTableFilter />
             </div>

@@ -12,6 +12,7 @@ type FilterType = {
   orcabusId?: string[];
   libraryId?: string[];
   assay?: string[];
+  individualId?: string[];
   'coverage[gte]'?: string;
   'coverage[lte]'?: string;
   projectId?: string[];
@@ -81,13 +82,13 @@ export const LibraryTableFilter = () => {
   const LibraryFilter = () => (
     <>
       <FilterTextInput
-        title='Orcabus Id *'
+        title='Orcabus ID *'
         keyFilter='orcabusId'
         defaultInput={filter.orcabusId ? filter.orcabusId : []}
         handleFilterChange={handleFilterChange}
       />
       <FilterTextInput
-        title='Library Id *'
+        title='Library ID *'
         keyFilter='libraryId'
         defaultInput={filter.libraryId ? filter.libraryId : []}
         handleFilterChange={handleFilterChange}
@@ -99,7 +100,13 @@ export const LibraryTableFilter = () => {
         handleFilterChange={handleFilterChange}
       />
       <FilterTextInput
-        title='Project Id *'
+        title='Individual ID (SBJ ID) *'
+        keyFilter='individualId'
+        defaultInput={filter.individualId ? filter.individualId : []}
+        handleFilterChange={handleFilterChange}
+      />
+      <FilterTextInput
+        title='Project ID *'
         keyFilter='projectId'
         defaultInput={filter.projectId ? filter.projectId : []}
         handleFilterChange={handleFilterChange}

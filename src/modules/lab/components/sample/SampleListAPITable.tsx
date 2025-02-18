@@ -8,7 +8,7 @@ import { getLibraryTableColumn } from '../library/utils';
 import { getSampleTableColumn } from './utils';
 
 export const SampleListAPITable = ({ queryParams }: { queryParams: SampleListQueryParams }) => {
-  const { setQueryParams, getPaginationParams } = useQueryParams();
+  const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
 
   const sampleModel = useSuspenseMetadataSampleModel({
     params: { query: { ...queryParams, ...getPaginationParams() } },
@@ -28,7 +28,10 @@ export const SampleListAPITable = ({ queryParams }: { queryParams: SampleListQue
         <div className='flex flex-col md:flex-row'>
           <div className='flex items-center justify-center'>{'Sample Table'}</div>
           <div className='flex flex-1 items-center justify-end pt-2'>
-            <Search onSearch={(s) => setQueryParams({ search: s })} />
+            <Search
+              onSearch={(s) => setQueryParams({ search: s })}
+              searchBoxContent={getQueryParams().search}
+            />
             <div className='ml-2'>
               <SampleTableFilter />
             </div>

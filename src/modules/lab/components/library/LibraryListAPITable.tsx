@@ -10,7 +10,7 @@ import { getSubjectTableColumn } from '../subject/utils';
 import { getProjectTableColumn } from '../project/utils';
 
 export const LibraryListAPITable = ({ queryParams }: { queryParams: LibraryListQueryParams }) => {
-  const { setQueryParams, getPaginationParams } = useQueryParams();
+  const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
 
   const libraryModel = useSuspenseMetadataLibraryModel({
     params: { query: { ...queryParams, ...getPaginationParams() } },
@@ -30,7 +30,10 @@ export const LibraryListAPITable = ({ queryParams }: { queryParams: LibraryListQ
         <div className='flex flex-col'>
           <div className='flex items-center justify-center'>{'Library Table'}</div>
           <div className='flex flex-1 items-center justify-end pt-2'>
-            <Search onSearch={(s) => setQueryParams({ search: s })} />
+            <Search
+              onSearch={(s) => setQueryParams({ search: s })}
+              searchBoxContent={getQueryParams().search}
+            />
             <div className='ml-2'>
               <LibraryTableFilter />
             </div>

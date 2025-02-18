@@ -11,7 +11,7 @@
     "start": "bash -c 'source start.sh'",
     "dev": "bash -c 'source start.sh'",
     "tsc-check": "tsc --build --force",
-    "build": "vite build",
+    "build": "curl -o ./public/assets/metadata-schema.svg https://raw.githubusercontent.com/umccr/orcabus/refs/heads/main/lib/workload/stateless/stacks/metadata-manager/docs/schema.drawio.svg && vite build",
     "lint": "eslint --ignore-pattern 'deploy/cdk.out'",
     "prettier-fix": "prettier . --write --ignore-path .gitignore --ignore-path deploy/.gitignore",
     "prettier-check": "prettier . --check --ignore-path .gitignore --ignore-path deploy/.gitignore",

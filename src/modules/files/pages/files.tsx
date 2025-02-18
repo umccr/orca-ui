@@ -88,7 +88,7 @@ export default function FilesPage() {
       <div className='flex flex-col'>
         {/* PortalRunId */}
         <InputBadgeBox
-          label='Portal Run Id'
+          label='Portal Run ID'
           inputState={portalRunIdInput.inputState}
           inputDraft={portalRunIdInput.inputDraft}
           setInput={setPortalRunIdInput}

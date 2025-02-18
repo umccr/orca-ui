@@ -15,7 +15,7 @@ const Search: FC<SearchProps> = ({
   searchBoxContent,
   hasTooltip,
   tooltipText,
-  placeholder,
+  placeholder = 'Search',
 }) => {
   const [searchBox, setSearchBox] = useState<string>('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
