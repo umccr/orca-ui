@@ -101,6 +101,18 @@ const SimpleDialog: FC<DialogProps> = ({
 
             {(closeBtn || confirmBtn) && (
               <div className='flex flex-col-reverse gap-2 border-t border-gray-100 px-6 py-4 sm:flex-row sm:justify-end dark:border-gray-700'>
+                {closeBtn && (
+                  <button
+                    type='button'
+                    onClick={closeBtn.onClick}
+                    className={classNames(
+                      'inline-flex justify-center rounded-lg border px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-800 dark:focus:ring-gray-400',
+                      closeBtn.className || ''
+                    )}
+                  >
+                    {closeBtn.label}
+                  </button>
+                )}
                 {confirmBtn && (
                   <button
                     type='button'
@@ -115,19 +127,6 @@ const SimpleDialog: FC<DialogProps> = ({
                     )}
                   >
                     {confirmBtn.label}
-                  </button>
-                )}
-
-                {closeBtn && (
-                  <button
-                    type='button'
-                    onClick={closeBtn.onClick}
-                    className={classNames(
-                      'inline-flex justify-center rounded-lg border px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-800 dark:focus:ring-gray-400',
-                      closeBtn.className || ''
-                    )}
-                  >
-                    {closeBtn.label}
                   </button>
                 )}
               </div>

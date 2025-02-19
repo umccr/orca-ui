@@ -120,7 +120,6 @@ const WorkflowRunTimeline = () => {
         ? workflowCommentData.map((comment) => ({
             id: comment.orcabusId as string,
             title: 'Comment Added',
-
             datetime: comment.updatedAt,
             iconBackground: 'bg-blue-100 dark:bg-blue-900',
             comment: comment.comment,

@@ -7,19 +7,16 @@ import {
 } from '@/api/sequenceRun';
 import { useState, useEffect, useMemo } from 'react';
 import { dayjs } from '@/utils/dayjs';
-import Badge from '@/components/common/badges/Badge';
-import { Tooltip } from '@/components/common/tooltips';
-import { WrenchIcon, TrashIcon, ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
+
 import { getUsername } from '@/utils/commonUtils';
 import { Timeline } from '@/components/common/timelines';
 import { getBadgeStatusType, statusBackgroundColor } from '@/utils/statusUtils';
 import { BackdropWithText } from '@/components/common/backdrop';
 import { Button } from '@/components/common/buttons';
-import { PlusIcon } from '@heroicons/react/20/solid';
-import { Dialog } from '@/components/common/dialogs';
-import { Textarea } from '@headlessui/react';
+import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
 import toaster from '@/components/common/toaster';
+import CommentDialog from '../common/CommentDialog';
 
 const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId: string }) => {
   const { user } = useAuthContext();
@@ -57,12 +54,7 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
   const SequenceRunStateTimelineData = useMemo(() => {
     return sequenceRunStateDetail?.map((state) => ({
       id: state.orcabusId || '',
-      content: (
-        <div className='group flex flex-row gap-2 text-sm text-gray-500'>
-          <div>Status Updated</div>
-          <Badge status={state.status}>{state.status}</Badge>
-        </div>
-      ),
+      title: 'Status Updated',
       datetime: dayjs(state.timestamp).format('YYYY-MM-DD HH:mm'),
       comment: state.comment || '',
       status: state.status,
@@ -75,41 +67,35 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
   const SequenceRunCommentTimelineData = useMemo(() => {
     return sequenceRunCommentsDetail?.map((comment) => ({
       id: comment.orcabusId || '',
-      content: (
-        <div className='group flex flex-row gap-2 text-sm text-gray-500'>
-          <div className='text-nowrap font-medium'>{`${getUsername(comment.createdBy)} `}</div>
-          <div className='text-nowrap text-gray-500'>made a new</div>
-          <Badge type='unknown'>Comment</Badge>
-          {comment.comment && (
-            <div className='flex flex-row gap-2 opacity-0 group-hover:opacity-100'>
-              <Tooltip text='Update' position='top' background='light'>
-                <WrenchIcon
-                  className='h-4 w-4 cursor-pointer stroke-gray-500'
-                  onClick={() => {
-                    setCommentId(comment.orcabusId as string);
-                    setComment(comment.comment);
-                    setIsOpenUpdateCommentDialog(true);
-                  }}
-                />
-              </Tooltip>
-              <Tooltip text='Delete' position='top' background='light'>
-                <TrashIcon
-                  className='h-4 w-4 cursor-pointer stroke-gray-500'
-                  onClick={() => {
-                    setCommentId(comment.orcabusId as string);
-                    setIsOpenDeleteCommentDialog(true);
-                  }}
-                />
-              </Tooltip>
-            </div>
-          )}
-        </div>
-      ),
-      datetime: dayjs(comment.createdAt).format('YYYY-MM-DD HH:mm'),
-      type: 'comment',
-      comment: comment.comment || '',
+      title: 'Comment Added',
+      datetime: comment.updatedAt,
+      iconBackground: 'bg-blue-100 dark:bg-blue-900',
+      comment: comment.comment,
+      actionsList: [
+        {
+          label: 'Update',
+          onClick: () => {
+            setCommentId(comment.orcabusId as string);
+            setComment(comment.comment);
+            setIsOpenUpdateCommentDialog(true);
+          },
+          icon: PencilIcon,
+        },
+        {
+          label: 'Delete',
+          onClick: () => {
+            setCommentId(comment.orcabusId as string);
+            setIsOpenDeleteCommentDialog(true);
+          },
+          icon: TrashIcon,
+        },
+      ],
       eventType: 'comment' as const,
-      iconBackground: 'bg-green-100',
+      user: {
+        name: getUsername(comment.createdBy || ''),
+        // Optional: Add avatar if available
+        // avatar: getUserAvatar(comment.createdBy)
+      },
     }));
   }, [sequenceRunCommentsDetail]);
 
@@ -119,6 +105,8 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
       ...(SequenceRunCommentTimelineData || []),
     ].sort((a, b) => (dayjs(a.datetime).isBefore(dayjs(b.datetime)) ? -1 : 1));
   }, [SequenceRunStateTimelineData, SequenceRunCommentTimelineData]);
+
+  console.log(timelineData);
 
   const {
     mutate: createSequenceRunComment,
@@ -233,26 +221,6 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
     isErrorDeletingSequenceRunComment,
   ]);
 
-  const userProfileSection = useMemo(() => {
-    return (
-      <div className='flex items-center gap-3 rounded-lg bg-gray-50 p-3 dark:bg-gray-700'>
-        <div className='flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900'>
-          <span className='text-sm font-medium text-blue-600 dark:text-blue-300'>
-            {user?.email?.[0].toUpperCase() || '?'}
-          </span>
-        </div>
-        <div className='flex flex-col'>
-          <span className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-            {user?.email || 'Unknown User'}
-          </span>
-          <span className='text-xs text-gray-500 dark:text-gray-400'>
-            {dayjs().format('MMM D, YYYY • h:mm A')}
-          </span>
-        </div>
-      </div>
-    );
-  }, [user]);
-
   return (
     <div>
       {(isFetchingSequenceRunStateDetail || isFetchingSequenceRunComments) && (
@@ -272,82 +240,25 @@ const SequenceRunTimeline = ({ selectedSequenceRunId }: { selectedSequenceRunId:
           Add Comment
         </Button>
       </div>
-      <Timeline timeline={timelineData || [{ id: 'loading' }]} />
+      <Timeline timeline={timelineData || [{ id: 'loading' }]} isCollapsed={true} />
       {/* comment dialog */}
-      <Dialog
-        TitleIcon={ChatBubbleBottomCenterTextIcon}
-        open={isOpenAddCommentDialog || isOpenUpdateCommentDialog || isOpenDeleteCommentDialog}
-        title={
-          isOpenAddCommentDialog
-            ? 'Add a new comment'
-            : isOpenUpdateCommentDialog
-              ? 'Update a comment'
-              : 'Delete a comment'
-        }
-        content={
-          <div className='flex flex-col gap-4 p-2'>
-            {/* User Info Section */}
-            {userProfileSection}
-
-            {/* Comment Input Section */}
-            {(isOpenAddCommentDialog || isOpenUpdateCommentDialog) && (
-              <div className='flex flex-col gap-2'>
-                <label
-                  htmlFor='comment'
-                  className='text-sm font-medium text-gray-700 dark:text-gray-300'
-                >
-                  Comment
-                </label>
-                <Textarea
-                  id='comment'
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  placeholder='Write your comment here...'
-                  className='min-h-[120px] w-full rounded-lg border border-gray-300 p-3 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100'
-                />
-              </div>
-            )}
-
-            {isOpenDeleteCommentDialog && (
-              <div className='flex flex-col gap-2 rounded-lg bg-red-50 p-4 dark:bg-red-600/10'>
-                <div className='text-sm font-medium text-red-800 dark:text-red-100'>
-                  Are you sure you want to delete this comment?
-                </div>
-                <div className='text-sm text-red-600 dark:text-red-400'>
-                  This action will be irreversible.
-                </div>
-              </div>
-            )}
-          </div>
-        }
-        onClose={() => {
+      <CommentDialog
+        isOpenAddCommentDialog={isOpenAddCommentDialog}
+        isOpenUpdateCommentDialog={isOpenUpdateCommentDialog}
+        isOpenDeleteCommentDialog={isOpenDeleteCommentDialog}
+        comment={comment}
+        setComment={setComment}
+        handleClose={() => {
           setIsOpenAddCommentDialog(false);
           setIsOpenUpdateCommentDialog(false);
           setIsOpenDeleteCommentDialog(false);
           setComment('');
         }}
-        closeBtn={{
-          label: 'Close',
-          onClick: () => {
-            setIsOpenAddCommentDialog(false);
-            setIsOpenUpdateCommentDialog(false);
-            setIsOpenDeleteCommentDialog(false);
-            setComment('');
-          },
-        }}
-        confirmBtn={{
-          label: isOpenAddCommentDialog
-            ? 'Add Comment'
-            : isOpenUpdateCommentDialog
-              ? 'Update Comment'
-              : 'Delete Comment',
-          onClick: isOpenAddCommentDialog
-            ? handleAddComment
-            : isOpenUpdateCommentDialog
-              ? handleUpdateComment
-              : handleDeleteComment,
-        }}
-      ></Dialog>
+        handleAddComment={handleAddComment}
+        handleUpdateComment={handleUpdateComment}
+        handleDeleteComment={handleDeleteComment}
+        user={user}
+      />
     </div>
   );
 };
