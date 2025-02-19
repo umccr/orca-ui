@@ -6,7 +6,7 @@ const AnalysisRunFilterHeader = () => {
   const { setQueryParams, clearQueryParams, getQueryParams } = useQueryParams();
   return (
     <div className='flex w-full flex-row items-center justify-between gap-1 p-2 md:flex-row'>
-      <div>
+      <div className='w-1/4'>
         <Search
           onSearch={(searchContent) => setQueryParams({ search: searchContent })}
           searchBoxContent={getQueryParams().search || ''}

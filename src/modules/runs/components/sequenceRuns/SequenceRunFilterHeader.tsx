@@ -78,7 +78,7 @@ const SequenceRunFilterHeader = () => {
   return (
     <>
       <div className='flex w-full flex-row items-center justify-between gap-1 p-2 md:flex-row'>
-        <div className='w-2/5'>
+        <div className='w-1/4'>
           <Search
             onSearch={(searchContent) => setQueryParams({ search: searchContent })}
             searchBoxContent={getQueryParams().search || ''}

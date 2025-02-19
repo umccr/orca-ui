@@ -8,7 +8,7 @@ import { SideBarLayout } from '@/components/common/sidebar';
 const WorkflowRunsDetails = () => {
   return (
     <WorkflowRunProvider>
-      <div className='flex h-full w-full'>
+      <div className='no-scrollbar flex h-full w-full overflow-y-auto'>
         <div className='flex-grow'>
           <SideBarLayout
             main={
@@ -18,7 +18,9 @@ const WorkflowRunsDetails = () => {
                 <WorkflowRunTimeline />
               </div>
             }
+            mainClassName='no-scrollbar'
             sideBar={<WorkflowRunDetailsSidebar />}
+            sideBarClassName='overflow-y-auto no-scrollbar'
             sideBarPosition='right'
           />
         </div>

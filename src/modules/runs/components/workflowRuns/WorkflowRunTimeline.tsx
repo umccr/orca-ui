@@ -13,13 +13,14 @@ import {
 } from '@/api/workflow';
 import { keepPreviousData } from '@tanstack/react-query';
 import {
-  WrenchIcon,
   TrashIcon,
-  ArrowsUpDownIcon,
-  DocumentTextIcon,
+  EyeSlashIcon,
+  EyeIcon,
+  BarsArrowUpIcon,
+  BarsArrowDownIcon,
+  PencilIcon,
 } from '@heroicons/react/24/outline';
 import toaster from '@/components/common/toaster';
-import { Tooltip } from '@/components/common/tooltips';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
 import { Badge } from '@/components/common/badges';
 import { getBadgeStatusType, statusBackgroundColor } from '@/utils/statusUtils';
@@ -89,36 +90,19 @@ const WorkflowRunTimeline = () => {
         ? workflowStateData.map((state) => ({
             id: state.orcabusId as string,
             title: 'Workflow State Update',
-            content: (
-              <div className='flex items-center gap-3'>
-                <div className='flex-1'>
-                  <div className='group flex items-center justify-between gap-2'>
-                    <Badge status={state.status}>{state.status}</Badge>
-                    <div className='flex items-center gap-2 opacity-0 group-hover:opacity-100'>
-                      {Object.keys(workflowRunStateValidMapData || {}).includes(state.status) && (
-                        <Tooltip
-                          text='Update State Comment'
-                          position='top'
-                          background='dark'
-                          size='small'
-                        >
-                          <button
-                            onClick={() => {
-                              setStateId(state.orcabusId as string);
-                              setStateComment(state.comment || '');
-                              setIsOpenUpdateStateDialog(true);
-                            }}
-                            className='rounded-full p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700'
-                          >
-                            <WrenchIcon className='h-4 w-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300' />
-                          </button>
-                        </Tooltip>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ),
+            actionsList: Object.keys(workflowRunStateValidMapData || {}).includes(state.status)
+              ? [
+                  {
+                    label: 'Edit',
+                    icon: PencilIcon,
+                    onClick: () => {
+                      setStateId(state.orcabusId as string);
+                      setStateComment(state.comment || '');
+                      setIsOpenUpdateStateDialog(true);
+                    },
+                  },
+                ]
+              : [],
             datetime: state.timestamp,
             comment: state.comment || '',
             status: state.status,
@@ -136,43 +120,29 @@ const WorkflowRunTimeline = () => {
         ? workflowCommentData.map((comment) => ({
             id: comment.orcabusId as string,
             title: 'Comment Added',
-            content: (
-              <div className='group flex items-center justify-between'>
-                <div className='flex items-center gap-2'>
-                  <Badge type='unknown'>Comment</Badge>
-                </div>
-                {comment.comment && (
-                  <div className='flex items-center gap-2 opacity-0 group-hover:opacity-100'>
-                    <Tooltip text='Edit' position='top' background='dark' size='small'>
-                      <button
-                        onClick={() => {
-                          setCommentId(comment.orcabusId as string);
-                          setComment(comment.comment);
-                          setIsOpenUpdateCommentDialog(true);
-                        }}
-                        className='rounded-full p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700'
-                      >
-                        <WrenchIcon className='h-4 w-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300' />
-                      </button>
-                    </Tooltip>
-                    <Tooltip text='Delete' position='top' background='dark' size='small'>
-                      <button
-                        onClick={() => {
-                          setCommentId(comment.orcabusId as string);
-                          setIsOpenDeleteCommentDialog(true);
-                        }}
-                        className='rounded-full p-1 text-red-500 transition-colors hover:bg-gray-100 hover:text-red-600 dark:hover:bg-gray-700'
-                      >
-                        <TrashIcon className='h-4 w-4' />
-                      </button>
-                    </Tooltip>
-                  </div>
-                )}
-              </div>
-            ),
+
             datetime: comment.updatedAt,
             iconBackground: 'bg-blue-100 dark:bg-blue-900',
             comment: comment.comment,
+            actionsList: [
+              {
+                label: 'Edit',
+                icon: PencilIcon,
+                onClick: () => {
+                  setCommentId(comment.orcabusId as string);
+                  setComment(comment.comment);
+                  setIsOpenUpdateCommentDialog(true);
+                },
+              },
+              {
+                label: 'Delete',
+                icon: TrashIcon,
+                onClick: () => {
+                  setCommentId(comment.orcabusId as string);
+                  setIsOpenDeleteCommentDialog(true);
+                },
+              },
+            ],
             eventType: 'comment' as const,
             user: {
               name: getUsername(comment.createdBy || ''),
@@ -207,17 +177,10 @@ const WorkflowRunTimeline = () => {
   const handleTimelineSelect = (event: TimelineEvent) => {
     if (event.eventType !== 'stateChange') return;
 
-    const isSamePayload = event.payloadId === selectedPayloadId;
-
-    if (isSamePayload) {
-      // Toggle payload visibility when clicking the same event
-      setShowPayload((prev) => !prev);
-    } else {
-      // Update state and show payload for new selection
-      setSelectedPayloadId(event.payloadId || null);
-      setSelectedState(event.status || null);
-      setShowPayload(true);
-    }
+    // Update state and show payload for new selection
+    setSelectedPayloadId(event.payloadId || null);
+    setSelectedState(event.status || null);
+    setShowPayload(true);
   };
 
   const {
@@ -413,23 +376,7 @@ const WorkflowRunTimeline = () => {
               {workflowRuntimelineData.length} events
             </span>
           </div>
-          <div className='flex items-center gap-1'>
-            <Button
-              type='gray'
-              size='xs'
-              onClick={() => setIsReverseOrder(!isReverseOrder)}
-              className={classNames(
-                'flex items-center gap-2',
-                'border border-gray-200 dark:border-gray-700',
-                'text-gray-700 dark:text-gray-300',
-                'hover:bg-gray-50 dark:hover:bg-gray-700',
-                'rounded-lg px-4 py-2',
-                'shadow-sm'
-              )}
-            >
-              <ArrowsUpDownIcon className='h-4 w-4' />
-              <span>{isReverseOrder ? 'Oldest First' : 'Latest First'}</span>
-            </Button>
+          <div className='flex items-center gap-2'>
             <Button
               type='gray'
               size='xs'
@@ -444,55 +391,41 @@ const WorkflowRunTimeline = () => {
                 'shadow-sm'
               )}
             >
-              <DocumentTextIcon className='h-4 w-4' />
+              {showPayload ? <EyeSlashIcon className='h-4 w-4' /> : <EyeIcon className='h-4 w-4' />}
               {showPayload ? 'Hide Payload' : 'Show Payload'}
+            </Button>
+            <Button
+              type='gray'
+              size='xs'
+              onClick={() => setIsReverseOrder(!isReverseOrder)}
+              className={classNames(
+                'flex items-center gap-2',
+                'border border-gray-200 dark:border-gray-700',
+                'text-gray-700 dark:text-gray-300',
+                'hover:bg-gray-50 dark:hover:bg-gray-700',
+                'rounded-lg px-4 py-2',
+                'shadow-sm'
+              )}
+            >
+              {isReverseOrder ? (
+                <BarsArrowUpIcon className='h-4 w-4' />
+              ) : (
+                <BarsArrowDownIcon className='h-4 w-4' />
+              )}
+              <span>{isReverseOrder ? 'Oldest First' : 'Latest First'}</span>
             </Button>
           </div>
         </div>
         {/* timeline content part */}
-        <div className='flex flex-row gap-1 pb-4'>
+        <div className='flex h-full flex-row gap-2'>
           <div className='flex-1'>
-            {/* comment dialog */}
-            <CommentDialog
-              isOpenAddCommentDialog={false}
-              isOpenUpdateCommentDialog={isOpenUpdateCommentDialog}
-              isOpenDeleteCommentDialog={isOpenDeleteCommentDialog}
-              comment={comment}
-              setComment={setComment}
-              handleClose={() => {
-                setIsOpenUpdateCommentDialog(false);
-                setIsOpenDeleteCommentDialog(false);
-                setComment('');
-              }}
-              handleAddComment={() => {}}
-              handleUpdateComment={handleUpdateComment}
-              handleDeleteComment={handleDeleteComment}
-              user={user}
-            />
-            {/* state dialog */}
-            <StatesDialog
-              isOpenAddStateDialog={false}
-              isOpenUpdateStateDialog={isOpenUpdateStateDialog}
-              user={user}
-              validState={validState}
-              stateStatus={stateStatus}
-              setStateStatus={setStateStatus}
-              selectedState={selectedState}
-              currentState={currentState}
-              handleClose={() => {
-                setIsOpenUpdateStateDialog(false);
-              }}
-              stateComment={stateComment}
-              setStateComment={setStateComment}
-              handleStateCreationEvent={() => {}}
-              handleUpdateState={handleUpdateState}
-            />
             <div className='shrink-0'>
               <Timeline
                 timeline={
                   isReverseOrder ? workflowRuntimelineData.reverse() : workflowRuntimelineData
                 }
                 handldEventClick={handleTimelineSelect}
+                isCollapsed={showPayload}
               />
             </div>
           </div>
@@ -504,6 +437,44 @@ const WorkflowRunTimeline = () => {
               />
             </div>
           )}
+        </div>
+
+        <div>
+          {/* comment dialog */}
+          <CommentDialog
+            isOpenAddCommentDialog={false}
+            isOpenUpdateCommentDialog={isOpenUpdateCommentDialog}
+            isOpenDeleteCommentDialog={isOpenDeleteCommentDialog}
+            comment={comment}
+            setComment={setComment}
+            handleClose={() => {
+              setIsOpenUpdateCommentDialog(false);
+              setIsOpenDeleteCommentDialog(false);
+              setComment('');
+            }}
+            handleAddComment={() => {}}
+            handleUpdateComment={handleUpdateComment}
+            handleDeleteComment={handleDeleteComment}
+            user={user}
+          />
+          {/* state dialog */}
+          <StatesDialog
+            isOpenAddStateDialog={false}
+            isOpenUpdateStateDialog={isOpenUpdateStateDialog}
+            user={user}
+            validState={validState}
+            stateStatus={stateStatus}
+            setStateStatus={setStateStatus}
+            selectedState={selectedState}
+            currentState={currentState}
+            handleClose={() => {
+              setIsOpenUpdateStateDialog(false);
+            }}
+            stateComment={stateComment}
+            setStateComment={setStateComment}
+            handleStateCreationEvent={() => {}}
+            handleUpdateState={handleUpdateState}
+          />
         </div>
       </div>
     </div>

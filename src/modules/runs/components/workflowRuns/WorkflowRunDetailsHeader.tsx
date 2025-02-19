@@ -12,7 +12,7 @@ import toaster from '@/components/common/toaster';
 import { useWorkflowRunContext } from './WorkflowRunContext';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
 import { Button } from '@/components/common/buttons';
-import { ChatBubbleLeftRightIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { ChatBubbleLeftRightIcon, PlusIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import RerunDialog from '../common/RerunDialog';
 import CommentDialog from '../common/CommentDialog';
 import StatesDialog from '../common/StatesDialog';
@@ -231,57 +231,22 @@ const WorkflowRunDetailsHeader = () => {
         </div>
       ) : (
         <div>
-          <div className='flex items-center justify-between pt-4'>
+          <div className='flex items-center justify-between py-4'>
             <div className='flex flex-col'>
               <h1 className='truncate text-xl font-semibold text-gray-900 dark:text-white'>
                 {workflowRunDetail?.workflowRunName}
               </h1>
-              <p className='mt-1 text-sm text-gray-500 dark:text-gray-400'>Workflow Run Actions</p>
             </div>
           </div>
-          <div className='flex flex-wrap items-center gap-2 p-4'>
-            <Button
-              type='gray'
-              size='xs'
-              rounded
-              onClick={() => setIsOpenRerunWorkflowDialog(true)}
-              disabled={isFetchingWorkflowRunRerunAllowedWorkflows}
-              className={classNames(
-                'flex items-center gap-2',
-                'border border-gray-200 dark:border-gray-700',
-                'text-gray-700 dark:text-gray-300',
-                'hover:bg-gray-50 dark:hover:bg-gray-700',
-                'rounded-lg px-4 py-2',
-                'shadow-sm'
-              )}
-            >
-              <PlusIcon className='h-4 w-4' />
-              Rerun
-            </Button>
-            <Button
-              type='gray'
-              size='xs'
-              rounded
-              onClick={() => setIsOpenAddCommentDialog(true)}
-              className={classNames(
-                'flex items-center gap-2',
-                'border border-gray-200 dark:border-gray-700',
-                'text-gray-700 dark:text-gray-300',
-                'hover:bg-gray-50 dark:hover:bg-gray-700',
-                'rounded-lg px-4 py-2',
-                'shadow-sm'
-              )}
-            >
-              <ChatBubbleLeftRightIcon className='h-4 w-4' />
-              Add Comment
-            </Button>
-
-            {isValidCreateState && (
+          <div className='flex flex-col gap-2 py-2'>
+            <p className='mt-1 text-sm text-gray-500 dark:text-gray-400'>Workflow Run Actions</p>
+            <div className='flex flex-wrap items-center gap-2'>
               <Button
                 type='gray'
                 size='xs'
                 rounded
-                onClick={() => setIsOpenAddStateDialog(true)}
+                onClick={() => setIsOpenRerunWorkflowDialog(true)}
+                disabled={isFetchingWorkflowRunRerunAllowedWorkflows}
                 className={classNames(
                   'flex items-center gap-2',
                   'border border-gray-200 dark:border-gray-700',
@@ -291,10 +256,47 @@ const WorkflowRunDetailsHeader = () => {
                   'shadow-sm'
                 )}
               >
-                <PlusIcon className='h-4 w-4' />
-                Add New State
+                <ArrowPathIcon className='h-4 w-4' />
+                Rerun
               </Button>
-            )}
+
+              {isValidCreateState && (
+                <Button
+                  type='gray'
+                  size='xs'
+                  rounded
+                  onClick={() => setIsOpenAddStateDialog(true)}
+                  className={classNames(
+                    'flex items-center gap-2',
+                    'border border-gray-200 dark:border-gray-700',
+                    'text-gray-700 dark:text-gray-300',
+                    'hover:bg-gray-50 dark:hover:bg-gray-700',
+                    'rounded-lg px-4 py-2',
+                    'shadow-sm'
+                  )}
+                >
+                  <PlusIcon className='h-4 w-4' />
+                  Add New State
+                </Button>
+              )}
+              <Button
+                type='gray'
+                size='xs'
+                rounded
+                onClick={() => setIsOpenAddCommentDialog(true)}
+                className={classNames(
+                  'flex items-center gap-2',
+                  'border border-gray-200 dark:border-gray-700',
+                  'text-gray-700 dark:text-gray-300',
+                  'hover:bg-gray-50 dark:hover:bg-gray-700',
+                  'rounded-lg px-4 py-2',
+                  'shadow-sm'
+                )}
+              >
+                <ChatBubbleLeftRightIcon className='h-4 w-4' />
+                Add Comment
+              </Button>
+            </div>
           </div>
         </div>
       )}
