@@ -16,6 +16,7 @@ export interface DialogProps {
   description?: string;
   content?: string | ReactNode;
   open: boolean;
+  size?: 'sm' | 'md' | 'lg';
   onClose: () => void;
   closeBtn?: DialogButtonProps;
   confirmBtn?: DialogButtonProps;
@@ -28,6 +29,7 @@ const SimpleDialog: FC<DialogProps> = ({
   description,
   content,
   open,
+  size = 'md',
   onClose,
   closeBtn,
   confirmBtn,
@@ -44,7 +46,14 @@ const SimpleDialog: FC<DialogProps> = ({
         <div className='flex min-h-full items-center justify-center'>
           <DialogPanel
             transition
-            className='relative w-full max-w-[calc(100vw-2rem)] transform rounded-xl bg-white shadow-xl ring-1 ring-gray-900/5 transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95 md:max-w-2xl lg:max-w-7xl dark:bg-gray-800 dark:ring-white/5'
+            className={classNames(
+              'relative w-full max-w-[calc(100vw-2rem)] transform rounded-xl bg-white shadow-xl ring-1 ring-gray-900/5 transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in',
+              size === 'sm' &&
+                'sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95',
+              size === 'md' && 'md:max-w-2xl',
+              size === 'lg' && 'lg:max-w-7xl',
+              'dark:bg-gray-800 dark:ring-white/5'
+            )}
           >
             {/* Close button */}
             <div className='absolute right-4 top-4'>
@@ -92,6 +101,18 @@ const SimpleDialog: FC<DialogProps> = ({
 
             {(closeBtn || confirmBtn) && (
               <div className='flex flex-col-reverse gap-2 border-t border-gray-100 px-6 py-4 sm:flex-row sm:justify-end dark:border-gray-700'>
+                {closeBtn && (
+                  <button
+                    type='button'
+                    onClick={closeBtn.onClick}
+                    className={classNames(
+                      'inline-flex justify-center rounded-lg border px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-800 dark:focus:ring-gray-400',
+                      closeBtn.className || ''
+                    )}
+                  >
+                    {closeBtn.label}
+                  </button>
+                )}
                 {confirmBtn && (
                   <button
                     type='button'
@@ -106,19 +127,6 @@ const SimpleDialog: FC<DialogProps> = ({
                     )}
                   >
                     {confirmBtn.label}
-                  </button>
-                )}
-
-                {closeBtn && (
-                  <button
-                    type='button'
-                    onClick={closeBtn.onClick}
-                    className={classNames(
-                      'inline-flex justify-center rounded-lg border px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-800 dark:focus:ring-gray-400',
-                      closeBtn.className || ''
-                    )}
-                  >
-                    {closeBtn.label}
                   </button>
                 )}
               </div>

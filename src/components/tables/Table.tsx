@@ -8,7 +8,7 @@ import Pagination, { PaginationProps } from './Pagination';
 import { BackdropWithText } from '@/components/common/backdrop';
 import Skeleton from 'react-loading-skeleton';
 import toaster from '@/components/common/toaster';
-
+import { Tooltip } from '@/components/common/tooltips';
 export type TableData = Record<string, unknown>;
 
 export type Column = {
@@ -193,23 +193,25 @@ const Table: FC<TableProps> = ({
                                     ? column.cell(data[column.accessor], data) // pass cell data and row data to cell renderer
                                     : (data[column.accessor] as ReactNode)}
                                   {column.copyable && (
-                                    <ClipboardDocumentIcon
-                                      className={classNames(
-                                        'h-5 w-5 !cursor-pointer',
-                                        'stroke-gray-600 dark:stroke-gray-400',
-                                        'opacity-0 group-hover:opacity-100',
-                                        'transition-all duration-200',
-                                        'hover:stroke-gray-700 dark:hover:stroke-gray-400'
-                                      )}
-                                      onClick={() => {
-                                        navigator.clipboard.writeText(
-                                          data[column.accessor] as string
-                                        );
-                                        toaster.success({
-                                          title: `Copied ${column.accessor} to clipboard`,
-                                        });
-                                      }}
-                                    />
+                                    <Tooltip text='Copy' size='small' background='light'>
+                                      <ClipboardDocumentIcon
+                                        className={classNames(
+                                          'h-5 w-5 !cursor-pointer',
+                                          'stroke-gray-600 dark:stroke-gray-400',
+                                          'opacity-0 group-hover:opacity-100',
+                                          'transition-all duration-200',
+                                          'hover:stroke-gray-700 dark:hover:stroke-gray-400'
+                                        )}
+                                        onClick={() => {
+                                          navigator.clipboard.writeText(
+                                            data[column.accessor] as string
+                                          );
+                                          toaster.success({
+                                            title: `Copied ${column.accessor} to clipboard`,
+                                          });
+                                        }}
+                                      />
+                                    </Tooltip>
                                   )}
                                 </div>
                               </td>

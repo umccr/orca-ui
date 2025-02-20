@@ -52,7 +52,7 @@ export const IconMultipleSelectStory: Story = {
     return (
       <IconMultipleSelect
         BtnIcon={ListBulletIcon}
-        value={['1', '2']}
+        selectedItemValues={['1', '2']}
         options={people}
         onApply={(value) => console.log(value)}
       />

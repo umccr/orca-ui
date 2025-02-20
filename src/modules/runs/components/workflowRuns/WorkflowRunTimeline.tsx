@@ -1,34 +1,26 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Timeline } from '@/components/common/timelines';
 import type { TimelineEvent } from '@/components/common/timelines';
 import { ContentTabs } from '@/components/navigation/tabs';
 import { JsonToNestedList, JsonDisplay } from '@/components/common/json-to-table';
 import {
-  useWorkflowStateModel,
-  useWorkflowRunCommentModel,
   useWorkflowPayloadModel,
-  useWorkflowRunCommentCreateModel,
   useWorkflowRunCommentUpdateModel,
   useWorkflowRunCommentDeleteModel,
-  useWorkflowRunStateCreateModel,
   useWorkflowRunStateUpdateModel,
   useWorkflowRunStateValidMapModel,
 } from '@/api/workflow';
 import { keepPreviousData } from '@tanstack/react-query';
 import {
-  PlusCircleIcon,
-  PlusIcon,
-  ChatBubbleLeftRightIcon,
-  ChatBubbleBottomCenterTextIcon,
-  WrenchIcon,
   TrashIcon,
-  ArrowsUpDownIcon,
+  EyeSlashIcon,
+  EyeIcon,
+  BarsArrowUpIcon,
+  BarsArrowDownIcon,
+  PencilIcon,
 } from '@heroicons/react/24/outline';
 import toaster from '@/components/common/toaster';
-import { Tooltip } from '@/components/common/tooltips';
-import { Dialog } from '@/components/common/dialogs';
-import { Textarea } from '@headlessui/react';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
 import { Badge } from '@/components/common/badges';
 import { getBadgeStatusType, statusBackgroundColor } from '@/utils/statusUtils';
@@ -37,17 +29,27 @@ import { classNames, getUsername } from '@/utils/commonUtils';
 import { BackdropWithText } from '@/components/common/backdrop';
 import { useWorkflowRunContext } from './WorkflowRunContext';
 import { Button } from '@/components/common/buttons';
-// import { SideDrawer } from '@/components/common/drawers';
+import CommentDialog from '../common/CommentDialog';
+import StatesDialog from '../common/StatesDialog';
+import { Accordion } from '@/components/common/accordion';
 
 const WorkflowRunTimeline = () => {
   const { orcabusId } = useParams();
   const { user } = useAuthContext();
-  const { refreshWorkflowRuns, setRefreshWorkflowRuns } = useWorkflowRunContext();
+  const {
+    refreshWorkflowRuns,
+    setRefreshWorkflowRuns,
+    workflowStateData,
+    refetchWorkflowState,
+    workflowCommentData,
+    refetchWorkflowComment,
+    isFetchingWorkflowState,
+    isFetchingWorkflowComment,
+  } = useWorkflowRunContext();
   const [currentState, setCurrentState] = useState<string | null>(null);
   const [selectedPayloadId, setSelectedPayloadId] = useState<string | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);
 
-  const [isOpenAddCommentDialog, setIsOpenAddCommentDialog] = useState<boolean>(false);
   const [isOpenUpdateCommentDialog, setIsOpenUpdateCommentDialog] = useState<boolean>(false);
   const [isOpenDeleteCommentDialog, setIsOpenDeleteCommentDialog] = useState<boolean>(false);
   const [commentId, setCommentId] = useState<string | null>(null);
@@ -55,24 +57,12 @@ const WorkflowRunTimeline = () => {
 
   const [isReverseOrder, setIsReverseOrder] = useState<boolean>(false);
 
-  const [isOpenAddStateDialog, setIsOpenAddStateDialog] = useState<boolean>(false);
   const [isOpenUpdateStateDialog, setIsOpenUpdateStateDialog] = useState<boolean>(false);
   const [stateStatus, setStateStatus] = useState<string | null>(null);
   const [stateId, setStateId] = useState<string | null>(null);
   const [stateComment, setStateComment] = useState<string>('');
 
-  // const [isOpenSideDrawer, setIsOpenSideDrawer] = useState<boolean>(false);
-
-  const {
-    data: workflowStateData,
-    isFetching: isFetchingWorkflowState,
-    refetch: refetchWorkflowState,
-  } = useWorkflowStateModel({
-    params: { path: { orcabusId: orcabusId?.split('.')[1] as string } },
-    reactQuery: {
-      enabled: !!orcabusId,
-    },
-  });
+  const [showPayload, setShowPayload] = useState(false);
 
   useEffect(() => {
     if (refreshWorkflowRuns) {
@@ -81,19 +71,8 @@ const WorkflowRunTimeline = () => {
     }
   }, [refreshWorkflowRuns, refetchWorkflowState, setRefreshWorkflowRuns]);
 
-  const {
-    data: workflowCommentData,
-    isFetching: isFetchingWorkflowComment,
-    refetch: refetchWorkflowComment,
-  } = useWorkflowRunCommentModel({
-    params: { path: { orcabusId: orcabusId?.split('.')[1] as string } },
-    reactQuery: {
-      enabled: !!orcabusId,
-    },
-  });
-
   const { data: workflowRunStateValidMapData } = useWorkflowRunStateValidMapModel({
-    params: { path: { orcabusId: orcabusId?.split('.')[1] as string } },
+    params: { path: { orcabusId: orcabusId as string } },
     reactQuery: {
       enabled: !!orcabusId,
     },
@@ -101,10 +80,6 @@ const WorkflowRunTimeline = () => {
 
   const workflowLastState = workflowStateData?.[workflowStateData.length - 1]?.status;
 
-  // check if the last state is valid for state creation
-  const isValidCreateState = Object.entries(workflowRunStateValidMapData || {}).some(([, value]) =>
-    (value as string[]).includes(workflowLastState || '')
-  );
   // find all valid state key who has vale of workflowLastState
   const validState = Object.entries(workflowRunStateValidMapData || {})
     .filter(([, value]) => (value as string[]).includes(workflowLastState || ''))
@@ -116,46 +91,25 @@ const WorkflowRunTimeline = () => {
         ? workflowStateData.map((state) => ({
             id: state.orcabusId as string,
             title: 'Workflow State Update',
-            content: (
-              <div className='flex items-center gap-3'>
-                <div className='flex-1'>
-                  <div className='flex items-center justify-between gap-2'>
-                    <Badge status={state.status}>{state.status}</Badge>
-                    {Object.keys(workflowRunStateValidMapData || {}).includes(state.status) && (
-                      <Tooltip
-                        text='Update State Comment'
-                        position='top'
-                        background='dark'
-                        size='small'
-                      >
-                        <button
-                          onClick={() => {
-                            setStateId(state.orcabusId as string);
-                            setStateComment(state.comment || '');
-                            setIsOpenUpdateStateDialog(true);
-                          }}
-                          className='rounded-full p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700'
-                        >
-                          <WrenchIcon className='h-4 w-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300' />
-                        </button>
-                      </Tooltip>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ),
+            actionsList: Object.keys(workflowRunStateValidMapData || {}).includes(state.status)
+              ? [
+                  {
+                    label: 'Edit',
+                    icon: PencilIcon,
+                    onClick: () => {
+                      setStateId(state.orcabusId as string);
+                      setStateComment(state.comment || '');
+                      setIsOpenUpdateStateDialog(true);
+                    },
+                  },
+                ]
+              : [],
             datetime: state.timestamp,
             comment: state.comment || '',
             status: state.status,
             iconBackground: statusBackgroundColor(getBadgeStatusType(state.status)),
             payloadId: state?.payload || '',
             eventType: 'stateChange' as const,
-            // user: {
-            //   name: getUsername(state.createdBy || ''),
-            //   // Optional: Add avatar if available
-            //   // avatar: getUserAvatar(state.createdBy)
-            // },
-            // tags: [state.status]
           }))
         : [],
     [workflowStateData, workflowRunStateValidMapData]
@@ -167,43 +121,28 @@ const WorkflowRunTimeline = () => {
         ? workflowCommentData.map((comment) => ({
             id: comment.orcabusId as string,
             title: 'Comment Added',
-            content: (
-              <div className='group flex items-center justify-between'>
-                <div className='flex items-center gap-2'>
-                  <Badge type='unknown'>Comment</Badge>
-                </div>
-                {comment.comment && (
-                  <div className='flex items-center gap-2 opacity-0 group-hover:opacity-100'>
-                    <Tooltip text='Edit' position='top' background='dark' size='small'>
-                      <button
-                        onClick={() => {
-                          setCommentId(comment.orcabusId as string);
-                          setComment(comment.comment);
-                          setIsOpenUpdateCommentDialog(true);
-                        }}
-                        className='rounded-full p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700'
-                      >
-                        <WrenchIcon className='h-4 w-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300' />
-                      </button>
-                    </Tooltip>
-                    <Tooltip text='Delete' position='top' background='dark' size='small'>
-                      <button
-                        onClick={() => {
-                          setCommentId(comment.orcabusId as string);
-                          setIsOpenDeleteCommentDialog(true);
-                        }}
-                        className='rounded-full p-1 text-red-500 transition-colors hover:bg-gray-100 hover:text-red-600 dark:hover:bg-gray-700'
-                      >
-                        <TrashIcon className='h-4 w-4' />
-                      </button>
-                    </Tooltip>
-                  </div>
-                )}
-              </div>
-            ),
             datetime: comment.updatedAt,
             iconBackground: 'bg-blue-100 dark:bg-blue-900',
             comment: comment.comment,
+            actionsList: [
+              {
+                label: 'Edit',
+                icon: PencilIcon,
+                onClick: () => {
+                  setCommentId(comment.orcabusId as string);
+                  setComment(comment.comment);
+                  setIsOpenUpdateCommentDialog(true);
+                },
+              },
+              {
+                label: 'Delete',
+                icon: TrashIcon,
+                onClick: () => {
+                  setCommentId(comment.orcabusId as string);
+                  setIsOpenDeleteCommentDialog(true);
+                },
+              },
+            ],
             eventType: 'comment' as const,
             user: {
               name: getUsername(comment.createdBy || ''),
@@ -228,93 +167,20 @@ const WorkflowRunTimeline = () => {
   }, [workflowStateTimelineData]);
 
   const { data: selectedWorkflowPayloadData, isFetching } = useWorkflowPayloadModel({
-    params: { path: { id: selectedPayloadId?.split('.')[1] || '' } },
+    params: { path: { id: selectedPayloadId || '' } },
     reactQuery: {
       enabled: !!selectedPayloadId,
       placeholderData: keepPreviousData,
     },
   });
 
-  const {
-    mutate: createWorkflowRunComment,
-    isSuccess: isCreatedWorkflowRunComment,
-    isError: isErrorCreatingWorkflowRunComment,
-    reset: resetCreateWorkflowRunComment,
-  } = useWorkflowRunCommentCreateModel({
-    params: { path: { orcabusId: orcabusId?.split('.')[1] as string } },
-    body: {
-      comment: comment,
-      createdBy: user?.email,
-    },
-  });
-
-  const handleAddComment = () => {
-    createWorkflowRunComment();
-    setIsOpenAddCommentDialog(false);
-  };
-
-  useEffect(() => {
-    if (isCreatedWorkflowRunComment) {
-      toaster.success({ title: 'Comment added successfully' });
-      refetchWorkflowComment();
-      resetCreateWorkflowRunComment();
-      setComment('');
-    }
-
-    if (isErrorCreatingWorkflowRunComment) {
-      toaster.error({ title: 'Error adding comment' });
-      resetCreateWorkflowRunComment();
-    }
-  }, [
-    isCreatedWorkflowRunComment,
-    isErrorCreatingWorkflowRunComment,
-    refetchWorkflowComment,
-    resetCreateWorkflowRunComment,
-  ]);
-
-  const {
-    mutate: createWorkflowRunState,
-    isSuccess: isCreatedWorkflowRunState,
-    isError: isErrorCreatingWorkflowRunState,
-    reset: resetCreateWorkflowRunState,
-  } = useWorkflowRunStateCreateModel({
-    params: { path: { orcabusId: orcabusId?.split('.')[1] as string } },
-    body: {
-      status: stateStatus,
-      comment: stateComment,
-      createdBy: user?.email,
-    },
-  });
-
-  const handleStateCreationEvent = () => {
-    createWorkflowRunState();
-    setIsOpenAddStateDialog(false);
-  };
-  useEffect(() => {
-    if (isCreatedWorkflowRunState) {
-      toaster.success({ title: 'State added' });
-      refetchWorkflowState();
-      resetCreateWorkflowRunState();
-      setStateComment('');
-    }
-
-    if (isErrorCreatingWorkflowRunState) {
-      toaster.error({ title: 'Error adding state status' });
-      resetCreateWorkflowRunState();
-    }
-  }, [
-    isCreatedWorkflowRunState,
-    refetchWorkflowState,
-    resetCreateWorkflowRunState,
-    isErrorCreatingWorkflowRunState,
-  ]);
-
   const handleTimelineSelect = (event: TimelineEvent) => {
-    if (event.eventType === 'stateChange') {
-      setSelectedPayloadId(event.payloadId || null);
-      setSelectedState(event.status || null);
-      // setIsOpenSideDrawer(true);
-    }
+    if (event.eventType !== 'stateChange') return;
+
+    // Update state and show payload for new selection
+    setSelectedPayloadId(event.payloadId || null);
+    setSelectedState(event.status || null);
+    // setShowPayload(true);
   };
 
   const {
@@ -325,8 +191,8 @@ const WorkflowRunTimeline = () => {
   } = useWorkflowRunCommentUpdateModel({
     params: {
       path: {
-        orcabusId: orcabusId?.split('.')[1] as string,
-        id: commentId?.split('.')[1] as string,
+        orcabusId: orcabusId as string,
+        id: commentId as string,
       },
     },
     body: {
@@ -370,8 +236,8 @@ const WorkflowRunTimeline = () => {
   } = useWorkflowRunCommentDeleteModel({
     params: {
       path: {
-        orcabusId: orcabusId?.split('.')[1] as string,
-        id: commentId?.split('.')[1] as string,
+        orcabusId: orcabusId as string,
+        id: commentId as string,
       },
     },
     body: {
@@ -411,8 +277,8 @@ const WorkflowRunTimeline = () => {
   } = useWorkflowRunStateUpdateModel({
     params: {
       path: {
-        orcabusId: orcabusId?.split('.')[1] as string,
-        id: stateId?.split('.')[1] as string,
+        orcabusId: orcabusId as string,
+        id: stateId as string,
       },
     },
     body: {
@@ -444,26 +310,6 @@ const WorkflowRunTimeline = () => {
     isErrorUpdatingWorkflowRunState,
   ]);
 
-  const userProfileSection = useMemo(() => {
-    return (
-      <div className='flex items-center gap-3 rounded-lg bg-gray-50 p-3 dark:bg-gray-700'>
-        <div className='flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900'>
-          <span className='text-sm font-medium text-blue-600 dark:text-blue-300'>
-            {user?.email?.[0].toUpperCase() || '?'}
-          </span>
-        </div>
-        <div className='flex flex-col'>
-          <span className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-            {user?.email || 'Unknown User'}
-          </span>
-          <span className='text-xs text-gray-500 dark:text-gray-400'>
-            {dayjs().format('MMM D, YYYY • h:mm A')}
-          </span>
-        </div>
-      </div>
-    );
-  }, [user]);
-
   // Create a PayloadContent component for the drawer
   const PayloadContent = ({
     selectedState,
@@ -472,37 +318,80 @@ const WorkflowRunTimeline = () => {
     selectedState: string;
     currentState: string;
   }) => (
-    <div className='flex flex-col space-y-4'>
-      {/* State Badge */}
-      <div className='flex items-center gap-3 rounded-lg bg-gray-50 p-3 dark:bg-gray-800'>
+    <div className='flex flex-col space-y-4 px-2'>
+      {/* State Badge Card */}
+      <div
+        className={classNames(
+          'flex items-center gap-3 rounded-lg p-3',
+          'bg-gradient-to-r from-gray-50/80 to-white dark:from-gray-800/80 dark:to-gray-800/50'
+        )}
+      >
         <span className='text-sm font-medium text-gray-600 dark:text-gray-400'>
-          Selected State:
+          {selectedState ? 'Selected State' : 'Current State'}:
         </span>
-        <Badge status={selectedState || currentState || 'unknown'}>
+        <Badge status={selectedState || currentState || 'unknown'} className='shadow-sm'>
           {selectedState || currentState || 'unknown'}
         </Badge>
       </div>
 
-      {/* Content Tabs */}
-      <div className='rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900'>
+      {/* Content Section */}
+      <div className='flex flex-col space-y-1 rounded-lg'>
         <ContentTabs
+          className='rounded-lg bg-white bg-gradient-to-r from-gray-50/80 to-white shadow-sm dark:bg-gray-900 dark:from-gray-800/80 dark:to-gray-800/50'
           tabs={[
             {
-              label: 'List View',
+              label: 'Payload Data',
               content: (
-                <div className='p-4'>
-                  <JsonToNestedList
-                    cellValueFormat={cellValueFormat}
-                    data={selectedWorkflowPayloadData?.data as Record<string, unknown>}
-                    isFetchingData={isFetching}
-                  />
+                <div className='flex flex-col gap-3 p-2'>
+                  {Object.entries(selectedWorkflowPayloadData?.data as Record<string, unknown>).map(
+                    ([key, value]) => (
+                      <Accordion
+                        key={key}
+                        title={key}
+                        defaultOpen={true}
+                        chevronPosition='right'
+                        className={classNames(
+                          'overflow-hidden rounded-lg',
+                          'bg-gradient-to-r from-white to-gray-50/50',
+                          'dark:from-gray-900 dark:to-gray-800/50',
+                          'shadow-sm hover:shadow-md',
+                          'transition-all duration-200 ease-in-out',
+                          'group'
+                        )}
+                        buttonClassName={classNames(
+                          'border-0',
+                          'bg-gradient-to-r from-gray-50/80 to-transparent',
+                          'dark:from-gray-800/80 dark:to-transparent',
+                          'group-hover:from-blue-50/50 dark:group-hover:from-blue-900/20',
+                          'transition-all duration-300'
+                        )}
+                      >
+                        <div className='divide-y divide-gray-100 bg-white/50 dark:divide-gray-800 dark:bg-gray-900/50'>
+                          <JsonToNestedList
+                            data={value as Record<string, unknown>}
+                            isURIIncluded={true}
+                            isFetchingData={isFetching}
+                            inCard={false}
+                            className='space-y-0'
+                            listClassName='hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors duration-200'
+                          />
+                        </div>
+                      </Accordion>
+                    )
+                  )}
                 </div>
               ),
             },
             {
               label: 'JSON View',
               content: (
-                <div className='p-4'>
+                <div
+                  className={classNames(
+                    'rounded-lg p-4',
+                    'bg-gray-50/50 dark:bg-gray-800/50',
+                    'font-mono text-sm'
+                  )}
+                >
                   <JsonDisplay
                     data={selectedWorkflowPayloadData as Record<string, unknown>}
                     isFetchingData={isFetching}
@@ -519,266 +408,120 @@ const WorkflowRunTimeline = () => {
   return (
     <div>
       {(isFetchingWorkflowState || isFetchingWorkflowComment) && (
-        <BackdropWithText text='Loading Status data...' />
+        <BackdropWithText text='Loading Timeline data...' />
       )}
-      <div className='flex flex-row gap-1 pb-4'>
-        <div className='flex-1'>
-          <div className='flex flex-col gap-2 pb-4'>
-            <div className='flex items-center gap-3'>
-              <h2 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>Timeline</h2>
-              <div className='flex items-center gap-1'>
-                <span className='text-sm text-gray-500 dark:text-gray-400'>
-                  {workflowRuntimelineData.length} events
-                </span>
-                <span className='text-sm text-gray-400 dark:text-gray-500'>•</span>
-                <button
-                  onClick={() => setIsReverseOrder(!isReverseOrder)}
-                  className='inline-flex items-center gap-1.5 text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
-                >
-                  <ArrowsUpDownIcon className='h-4 w-4' />
-                  <span>{isReverseOrder ? 'Oldest First' : 'Latest First'}</span>
-                </button>
-              </div>
-            </div>
-
-            <div className='flex flex-row items-end gap-2'>
-              <Button
-                type='gray'
-                size='xs'
-                rounded
-                onClick={() => {
-                  setIsOpenAddCommentDialog(true);
-                }}
-                className='ring-2 ring-gray-300'
-              >
-                <ChatBubbleLeftRightIcon className='h-4 w-4' />
-                Add Comment
-              </Button>
-
-              {isValidCreateState && (
-                <Button
-                  type='gray'
-                  size='xs'
-                  rounded
-                  onClick={() => {
-                    setIsOpenAddStateDialog(true);
-                  }}
-                  className='ring-2 ring-gray-300'
-                >
-                  <PlusIcon className='h-4 w-4' />
-                  Add New State
-                </Button>
+      <div className='flex flex-col gap-1 pb-4'>
+        {/* timeline header part */}
+        <div className='mb-4 flex items-center justify-between'>
+          <div className='flex items-center gap-3'>
+            <h2 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>Timeline</h2>
+            <span className='text-sm text-gray-500 dark:text-gray-400'>
+              {workflowRuntimelineData.length} events
+            </span>
+          </div>
+          <div className='flex items-center gap-2'>
+            <Button
+              type='gray'
+              size='xs'
+              rounded
+              onClick={() => setShowPayload(!showPayload)}
+              className={classNames(
+                'flex items-center gap-2',
+                'border border-gray-200 dark:border-gray-700',
+                'text-gray-700 dark:text-gray-300',
+                'hover:bg-gray-50 dark:hover:bg-gray-700',
+                'rounded-lg px-4 py-2',
+                'shadow-sm'
               )}
+            >
+              {showPayload ? <EyeSlashIcon className='h-4 w-4' /> : <EyeIcon className='h-4 w-4' />}
+              {showPayload ? 'Hide Payload' : 'Show Payload'}
+            </Button>
+            <Button
+              type='gray'
+              size='xs'
+              onClick={() => setIsReverseOrder(!isReverseOrder)}
+              className={classNames(
+                'flex items-center gap-2',
+                'border border-gray-200 dark:border-gray-700',
+                'text-gray-700 dark:text-gray-300',
+                'hover:bg-gray-50 dark:hover:bg-gray-700',
+                'rounded-lg px-4 py-2',
+                'shadow-sm'
+              )}
+            >
+              {isReverseOrder ? (
+                <BarsArrowUpIcon className='h-4 w-4' />
+              ) : (
+                <BarsArrowDownIcon className='h-4 w-4' />
+              )}
+              <span>{isReverseOrder ? 'Oldest First' : 'Latest First'}</span>
+            </Button>
+          </div>
+        </div>
+        {/* timeline content part */}
+        <div className='flex h-full flex-row gap-2'>
+          <div className='flex-1'>
+            <div className='shrink-0'>
+              <Timeline
+                timeline={
+                  isReverseOrder ? workflowRuntimelineData.reverse() : workflowRuntimelineData
+                }
+                handldEventClick={handleTimelineSelect}
+                isCollapsed={showPayload}
+              />
             </div>
           </div>
+          {showPayload && (
+            <div className='flex-2'>
+              <PayloadContent
+                selectedState={selectedState || ''}
+                currentState={currentState || ''}
+              />
+            </div>
+          )}
+        </div>
+
+        <div>
           {/* comment dialog */}
-          <Dialog
-            TitleIcon={ChatBubbleBottomCenterTextIcon}
-            open={isOpenAddCommentDialog || isOpenUpdateCommentDialog || isOpenDeleteCommentDialog}
-            title={
-              isOpenAddCommentDialog
-                ? 'Add a new comment'
-                : isOpenUpdateCommentDialog
-                  ? 'Update a comment'
-                  : 'Delete a comment'
-            }
-            content={
-              <div className='flex flex-col gap-4 p-2'>
-                {/* User Info Section */}
-                {userProfileSection}
-
-                {/* Comment Input Section */}
-                {(isOpenAddCommentDialog || isOpenUpdateCommentDialog) && (
-                  <div className='flex flex-col gap-2'>
-                    <label
-                      htmlFor='comment'
-                      className='text-sm font-medium text-gray-700 dark:text-gray-300'
-                    >
-                      Comment
-                    </label>
-                    <Textarea
-                      id='comment'
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                      placeholder='Write your comment here...'
-                      className='min-h-[120px] w-full rounded-lg border border-gray-300 p-3 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100'
-                    />
-                  </div>
-                )}
-
-                {isOpenDeleteCommentDialog && (
-                  <div className='flex flex-col gap-2 rounded-lg bg-red-50 p-4 dark:bg-red-600/10'>
-                    <div className='text-sm font-medium text-red-800 dark:text-red-100'>
-                      Are you sure you want to delete this comment?
-                    </div>
-                    <div className='text-sm text-red-600 dark:text-red-400'>
-                      This action will be irreversible.
-                    </div>
-                  </div>
-                )}
-              </div>
-            }
-            onClose={() => {
-              setIsOpenAddCommentDialog(false);
+          <CommentDialog
+            isOpenAddCommentDialog={false}
+            isOpenUpdateCommentDialog={isOpenUpdateCommentDialog}
+            isOpenDeleteCommentDialog={isOpenDeleteCommentDialog}
+            comment={comment}
+            setComment={setComment}
+            handleClose={() => {
               setIsOpenUpdateCommentDialog(false);
               setIsOpenDeleteCommentDialog(false);
               setComment('');
             }}
-            closeBtn={{
-              label: 'Close',
-              onClick: () => {
-                setIsOpenAddCommentDialog(false);
-                setIsOpenUpdateCommentDialog(false);
-                setIsOpenDeleteCommentDialog(false);
-                setComment('');
-              },
-            }}
-            confirmBtn={{
-              label: isOpenAddCommentDialog
-                ? 'Add Comment'
-                : isOpenUpdateCommentDialog
-                  ? 'Update Comment'
-                  : 'Delete Comment',
-              onClick: isOpenAddCommentDialog
-                ? handleAddComment
-                : isOpenUpdateCommentDialog
-                  ? handleUpdateComment
-                  : handleDeleteComment,
-            }}
-          ></Dialog>
+            handleAddComment={() => {}}
+            handleUpdateComment={handleUpdateComment}
+            handleDeleteComment={handleDeleteComment}
+            user={user}
+          />
           {/* state dialog */}
-          <Dialog
-            TitleIcon={PlusCircleIcon}
-            open={isOpenAddStateDialog || isOpenUpdateStateDialog}
-            title={isOpenAddStateDialog ? 'Add New State' : 'Update State'}
-            content={
-              <div className='flex flex-col gap-4 p-2'>
-                {/* User Info Section */}
-                {userProfileSection}
-
-                {/* state status */}
-                {isOpenAddStateDialog && (
-                  <div className='flex flex-col gap-2'>
-                    <div className='mb-1 pt-1 text-xs font-medium'>
-                      Please select the state status:
-                    </div>
-                    <div className='flex flex-wrap gap-1'>
-                      {validState?.map((state, idx) => (
-                        <label
-                          key={idx}
-                          className='flex cursor-pointer items-center rounded-md border px-2 py-1 transition-colors'
-                        >
-                          <input
-                            type='radio'
-                            name='state'
-                            value={state}
-                            onChange={() => setStateStatus(state)}
-                          />
-                          <span className='ml-1 text-xs font-medium'>{state}</span>
-                        </label>
-                      ))}
-                    </div>
-                    {!stateStatus && (
-                      <div className='text-xs text-red-500'>Please select a state</div>
-                    )}
-                  </div>
-                )}
-
-                {isOpenUpdateStateDialog && (
-                  <div className='flex flex-col gap-2'>
-                    <label className='text-sm font-medium text-gray-700'>
-                      Current State Status
-                    </label>
-                    <div className='rounded-lg bg-gray-50 p-3 dark:bg-gray-700'>
-                      <Badge status={selectedState || currentState || 'unknown'}>
-                        {selectedState || currentState || 'unknown'}
-                      </Badge>
-                    </div>
-                  </div>
-                )}
-
-                {/* State Comment Input Section */}
-                <div className='flex flex-col gap-2'>
-                  <label
-                    htmlFor='stateComment'
-                    className='text-sm font-medium text-gray-700 dark:text-gray-300'
-                  >
-                    Comment
-                  </label>
-                  <Textarea
-                    id='stateComment'
-                    value={stateComment}
-                    onChange={(e) => setStateComment(e.target.value)}
-                    placeholder='Write your state comment here...'
-                    className='min-h-[120px] w-full rounded-lg border border-gray-300 p-3 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100'
-                  />
-                </div>
-              </div>
-            }
-            onClose={() => {
-              setIsOpenAddStateDialog(false);
+          <StatesDialog
+            isOpenAddStateDialog={false}
+            isOpenUpdateStateDialog={isOpenUpdateStateDialog}
+            user={user}
+            validState={validState}
+            stateStatus={stateStatus}
+            setStateStatus={setStateStatus}
+            selectedState={selectedState}
+            currentState={currentState}
+            handleClose={() => {
               setIsOpenUpdateStateDialog(false);
-              setStateComment('');
-              setStateStatus(null);
             }}
-            closeBtn={{
-              label: 'Close',
-              onClick: () => {
-                setIsOpenAddStateDialog(false);
-                setIsOpenUpdateStateDialog(false);
-                setStateComment('');
-                setStateStatus(null);
-              },
-            }}
-            confirmBtn={{
-              label: isOpenAddStateDialog ? 'Add State' : 'Update State',
-              onClick: isOpenAddStateDialog ? handleStateCreationEvent : handleUpdateState,
-            }}
-          ></Dialog>
-
-          <Timeline
-            timeline={isReverseOrder ? workflowRuntimelineData.reverse() : workflowRuntimelineData}
-            handldEventClick={handleTimelineSelect}
+            stateComment={stateComment}
+            setStateComment={setStateComment}
+            handleStateCreationEvent={() => {}}
+            handleUpdateState={handleUpdateState}
           />
         </div>
-        <div className='flex-2'>
-          <PayloadContent selectedState={selectedState || ''} currentState={currentState || ''} />
-        </div>
-
-        {/* <SideDrawer
-          isOpen={isOpenSideDrawer}
-          onClose={() => setIsOpenSideDrawer(false)}
-          title='Payload Details'
-          subtitle={selectedPayloadId || ''}
-          size='large'
-        >
-          <PayloadContent selectedState={selectedState || ''} currentState={currentState || ''} />
-        </SideDrawer> */}
       </div>
     </div>
   );
 };
 
 export default WorkflowRunTimeline;
-
-/**
- * This is an EXPERIMENTAL approach where want to be able to redirect to the `/files` page
- * with filter to a specific key prefix if an s3 uri path is found as the value
- */
-const cellValueFormat = {
-  condition: (value: unknown) => typeof value === 'string' && value.startsWith('s3://'),
-  cell: (value: string) => {
-    const s3Bucket = value.split('s3://')[1].split('/')[0];
-    const s3Key = value.split(`s3://${s3Bucket}/`)[1];
-
-    return (
-      <Link
-        // asterisk (*) is added to the end of the key to filter the path prefix
-        to={`/files?bucket=${encodeURIComponent(s3Bucket)}&key=${encodeURIComponent(s3Key)}*`}
-        className={classNames('text-sm font-medium text-blue-500 hover:text-blue-700')}
-      >
-        {value}
-      </Link>
-    );
-  },
-};

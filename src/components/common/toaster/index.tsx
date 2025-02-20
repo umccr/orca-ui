@@ -34,10 +34,16 @@ export const Msg: FC<MsgProps> = ({ title, message, type }) => {
   };
 
   return (
-    <div className={`flex items-start ${typeClass(type || ToastType.default)}`}>
+    <div className={`flex items-start gap-3 p-1 ${typeClass(type || ToastType.default)}`}>
       <div className='w-full'>
-        <h3 className='text-sm font-medium text-current'>{title}</h3>
-        {message && <p className='mt-1 text-sm opacity-90'>{message}</p>}
+        <h3 className='flex items-center gap-2 text-sm font-semibold tracking-tight text-current'>
+          {title}
+        </h3>
+        {message && (
+          <p className='text-current/80 break-words text-xs font-normal leading-relaxed'>
+            {message}
+          </p>
+        )}
       </div>
     </div>
   );
