@@ -119,7 +119,7 @@ const WorkflowRunDetailsSidebar = () => {
         {workflowRunDetailsData ? (
           <div className='space-y-2'>
             <AccordionList
-              title='Workflow Run Details'
+              title='Run Details'
               data={workflowRunDetailsData?.workflowRunDetails || []}
               defaultOpen={true}
               chevronPosition='right'

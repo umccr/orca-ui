@@ -84,7 +84,7 @@ const Sidebar: FC<SidebarProps> = ({
             </div>
           )}
 
-          <div className='scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 flex-1 overflow-y-auto'>
+          <div className='flex-1'>
             <div className='space-y-2 p-4'>{children}</div>
           </div>
 

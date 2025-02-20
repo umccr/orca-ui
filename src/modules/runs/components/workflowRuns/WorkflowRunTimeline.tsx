@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Timeline } from '@/components/common/timelines';
 import type { TimelineEvent } from '@/components/common/timelines';
 import { ContentTabs } from '@/components/navigation/tabs';
@@ -31,6 +31,7 @@ import { useWorkflowRunContext } from './WorkflowRunContext';
 import { Button } from '@/components/common/buttons';
 import CommentDialog from '../common/CommentDialog';
 import StatesDialog from '../common/StatesDialog';
+import { Accordion } from '@/components/common/accordion';
 
 const WorkflowRunTimeline = () => {
   const { orcabusId } = useParams();
@@ -179,7 +180,7 @@ const WorkflowRunTimeline = () => {
     // Update state and show payload for new selection
     setSelectedPayloadId(event.payloadId || null);
     setSelectedState(event.status || null);
-    setShowPayload(true);
+    // setShowPayload(true);
   };
 
   const {
@@ -317,37 +318,80 @@ const WorkflowRunTimeline = () => {
     selectedState: string;
     currentState: string;
   }) => (
-    <div className='flex flex-col space-y-4'>
-      {/* State Badge */}
-      <div className='flex items-center gap-3 rounded-lg bg-gray-50 p-3 dark:bg-gray-800'>
+    <div className='flex flex-col space-y-4 px-2'>
+      {/* State Badge Card */}
+      <div
+        className={classNames(
+          'flex items-center gap-3 rounded-lg p-3',
+          'bg-gradient-to-r from-gray-50/80 to-white dark:from-gray-800/80 dark:to-gray-800/50'
+        )}
+      >
         <span className='text-sm font-medium text-gray-600 dark:text-gray-400'>
-          Selected State:
+          {selectedState ? 'Selected State' : 'Current State'}:
         </span>
-        <Badge status={selectedState || currentState || 'unknown'}>
+        <Badge status={selectedState || currentState || 'unknown'} className='shadow-sm'>
           {selectedState || currentState || 'unknown'}
         </Badge>
       </div>
 
-      {/* Content Tabs */}
-      <div className='rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900'>
+      {/* Content Section */}
+      <div className='flex flex-col space-y-1 rounded-lg'>
         <ContentTabs
+          className='rounded-lg bg-white bg-gradient-to-r from-gray-50/80 to-white shadow-sm dark:bg-gray-900 dark:from-gray-800/80 dark:to-gray-800/50'
           tabs={[
             {
-              label: 'List View',
+              label: 'Payload Data',
               content: (
-                <div className='p-4'>
-                  <JsonToNestedList
-                    cellValueFormat={cellValueFormat}
-                    data={selectedWorkflowPayloadData?.data as Record<string, unknown>}
-                    isFetchingData={isFetching}
-                  />
+                <div className='flex flex-col gap-3 p-2'>
+                  {Object.entries(selectedWorkflowPayloadData?.data as Record<string, unknown>).map(
+                    ([key, value]) => (
+                      <Accordion
+                        key={key}
+                        title={key}
+                        defaultOpen={true}
+                        chevronPosition='right'
+                        className={classNames(
+                          'overflow-hidden rounded-lg',
+                          'bg-gradient-to-r from-white to-gray-50/50',
+                          'dark:from-gray-900 dark:to-gray-800/50',
+                          'shadow-sm hover:shadow-md',
+                          'transition-all duration-200 ease-in-out',
+                          'group'
+                        )}
+                        buttonClassName={classNames(
+                          'border-0',
+                          'bg-gradient-to-r from-gray-50/80 to-transparent',
+                          'dark:from-gray-800/80 dark:to-transparent',
+                          'group-hover:from-blue-50/50 dark:group-hover:from-blue-900/20',
+                          'transition-all duration-300'
+                        )}
+                      >
+                        <div className='divide-y divide-gray-100 bg-white/50 dark:divide-gray-800 dark:bg-gray-900/50'>
+                          <JsonToNestedList
+                            data={value as Record<string, unknown>}
+                            isURIIncluded={true}
+                            isFetchingData={isFetching}
+                            inCard={false}
+                            className='space-y-0'
+                            listClassName='hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors duration-200'
+                          />
+                        </div>
+                      </Accordion>
+                    )
+                  )}
                 </div>
               ),
             },
             {
               label: 'JSON View',
               content: (
-                <div className='p-4'>
+                <div
+                  className={classNames(
+                    'rounded-lg p-4',
+                    'bg-gray-50/50 dark:bg-gray-800/50',
+                    'font-mono text-sm'
+                  )}
+                >
                   <JsonDisplay
                     data={selectedWorkflowPayloadData as Record<string, unknown>}
                     isFetchingData={isFetching}
@@ -481,25 +525,3 @@ const WorkflowRunTimeline = () => {
 };
 
 export default WorkflowRunTimeline;
-
-/**
- * This is an EXPERIMENTAL approach where want to be able to redirect to the `/files` page
- * with filter to a specific key prefix if an s3 uri path is found as the value
- */
-const cellValueFormat = {
-  condition: (value: unknown) => typeof value === 'string' && value.startsWith('s3://'),
-  cell: (value: string) => {
-    const s3Bucket = value.split('s3://')[1].split('/')[0];
-    const s3Key = value.split(`s3://${s3Bucket}/`)[1];
-
-    return (
-      <Link
-        // asterisk (*) is added to the end of the key to filter the path prefix
-        to={`/files?bucket=${encodeURIComponent(s3Bucket)}&key=${encodeURIComponent(s3Key)}*`}
-        className={classNames('text-sm font-medium text-blue-500 hover:text-blue-700')}
-      >
-        {value}
-      </Link>
-    );
-  },
-};

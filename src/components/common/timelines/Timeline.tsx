@@ -5,7 +5,6 @@ import {
   CheckCircleIcon,
   EllipsisHorizontalIcon,
 } from '@heroicons/react/24/outline';
-// import { Badge } from '@/components/common/badges';
 import { dayjs } from '@/utils/dayjs';
 import { Badge } from '../badges';
 import { IconDropdown } from '@/components/common/dropdowns';
@@ -81,18 +80,26 @@ const Timeline: FC<TimelineProps> = ({
 
               <div
                 className={classNames(
-                  'items-top relative flex space-x-3',
-                  'cursor-pointer rounded-lg p-0 transition-all duration-200'
+                  'items-top relative flex space-x-4',
+                  'rounded-lg p-0 transition-all duration-200'
                 )}
               >
+                {/* Icon Container */}
                 <div>
                   <div
                     className={classNames(
+                      'flex h-8 w-8 cursor-pointer items-center justify-center rounded-full',
                       event.iconBackground || 'bg-gray-100 dark:bg-gray-700',
-                      'flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white dark:ring-gray-900',
+                      'ring-8 ring-white dark:ring-gray-900',
+                      'transition-all duration-300 ease-in-out',
                       selectedEventId === event.id
-                        ? 'ring-2 ring-indigo-500 dark:ring-indigo-400'
-                        : ''
+                        ? [
+                            'scale-110',
+                            'ring-blue-50 dark:ring-blue-900/20',
+                            'shadow-lg shadow-blue-100/50 dark:shadow-blue-900/20',
+                            'bg-blue-100 dark:bg-blue-900/30',
+                          ]
+                        : 'hover:scale-105'
                     )}
                     onClick={() => handleTimelineEventClick(event)}
                   >
@@ -101,13 +108,38 @@ const Timeline: FC<TimelineProps> = ({
                     ) : (
                       <CheckCircleIcon
                         aria-hidden='true'
-                        className='h-5 w-5 text-green-500 dark:text-green-400'
+                        className={classNames(
+                          'h-5 w-5',
+                          selectedEventId === event.id
+                            ? 'text-blue-600 dark:text-blue-400'
+                            : 'text-green-500 dark:text-green-400'
+                        )}
                       />
                     )}
                   </div>
                 </div>
-
-                <div className='flex h-full min-w-0 flex-1 flex-col pt-1'>
+                {/* Event Content Section */}
+                <div
+                  className={classNames(
+                    'flex h-full min-w-0 flex-1 flex-col pt-1',
+                    'rounded-lg transition-all duration-300 ease-in-out',
+                    selectedEventId === event.id && [
+                      'bg-gradient-to-r from-blue-50/80 to-white dark:from-blue-900/20 dark:to-gray-800/50',
+                      'shadow-sm shadow-blue-100/50 dark:shadow-blue-900/20',
+                      'ring-1 ring-blue-100/50 dark:ring-blue-900/20',
+                      '-mt-1 p-3 pl-4',
+                      'transform-gpu',
+                      'cursor-pointer',
+                    ],
+                    !selectedEventId && 'hover:bg-gray-50/50 dark:hover:bg-gray-800/20'
+                  )}
+                  onClick={(e) => {
+                    // Prevent event selection if clicking on the action button
+                    if (!(e.target as HTMLElement).closest('.action-dropdown')) {
+                      handleTimelineEventClick(event);
+                    }
+                  }}
+                >
                   {/* Header Section */}
                   <div
                     className={classNames(
@@ -159,7 +191,10 @@ const Timeline: FC<TimelineProps> = ({
                                 </span>
                               )}
                               {event.actionsList && event.actionsList.length > 0 && (
-                                <div className='ml-2 flex items-center'>
+                                <div
+                                  className='action-dropdown ml-2 flex items-center'
+                                  onClick={(e) => e.stopPropagation()}
+                                >
                                   <IconDropdown
                                     BtnIcon={EllipsisHorizontalIcon}
                                     items={event.actionsList || []}
@@ -213,7 +248,6 @@ const Timeline: FC<TimelineProps> = ({
                       {/* Status Badge */}
                       <div
                         className={classNames('flex items-center', isCollapsed ? 'mt-1' : 'ml-2')}
-                        onClick={() => handleTimelineEventClick(event)}
                       >
                         {event.status && (
                           <Badge
@@ -227,7 +261,7 @@ const Timeline: FC<TimelineProps> = ({
                     </div>
                     {/* Actions Dropdown */}
                     {!isCollapsed && event.actionsList && event.actionsList.length > 0 && (
-                      <div className='ml-2'>
+                      <div className='action-dropdown ml-2' onClick={(e) => e.stopPropagation()}>
                         <IconDropdown
                           BtnIcon={EllipsisHorizontalIcon}
                           items={event.actionsList || []}
@@ -285,64 +319,5 @@ const Timeline: FC<TimelineProps> = ({
     </div>
   );
 };
-
-// Example Usage:
-
-// const exampleTimeline: TimelineEvent[] = [
-//   {
-//     id: 1,
-//     content: 'Applied to',
-//     target: 'Front End Developer',
-//     href: '#',
-//     date: 'Sep 20',
-//     datetime: '2020-09-20',
-//     icon: UserIcon,
-//     iconBackground: 'bg-gray-400',
-//   },
-//   {
-//     id: 2,
-//     content: 'Advanced to phone screening by',
-//     target: 'Bethany Blake',
-//     href: '#',
-//     date: 'Sep 22',
-//     datetime: '2020-09-22',
-//     icon: HandThumbUpIcon,
-//     iconBackground: 'bg-blue-500',
-//   },
-//   {
-//     id: 3,
-//     content: 'Completed phone screening with',
-//     target: 'Martha Gardner',
-//     href: '#',
-//     date: 'Sep 28',
-//     datetime: '2020-09-28',
-//     icon: CheckIcon,
-//     iconBackground: 'bg-green-500',
-//   },
-//   {
-//     id: 4,
-//     content: 'Advanced to interview by',
-//     target: 'Bethany Blake',
-//     href: '#',
-//     date: 'Sep 30',
-//     datetime: '2020-09-30',
-//     icon: HandThumbUpIcon,
-//     iconBackground: 'bg-blue-500',
-//   },
-//   {
-//     id: 5,
-//     content: 'Completed interview with',
-//     target: 'Katherine Snyder',
-//     href: '#',
-//     date: 'Oct 4',
-//     datetime: '2020-10-04',
-//     icon: CheckIcon,
-//     iconBackground: 'bg-green-500',
-//   },
-// ];
-
-// const Example = () => {
-//   return <Timeline timeline={exampleTimeline} />;
-// };
 
 export default Timeline;
