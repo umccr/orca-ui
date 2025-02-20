@@ -9,6 +9,7 @@ export const columns = [
   'flipper_length_mm',
   'body_mass_g',
   'sex',
+  'species',
 ];
 
 export const scatterPlotData: ScatterPlotData[] = [
