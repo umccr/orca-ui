@@ -36,6 +36,7 @@ export const SimpleHeader: Story = {
           },
           signInWithGoogle: async () => {},
           logout: async () => {},
+          isLoading: false,
         }}
       >
         <Header />

@@ -140,10 +140,10 @@ export const GroupedRowTableExample: Story = {
         {
           header: 'Email',
           accessor: 'email',
-          cell: (data: string | number) => (
+          cell: (data: unknown) => (
             <div>
               <span>Custom Node example</span>
-              <div className='text-red-600'>{data}</div>
+              <div className='text-red-600'>{String(data)}</div>
             </div>
           ),
         },

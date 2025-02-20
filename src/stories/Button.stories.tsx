@@ -91,7 +91,8 @@ export const IconButtonStory: StoryObj<IconButtonProps> = {
     <IconButton
       onClick={() => console.log('testing')}
       icon={<ArrowDownOnSquareIcon className='h-5 w-5' />}
-      tooltip='Export'
+      hasTooltip={true}
+      tooltipText='Export'
       tooltipPosition='top'
       tooltipBackground='light'
     />

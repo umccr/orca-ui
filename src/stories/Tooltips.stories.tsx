@@ -42,7 +42,7 @@ export const TopWithSmallTooltip: Story = {
 
 export const TopWithSmallWhiteTooltip: Story = {
   render: () => (
-    <Tooltip text='Tooltip text' position='top' size='small' background='white'>
+    <Tooltip text='Tooltip text' position='top' size='small' background='light'>
       <Button type='primary'>Hover me</Button>
     </Tooltip>
   ),
