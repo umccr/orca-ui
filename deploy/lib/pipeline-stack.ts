@@ -30,7 +30,7 @@ import {
   Role,
   ServicePrincipal,
 } from 'aws-cdk-lib/aws-iam';
-import { Pipeline, Artifact } from 'aws-cdk-lib/aws-codepipeline';
+import { Pipeline, Artifact, CfnPipeline } from 'aws-cdk-lib/aws-codepipeline';
 import {
   CodeStarConnectionsSourceAction,
   CodeBuildAction,
@@ -279,7 +279,7 @@ export class PipelineStack extends Stack {
     /**
      * React Build and Deploy Pipeline
      */
-    new Pipeline(this, 'OrcaUICodeCICDPipeline', {
+    const appCiCdPipeline = new Pipeline(this, 'OrcaUICodeCICDPipeline', {
       pipelineName: 'OrcaUICodeCICDPipeline',
       crossAccountKeys: false,
       stages: [
@@ -354,6 +354,26 @@ export class PipelineStack extends Stack {
         },
       ],
     });
+
+    const appCiCdCfnPipeline = appCiCdPipeline.node.defaultChild as CfnPipeline;
+    appCiCdCfnPipeline.addPropertyOverride('Triggers', [
+      {
+        GitConfiguration: {
+          Push: [
+            {
+              Branches: {
+                Includes: ['feat/pipeline-filter'],
+              },
+              FilePaths: {
+                Excludes: ['deploy/**'],
+              },
+            },
+          ],
+          SourceActionName: 'FilterTrigger',
+        },
+        ProviderType: 'CodeStarSourceConnection',
+      },
+    ]);
   }
 }
 
