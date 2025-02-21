@@ -369,7 +369,7 @@ export class PipelineStack extends Stack {
               },
             },
           ],
-          SourceActionName: 'FilterTrigger',
+          SourceActionName: 'Source',
         },
         ProviderType: 'CodeStarSourceConnection',
       },
