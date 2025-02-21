@@ -30,7 +30,7 @@ import {
   Role,
   ServicePrincipal,
 } from 'aws-cdk-lib/aws-iam';
-import { Pipeline, Artifact, CfnPipeline } from 'aws-cdk-lib/aws-codepipeline';
+import { Pipeline, Artifact, CfnPipeline, PipelineType } from 'aws-cdk-lib/aws-codepipeline';
 import {
   CodeStarConnectionsSourceAction,
   CodeBuildAction,
@@ -42,7 +42,7 @@ export class PipelineStack extends Stack {
 
     // A connection where the pipeline get its source code
     const codeStarArn = StringParameter.valueForStringParameter(this, 'codestar_github_arn');
-    const sourceFile = CodePipelineSource.connection('umccr/orca-ui', 'main', {
+    const sourceFile = CodePipelineSource.connection('umccr/orca-ui', 'feat/pipeline-filter', {
       connectionArn: codeStarArn,
     });
 
@@ -54,6 +54,58 @@ export class PipelineStack extends Stack {
       TODO: add custom webhook to path "/deploy", 
       issue related to https://github.com/aws/aws-cdk/issues/10265
     */
+
+    const infraCodePipeline = new Pipeline(this, 'InfraCodePipeline', {
+      pipelineType: PipelineType.V2,
+      pipelineName: 'OrcaUI-Infrastructure',
+      crossAccountKeys: true,
+    });
+
+    const infraCDKPipeline = new CodePipeline(this, 'InfraCDKPipeline', {
+      codePipeline: infraCodePipeline,
+      synth: new CodeBuildStep('CdkSynth', {
+        installCommands: ['node -v', 'corepack enable'],
+        commands: ['cd deploy', 'yarn install --immutable', 'yarn cdk synth'],
+        input: sourceFile,
+        primaryOutputDirectory: 'deploy/cdk.out',
+        rolePolicyStatements: [
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ['sts:AssumeRole'],
+            resources: ['*'],
+          }),
+        ],
+      }),
+      selfMutation: true,
+      codeBuildDefaults: {
+        buildEnvironment: {
+          computeType: ComputeType.LARGE,
+          buildImage: LinuxArmBuildImage.AMAZON_LINUX_2_STANDARD_3_0,
+          environmentVariables: {
+            NODE_OPTIONS: {
+              value: '--max-old-space-size=8192',
+            },
+          },
+        },
+      },
+    });
+
+    /**
+     * Deployment to Beta (Dev) account
+     */
+    const betaConfig = getAppStackConfig(AppStage.BETA);
+    infraCDKPipeline.addStage(
+      new DeploymentStage(
+        this,
+        'OrcaUIBeta',
+        {
+          account: accountIdAlias.beta,
+          region: REGION,
+        },
+        betaConfig
+      )
+    );
+
     const infraPipeline = new CodePipeline(this, 'OrcaUIInfraPipeline', {
       pipelineName: 'OrcaUIInfraPipeline',
       synth: new CodeBuildStep('CdkSynth', {
@@ -83,22 +135,6 @@ export class PipelineStack extends Stack {
         },
       },
     });
-
-    /**
-     * Deployment to Beta (Dev) account
-     */
-    const betaConfig = getAppStackConfig(AppStage.BETA);
-    infraPipeline.addStage(
-      new DeploymentStage(
-        this,
-        'OrcaUIBeta',
-        {
-          account: accountIdAlias.beta,
-          region: REGION,
-        },
-        betaConfig
-      )
-    );
 
     /**
      * Deployment to Gamma (Staging) account
@@ -279,7 +315,9 @@ export class PipelineStack extends Stack {
     /**
      * React Build and Deploy Pipeline
      */
+    const branchName = 'feat/pipeline-filter';
     const appCiCdPipeline = new Pipeline(this, 'OrcaUICodeCICDPipeline', {
+      pipelineType: PipelineType.V2,
       pipelineName: 'OrcaUICodeCICDPipeline',
       crossAccountKeys: false,
       stages: [
@@ -290,7 +328,7 @@ export class PipelineStack extends Stack {
               actionName: 'Source',
               owner: 'umccr',
               repo: 'orca-ui',
-              branch: 'main',
+              branch: branchName,
               connectionArn: codeStarArn,
               output: sourceOutput,
               triggerOnPush: true,
@@ -355,6 +393,7 @@ export class PipelineStack extends Stack {
       ],
     });
 
+    // Add event filter to exclude push event from `deploy` folder to trigger the pipeline
     const appCiCdCfnPipeline = appCiCdPipeline.node.defaultChild as CfnPipeline;
     appCiCdCfnPipeline.addPropertyOverride('Triggers', [
       {
@@ -362,7 +401,7 @@ export class PipelineStack extends Stack {
           Push: [
             {
               Branches: {
-                Includes: ['feat/pipeline-filter'],
+                Includes: [branchName],
               },
               FilePaths: {
                 Excludes: ['deploy/**'],
