@@ -22,7 +22,7 @@ export const LibraryDetailBar = () => {
   }
 
   return (
-    <Sidebar position='right'>
+    <Sidebar position='right' preferenceStorageKey='library-detail-sidebar'>
       <div className='mt-20'>
         <LibraryTableDetails libraryDetail={libraryDetailRes} />
       </div>

@@ -1,6 +1,5 @@
 import { FC, useState, useEffect, useMemo, FunctionComponent, SVGProps } from 'react';
 import { Menu, MenuButton, MenuItems, MenuItem, Checkbox, Field, Label } from '@headlessui/react';
-// import { Popover, PopoverButton, PopoverPanel, useClose } from '@headlessui/react';
 import { FunnelIcon } from '@heroicons/react/24/outline';
 import { FunnelIcon as SolidFunnelIcon } from '@heroicons/react/24/solid';
 import { classNames } from '@/utils/commonUtils';
@@ -36,11 +35,9 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
   selectAllOptionValue = '-1',
 }) => {
   const [selected, setSelected] = useState<(string | number)[]>(selectedItemValues);
-  const [inputValue, setInputValue] = useState<(string | number)[]>(selectedItemValues);
 
   useEffect(() => {
     setSelected(selectedItemValues);
-    setInputValue(selectedItemValues);
   }, [selectedItemValues]);
 
   const hasSelected = useMemo(
@@ -51,7 +48,7 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
   const selectedValues = useMemo(
     () =>
       options
-        .filter((option) => selected?.includes(option.value?.toString().split('.')[1]))
+        .filter((option) => selected?.includes(option.value?.toString()))
         .map(
           (option) => option.label + (option.secondaryLabel ? ` (${option.secondaryLabel})` : '')
         ),
@@ -61,9 +58,16 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
   return (
     <Menu as='div' className='relative inline-block text-left'>
       <Tooltip
-        text={`${selectedValues ? `Filter by: ${selectedValues.join(', ')}` : ''}`}
+        text={
+          selectedValues.length === 0 ||
+          (selectedValues.length === 1 && selectedValues[0] === 'All workflows')
+            ? 'All workflows selected'
+            : `Filter by: ${selectedValues.join(', ')}`
+        }
         position='top'
         background='light'
+        className='z-50 min-w-[150px] max-w-[400px] whitespace-normal'
+        size='small'
       >
         <MenuButton
           className={classNames(
@@ -105,7 +109,7 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
               <Field className={classNames('flex w-full items-center', 'hover:bg-gray-100')}>
                 <Checkbox
                   as='button'
-                  checked={selected?.some((item) => item === option.value)}
+                  checked={selected.includes(option.value)}
                   onChange={(checked) => {
                     if (checked) {
                       const isSelectAll = option.value === selectAllOptionValue;
@@ -182,7 +186,7 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
             <li>
               <button
                 className='btn-xs border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-200'
-                onClick={() => setSelected(inputValue)}
+                onClick={() => setSelected(['-1'])}
               >
                 Reset
               </button>

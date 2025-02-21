@@ -30,13 +30,13 @@ const Search: FC<SearchProps> = ({
   }, [searchBoxContent, hasTooltip]);
 
   return (
-    <div className='flex flex-row items-center gap-2'>
+    <div className='flex w-full flex-row items-center gap-2'>
       <div className='relative flex-1'>
         <label htmlFor='search' className='sr-only'>
           Search
         </label>
         <div
-          className='relative inline-flex w-full rounded-lg shadow-sm transition-shadow duration-200 hover:shadow-md dark:shadow-gray-800'
+          className='relative flex w-full flex-row items-center rounded-lg shadow-sm transition-shadow duration-200 hover:shadow-md dark:shadow-gray-800'
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
@@ -79,11 +79,11 @@ const Search: FC<SearchProps> = ({
       </div>
       {showTooltip && (
         <Tooltip
-          text={
-            tooltipText ||
-            'Available Search Items: workflowRunName, comment, libraryId, orcabusId, workflowName'
-          }
+          text={tooltipText || ''}
           position='top'
+          size='small'
+          background='light'
+          className='min-w-[300px] max-w-[600px] whitespace-normal'
         >
           <QuestionMarkCircleIcon className='h-7 w-7 cursor-pointer pl-1 text-slate-300 transition-opacity duration-200 hover:opacity-80 dark:text-gray-600' />
         </Tooltip>

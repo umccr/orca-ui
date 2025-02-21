@@ -46,5 +46,9 @@ response.json
 # ignore openapi types
 src/api/types/*
 
+# ignore metadata schema
 # metadata schema should fetched from metadata repo
 public/assets/metadata-schema.svg
+
+# ignore cursor rules
+.cursorrules

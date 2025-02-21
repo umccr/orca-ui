@@ -8,9 +8,10 @@ interface TabItemProps {
 export interface TabsProps {
   tabs: TabItemProps[];
   selectedLabel?: string;
+  className?: string;
 }
 
-export const Tabs: FC<TabsProps> = ({ tabs, selectedLabel = tabs[0]?.label ?? '' }) => {
+export const Tabs: FC<TabsProps> = ({ tabs, selectedLabel = tabs[0]?.label ?? '', className }) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(
     tabs.findIndex((tab) => tab.label === selectedLabel)
   );
@@ -29,7 +30,7 @@ export const Tabs: FC<TabsProps> = ({ tabs, selectedLabel = tabs[0]?.label ?? ''
     'border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300';
 
   return (
-    <div>
+    <div className={classNames(className)}>
       {/* Mobile tab selector */}
       <div className='sm:hidden'>
         <label htmlFor='tabs' className='sr-only'>

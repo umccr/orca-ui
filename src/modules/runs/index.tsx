@@ -5,7 +5,7 @@ import { RouteObject } from 'react-router-dom';
 
 const SequenceRunPage = lazy(() => import('@/modules/runs/pages/SequenceRuns'));
 const WorkflowRunPage = lazy(() => import('@/modules/runs/pages/WorkflowRuns'));
-const WorkflowRunDetailsPage = lazy(() => import('@/modules/runs/pages/WorkflowRunsDetails'));
+const WorkflowRunsDetailsPage = lazy(() => import('@/modules/runs/pages/WorkflowRunsDetails'));
 const AnalysisRunPage = lazy(() => import('@/modules/runs/pages/AnalysisRuns'));
 const AnalysisRunDetailsPage = lazy(() => import('@/modules/runs/pages/AnalysisRunsDetails'));
 // const RunsPage = lazy(() => import('@/modules/runs/pages/RunsPage'));
@@ -34,14 +34,14 @@ export const Router: RouteObject = {
           children: [
             { path: '', element: <AnalysisRunPage /> },
             { path: ':orcabusId', element: <AnalysisRunDetailsPage /> },
-            { path: ':analysis_orcabusId/:orcabusId', element: <WorkflowRunDetailsPage /> },
+            { path: ':analysis_orcabusId/:orcabusId', element: <WorkflowRunsDetailsPage /> },
           ],
         },
         {
           path: 'workflow',
           children: [
             { path: '', element: <WorkflowRunPage /> },
-            { path: ':orcabusId', element: <WorkflowRunDetailsPage /> },
+            { path: ':orcabusId', element: <WorkflowRunsDetailsPage /> },
           ],
         },
       ],

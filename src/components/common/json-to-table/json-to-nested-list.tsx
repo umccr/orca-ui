@@ -1,8 +1,9 @@
 /* eslint-disable */
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { classNames } from '@/utils/commonUtils';
 import { BackdropWithText } from '@/components/common/backdrop';
+import { uriLinkFormatter } from '@/utils/uriLinkFormatter';
 
 interface JsonToNestedListProps {
   title?: string;
@@ -10,10 +11,9 @@ interface JsonToNestedListProps {
   data: Record<string, any> | null;
   isFetchingData: boolean;
   inCard?: boolean;
-  cellValueFormat?: {
-    condition: (value: string) => boolean;
-    cell: (value: string) => ReactNode;
-  };
+  className?: string;
+  listClassName?: string;
+  isURIIncluded?: boolean;
 }
 
 const JsonToNestedList: FC<JsonToNestedListProps> = ({
@@ -22,7 +22,9 @@ const JsonToNestedList: FC<JsonToNestedListProps> = ({
   data,
   isFetchingData,
   inCard = true,
-  cellValueFormat,
+  isURIIncluded = false,
+  className,
+  listClassName,
 }) => {
   const [listData, setListData] = useState<Record<string, any> | null>(data);
   useEffect(() => {
@@ -46,20 +48,20 @@ const JsonToNestedList: FC<JsonToNestedListProps> = ({
           {Object.entries(value).map(([key, val], index) => (
             <div
               key={index}
-              className='px-4 py-2 transition-colors sm:grid sm:grid-cols-5 sm:gap-4 sm:px-0'
+              className='px-4 py-2 transition-colors sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'
             >
-              <dt className='text-pretty break-words text-sm font-medium text-gray-900 dark:text-gray-100'>
+              <dt className='text-pretty break-words text-sm font-medium text-gray-900 sm:col-span-1 dark:text-gray-100'>
                 {key}
               </dt>
-              <dd className='mt-1 break-words text-sm text-gray-600 sm:col-span-4 sm:mt-0 dark:text-gray-300'>
+              <dd className='mt-1 break-words text-sm text-gray-600 sm:col-span-2 sm:mt-0 dark:text-gray-300'>
                 {renderValue(val)}
               </dd>
             </div>
           ))}
         </dl>
       );
-    } else if (cellValueFormat && cellValueFormat.condition(value)) {
-      return cellValueFormat.cell(value);
+    } else if (isURIIncluded && uriLinkFormatter.isValidUri(value)) {
+      return uriLinkFormatter.formatLink(value);
     } else {
       return <span className='break-words dark:text-gray-300'>{value}</span>;
     }
@@ -79,7 +81,8 @@ const JsonToNestedList: FC<JsonToNestedListProps> = ({
   }
 
   return (
-    <div className='space-y-4'>
+    <div className={classNames('space-y-4', className)}>
+      {/* Header */}
       <div className='px-4 sm:px-0'>
         {title && (
           <h3 className='text-lg font-semibold leading-7 text-gray-900 dark:text-white'>{title}</h3>
@@ -90,23 +93,20 @@ const JsonToNestedList: FC<JsonToNestedListProps> = ({
           </p>
         )}
       </div>
+      {/* List */}
       <div
         className={classNames(
           'relative bg-white transition-colors dark:bg-gray-900',
           inCard
             ? 'overflow-hidden rounded-lg border border-gray-200 shadow-sm dark:border-gray-700'
-            : ''
+            : '',
+          listClassName
         )}
       >
         {listData && isFetchingData ? (
           <BackdropWithText text='Loading data...' isVisible={true} />
         ) : null}
-        <div
-          className={classNames(
-            'px-4',
-            inCard ? '' : 'border-t border-gray-100 sm:px-0 dark:border-gray-800'
-          )}
-        >
+        <div className='px-4'>
           {listData ? (
             renderValue(listData)
           ) : (

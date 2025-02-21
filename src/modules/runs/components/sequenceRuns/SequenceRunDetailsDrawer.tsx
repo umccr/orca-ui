@@ -86,6 +86,7 @@ const SequenceRunDetailsDrawer: FC<SequenceRunDetailsDrawerProps> = ({
           defaultOpen={false}
           className='px-4 py-1'
           chevronPosition='right'
+          buttonClassName='border-y border-2 border-gray-200 dark:border-gray-700'
         >
           <JsonToList data={sequenceRunDetailData} isFetchingData={isFetchingSequenceRunDetail} />
         </Accordion>
@@ -95,6 +96,7 @@ const SequenceRunDetailsDrawer: FC<SequenceRunDetailsDrawerProps> = ({
           defaultOpen={true}
           className='px-4 py-1'
           chevronPosition='right'
+          buttonClassName='border-y border-2 border-gray-200 dark:border-gray-700'
         >
           <SequenceRunTimeline selectedSequenceRunId={selectedSequenceRunId} />
         </Accordion>

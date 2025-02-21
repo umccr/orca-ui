@@ -33,6 +33,7 @@ export const GanttChartStory: Story = {
 
 export const ScatterplotStory: Story = {
   render: () => {
+    // @ts-expect-error - This is a mock data
     return <ScatterplotMatrix data={scatterPlotData} width={1000} height={1000} />;
   },
 };

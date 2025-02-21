@@ -15,7 +15,7 @@ const AnalysisRunDetailsWorkflowRuns = () => {
   const { data: workflowRuns, isFetching: isFetchingWorkflowRuns } = useWorkflowRunListModel({
     params: {
       query: {
-        analysisRun__orcabus_id: orcabusId?.split('.')[1] as string,
+        analysisRun__orcabus_id: orcabusId as string,
         page: getQueryParams().page || 1,
         rowsPerPage: getPaginationParams().rowsPerPage || DEFAULT_PAGE_SIZE,
       },

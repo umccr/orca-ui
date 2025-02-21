@@ -38,6 +38,7 @@ export const WorkflowVersion = ({
         <Dialog
           open={isOpenWorkflowDetails}
           title='Workflow Details'
+          size='lg'
           content={<JsonToTable data={wf} />}
           onClose={() => setIsOpenWorkflowDetails(false)}
           closeBtn={{ label: 'Close', onClick: () => setIsOpenWorkflowDetails(false) }}

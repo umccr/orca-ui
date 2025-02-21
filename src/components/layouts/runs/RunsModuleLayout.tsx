@@ -16,7 +16,7 @@ const RunsModuleLayout = ({ children }: PropsWithChildren) => {
           />
         </div>
         <div className='flex min-w-[450px] flex-1 flex-col overflow-auto overflow-x-auto px-8 py-4'>
-          <LocationBreadcrumb />
+          <LocationBreadcrumb className='mb-0' />
           <Suspense fallback={<SpinnerWithText text='Loading Runs page' />}>
             <DetailedErrorBoundary errorTitle='Unable to load Runs page'>
               {children || <Outlet />}

@@ -5,26 +5,25 @@ export const MultiqcIcon = (props: SVGProps<SVGSVGElement>) => (
     width='24'
     height='24'
     viewBox='0 0 24 24'
-    xmlns='http://www.w3.org/2000/svg'
     fill='none'
-    stroke='black'
+    xmlns='http://www.w3.org/2000/svg'
     {...props}
   >
-    <g fill='none' stroke='currentColor' strokeWidth='1.5'>
-      {/* Top left quarter-circle with larger spacing */}
-      <path d='M11,2 A9.5,9.5 0 0,0 2,11 H7.5 A4,4 0 0,1 11,7.5 V2 Z' />
-
-      {/* Top right quarter-circle with larger spacing */}
-      <path d='M13,2 A9.5,9.5 0 0,1 22,11 H16.5 A4,4 0 0,0 13,7.5 V2 Z' />
-
-      {/* Bottom left quarter-circle with larger spacing */}
-      <path d='M11,22 A9.5,9.5 0 0,1 2,13 H7.5 A4,4 0 0,0 11,16.5 V22 Z' />
-
-      {/* Bottom right quarter-circle with larger spacing */}
-      <path
-        d='M13,22 A9.5,9.5 0 0,0 22,13 H16.5 A4,4 0 0,1 13,16.5 V22 Z'
-        transform='rotate(90, 17, 18)'
-      />
-    </g>
+    <path
+      d='M4.42368 11.4826C4.6752 7.69536 7.71744 4.6608 11.5085 4.42272V0C5.27232 0.24576 0.2592 5.24928 0 11.4826H4.42368Z'
+      fill='currentColor'
+    />
+    <path
+      d='M11.4826 19.5764C7.69536 19.3249 4.6608 16.2826 4.42272 12.4916H0C0.24576 18.7277 5.24928 23.7409 11.4826 24.0001V19.5764Z'
+      fill='currentColor'
+    />
+    <path
+      d='M12.5175 4.42368C16.3047 4.6752 19.3392 7.71744 19.5773 11.5085H24C23.7543 5.27232 18.7507 0.2592 12.5175 0V4.42368Z'
+      fill='currentColor'
+    />
+    <path
+      d='M24 19.5764C20.2128 19.3249 17.1783 16.2826 16.9402 12.4916H12.5175C12.7632 18.7277 17.7667 23.7409 24 24.0001V19.5764Z'
+      fill='currentColor'
+    />
   </svg>
 );
