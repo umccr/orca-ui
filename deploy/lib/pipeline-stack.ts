@@ -40,7 +40,7 @@ export class PipelineStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps) {
     super(scope, id, props);
 
-    const ghBranchName = 'feat/pipeline-filter';
+    const ghBranchName = 'main';
 
     // A connection where the pipeline get its source code
     const codeStarArn = StringParameter.valueForStringParameter(this, 'codestar_github_arn');
