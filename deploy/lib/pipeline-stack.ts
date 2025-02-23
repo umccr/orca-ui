@@ -30,7 +30,7 @@ import {
   Role,
   ServicePrincipal,
 } from 'aws-cdk-lib/aws-iam';
-import { Pipeline, Artifact } from 'aws-cdk-lib/aws-codepipeline';
+import { Pipeline, Artifact, CfnPipeline, PipelineType } from 'aws-cdk-lib/aws-codepipeline';
 import {
   CodeStarConnectionsSourceAction,
   CodeBuildAction,
@@ -40,22 +40,46 @@ export class PipelineStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps) {
     super(scope, id, props);
 
+    const ghBranchName = 'main';
+
     // A connection where the pipeline get its source code
     const codeStarArn = StringParameter.valueForStringParameter(this, 'codestar_github_arn');
-    const sourceFile = CodePipelineSource.connection('umccr/orca-ui', 'main', {
+    const codeStarSourceActionName = 'infra-src';
+    const sourceFile = CodePipelineSource.connection('umccr/orca-ui', ghBranchName, {
       connectionArn: codeStarArn,
+      actionName: codeStarSourceActionName,
+      triggerOnPush: true,
     });
 
-    /*
-      Infra Pipeline
-      This pipeline is used to deploy the infrastructure code to all accounts
-      It is triggered by a webhook from the CodeStar connection
+    const infraCodePipeline = new Pipeline(this, 'InfraCodePipeline', {
+      pipelineType: PipelineType.V2,
+      pipelineName: 'OrcaUIInfrastructure',
+      crossAccountKeys: true,
+    });
 
-      TODO: add custom webhook to path "/deploy", 
-      issue related to https://github.com/aws/aws-cdk/issues/10265
-    */
-    const infraPipeline = new CodePipeline(this, 'OrcaUIInfraPipeline', {
-      pipelineName: 'OrcaUIInfraPipeline',
+    // Add event filter to only trigger if the push event is from `deploy` directory
+    const infraCfnPipeline = infraCodePipeline.node.defaultChild as CfnPipeline;
+    infraCfnPipeline.addPropertyOverride('Triggers', [
+      {
+        GitConfiguration: {
+          Push: [
+            {
+              Branches: {
+                Includes: [ghBranchName],
+              },
+              FilePaths: {
+                Includes: ['deploy/**'],
+              },
+            },
+          ],
+          SourceActionName: codeStarSourceActionName,
+        },
+        ProviderType: 'CodeStarSourceConnection',
+      },
+    ]);
+
+    const infraCDKPipeline = new CodePipeline(this, 'InfraCDKPipeline', {
+      codePipeline: infraCodePipeline,
       synth: new CodeBuildStep('CdkSynth', {
         installCommands: ['node -v', 'corepack enable'],
         commands: ['cd deploy', 'yarn install --immutable', 'yarn cdk synth'],
@@ -70,7 +94,6 @@ export class PipelineStack extends Stack {
         ],
       }),
       selfMutation: true,
-      crossAccountKeys: true,
       codeBuildDefaults: {
         buildEnvironment: {
           computeType: ComputeType.LARGE,
@@ -88,7 +111,7 @@ export class PipelineStack extends Stack {
      * Deployment to Beta (Dev) account
      */
     const betaConfig = getAppStackConfig(AppStage.BETA);
-    infraPipeline.addStage(
+    infraCDKPipeline.addStage(
       new DeploymentStage(
         this,
         'OrcaUIBeta',
@@ -104,7 +127,7 @@ export class PipelineStack extends Stack {
      * Deployment to Gamma (Staging) account
      */
     const gammaConfig = getAppStackConfig(AppStage.GAMMA);
-    infraPipeline.addStage(
+    infraCDKPipeline.addStage(
       new DeploymentStage(
         this,
         'OrcaUIGamma',
@@ -120,7 +143,7 @@ export class PipelineStack extends Stack {
      * Deployment to Prod (Production) account
      */
     const prodConfig = getAppStackConfig(AppStage.PROD);
-    infraPipeline.addStage(
+    infraCDKPipeline.addStage(
       new DeploymentStage(
         this,
         'OrcaUIProd',
@@ -279,7 +302,9 @@ export class PipelineStack extends Stack {
     /**
      * React Build and Deploy Pipeline
      */
-    new Pipeline(this, 'OrcaUICodeCICDPipeline', {
+    const codesStarSourceName = 'orcauiAppSrc';
+    const appCiCdPipeline = new Pipeline(this, 'OrcaUICodeCICDPipeline', {
+      pipelineType: PipelineType.V2,
       pipelineName: 'OrcaUICodeCICDPipeline',
       crossAccountKeys: false,
       stages: [
@@ -287,10 +312,10 @@ export class PipelineStack extends Stack {
           stageName: 'Source',
           actions: [
             new CodeStarConnectionsSourceAction({
-              actionName: 'Source',
+              actionName: codesStarSourceName,
               owner: 'umccr',
               repo: 'orca-ui',
-              branch: 'main',
+              branch: ghBranchName,
               connectionArn: codeStarArn,
               output: sourceOutput,
               triggerOnPush: true,
@@ -354,6 +379,27 @@ export class PipelineStack extends Stack {
         },
       ],
     });
+
+    // Add event filter to exclude push event from `deploy` folder to trigger the pipeline
+    const appCiCdCfnPipeline = appCiCdPipeline.node.defaultChild as CfnPipeline;
+    appCiCdCfnPipeline.addPropertyOverride('Triggers', [
+      {
+        GitConfiguration: {
+          Push: [
+            {
+              Branches: {
+                Includes: [ghBranchName],
+              },
+              FilePaths: {
+                Excludes: ['deploy/**'],
+              },
+            },
+          ],
+          SourceActionName: codesStarSourceName,
+        },
+        ProviderType: 'CodeStarSourceConnection',
+      },
+    ]);
   }
 }
 
