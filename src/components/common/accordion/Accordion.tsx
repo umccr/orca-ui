@@ -10,6 +10,7 @@ interface AccordionProps {
   chevronPosition?: 'left' | 'right';
   className?: string;
   buttonClassName?: string;
+  panelClassName?: string;
 }
 
 const Accordion: FC<AccordionProps> = ({
@@ -19,6 +20,7 @@ const Accordion: FC<AccordionProps> = ({
   chevronPosition = 'left',
   className,
   buttonClassName,
+  panelClassName,
 }) => {
   return (
     <Disclosure
@@ -52,7 +54,10 @@ const Accordion: FC<AccordionProps> = ({
         )}
       </DisclosureButton>
 
-      <DisclosurePanel className='px-3 py-2 text-sm text-gray-500 dark:text-gray-400' transition>
+      <DisclosurePanel
+        className={classNames('px-3 py-2 text-sm text-gray-500 dark:text-gray-400', panelClassName)}
+        transition
+      >
         <div className='origin-top transition duration-200 ease-out data-[closed]:-translate-y-2 data-[closed]:opacity-0'>
           {children}
         </div>

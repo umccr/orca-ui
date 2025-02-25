@@ -154,7 +154,7 @@ const WorkflowRunTimeline = () => {
     [workflowCommentData]
   );
 
-  const workflowRuntimelineData = [
+  const workflowRunTimelineData = [
     ...workflowStateTimelineData,
     ...workflowCommentTimelineData,
   ].sort((a, b) => (dayjs(a.datetime).isAfter(dayjs(b.datetime)) ? -1 : 1));
@@ -351,18 +351,19 @@ const WorkflowRunTimeline = () => {
                         defaultOpen={true}
                         chevronPosition='right'
                         className={classNames(
-                          'overflow-hidden rounded-lg',
-                          'bg-gradient-to-r from-white to-gray-50/50',
-                          'dark:from-gray-900 dark:to-gray-800/50',
+                          'rounded-lg',
+                          'bg-gradient-to-r from-white via-gray-50/80 to-gray-100/50',
+                          'dark:from-gray-900 dark:via-gray-800/80 dark:to-gray-800/50',
                           'shadow-sm hover:shadow-md',
+                          'ring-1 ring-gray-200/50 dark:ring-gray-700/50',
                           'transition-all duration-200 ease-in-out',
                           'group'
                         )}
                         buttonClassName={classNames(
                           'border-0',
-                          'bg-gradient-to-r from-gray-50/80 to-transparent',
-                          'dark:from-gray-800/80 dark:to-transparent',
-                          'group-hover:from-blue-50/50 dark:group-hover:from-blue-900/20',
+                          'bg-gradient-to-r from-blue-50/90 to-transparent',
+                          'dark:from-blue-900/30 dark:to-transparent',
+                          'group-hover:from-blue-100/80 dark:group-hover:from-blue-800/40',
                           'transition-all duration-300'
                         )}
                       >
@@ -416,7 +417,7 @@ const WorkflowRunTimeline = () => {
           <div className='flex items-center gap-3'>
             <h2 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>Timeline</h2>
             <span className='text-sm text-gray-500 dark:text-gray-400'>
-              {workflowRuntimelineData.length} events
+              {workflowRunTimelineData.length} events
             </span>
           </div>
           <div className='flex items-center gap-2'>
@@ -464,8 +465,8 @@ const WorkflowRunTimeline = () => {
           <div className='flex-1'>
             <div className='shrink-0'>
               <Timeline
-                timeline={
-                  isReverseOrder ? workflowRuntimelineData.reverse() : workflowRuntimelineData
+                timelineEvents={
+                  isReverseOrder ? workflowRunTimelineData.reverse() : workflowRunTimelineData
                 }
                 handldEventClick={handleTimelineSelect}
                 isCollapsed={showPayload}

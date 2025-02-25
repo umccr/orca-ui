@@ -8,6 +8,7 @@ const WorkflowRunPage = lazy(() => import('@/modules/runs/pages/WorkflowRuns'));
 const WorkflowRunsDetailsPage = lazy(() => import('@/modules/runs/pages/WorkflowRunsDetails'));
 const AnalysisRunPage = lazy(() => import('@/modules/runs/pages/AnalysisRuns'));
 const AnalysisRunDetailsPage = lazy(() => import('@/modules/runs/pages/AnalysisRunsDetails'));
+const SequenceRunsDetailsPage = lazy(() => import('@/modules/runs/pages/SequenceRunsDetails'));
 // const RunsPage = lazy(() => import('@/modules/runs/pages/RunsPage'));
 
 export const Router: RouteObject = {
@@ -27,7 +28,10 @@ export const Router: RouteObject = {
         { path: '', element: <Navigate to='sequence' replace /> },
         {
           path: 'sequence',
-          children: [{ path: '', element: <SequenceRunPage /> }],
+          children: [
+            { path: '', element: <SequenceRunPage /> },
+            { path: ':orcabusId', element: <SequenceRunsDetailsPage /> },
+          ],
         },
         {
           path: 'analysis',

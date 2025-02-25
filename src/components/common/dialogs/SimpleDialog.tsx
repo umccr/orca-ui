@@ -21,6 +21,7 @@ export interface DialogProps {
   closeBtn?: DialogButtonProps;
   confirmBtn?: DialogButtonProps;
   children?: ReactNode;
+  className?: string;
 }
 
 const SimpleDialog: FC<DialogProps> = ({
@@ -34,6 +35,7 @@ const SimpleDialog: FC<DialogProps> = ({
   closeBtn,
   confirmBtn,
   children,
+  className,
 }) => {
   return (
     <Dialog open={open} onClose={onClose} className='relative z-50'>
@@ -52,7 +54,8 @@ const SimpleDialog: FC<DialogProps> = ({
                 'sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95',
               size === 'md' && 'md:max-w-2xl',
               size === 'lg' && 'lg:max-w-7xl',
-              'dark:bg-gray-800 dark:ring-white/5'
+              'dark:bg-gray-800 dark:ring-white/5',
+              className || ''
             )}
           >
             {/* Close button */}
@@ -78,7 +81,7 @@ const SimpleDialog: FC<DialogProps> = ({
                 <div className='w-full flex-1'>
                   <DialogTitle
                     as='h3'
-                    className='text-lg font-semibold leading-6 text-gray-900 dark:text-white'
+                    className='pt-2 text-lg font-semibold leading-6 text-gray-900 dark:text-white'
                   >
                     {title}
                   </DialogTitle>

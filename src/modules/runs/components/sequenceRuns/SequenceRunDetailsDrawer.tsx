@@ -1,12 +1,10 @@
 import { FC, useState, useEffect, useMemo } from 'react';
 import { useSequenceRunDetailModel } from '@/api/sequenceRun';
 import { SideDrawer } from '@/components/common/drawers';
-import { sleep } from '@/utils/commonUtils';
+import { classNames, sleep } from '@/utils/commonUtils';
 import { JsonToList } from '@/components/common/json-to-table';
-// import { ContentTabs } from '@/components/navigation/tabs';
 import SequenceRunTimeline from './SequenceRunTimeline';
 import { Accordion } from '@/components/common/accordion';
-// import { ClockIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 
 interface SequenceRunDetailsDrawerProps {
   selectedSequenceRunId: string;
@@ -64,29 +62,27 @@ const SequenceRunDetailsDrawer: FC<SequenceRunDetailsDrawerProps> = ({
       onClose={handleCloseDrawer}
       size='medium'
     >
-      <div className='h-full flex-1 flex-col gap-4'>
-        {/* Header Info */}
-        {/* <div className='px-4 py-1'>
-          <div className='flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400'>
-            <InformationCircleIcon className='h-5 w-5' />
-            <span>SequenceRunID: {selectedSequenceRun?.sequenceRunId || ''}</span>
-          </div>
-          <div className='mt-2 flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400'>
-            <ClockIcon className='h-5 w-5' />
-            <span>
-              Time: {selectedSequenceRun?.startTime} - {selectedSequenceRun?.endTime}
-            </span>
-          </div>
-        </div> */}
-
-        {/* Content */}
-
+      <div className='flex h-full flex-col gap-4 overflow-y-auto'>
         <Accordion
           title='Details'
           defaultOpen={false}
-          className='px-4 py-1'
           chevronPosition='right'
-          buttonClassName='border-y border-2 border-gray-200 dark:border-gray-700'
+          className={classNames(
+            'rounded-lg',
+            'bg-gradient-to-r from-white via-gray-50/80 to-gray-100/50',
+            'dark:from-gray-900 dark:via-gray-800/80 dark:to-gray-800/50',
+            'shadow-sm hover:shadow-md',
+            'ring-1 ring-gray-200/50 dark:ring-gray-700/50',
+            'transition-all duration-200 ease-in-out',
+            'group'
+          )}
+          buttonClassName={classNames(
+            'border-0',
+            'bg-gradient-to-r from-blue-50/90 to-transparent',
+            'dark:from-blue-900/30 dark:to-transparent',
+            'group-hover:from-blue-100/80 dark:group-hover:from-blue-800/40',
+            'transition-all duration-300'
+          )}
         >
           <JsonToList data={sequenceRunDetailData} isFetchingData={isFetchingSequenceRunDetail} />
         </Accordion>
@@ -94,9 +90,23 @@ const SequenceRunDetailsDrawer: FC<SequenceRunDetailsDrawerProps> = ({
         <Accordion
           title='Timeline'
           defaultOpen={true}
-          className='px-4 py-1'
           chevronPosition='right'
-          buttonClassName='border-y border-2 border-gray-200 dark:border-gray-700'
+          className={classNames(
+            'rounded-lg',
+            'bg-gradient-to-r from-white via-gray-50/80 to-gray-100/50',
+            'dark:from-gray-900 dark:via-gray-800/80 dark:to-gray-800/50',
+            'shadow-sm hover:shadow-md',
+            'ring-1 ring-gray-200/50 dark:ring-gray-700/50',
+            'transition-all duration-200 ease-in-out',
+            'group'
+          )}
+          buttonClassName={classNames(
+            'border-0',
+            'bg-gradient-to-r from-blue-50/90 to-transparent',
+            'dark:from-blue-900/30 dark:to-transparent',
+            'group-hover:from-blue-100/80 dark:group-hover:from-blue-800/40',
+            'transition-all duration-300'
+          )}
         >
           <SequenceRunTimeline selectedSequenceRunId={selectedSequenceRunId} />
         </Accordion>
