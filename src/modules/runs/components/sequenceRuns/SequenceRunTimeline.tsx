@@ -20,9 +20,13 @@ import { useParams } from 'react-router-dom';
 
 interface SequenceRunTimelineProps {
   hasAddCommentBtn?: boolean;
+  selectedSequenceRunId?: string;
 }
 
-const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ hasAddCommentBtn = true }) => {
+const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({
+  hasAddCommentBtn = true,
+  selectedSequenceRunId,
+}) => {
   const { user } = useAuthContext();
   const { orcabusId } = useParams();
   const [isOpenAddCommentDialog, setIsOpenAddCommentDialog] = useState<boolean>(false);
@@ -31,11 +35,12 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ hasAddCommentBtn = 
   const [commentId, setCommentId] = useState<string | null>(null);
   const [comment, setComment] = useState<string>('');
 
+  const sequenceRunId = selectedSequenceRunId || orcabusId;
   const { data: sequenceRunStateDetail, isFetching: isFetchingSequenceRunStateDetail } =
     useSequenceRunStateListModel({
-      params: { path: { orcabusId: orcabusId as string } },
+      params: { path: { orcabusId: sequenceRunId as string } },
       reactQuery: {
-        enabled: !!orcabusId,
+        enabled: !!sequenceRunId,
       },
     });
 
@@ -44,9 +49,9 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ hasAddCommentBtn = 
     isFetching: isFetchingSequenceRunComments,
     refetch: refetchSequenceRunComment,
   } = useSequenceRunCommentListModel({
-    params: { path: { orcabusId: orcabusId as string } },
+    params: { path: { orcabusId: sequenceRunId as string } },
     reactQuery: {
-      enabled: !!orcabusId,
+      enabled: !!sequenceRunId,
     },
   });
 
@@ -114,7 +119,7 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ hasAddCommentBtn = 
     isError: isErrorCreatingSequenceRunComment,
     reset: resetCreateSequenceRunComment,
   } = useSequenceRunCommentCreateModel({
-    params: { path: { orcabusId: orcabusId as string } },
+    params: { path: { orcabusId: sequenceRunId as string } },
     body: {
       comment: comment,
       createdBy: user?.email,
@@ -151,7 +156,7 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ hasAddCommentBtn = 
     isError: isErrorUpdatingSequenceRunComment,
     reset: resetUpdateSequenceRunComment,
   } = useSequenceRunCommentUpdateModel({
-    params: { path: { orcabusId: orcabusId as string, id: commentId as string } },
+    params: { path: { orcabusId: sequenceRunId as string, id: commentId as string } },
     body: {
       comment: comment,
       createdBy: user?.email,
@@ -191,7 +196,7 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ hasAddCommentBtn = 
     isError: isErrorDeletingSequenceRunComment,
     reset: resetDeleteSequenceRunComment,
   } = useSequenceRunCommentDeleteModel({
-    params: { path: { orcabusId: orcabusId as string, id: commentId as string } },
+    params: { path: { orcabusId: sequenceRunId as string, id: commentId as string } },
     body: {
       createdBy: user?.email,
     },

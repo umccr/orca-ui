@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSequenceRunContext } from './SequenceRunContext';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
-import { classNames } from '@/utils/commonUtils';
+import { classNames, decompressBase64gz } from '@/utils/commonUtils';
 import Skeleton from 'react-loading-skeleton';
 import { Button } from '@/components/common/buttons';
 import { DocumentTextIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
@@ -81,9 +81,9 @@ const SequenceRunDetailsHeader = () => {
   }
 
   const sampleSheetName = (sampleSheetData?.sampleSheetName || 'Sample Sheet') as string;
-  const sampleSheetContent = (
+  const decodedSampleSheetContent = (
     sampleSheetData?.sampleSheetContent
-      ? atob(sampleSheetData.sampleSheetContent as string)
+      ? decompressBase64gz(sampleSheetData.sampleSheetContent as string)
       : 'sample sheet content'
   ) as string;
 
@@ -173,7 +173,7 @@ const SequenceRunDetailsHeader = () => {
         isOpenFileViewDialog={isOpenFileViewDialog}
         setIsOpenFileViewDialog={setIsOpenFileViewDialog}
         fileName={sampleSheetName}
-        fileContent={sampleSheetContent}
+        fileContent={decodedSampleSheetContent}
         isLoading={isPendingSampleSheet}
       />
     </div>

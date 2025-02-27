@@ -1,8 +1,8 @@
-import { BackdropWithText } from '@/components/common/backdrop';
 import { Dialog } from '@/components/common/dialogs';
 import { DocumentTextIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { FC } from 'react';
 import { classNames } from '@/utils/commonUtils';
+import { SpinnerWithText } from '@/components/common/spinner';
 
 interface FileViewDialogProps {
   isOpenFileViewDialog: boolean;
@@ -30,7 +30,7 @@ const FileViewDialog: FC<FileViewDialogProps> = ({
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
   };
-  console.log('is loading', isLoading);
+
   return (
     <Dialog
       title={
@@ -50,10 +50,17 @@ const FileViewDialog: FC<FileViewDialogProps> = ({
               'border border-gray-200 dark:border-gray-700',
               'text-gray-600 dark:text-gray-300',
               'hover:bg-gray-100 dark:hover:bg-gray-700',
-              'transition-colors duration-200'
+              'transition-colors duration-200',
+              'group'
             )}
           >
-            <ArrowDownTrayIcon className='h-4 w-4' />
+            <ArrowDownTrayIcon
+              className={classNames(
+                'h-4 w-4',
+                'group-hover:text-blue-500 dark:group-hover:text-blue-400',
+                'transition-colors duration-200'
+              )}
+            />
             Download
           </button>
         </div>
@@ -65,8 +72,8 @@ const FileViewDialog: FC<FileViewDialogProps> = ({
     >
       <div className={classNames('relative', 'rounded-lg', 'bg-white dark:bg-gray-900')}>
         {isLoading ? (
-          <div className='flex h-full w-full items-center justify-center'>
-            <BackdropWithText text='Loading file content...' isVisible={true} />
+          <div className='flex h-full w-full items-center justify-center py-4'>
+            <SpinnerWithText text='Loading file content...' />
           </div>
         ) : (
           <div

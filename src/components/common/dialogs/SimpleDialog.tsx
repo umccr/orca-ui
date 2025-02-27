@@ -63,7 +63,7 @@ const SimpleDialog: FC<DialogProps> = ({
               <button
                 type='button'
                 onClick={onClose}
-                className='rounded-lg p-2 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 dark:hover:text-gray-300 dark:focus:ring-blue-400/50 dark:focus:ring-offset-gray-800'
+                className='rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 dark:hover:text-gray-300 dark:focus:ring-blue-400/50 dark:focus:ring-offset-gray-800'
               >
                 <span className='sr-only'>Close</span>
                 <XMarkIcon className='h-5 w-5' />

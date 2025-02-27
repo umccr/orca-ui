@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-
+import pako from 'pako';
 /**
  * Get environment variables from window.config or import.meta.env
  * @returns the environment variables
@@ -136,3 +136,30 @@ export const getFilenameFromKey = (key: string): string => {
  */
 export const sleep = (timeout?: number) =>
   new Promise((resolve) => setTimeout(resolve, timeout || 0));
+
+/**
+ * Decompress base64 gzip
+ * @param base64gz - the base64 gzip
+ * @returns the decompressed content
+ * @example
+ * const decompressed = decompressBase64('base64gz');
+ * console.log(decompressed); // decompressed content
+ */
+export const decompressBase64gz = (b64gz: string): string => {
+  try {
+    // Decode base64 safely
+    const binaryString = atob(b64gz);
+
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    // Use pako to inflate the gzipped content
+    const decompressed = pako.inflate(bytes, { to: 'string' });
+    return decompressed;
+  } catch (error) {
+    console.error('Error decompressing content:', error);
+    return 'Error: Failed to decompress content';
+  }
+};
