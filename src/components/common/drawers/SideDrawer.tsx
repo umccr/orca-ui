@@ -8,6 +8,7 @@ type DrawerProps = {
   title: string;
   subtitle?: string;
   dialogPanelClassName?: string;
+  contentClassName?: string;
   children: ReactNode;
   size?: 'small' | 'medium' | 'large';
 };
@@ -23,6 +24,7 @@ const SideDrawer: FC<DrawerProps> = ({
   title,
   subtitle,
   dialogPanelClassName,
+  contentClassName,
   children,
   size = 'medium',
 }) => {
@@ -44,7 +46,7 @@ const SideDrawer: FC<DrawerProps> = ({
             'pointer-events-auto w-screen transform shadow-2xl transition-all duration-300 ease-in-out data-[closed]:translate-x-full',
             'border-l border-gray-200 dark:border-gray-800',
             sizeToWidth[size],
-            dialogPanelClassName ? dialogPanelClassName : ''
+            dialogPanelClassName
           )}
         >
           <div className='flex h-full flex-col overflow-hidden bg-white dark:bg-gray-900'>
@@ -75,7 +77,14 @@ const SideDrawer: FC<DrawerProps> = ({
 
             {/* Content */}
             <div className='relative flex-1 overflow-y-auto'>
-              <div className='bg-white px-4 py-6 sm:px-6 dark:bg-gray-900'>{children}</div>
+              <div
+                className={classNames(
+                  'bg-white px-4 py-6 sm:px-6 dark:bg-gray-900',
+                  contentClassName
+                )}
+              >
+                {children}
+              </div>
             </div>
           </div>
         </DialogPanel>
