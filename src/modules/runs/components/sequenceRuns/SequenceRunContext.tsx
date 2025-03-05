@@ -8,6 +8,7 @@ import {
   useSequenceRunStateListModel,
 } from '@/api/sequenceRun';
 import { useParams } from 'react-router-dom';
+import { SpinnerWithText } from '@/components/common/spinner';
 
 const SequenceRunContext = createContext({
   refreshSequenceRuns: false,
@@ -57,23 +58,34 @@ export const SequenceRunProvider: FC<PropsWithChildren> = ({ children }): ReactE
     },
   });
 
+  const isFetching =
+    isFetchingSequenceRunDetail || isFetchingSequenceRunComment || isFetchingSequenceRunState;
+
   return (
-    <SequenceRunContext.Provider
-      value={{
-        refreshSequenceRuns,
-        setRefreshSequenceRuns,
-        sequenceRunDetail,
-        isFetchingSequenceRunDetail,
-        sequenceRunCommentData,
-        isFetchingSequenceRunComment,
-        refetchSequenceRunComment,
-        sequenceRunStateData,
-        isFetchingSequenceRunState,
-        refetchSequenceRunState,
-      }}
-    >
-      {children}
-    </SequenceRunContext.Provider>
+    <>
+      {isFetching ? (
+        <div className='h-screen'>
+          <SpinnerWithText text='Loading...' />
+        </div>
+      ) : (
+        <SequenceRunContext.Provider
+          value={{
+            refreshSequenceRuns,
+            setRefreshSequenceRuns,
+            sequenceRunDetail,
+            isFetchingSequenceRunDetail,
+            sequenceRunCommentData,
+            isFetchingSequenceRunComment,
+            refetchSequenceRunComment,
+            sequenceRunStateData,
+            isFetchingSequenceRunState,
+            refetchSequenceRunState,
+          }}
+        >
+          {children}
+        </SequenceRunContext.Provider>
+      )}
+    </>
   );
 };
 

@@ -9,7 +9,7 @@ import {
 } from '@/api/workflow';
 // import type { WorkflowRunModel } from '@/api/workflow';
 import { useParams } from 'react-router-dom';
-
+import { SpinnerWithText } from '@/components/common/spinner';
 const WorkflowRunContext = createContext({
   refreshWorkflowRuns: false,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -58,23 +58,34 @@ export const WorkflowRunProvider: FC<PropsWithChildren> = ({ children }): ReactE
     },
   });
 
+  const isFetching =
+    isFetchingWorkflowRunDetail || isFetchingWorkflowComment || isFetchingWorkflowState;
+
   return (
-    <WorkflowRunContext.Provider
-      value={{
-        refreshWorkflowRuns,
-        setRefreshWorkflowRuns,
-        workflowRunDetail,
-        isFetchingWorkflowRunDetail,
-        workflowCommentData,
-        isFetchingWorkflowComment,
-        refetchWorkflowComment,
-        workflowStateData,
-        isFetchingWorkflowState,
-        refetchWorkflowState,
-      }}
-    >
-      {children}
-    </WorkflowRunContext.Provider>
+    <>
+      {isFetching ? (
+        <div className='h-screen'>
+          <SpinnerWithText text='Loading...' />
+        </div>
+      ) : (
+        <WorkflowRunContext.Provider
+          value={{
+            refreshWorkflowRuns,
+            setRefreshWorkflowRuns,
+            workflowRunDetail,
+            isFetchingWorkflowRunDetail,
+            workflowCommentData,
+            isFetchingWorkflowComment,
+            refetchWorkflowComment,
+            workflowStateData,
+            isFetchingWorkflowState,
+            refetchWorkflowState,
+          }}
+        >
+          {children}
+        </WorkflowRunContext.Provider>
+      )}
+    </>
   );
 };
 
