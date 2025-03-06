@@ -65,11 +65,8 @@ const InputBadgeBox: React.FC<InputBadgeBoxProps> = ({
         {inputState.map((key, index) => (
           <Badge className='mx-1 my-1' key={`key-filter-${index}`} type={badgeType(key)}>
             {key}
-            <div className='pl-2'>
-              <XMarkIcon />
-            </div>
             <div
-              className='inline cursor-pointer'
+              className='ml-2 inline cursor-pointer'
               onClick={() => {
                 setInput((prev) => ({
                   ...prev,
