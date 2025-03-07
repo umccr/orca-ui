@@ -41,7 +41,7 @@ export const LibraryBreadCrumb: FC<LibraryBreadcrumbProps> = ({ className }) => 
   return (
     <nav
       className={classNames(
-        'mb-6 flex border-b border-gray-200 pb-3 transition-colors duration-200 dark:border-gray-700',
+        'flex border-b border-gray-200 pb-3 transition-colors duration-200 dark:border-gray-700',
         className
       )}
       aria-label='Breadcrumb'

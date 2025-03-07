@@ -47,6 +47,7 @@ export const LibraryTableDetails: FC<LibraryTableDetailsProps> = ({ libraryDetai
           Quality: library.quality ?? '-',
           Type: library.type ?? '-',
           Assay: library.assay ?? '-',
+          'Override Cycles': library.overrideCycles ?? '-',
           Project: library.projectSet.map((project) => (
             <Link
               key={project.orcabusId}
