@@ -3,8 +3,8 @@
 
 import { lazy, Suspense } from 'react';
 import { Navigate, Outlet, RouteObject } from 'react-router-dom';
-import LibraryLayout from '@/components/layouts/lab/LibraryLayout';
-import MetadataLayout from '@/components/layouts/lab/MetadataLayout';
+import LibraryLayout from '@/modules/lab/layouts/LibraryLayout';
+import MetadataLayout from '@/modules/lab/layouts/MetadataLayout';
 import { DetailedErrorBoundary } from '@/components/common/error';
 
 const MetadataPage = lazy(() => import('@/modules/lab/pages/Metadata'));
