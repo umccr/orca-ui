@@ -1,5 +1,5 @@
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
-import { ChevronUpIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { ReactNode, FC } from 'react';
 import { classNames } from '@/utils/commonUtils';
 
@@ -38,7 +38,7 @@ const Accordion: FC<AccordionProps> = ({
         )}
       >
         {chevronPosition === 'left' && (
-          <ChevronUpIcon
+          <ChevronDownIcon
             className={`h-5 w-5 shrink-0 text-gray-500 transition-transform group-data-[open]:rotate-180 dark:text-gray-400`}
           />
         )}
@@ -46,7 +46,7 @@ const Accordion: FC<AccordionProps> = ({
         {title}
 
         {chevronPosition === 'right' && (
-          <ChevronUpIcon
+          <ChevronDownIcon
             className={`h-5 w-5 shrink-0 text-gray-500 transition-transform group-data-[open]:rotate-180 dark:text-gray-400`}
           />
         )}

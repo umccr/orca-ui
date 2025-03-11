@@ -74,7 +74,7 @@ export default function Pagination({
       {/* mobile pagination */}
       <div className='flex flex-1 justify-between md:hidden'>
         <Button
-          disabled={currentPage === 1}
+          disabled={currentPage <= 1}
           onClick={() => setPage(currentPage - 1)}
           className={classNames(
             'relative inline-flex items-center rounded-md px-4 py-2 text-sm font-medium',
@@ -96,7 +96,7 @@ export default function Pagination({
             'border dark:border-gray-600',
             'bg-white dark:bg-gray-800',
             'text-gray-700 dark:text-gray-200',
-            currentPage === 1
+            currentPage >= maxPage
               ? 'cursor-not-allowed opacity-50'
               : 'hover:bg-gray-50 dark:hover:bg-gray-700'
           )}
