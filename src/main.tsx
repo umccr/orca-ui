@@ -18,7 +18,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       // remove when react router v7 is integrated
       future={{
         v7_relativeSplatPath: true,
-        v7_startTransition: true,
+        // Many of the "Lab" pages use "useSuspenseQuery" which then doesn't show fallback (loading)
+        // when this startTransition feature is enabled
+        // v7_startTransition: true,
       }}
     >
       <App />

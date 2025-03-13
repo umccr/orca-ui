@@ -1,5 +1,5 @@
 import { Column } from '@/components/tables';
-import { getCurrentSortDirection, getSortValue } from '@/components/tables/Table';
+import { getCurrentSortDirection, getSortValue, multiRowCell } from '@/components/tables/Table';
 
 export const getContactTableColumn = ({
   cellClassName,
@@ -68,5 +68,6 @@ export const getContactTableColumn = ({
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'name'),
     cellClassName: cellClassName,
+    cell: multiRowCell,
   },
 ];
