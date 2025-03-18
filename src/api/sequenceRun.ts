@@ -166,3 +166,7 @@ export const useSequenceRunCommentDeleteModel = createSequenceRunDeleteMutationH
 export const useSequenceRunStatusCountModel = createSequenceRunQueryHook(
   '/api/v1/sequence/stats/status_counts/'
 );
+
+export const useSequenceRunSampleSheetModel = createSequenceRunQueryHook(
+  '/api/v1/sequence/{orcabusId}/get_sample_sheet/'
+);

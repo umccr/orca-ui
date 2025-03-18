@@ -93,55 +93,19 @@ const WorkflowRunFilterHeader = () => {
             })),
           ]
         : [
-            {
-              label: 'All',
-              subLabel: '',
-              onClick: () => {
-                setQueryParams({ workflowRunStatus: null });
-              },
-            },
-            {
-              label: 'Succeeded',
-              subLabel: '',
-              onClick: () => {
-                setQueryParams({ workflowRunStatus: 'succeeded' });
-              },
-            },
-            {
-              label: 'Aborted',
-              subLabel: '',
-              onClick: () => {
-                setQueryParams({ workflowRunStatus: 'aborted' });
-              },
-            },
-            {
-              label: 'Failed',
-              subLabel: '',
-              onClick: () => {
-                setQueryParams({ workflowRunStatus: 'failed' });
-              },
-            },
-            {
-              label: 'Resolved',
-              subLabel: '',
-              onClick: () => {
-                setQueryParams({ workflowRunStatus: 'resolved' });
-              },
-            },
-            {
-              label: 'Deprecated',
-              subLabel: '',
-              onClick: () => {
-                setQueryParams({ workflowRunStatus: 'deprecated' });
-              },
-            },
-            {
-              label: 'Ongoing',
-              subLabel: '',
-              onClick: () => {
-                setQueryParams({ workflowRunStatus: 'ongoing' });
-              },
-            },
+            ...['All', 'Succeeded', 'Aborted', 'Failed', 'Resolved', 'Deprecated'].map(
+              (status) => ({
+                label: status,
+                subLabel: '',
+                onClick: () => {
+                  if (status === 'All') {
+                    setQueryParams({ workflowRunStatus: null });
+                  } else {
+                    setQueryParams({ workflowRunStatus: status.toLowerCase() });
+                  }
+                },
+              })
+            ),
           ],
     [setQueryParams, workflowRunStatusCountData]
   );
