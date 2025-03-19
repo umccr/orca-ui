@@ -7,7 +7,7 @@ type ErrorBoundaryProps = PropsWithChildren & { errorTitle?: string; onCloseErro
 const DetailedErrorBoundary = ({ children, errorTitle, onCloseError }: ErrorBoundaryProps) => {
   function Fallback({ error, resetErrorBoundary }: FallbackProps) {
     return (
-      <div className='relative my-4 rounded-lg border border-red-100 bg-white p-6 shadow-sm dark:border-red-900 dark:bg-gray-800'>
+      <div className='relative my-4 w-full rounded-lg border border-red-100 bg-white p-6 shadow-sm dark:border-red-900 dark:bg-gray-800'>
         <div className='mb-4 flex w-full items-center justify-between'>
           <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
             {errorTitle ?? 'An error occurred'}

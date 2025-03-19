@@ -93,6 +93,7 @@ const processDataResults = (data: components['schemas']['SampleDetail'][]) => {
       type: [] as string[],
       assay: [] as string[],
       coverage: [] as string[],
+      overrideCycles: [] as string[],
     };
 
     for (const lib of smp.librarySet) {
@@ -106,6 +107,7 @@ const processDataResults = (data: components['schemas']['SampleDetail'][]) => {
       rec.type.push(lib.type ?? '-');
       rec.assay.push(lib.assay ?? '-');
       rec.coverage.push(lib.coverage?.toString() ?? '-');
+      rec.overrideCycles.push(lib.overrideCycles ?? '-');
     }
 
     return rec;
