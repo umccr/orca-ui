@@ -25,8 +25,11 @@ const Accordion: FC<AccordionProps> = ({
       as='div'
       defaultOpen={defaultOpen}
       className={classNames(
-        'overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-900',
-        'transition duration-200 ease-in-out',
+        'bg-white dark:bg-gray-900',
+        'border border-gray-200 dark:border-gray-700',
+        'overflow-hidden rounded-lg',
+        'hover:shadow-sm dark:hover:shadow-gray-800',
+        'shadow-sm dark:shadow-gray-800',
         className
       )}
     >
