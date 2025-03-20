@@ -95,6 +95,7 @@ const processSubjectResult = (data: components['schemas']['SubjectDetail'][]) =>
       type: [],
       assay: [],
       coverage: [],
+      overrideCycles: [],
     };
 
     for (const library of subject.librarySet) {
@@ -108,6 +109,7 @@ const processSubjectResult = (data: components['schemas']['SubjectDetail'][]) =>
       rec.type.push(library.type ?? '-');
       rec.assay.push(library.assay ?? '-');
       rec.coverage.push(library.coverage?.toString() ?? '-');
+      rec.overrideCycles.push(library.overrideCycles ?? '-');
     }
 
     for (const individual of subject.individualSet) {

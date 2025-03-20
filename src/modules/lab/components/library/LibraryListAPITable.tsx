@@ -103,6 +103,7 @@ const processLibraryResults = (data: components['schemas']['LibraryDetail'][]) =
       type: library.type ?? '-',
       assay: library.assay ?? '-',
       coverage: library.coverage?.toString() ?? '-',
+      overrideCycles: library.overrideCycles ?? '-',
 
       // Sample Model
       sampleIds: {

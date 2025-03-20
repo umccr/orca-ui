@@ -17,10 +17,14 @@ import { JsonToTable } from '@/components/common/json-to-table';
 import { WorkflowDialogDetail } from './WorkflowDialogDetail';
 
 const WORKFLOW_ANALYSIS_TABLE = {
-  umccrise: {
+  sash: {
     keyPatterns: ['*.html', '*circos*.png', '*somatic-PASS.vcf.gz', '*predispose_genes.vcf.gz'],
     getTableData: (data: ({ key: string } & Record<string, unknown>)[]): TableData[] => {
       return [
+        {
+          groupTitle: 'LINX',
+          groupData: data.filter((r) => r.key.endsWith('linx.html')),
+        },
         {
           groupTitle: 'CANCER',
           groupData: data.filter((r) => r.key.endsWith('cancer_report.html')),
@@ -97,6 +101,7 @@ const WORKFLOW_ANALYSIS_TABLE = {
       '*/Results/*/*.tsv',
       '*/Results/*.vcf.gz',
       '*/Results/*.gvcf.gz',
+      '*/Results/*microsat_output.json',
     ],
     getTableData: (data: ({ key: string } & Record<string, unknown>)[]): TableData[] => {
       return [
@@ -143,7 +148,7 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
    */
 
   const libraryDisplayNotes = {
-    '"WGS" type': ['UMCCRISE', 'tumor-normal'],
+    '"WGS" type': ['sash', 'tumor-normal'],
     '"WTS" type': ['wts', 'rnasum'],
     '"ctDNA" type, "ctTSO" assay': ['cttsov2'],
   };
@@ -169,13 +174,13 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
       </div>
       {libraryDetail.type === 'WGS' ? (
         <>
-          <DetailedErrorBoundary errorTitle={`Unable to load 'umccrise' report files`}>
+          <DetailedErrorBoundary errorTitle={`Unable to load 'sash' report files`}>
             <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
               <AnalysisTable
                 libraryOrcabusId={libraryDetail.orcabusId}
-                workflowType='umccrise'
-                keyPatterns={WORKFLOW_ANALYSIS_TABLE['umccrise']['keyPatterns']}
-                getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['umccrise']['getTableData']}
+                workflowType='sash'
+                keyPatterns={WORKFLOW_ANALYSIS_TABLE['sash']['keyPatterns']}
+                getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['sash']['getTableData']}
               />
             </Suspense>
           </DetailedErrorBoundary>
