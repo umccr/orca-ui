@@ -4,7 +4,7 @@ import { FileAPITable, getTableColumn } from '../components/FileAPITable';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { Badge } from '@/components/common/badges';
 import { Button } from '@/components/common/buttons';
-import InputBadgeBox from '../components/InputBadgeBox';
+import InputBadgeBox, { InputBadgeBoxType } from '../components/InputBadgeBox';
 
 const WORKFLOW_FILTER = [
   '*/bclconvert-interop-qc/*',
@@ -40,12 +40,6 @@ const getBadgeType = (name: string) => {
   }
   return 'unknown';
 };
-
-interface InputBadgeBoxType {
-  operator: 'and' | 'or';
-  inputState: string[];
-  inputDraft: string;
-}
 
 export default function FilesPage() {
   const { setQueryParams, getQueryParams } = useQueryParams();

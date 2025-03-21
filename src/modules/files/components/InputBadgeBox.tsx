@@ -5,7 +5,7 @@ import { Dropdown } from '@/components/common/dropdowns';
 import { Tooltip } from '@/components/common/tooltips';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 
-interface InputBadgeBoxType {
+export interface InputBadgeBoxType {
   operator: 'and' | 'or';
   inputState: string[];
   inputDraft: string;
@@ -13,6 +13,7 @@ interface InputBadgeBoxType {
 
 interface InputBadgeBoxProps {
   label: string;
+  labelClassName?: string;
   tooltipText?: string;
   inputState: string[];
   inputDraft: string;
@@ -26,6 +27,7 @@ interface InputBadgeBoxProps {
 
 const InputBadgeBox: React.FC<InputBadgeBoxProps> = ({
   label,
+  labelClassName,
   tooltipText,
   inputState,
   inputDraft,
@@ -53,7 +55,7 @@ const InputBadgeBox: React.FC<InputBadgeBoxProps> = ({
 
   return (
     <div className='mt-2 flex flex-row items-center'>
-      <div className='flex w-28 flex-row text-sm'>
+      <div className={`flex w-28 flex-row text-sm ${labelClassName}`}>
         {label}
         {tooltipText && (
           <Tooltip text={tooltipText} position='right' background='light' size='large'>
