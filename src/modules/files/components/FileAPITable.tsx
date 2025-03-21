@@ -306,6 +306,7 @@ const DataActionButton = ({ fileRecord }: { fileRecord: S3Record }) => {
       {isOpenRecordDetails && (
         <Dialog
           open={isOpenRecordDetails}
+          size='lg'
           title='Record Details'
           content={<JsonToTable data={fileRecord} />}
           onClose={() => setIsOpenRecordDetails(false)}
