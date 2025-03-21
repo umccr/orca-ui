@@ -18,7 +18,12 @@ import { WorkflowDialogDetail } from './WorkflowDialogDetail';
 
 const WORKFLOW_ANALYSIS_TABLE = {
   sash: {
-    keyPatterns: ['*.html', '*circos*.png', '*somatic-PASS.vcf.gz', '*predispose_genes.vcf.gz'],
+    keyPatterns: [
+      '*.html',
+      '*circos*.png',
+      '*/smlv_somatic/filter/*.pass.vcf.gz',
+      '*/smlv_germline/report/*annotations.vcf.gz',
+    ],
     getTableData: (data: ({ key: string } & Record<string, unknown>)[]): TableData[] => {
       return [
         {
