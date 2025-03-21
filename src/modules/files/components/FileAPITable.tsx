@@ -18,6 +18,7 @@ import { getFilenameFromKey } from '@/utils/commonUtils';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { Tooltip } from '@/components/common/tooltips';
 import { IgvDesktopButton } from '@/components/files/igv/IgvDesktop';
+import { FileOpenInNewTab } from './FileOpenInNewTab';
 
 export const FileAPITable = ({
   additionalQueryParam,
@@ -189,6 +190,7 @@ export const getTableColumn = ({
               />
             )}
             {isDownloadable && <FileDownloadButton s3Record={data as S3Record} />}
+            {isDownloadable && <FileOpenInNewTab s3Record={data as S3Record} />}
             <FilePreviewDrawer s3Record={data as S3Record} />
           </div>
         );
