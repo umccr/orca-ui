@@ -5,6 +5,8 @@ import { useQueryParams } from '@/hooks/useQueryParams';
 import { Badge } from '@/components/common/badges';
 import { Button } from '@/components/common/buttons';
 import InputBadgeBox, { InputBadgeBoxType } from '../components/InputBadgeBox';
+import { areArraysEqual } from '../components/utils';
+import { CursorArrowRaysIcon } from '@heroicons/react/24/outline';
 
 const WORKFLOW_FILTER = [
   '*/bclconvert-interop-qc/*',
@@ -43,38 +45,53 @@ const getBadgeType = (name: string) => {
 
 export default function FilesPage() {
   const { setQueryParams, getQueryParams } = useQueryParams();
-  const s3KeyParam = getQueryParams().key as string | string[] | undefined;
-  const s3KeyOpParam = getQueryParams().keyOp as string | undefined;
 
+  const s3KeyOpParam = getQueryParams().keyOp as 'and' | 'or' | undefined;
+  const s3KeyParam = getQueryParams().key as string | string[] | undefined;
+  const s3KeyArray = !s3KeyParam ? [] : Array.isArray(s3KeyParam) ? s3KeyParam : [s3KeyParam];
+
+  const bucketOpParam = getQueryParams().bucketOp as 'and' | 'or' | undefined;
   const bucketParam = getQueryParams().bucket as string | string[] | undefined;
-  const bucketOpParam = getQueryParams().bucketOp as string | undefined;
+  const bucketArray = !bucketParam ? [] : Array.isArray(bucketParam) ? bucketParam : [bucketParam];
 
   const portalRunIdParam = getQueryParams().portalRunId as string | string[] | undefined;
+  const portalRunIdArray = !portalRunIdParam
+    ? []
+    : Array.isArray(portalRunIdParam)
+      ? portalRunIdParam
+      : [portalRunIdParam];
 
   // For PortalRunId
   const [portalRunIdInput, setPortalRunIdInput] = useState<InputBadgeBoxType>({
     operator: 'or',
-    inputState: !portalRunIdParam
-      ? []
-      : Array.isArray(portalRunIdParam)
-        ? portalRunIdParam
-        : [portalRunIdParam],
+    inputState: portalRunIdArray,
     inputDraft: '',
   });
 
   // For S3 bucket
   const [bucketInput, setBucketInput] = useState<InputBadgeBoxType>({
-    operator: 'or',
-    inputState: !bucketParam ? [] : Array.isArray(bucketParam) ? bucketParam : [bucketParam],
+    operator: bucketOpParam ? bucketOpParam : 'or',
+    inputState: bucketArray,
     inputDraft: '',
   });
 
   // For S3 key
   const [s3KeyInput, setS3KeyInput] = useState<InputBadgeBoxType>({
-    operator: 'and',
-    inputState: !s3KeyParam ? [] : Array.isArray(s3KeyParam) ? s3KeyParam : [s3KeyParam],
+    operator: s3KeyOpParam ? s3KeyOpParam : 'and',
+    inputState: s3KeyArray,
     inputDraft: '',
   });
+
+  const isBucketNeedUpdate =
+    !areArraysEqual(bucketInput.inputState, bucketArray) ||
+    (!!bucketOpParam && bucketInput.operator !== bucketOpParam);
+  const isKeyNeedUpdate =
+    !areArraysEqual(s3KeyInput.inputState, s3KeyArray) ||
+    (!!s3KeyOpParam && s3KeyInput.operator !== s3KeyOpParam);
+
+  const isPortalRunIdNeedUpdate = !areArraysEqual(portalRunIdInput.inputState, portalRunIdArray);
+
+  const isSearchNeedUpdate = isBucketNeedUpdate || isKeyNeedUpdate || isPortalRunIdNeedUpdate;
 
   return (
     <div className='flex flex-col'>
@@ -180,6 +197,7 @@ export default function FilesPage() {
             type='green'
           >
             Search
+            {isSearchNeedUpdate && <CursorArrowRaysIcon className='h-5 w-5' />}
           </Button>
         </div>
       </div>
