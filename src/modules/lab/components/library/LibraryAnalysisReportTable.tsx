@@ -182,6 +182,7 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
           <DetailedErrorBoundary errorTitle={`Unable to load 'sash' report files`}>
             <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
               <AnalysisTable
+                key={`${libraryDetail.orcabusId}-sash`}
                 libraryOrcabusId={libraryDetail.orcabusId}
                 workflowType='sash'
                 keyPatterns={WORKFLOW_ANALYSIS_TABLE['sash']['keyPatterns']}
@@ -193,6 +194,7 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
           <DetailedErrorBoundary errorTitle={`Unable to load 'tumor-normal' report files`}>
             <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
               <AnalysisTable
+                key={`${libraryDetail.orcabusId}-tumor-normal`}
                 libraryOrcabusId={libraryDetail.orcabusId}
                 workflowType='tumor-normal'
                 keyPatterns={WORKFLOW_ANALYSIS_TABLE['tumor-normal']['keyPatterns']}
@@ -206,6 +208,7 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
           <DetailedErrorBoundary errorTitle={`Unable to load 'wts' report files`}>
             <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
               <AnalysisTable
+                key={`${libraryDetail.orcabusId}-wts`}
                 libraryOrcabusId={libraryDetail.orcabusId}
                 workflowType='wts'
                 keyPatterns={WORKFLOW_ANALYSIS_TABLE['wts']['keyPatterns']}
@@ -217,6 +220,7 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
           <DetailedErrorBoundary errorTitle={`Unable to load 'rnasum' report files`}>
             <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
               <AnalysisTable
+                key={`${libraryDetail.orcabusId}-rnasum`}
                 libraryOrcabusId={libraryDetail.orcabusId}
                 workflowType='rnasum'
                 keyPatterns={WORKFLOW_ANALYSIS_TABLE['rnasum']['keyPatterns']}
@@ -231,6 +235,7 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
         <DetailedErrorBoundary errorTitle={`Unable to load 'cttsov2' report files`}>
           <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
             <AnalysisTable
+              key={`${libraryDetail.orcabusId}-cttsov2`}
               libraryOrcabusId={libraryDetail.orcabusId}
               workflowType='cttsov2'
               keyPatterns={WORKFLOW_ANALYSIS_TABLE['cttsov2']['keyPatterns']}

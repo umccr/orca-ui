@@ -11,6 +11,7 @@ import { Badge } from '@/components/common/badges';
 import InputBadgeBox, { InputBadgeBoxType } from '@/modules/files/components/InputBadgeBox';
 import { Button } from '@/components/common/buttons';
 import { CursorArrowRaysIcon } from '@heroicons/react/24/outline';
+import { areArraysEqual } from '@/modules/files/components/utils';
 
 interface KeyPatternType {
   label: string;
@@ -47,13 +48,6 @@ const WORKFLOW_TYPE_FILTER: KeyPatternType[] = [
 
 const DEFAULT_FILTER_OP = 'and';
 
-function areArraysEqual(arr1: string[], arr2: string[]) {
-  return (
-    new Set(arr1).size === new Set(arr2).size &&
-    [...new Set(arr1)].every((item) => arr2.includes(item))
-  );
-}
-
 const getBadgeTypeFromPattern = (name: string) => {
   const isWorkflowMatch = WORKFLOW_TYPE_FILTER.some(({ pattern }) =>
     Array.isArray(pattern) ? pattern.includes(name) : pattern === name
@@ -80,13 +74,14 @@ export default function LibraryWorkflowPage() {
   const { libraryOrcabusId, portalRunId, workflowType } = useParams();
   const { pathname } = useLocation();
   const { setQueryParams, getQueryParams } = useQueryParams();
-  const searchKey = getQueryParams().key ?? '';
-  const searchKeyOpParam = getQueryParams().keyOp as string | undefined;
+  const searchKey = getQueryParams().key as string | string[] | undefined;
+  const searchKeyOpParam = getQueryParams().keyOp as 'and' | 'or' | undefined;
 
   // For S3 key
+  const sanitizedSearchKey = !searchKey ? [] : Array.isArray(searchKey) ? searchKey : [searchKey];
   const [s3KeyInput, setS3KeyInput] = useState<InputBadgeBoxType>({
-    operator: 'and',
-    inputState: !searchKey ? [] : Array.isArray(searchKey) ? searchKey : [searchKey],
+    operator: searchKeyOpParam ? searchKeyOpParam : DEFAULT_FILTER_OP,
+    inputState: sanitizedSearchKey,
     inputDraft: '',
   });
 
@@ -130,11 +125,10 @@ export default function LibraryWorkflowPage() {
   }
 
   const isMultipleRuns = workflowRunResults.length > 1;
-
   const isSearchNeedUpdate =
-    !areArraysEqual(s3KeyInput.inputState, searchKey) || searchKeyOpParam
-      ? s3KeyInput.operator !== searchKeyOpParam
-      : false;
+    !areArraysEqual(s3KeyInput.inputState, sanitizedSearchKey) ||
+    (!!searchKeyOpParam && s3KeyInput.operator !== searchKeyOpParam);
+
   return (
     <div>
       {/* Header */}
