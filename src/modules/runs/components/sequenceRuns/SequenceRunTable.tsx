@@ -46,9 +46,9 @@ const SequenceRunTable = () => {
 
   const sequenceRunColumn: Column[] = [
     {
-      header: 'Experiment Name',
-      accessor: 'experimentName',
-      cell: (experimentName: unknown, sequenceRunRowData: TableData) => {
+      header: 'Instrument Run ID',
+      accessor: 'instrumentRunId',
+      cell: (instrumentRunId: unknown, sequenceRunRowData: TableData) => {
         const id = sequenceRunRowData.orcabusId;
         return (
           <Link
@@ -57,16 +57,16 @@ const SequenceRunTable = () => {
               'flex cursor-pointer flex-row items-center text-sm font-medium text-blue-500 hover:text-blue-700'
             )}
           >
-            <div>{experimentName ? (experimentName as string) : '-'}</div>
+            <div>{instrumentRunId ? (instrumentRunId as string) : '-'}</div>
           </Link>
         );
       },
     },
     {
-      header: 'Instrument Run ID',
-      accessor: 'instrumentRunId',
-      cell: (instrumentRunId: unknown) => {
-        return <div>{instrumentRunId as string}</div>;
+      header: 'Experiment Name',
+      accessor: 'experimentName',
+      cell: (experimentName: unknown) => {
+        return <div>{experimentName ? (experimentName as string) : '-'}</div>;
       },
     },
     {
