@@ -10,6 +10,7 @@ import { WorkflowDialogDetail } from '../../components/library/WorkflowDialogDet
 import { Badge } from '@/components/common/badges';
 import InputBadgeBox, { InputBadgeBoxType } from '@/modules/files/components/InputBadgeBox';
 import { Button } from '@/components/common/buttons';
+import { CursorArrowRaysIcon } from '@heroicons/react/24/outline';
 
 interface KeyPatternType {
   label: string;
@@ -43,6 +44,15 @@ const WORKFLOW_TYPE_FILTER: KeyPatternType[] = [
   { label: 'coverage', pattern: ['*tumor.cacao.html', '*normal.cacao.html'] },
   { label: 'circos', pattern: '*/purple/*circos*.png' },
 ];
+
+const DEFAULT_FILTER_OP = 'and';
+
+function areArraysEqual(arr1: string[], arr2: string[]) {
+  return (
+    new Set(arr1).size === new Set(arr2).size &&
+    [...new Set(arr1)].every((item) => arr2.includes(item))
+  );
+}
 
 const getBadgeTypeFromPattern = (name: string) => {
   const isWorkflowMatch = WORKFLOW_TYPE_FILTER.some(({ pattern }) =>
@@ -83,7 +93,7 @@ export default function LibraryWorkflowPage() {
   useEffect(() => {
     if (!searchKey) {
       setS3KeyInput({
-        operator: 'and',
+        operator: DEFAULT_FILTER_OP,
         inputState: [],
         inputDraft: '',
       });
@@ -121,6 +131,10 @@ export default function LibraryWorkflowPage() {
 
   const isMultipleRuns = workflowRunResults.length > 1;
 
+  const isSearchNeedUpdate =
+    !areArraysEqual(s3KeyInput.inputState, searchKey) || searchKeyOpParam
+      ? s3KeyInput.operator !== searchKeyOpParam
+      : false;
   return (
     <div>
       {/* Header */}
@@ -147,21 +161,21 @@ export default function LibraryWorkflowPage() {
 
       {/* Body */}
       {portalRunId && (
-        <Suspense fallback={<SpinnerWithText text='Fetching related files ...' />}>
-          <div className='mt-2 flex flex-col gap-2'>
-            <InputBadgeBox
-              label='Key'
-              labelClassName='w-10'
-              tooltipText={`The search matches values within S3 keys. Use an asterisk (*) as a wildcard to match any sequence of characters. An asterisk is added at the beginning and end of the search term.`}
-              inputState={s3KeyInput.inputState}
-              inputDraft={s3KeyInput.inputDraft}
-              setInput={setS3KeyInput}
-              placeholder='Enter S3 key pattern (wildcard supported)'
-              badgeType={getBadgeTypeFromPattern}
-              operator={s3KeyInput.operator}
-              setOperator={(operator) => setS3KeyInput((prev) => ({ ...prev, operator }))}
-              allowedOperator={['and', 'or']}
-            />
+        <div className='mt-2 flex flex-col gap-2'>
+          <InputBadgeBox
+            label='Key'
+            labelClassName='w-10'
+            tooltipText={`The search matches values within S3 keys. Use an asterisk (*) as a wildcard to match any sequence of characters. An asterisk is added at the beginning and end of the search term.`}
+            inputState={s3KeyInput.inputState}
+            inputDraft={s3KeyInput.inputDraft}
+            setInput={setS3KeyInput}
+            placeholder='Enter S3 key pattern (wildcard supported)'
+            badgeType={getBadgeTypeFromPattern}
+            operator={s3KeyInput.operator}
+            setOperator={(operator) => setS3KeyInput((prev) => ({ ...prev, operator }))}
+            allowedOperator={['and', 'or']}
+          />
+          <Suspense fallback={<SpinnerWithText text='Fetching related files ...' />}>
             <div className='my-2'>
               {[...WORKFLOW_TYPE_FILTER, ...FILE_TYPE_FILTER].map((filter, idx) => {
                 const label = filter.label;
@@ -216,19 +230,18 @@ export default function LibraryWorkflowPage() {
                 type='green'
               >
                 Search
+                {isSearchNeedUpdate && <CursorArrowRaysIcon className='h-5 w-5' />}
               </Button>
             </div>
             <FileAPITable
               additionalQueryParam={{
                 'attributes[portalRunId]': portalRunId,
-                [`key[${searchKeyOpParam ?? s3KeyInput['operator']}][]`]: searchKey
-                  ? searchKey
-                  : '*',
+                [`key[${searchKeyOpParam ?? DEFAULT_FILTER_OP}][]`]: searchKey ? searchKey : '*',
               }}
               tableColumn={getTableColumn({ isHideKeyPrefix: true })}
             />
-          </div>
-        </Suspense>
+          </Suspense>
+        </div>
       )}
     </div>
   );
