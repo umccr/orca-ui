@@ -10,11 +10,10 @@ interface StatesDialogProps {
   isOpenAddStateDialog: boolean;
   isOpenUpdateStateDialog: boolean;
   user: FetchUserAttributesOutput;
-  validState: string[];
-  stateStatus: string | null;
-  setStateStatus: (status: string | null) => void;
-  selectedState: string | null;
-  currentState: string | null;
+  validStatesToCreate?: string[];
+  selectedState?: string | null;
+  setSelectedState?: (state: string | null) => void;
+  currentState?: string | null;
   handleClose: () => void;
   stateComment: string;
   setStateComment: (comment: string) => void;
@@ -26,10 +25,9 @@ const StatesDialog: FC<StatesDialogProps> = ({
   isOpenAddStateDialog,
   isOpenUpdateStateDialog,
   user,
-  validState,
-  stateStatus,
-  setStateStatus,
+  validStatesToCreate,
   selectedState,
+  setSelectedState,
   currentState,
   handleClose,
   stateComment,
@@ -49,35 +47,48 @@ const StatesDialog: FC<StatesDialogProps> = ({
 
           {/* state status */}
           {isOpenAddStateDialog && (
-            <div className='flex flex-col gap-2'>
-              <div className='mb-1 pt-1 text-xs font-medium'>Please select the state status:</div>
-              <div className='flex flex-wrap gap-1'>
-                {validState?.map((state, idx) => (
-                  <label
-                    key={idx}
-                    className='flex cursor-pointer items-center rounded-md border px-2 py-1 transition-colors'
-                  >
-                    <input
-                      type='radio'
-                      name='state'
-                      value={state}
-                      onChange={() => setStateStatus(state)}
-                    />
-                    <span className='ml-1 text-xs font-medium'>{state}</span>
-                  </label>
-                ))}
-              </div>
-              {!stateStatus && <div className='text-xs text-red-500'>Please select a state</div>}
-            </div>
+            <>
+              {validStatesToCreate && validStatesToCreate.length > 0 ? (
+                <div className='flex flex-col gap-2'>
+                  <div className='mb-1 pt-1 text-xs font-medium'>
+                    Please select the state status:
+                  </div>
+                  <div className='flex flex-wrap gap-1'>
+                    {validStatesToCreate?.map((state, idx) => (
+                      <label
+                        key={idx}
+                        className='flex cursor-pointer items-center rounded-md border px-2 py-1 transition-colors'
+                      >
+                        <input
+                          type='radio'
+                          name='state'
+                          value={state}
+                          onChange={() => setSelectedState?.(state)}
+                        />
+                        <span className='ml-1 text-xs font-medium'>{state}</span>
+                      </label>
+                    ))}
+                  </div>
+                  {!selectedState && validStatesToCreate && validStatesToCreate.length != 0 && (
+                    <div className='text-xs text-red-500'>Please select a state</div>
+                  )}
+                </div>
+              ) : (
+                // warning: no validate state
+                <div className='flex flex-row gap-1 text-red-500'>
+                  <span className='font-medium'>Warning:</span>
+                  <span>No validate state found for the current state</span>
+                </div>
+              )}
+            </>
           )}
 
+          {/* current state */}
           {isOpenUpdateStateDialog && (
             <div className='flex flex-col gap-2'>
-              <label className='text-sm font-medium text-gray-700'>Current State Status</label>
+              <label className='text-sm font-medium text-gray-700'>Current Status</label>
               <div className='rounded-lg bg-gray-50 p-3 dark:bg-gray-700'>
-                <Badge status={selectedState || currentState || 'unknown'}>
-                  {selectedState || currentState || 'unknown'}
-                </Badge>
+                <Badge status={currentState || 'unknown'}>{currentState || 'unknown'}</Badge>
               </div>
             </div>
           )}
@@ -91,6 +102,9 @@ const StatesDialog: FC<StatesDialogProps> = ({
               Comment
             </label>
             <Textarea
+              disabled={
+                isOpenAddStateDialog && validStatesToCreate && validStatesToCreate.length == 0
+              }
               id='stateComment'
               value={stateComment}
               onChange={(e) => setStateComment(e.target.value)}
@@ -103,19 +117,24 @@ const StatesDialog: FC<StatesDialogProps> = ({
       onClose={() => {
         handleClose();
         setStateComment('');
-        setStateStatus(null);
+        if (setSelectedState) {
+          setSelectedState(null);
+        }
       }}
       closeBtn={{
         label: 'Close',
         onClick: () => {
           handleClose();
           setStateComment('');
-          setStateStatus(null);
+          if (setSelectedState) {
+            setSelectedState(null);
+          }
         },
       }}
       confirmBtn={{
         label: isOpenAddStateDialog ? 'Add State' : 'Update State',
         onClick: isOpenAddStateDialog ? handleStateCreationEvent : handleUpdateState,
+        disabled: validStatesToCreate && validStatesToCreate.length == 0,
       }}
     ></Dialog>
   );

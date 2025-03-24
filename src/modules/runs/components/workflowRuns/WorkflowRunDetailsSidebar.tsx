@@ -2,11 +2,11 @@ import { useMemo } from 'react';
 import { useWorkflowRunContext } from './WorkflowRunContext';
 import { Sidebar } from '@/components/common/sidebar';
 import { AccordionList } from '@/components/common/accordion';
+import { SpinnerWithText } from '@/components/common/spinner';
 
 const WorkflowRunDetailsSidebar = () => {
-  const { workflowRunDetail } = useWorkflowRunContext();
+  const { workflowRunDetail, isFetchingWorkflowRunDetail } = useWorkflowRunContext();
   // format data and disply in the table
-
   const workflowRunDetailsData = useMemo(
     () =>
       workflowRunDetail
@@ -116,7 +116,11 @@ const WorkflowRunDetailsSidebar = () => {
       openWidth='w-100'
     >
       <div className='mt-14'>
-        {workflowRunDetailsData ? (
+        {isFetchingWorkflowRunDetail ? (
+          <div className='flex h-full items-center justify-center'>
+            <SpinnerWithText text='Loading Workflow Run Details...' />
+          </div>
+        ) : workflowRunDetailsData ? (
           <div className='space-y-2'>
             <AccordionList
               title='Run Details'

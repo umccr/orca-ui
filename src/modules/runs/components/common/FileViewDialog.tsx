@@ -1,14 +1,17 @@
 import { Dialog } from '@/components/common/dialogs';
 import { DocumentTextIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
-import { FC } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { classNames } from '@/utils/commonUtils';
 import { SpinnerWithText } from '@/components/common/spinner';
-
+import { JsonDisplay } from '@/components/common/json-to-table';
+import { jsonToCsv, SampleSheetModel } from '@/utils/samplesheetUtils';
+import { ContentTabs } from '@/components/navigation/tabs';
 interface FileViewDialogProps {
   isOpenFileViewDialog: boolean;
   setIsOpenFileViewDialog: (isOpen: boolean) => void;
   fileName: string;
-  fileContent: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  fileContent: Record<string, any> | null;
   isLoading: boolean;
 }
 
@@ -19,17 +22,44 @@ const FileViewDialog: FC<FileViewDialogProps> = ({
   fileContent,
   isLoading,
 }) => {
-  const handleDownload = () => {
-    const blob = new Blob([fileContent], { type: 'text/plain' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
+  const [selectedTab, setSelectedTab] = useState<'json' | 'csv'>('json');
+
+  const handleDownload = (tab: 'json' | 'csv') => {
+    let url: string;
+    let a: HTMLAnchorElement;
+
+    if (tab === 'json') {
+      const blob = new Blob([JSON.stringify(fileContent, null, 2)], { type: 'application/json' });
+      url = window.URL.createObjectURL(blob);
+      a = document.createElement('a');
+      a.href = url;
+      a.download = `${fileName.replace('.csv', '')}.json`; // remove default .csv extension
+      document.body.appendChild(a);
+      a.click();
+      // Delay revoking the URL to ensure download starts
+      setTimeout(() => {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }, 100);
+    } else {
+      const blob = new Blob([csvFileContent], { type: 'text/csv' });
+      url = window.URL.createObjectURL(blob);
+      a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      // Delay revoking the URL to ensure download starts
+      setTimeout(() => {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }, 100);
+    }
   };
+
+  const csvFileContent = useMemo(() => {
+    return jsonToCsv(fileContent as SampleSheetModel);
+  }, [fileContent]);
 
   return (
     <Dialog
@@ -42,7 +72,7 @@ const FileViewDialog: FC<FileViewDialogProps> = ({
             </div>
           </div>
           <button
-            onClick={handleDownload}
+            onClick={() => handleDownload(selectedTab)}
             className={classNames(
               'flex items-center gap-2 rounded-md px-3 py-1.5',
               'text-xs font-medium',
@@ -61,7 +91,7 @@ const FileViewDialog: FC<FileViewDialogProps> = ({
                 'transition-colors duration-200'
               )}
             />
-            Download
+            Download {selectedTab === 'json' ? 'JSON' : 'CSV'}
           </button>
         </div>
       }
@@ -83,18 +113,25 @@ const FileViewDialog: FC<FileViewDialogProps> = ({
               'scrollbar-track-transparent'
             )}
           >
-            <pre
-              className={classNames(
-                'whitespace-pre',
-                'font-mono text-sm leading-5',
-                'text-gray-600 dark:text-gray-300',
-                'bg-white dark:bg-gray-800',
-                'border border-gray-200 dark:border-gray-700',
-                'p-4'
-              )}
-            >
-              {fileContent}
-            </pre>
+            <ContentTabs
+              className='overflow-auto rounded-lg bg-white dark:bg-gray-900'
+              onChange={(index) => setSelectedTab(index === 0 ? 'json' : 'csv')}
+              selectedLabel={selectedTab === 'json' ? 'JSON' : 'CSV'}
+              tabs={[
+                {
+                  label: 'JSON',
+                  content: <JsonDisplay data={fileContent} isFetchingData={isLoading} />,
+                },
+                {
+                  label: 'CSV',
+                  content: (
+                    <div className='overflow-auto rounded-lg bg-white px-4 py-2 dark:bg-gray-900'>
+                      <pre>{csvFileContent}</pre>
+                    </div>
+                  ),
+                },
+              ]}
+            />
           </div>
         )}
       </div>

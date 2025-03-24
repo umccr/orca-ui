@@ -52,8 +52,10 @@ const SimpleDialog: FC<DialogProps> = ({
               'relative w-full max-w-[calc(100vw-2rem)] transform rounded-xl bg-white shadow-xl ring-1 ring-gray-900/5 transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in',
               size === 'sm' &&
                 'sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95',
-              size === 'md' && 'md:max-w-2xl',
-              size === 'lg' && 'lg:max-w-7xl',
+              size === 'md' &&
+                'md:max-w-2xl data-[closed]:md:translate-y-0 data-[closed]:md:scale-95',
+              size === 'lg' &&
+                'lg:max-w-6xl data-[closed]:lg:translate-y-0 data-[closed]:lg:scale-95',
               'dark:bg-gray-800 dark:ring-white/5',
               className || ''
             )}

@@ -1,19 +1,19 @@
-import { useSequenceRunListModel, SequenceRunModel } from '@/api/sequenceRun';
+import { useSequenceRunListModel } from '@/api/sequenceRun';
 import { Table, TableData } from '@/components/tables';
 import { Column } from '@/components/tables/Table';
 import { classNames } from '@/utils/commonUtils';
-import { useState, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { dayjs } from '@/utils/dayjs';
 import { Badge } from '@/components/common/badges';
-import SequenceRunDetailsDrawer from './SequenceRunDetailsDrawer';
+// import SequenceRunDetailsDrawer from './SequenceRunDetailsDrawer';
 import { MultiqcIcon } from '@/components/icons/MultiqcIcon';
 import { Tooltip } from '@/components/common/tooltips';
-import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
+// import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
 const SequenceRunTable = () => {
-  const [selectedSequenceRun, setSelectedSequenceRun] = useState<SequenceRunModel | null>(null);
+  // const [selectedSequenceRun, setSelectedSequenceRun] = useState<SequenceRunModel | null>(null);
 
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
 
@@ -39,10 +39,10 @@ const SequenceRunTable = () => {
     throw sequenceError;
   }
 
-  const onCloseDrawer = () => {
-    setSelectedSequenceRun(null);
-    setQueryParams({ sequenceRunId: null });
-  };
+  // const onCloseDrawer = () => {
+  //   setSelectedSequenceRun(null);
+  //   setQueryParams({ sequenceRunId: null });
+  // };
 
   const sequenceRunColumn: Column[] = [
     {
@@ -110,7 +110,7 @@ const SequenceRunTable = () => {
     {
       header: '',
       accessor: 'instrumentRunId',
-      cell: (instrumentRunId: unknown, sequenceRunRowData: TableData) => {
+      cell: (instrumentRunId: unknown) => {
         // Encode the URL parameters properly
         const params = new URLSearchParams({
           key: `*${instrumentRunId}_multiqc_report.html`,
@@ -119,7 +119,7 @@ const SequenceRunTable = () => {
         });
         return (
           <div className='flex flex-row gap-2'>
-            <Tooltip text='Comment' size='small' background='light'>
+            {/* <Tooltip text='Comment' size='small' background='light'>
               <div
                 className='flex cursor-pointer items-center'
                 onClick={() => {
@@ -129,7 +129,7 @@ const SequenceRunTable = () => {
               >
                 <ChatBubbleBottomCenterTextIcon className='size-5 stroke-orange-300 stroke-[3] hover:stroke-orange-600' />
               </div>
-            </Tooltip>
+            </Tooltip> */}
             <Tooltip text='MultiQC Report' size='small' background='light'>
               <Link to={`/files?${params.toString()}`} className='flex items-center p-1'>
                 <MultiqcIcon className='size-4 text-orange-300 hover:text-orange-600' />
@@ -220,12 +220,12 @@ const SequenceRunTable = () => {
         }}
       />
 
-      {(getQueryParams().sequenceRunId || selectedSequenceRun) && (
+      {/* {(getQueryParams().sequenceRunId || selectedSequenceRun) && (
         <SequenceRunDetailsDrawer
           selectedSequenceRunId={getQueryParams().sequenceRunId}
           onCloseDrawer={onCloseDrawer}
         />
-      )}
+      )} */}
     </div>
   );
 };

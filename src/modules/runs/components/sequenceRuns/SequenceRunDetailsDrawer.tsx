@@ -3,9 +3,9 @@ import { useSequenceRunDetailModel } from '@/api/sequenceRun';
 import { SideDrawer } from '@/components/common/drawers';
 import { classNames, sleep } from '@/utils/commonUtils';
 import { JsonToList } from '@/components/common/json-to-table';
-import SequenceRunTimeline from './SequenceRunTimeline';
+import SequenceRunTimeline from './SequenceRundetailsTimeline';
 import { Accordion } from '@/components/common/accordion';
-
+import SequenceRunDetailsActions from './SequenceRunDetailsActions';
 interface SequenceRunDetailsDrawerProps {
   selectedSequenceRunId: string;
   onCloseDrawer?: () => void;
@@ -19,7 +19,7 @@ const SequenceRunDetailsDrawer: FC<SequenceRunDetailsDrawerProps> = ({
 
   const { data: sequenceRunDetail, isFetching: isFetchingSequenceRunDetail } =
     useSequenceRunDetailModel({
-      params: { path: { id: selectedSequenceRunId } },
+      params: { path: { orcabusId: selectedSequenceRunId } },
       reactQuery: {
         enabled: !!selectedSequenceRunId,
       },
@@ -108,6 +108,7 @@ const SequenceRunDetailsDrawer: FC<SequenceRunDetailsDrawerProps> = ({
             'transition-all duration-300'
           )}
         >
+          <SequenceRunDetailsActions />
           <SequenceRunTimeline selectedSequenceRunId={selectedSequenceRunId} />
         </Accordion>
       </div>

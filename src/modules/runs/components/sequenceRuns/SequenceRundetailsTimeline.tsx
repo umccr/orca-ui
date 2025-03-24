@@ -1,65 +1,77 @@
 import {
-  useSequenceRunStateListModel,
-  useSequenceRunCommentListModel,
-  useSequenceRunCommentCreateModel,
   useSequenceRunCommentUpdateModel,
   useSequenceRunCommentDeleteModel,
+  useSequenceRunStateUpdateModel,
 } from '@/api/sequenceRun';
 import { useState, useEffect, useMemo, FC } from 'react';
 import { dayjs } from '@/utils/dayjs';
-import { getUsername } from '@/utils/commonUtils';
+import { classNames, getUsername } from '@/utils/commonUtils';
 import { Timeline } from '@/components/common/timelines';
 import { getBadgeStatusType, statusBackgroundColor } from '@/utils/statusUtils';
 import { BackdropWithText } from '@/components/common/backdrop';
-import { Button } from '@/components/common/buttons';
-import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
 import toaster from '@/components/common/toaster';
 import CommentDialog from '../common/CommentDialog';
 import { useParams } from 'react-router-dom';
+import { Button } from '@/components/common/buttons';
+import { BarsArrowUpIcon, BarsArrowDownIcon } from '@heroicons/react/24/outline';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import StateDialog from '../common/StateDialog';
+import { useSequenceRunContext } from './SequenceRunContext';
 
 interface SequenceRunTimelineProps {
-  hasAddCommentBtn?: boolean;
   selectedSequenceRunId?: string;
 }
 
-const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({
-  hasAddCommentBtn = true,
-  selectedSequenceRunId,
-}) => {
+const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRunId }) => {
   const { user } = useAuthContext();
   const { orcabusId } = useParams();
-  const [isOpenAddCommentDialog, setIsOpenAddCommentDialog] = useState<boolean>(false);
+
+  const {
+    sequenceRunDetail,
+    sequenceRunStateData,
+    isFetchingSequenceRunState,
+    refetchSequenceRunState,
+    sequenceRunCommentData,
+    isFetchingSequenceRunComment,
+    refetchSequenceRunComment,
+  } = useSequenceRunContext();
+
+  // comment dialog
   const [isOpenUpdateCommentDialog, setIsOpenUpdateCommentDialog] = useState<boolean>(false);
   const [isOpenDeleteCommentDialog, setIsOpenDeleteCommentDialog] = useState<boolean>(false);
   const [commentId, setCommentId] = useState<string | null>(null);
   const [comment, setComment] = useState<string>('');
 
-  const sequenceRunId = selectedSequenceRunId || orcabusId;
-  const { data: sequenceRunStateDetail, isFetching: isFetchingSequenceRunStateDetail } =
-    useSequenceRunStateListModel({
-      params: { path: { orcabusId: sequenceRunId as string } },
-      reactQuery: {
-        enabled: !!sequenceRunId,
-      },
-    });
+  // state dialog
+  const [isOpenUpdateStateDialog, setIsOpenUpdateStateDialog] = useState<boolean>(false);
+  const [stateId, setStateId] = useState<string | null>(null);
+  const [stateComment, setStateComment] = useState<string>('');
 
-  const {
-    data: sequenceRunCommentsDetail,
-    isFetching: isFetchingSequenceRunComments,
-    refetch: refetchSequenceRunComment,
-  } = useSequenceRunCommentListModel({
-    params: { path: { orcabusId: sequenceRunId as string } },
-    reactQuery: {
-      enabled: !!sequenceRunId,
-    },
-  });
+  const [isReverseOrder, setIsReverseOrder] = useLocalStorage(
+    'sequence-run-timeline-reverse-order',
+    false
+  );
+
+  const sequenceRunId = selectedSequenceRunId || orcabusId;
 
   const SequenceRunStateTimelineData = useMemo(() => {
-    return sequenceRunStateDetail
-      ? sequenceRunStateDetail?.map((state) => ({
+    return sequenceRunStateData
+      ? sequenceRunStateData?.map((state) => ({
           id: state.orcabusId || '',
           title: 'Status Updated',
+          actionsList: [
+            {
+              label: 'Edit',
+              icon: PencilIcon,
+              onClick: () => {
+                setStateId(state.orcabusId as string);
+                setStateComment(state.comment || '');
+                setIsOpenUpdateStateDialog(true);
+              },
+            },
+          ],
           datetime: dayjs(state.timestamp).format('YYYY-MM-DD HH:mm'),
           comment: state.comment || '',
           status: state.status,
@@ -68,11 +80,11 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({
           eventType: 'stateChange' as const,
         }))
       : [];
-  }, [sequenceRunStateDetail]);
+  }, [sequenceRunStateData]);
 
   const SequenceRunCommentTimelineData = useMemo(() => {
-    return sequenceRunCommentsDetail
-      ? sequenceRunCommentsDetail?.map((comment) => ({
+    return sequenceRunCommentData
+      ? sequenceRunCommentData?.map((comment) => ({
           id: comment.orcabusId || '',
           title: 'Comment Added',
           datetime: comment.updatedAt,
@@ -105,50 +117,11 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({
           },
         }))
       : [];
-  }, [sequenceRunCommentsDetail]);
+  }, [sequenceRunCommentData]);
 
-  const timelineData = useMemo(() => {
-    return [...SequenceRunStateTimelineData, ...SequenceRunCommentTimelineData].sort((a, b) =>
-      dayjs(a.datetime).isBefore(dayjs(b.datetime)) ? -1 : 1
-    );
-  }, [SequenceRunStateTimelineData, SequenceRunCommentTimelineData]);
-
-  const {
-    mutate: createSequenceRunComment,
-    isSuccess: isCreatedSequenceRunComment,
-    isError: isErrorCreatingSequenceRunComment,
-    reset: resetCreateSequenceRunComment,
-  } = useSequenceRunCommentCreateModel({
-    params: { path: { orcabusId: sequenceRunId as string } },
-    body: {
-      comment: comment,
-      createdBy: user?.email,
-    },
-  });
-
-  const handleAddComment = () => {
-    createSequenceRunComment();
-    setIsOpenAddCommentDialog(false);
-  };
-
-  useEffect(() => {
-    if (isCreatedSequenceRunComment) {
-      toaster.success({ title: 'Comment added successfully' });
-      refetchSequenceRunComment();
-      resetCreateSequenceRunComment();
-      setComment('');
-    }
-
-    if (isErrorCreatingSequenceRunComment) {
-      toaster.error({ title: 'Error adding comment' });
-      resetCreateSequenceRunComment();
-    }
-  }, [
-    isCreatedSequenceRunComment,
-    isErrorCreatingSequenceRunComment,
-    refetchSequenceRunComment,
-    resetCreateSequenceRunComment,
-  ]);
+  const timelineData = [...SequenceRunStateTimelineData, ...SequenceRunCommentTimelineData].sort(
+    (a, b) => (dayjs(a.datetime).isBefore(dayjs(b.datetime)) ? -1 : 1)
+  );
 
   const {
     mutate: updateSequenceRunComment,
@@ -226,50 +199,118 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({
     isErrorDeletingSequenceRunComment,
   ]);
 
+  const {
+    mutate: updateSequenceRunState,
+    isSuccess: isUpdatedSequenceRunState,
+    isError: isErrorUpdatingSequenceRunState,
+    reset: resetUpdateSequenceRunState,
+  } = useSequenceRunStateUpdateModel({
+    params: { path: { orcabusId: sequenceRunId as string, id: stateId as string } },
+    body: {
+      comment: stateComment,
+    },
+  });
+
+  const handleUpdateState = () => {
+    updateSequenceRunState();
+    setIsOpenUpdateStateDialog(false);
+  };
+
+  useEffect(() => {
+    if (isUpdatedSequenceRunState) {
+      toaster.success({ title: 'State updated successfully' });
+      refetchSequenceRunState();
+      resetUpdateSequenceRunState();
+    }
+
+    if (isErrorUpdatingSequenceRunState) {
+      toaster.error({ title: 'Error updating state' });
+      resetUpdateSequenceRunState();
+    }
+  }, [
+    isUpdatedSequenceRunState,
+    refetchSequenceRunState,
+    resetUpdateSequenceRunState,
+    isErrorUpdatingSequenceRunState,
+  ]);
+
   return (
     <div className='h-full gap-4 px-4 pb-2'>
-      {(isFetchingSequenceRunStateDetail || isFetchingSequenceRunComments) && (
+      {(isFetchingSequenceRunState || isFetchingSequenceRunComment) && (
         <BackdropWithText text='Loading Timeline data...' />
       )}
       <div className='flex h-full flex-col gap-4'>
-        {hasAddCommentBtn && (
-          <div className='flex flex-row py-2'>
+        {/* timeline header part */}
+        <div className='mb-4 flex items-center justify-between'>
+          <div className='flex items-center gap-3'>
+            <h2 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>Timeline</h2>
+            <span className='text-sm text-gray-500 dark:text-gray-400'>
+              {timelineData.length} events
+            </span>
+          </div>
+          <div className='flex items-center gap-2'>
             <Button
               type='gray'
               size='xs'
-              rounded
-              onClick={() => {
-                setIsOpenAddCommentDialog(true);
-              }}
-              className='ring-2 ring-gray-300'
+              onClick={() => setIsReverseOrder(!isReverseOrder)}
+              className={classNames(
+                'flex items-center gap-2',
+                'border border-gray-200 dark:border-gray-700',
+                'text-gray-700 dark:text-gray-300',
+                'hover:bg-gray-50 dark:hover:bg-gray-700',
+                'rounded-lg px-4 py-2',
+                'shadow-sm'
+              )}
             >
-              <PlusIcon className='h-4 w-4' />
-              Add Comment
+              {isReverseOrder ? (
+                <BarsArrowUpIcon className='h-4 w-4' />
+              ) : (
+                <BarsArrowDownIcon className='h-4 w-4' />
+              )}
+              <span>{isReverseOrder ? 'Oldest First' : 'Latest First'}</span>
             </Button>
           </div>
-        )}
+        </div>
+        {/* content part */}
         <div className='h-full overflow-visible'>
-          <Timeline timelineEvents={timelineData} isCollapsed={false} />
+          <Timeline
+            timelineEvents={isReverseOrder ? timelineData.reverse() : timelineData}
+            isCollapsed={false}
+          />
         </div>
       </div>
 
       {/* comment dialog */}
       <CommentDialog
-        isOpenAddCommentDialog={isOpenAddCommentDialog}
+        isOpenAddCommentDialog={false}
         isOpenUpdateCommentDialog={isOpenUpdateCommentDialog}
         isOpenDeleteCommentDialog={isOpenDeleteCommentDialog}
         comment={comment}
         setComment={setComment}
         handleClose={() => {
-          setIsOpenAddCommentDialog(false);
           setIsOpenUpdateCommentDialog(false);
           setIsOpenDeleteCommentDialog(false);
           setComment('');
         }}
-        handleAddComment={handleAddComment}
+        handleAddComment={() => {}}
         handleUpdateComment={handleUpdateComment}
         handleDeleteComment={handleDeleteComment}
         user={user}
+      />
+
+      {/* state dialog */}
+      <StateDialog
+        isOpenAddStateDialog={false}
+        isOpenUpdateStateDialog={isOpenUpdateStateDialog}
+        user={user}
+        currentState={sequenceRunDetail?.status as string | null}
+        handleClose={() => {
+          setIsOpenUpdateStateDialog(false);
+        }}
+        stateComment={stateComment}
+        setStateComment={setStateComment}
+        handleStateCreationEvent={() => {}}
+        handleUpdateState={handleUpdateState}
       />
     </div>
   );

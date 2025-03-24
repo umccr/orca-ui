@@ -56,10 +56,10 @@ const SequenceRunDetailsSidebar = () => {
               },
             ],
             runProperties: [
-              {
-                key: 'apiUrl',
-                value: sequenceRunDetail.apiUrl,
-              },
+              // {
+              //   key: 'apiUrl',
+              //   value: sequenceRunDetail.apiUrl,
+              // },
               {
                 key: 'flowcellBarcode',
                 value: sequenceRunDetail.flowcellBarcode,

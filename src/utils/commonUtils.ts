@@ -163,3 +163,19 @@ export const decompressBase64gz = (b64gz: string): string => {
     return 'Error: Failed to decompress content';
   }
 };
+
+/**
+ * Format string in Space Case
+ * @param key - the string in PascalCase
+ * @returns formatted string in Space Case, first letter is uppercase
+ * @example
+ * const key = 'PascalCase' or 'pascalCase';
+ * const formattedKey = formatSpaceCase(key);
+ * console.log(formattedKey); // Pascal Case
+ */
+export const formatSpaceCase = (key: string) => {
+  return key
+    .replace(/([A-Z])/g, ' $1')
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+};
