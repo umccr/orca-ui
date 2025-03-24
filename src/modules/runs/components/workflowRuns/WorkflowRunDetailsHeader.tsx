@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
-  useWorkflowRunRerunValidateModel,
   useWorkflowRunRerunModel,
   useWorkflowRunStateCreateModel,
-  useWorkflowRunStateValidMapModel,
   useWorkflowRunCommentCreateModel,
 } from '@/api/workflow';
 import Skeleton from 'react-loading-skeleton';
@@ -15,7 +13,7 @@ import { Button } from '@/components/common/buttons';
 import { ChatBubbleLeftRightIcon, PlusIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import RerunDialog from '../common/RerunDialog';
 import CommentDialog from '../common/CommentDialog';
-import StatesDialog from '../common/StatesDialog';
+import StateDialog from '../common/StateDialog';
 import { classNames } from '@/utils/commonUtils';
 
 const WorkflowRunDetailsHeader = () => {
@@ -27,6 +25,10 @@ const WorkflowRunDetailsHeader = () => {
     isFetchingWorkflowRunDetail,
     refetchWorkflowComment,
     refetchWorkflowState,
+    workflowRunStateCreationValidMapData,
+    isFetchingWorkflowRunStateCreationValidMap,
+    workflowRunRerunValidMapData,
+    isFetchingWorkflowRunRerunValidMap,
   } = useWorkflowRunContext();
 
   // rerun workflow dialog
@@ -59,33 +61,16 @@ const WorkflowRunDetailsHeader = () => {
     },
   });
 
-  const {
-    data: workflowRunRerunValidateDetail,
-    isFetching: isFetchingWorkflowRunRerunAllowedWorkflows,
-  } = useWorkflowRunRerunValidateModel({
-    params: { path: { orcabusId: (orcabusId as string).split('.')[1] } },
-    reactQuery: {
-      enabled: !!orcabusId,
-    },
-  });
-
-  const { data: workflowRunStateValidMapData } = useWorkflowRunStateValidMapModel({
-    params: { path: { orcabusId: orcabusId as string } },
-    reactQuery: {
-      enabled: !!orcabusId,
-    },
-  });
-
   const workflowLastState = workflowRunDetail?.currentState?.status;
 
-  // check if the last state is valid for state creation
-  const isValidCreateState = Object.entries(workflowRunStateValidMapData || {}).some(([, value]) =>
-    (value as string[]).includes(workflowLastState as string)
-  );
   // find all valid state key who has vale of workflowLastState
-  const validState = Object.entries(workflowRunStateValidMapData || {})
-    .filter(([, value]) => (value as string[]).includes(workflowLastState as string))
-    .map(([key]) => key);
+  const validState = useMemo(
+    () =>
+      Object.entries(workflowRunStateCreationValidMapData || {})
+        .filter(([, value]) => (value as string[]).includes(workflowLastState as string))
+        .map(([key]) => key),
+    [workflowRunStateCreationValidMapData, workflowLastState]
+  );
 
   const {
     mutate: createWorkflowRunComment,
@@ -147,6 +132,7 @@ const WorkflowRunDetailsHeader = () => {
       toaster.success({ title: 'State added' });
       refetchWorkflowState();
       resetCreateWorkflowRunState();
+      setStateStatus(null);
       setStateComment('');
     }
 
@@ -222,10 +208,10 @@ const WorkflowRunDetailsHeader = () => {
 
   return (
     <div className={classNames('flex w-full flex-col gap-3', 'bg-white dark:bg-gray-800')}>
-      {/* title */}
-
       {/* header: workflow run name */}
-      {isFetchingWorkflowRunDetail ? (
+      {isFetchingWorkflowRunDetail ||
+      isFetchingWorkflowRunStateCreationValidMap ||
+      isFetchingWorkflowRunRerunValidMap ? (
         <div className='flex-1'>
           <Skeleton height={20} />
         </div>
@@ -246,7 +232,7 @@ const WorkflowRunDetailsHeader = () => {
                 size='xs'
                 rounded
                 onClick={() => setIsOpenRerunWorkflowDialog(true)}
-                disabled={isFetchingWorkflowRunRerunAllowedWorkflows}
+                disabled={isFetchingWorkflowRunRerunValidMap}
                 className={classNames(
                   'flex items-center gap-2',
                   'border border-gray-200 dark:border-gray-700',
@@ -260,25 +246,25 @@ const WorkflowRunDetailsHeader = () => {
                 Rerun
               </Button>
 
-              {isValidCreateState && (
-                <Button
-                  type='gray'
-                  size='xs'
-                  rounded
-                  onClick={() => setIsOpenAddStateDialog(true)}
-                  className={classNames(
-                    'flex items-center gap-2',
-                    'border border-gray-200 dark:border-gray-700',
-                    'text-gray-700 dark:text-gray-300',
-                    'hover:bg-gray-50 dark:hover:bg-gray-700',
-                    'rounded-lg px-4 py-2',
-                    'shadow-sm'
-                  )}
-                >
-                  <PlusIcon className='h-4 w-4' />
-                  Add New State
-                </Button>
-              )}
+              <Button
+                type='gray'
+                size='xs'
+                rounded
+                onClick={() => setIsOpenAddStateDialog(true)}
+                disabled={isFetchingWorkflowRunRerunValidMap}
+                className={classNames(
+                  'flex items-center gap-2',
+                  'border border-gray-200 dark:border-gray-700',
+                  'text-gray-700 dark:text-gray-300',
+                  'hover:bg-gray-50 dark:hover:bg-gray-700',
+                  'rounded-lg px-4 py-2',
+                  'shadow-sm'
+                )}
+              >
+                <PlusIcon className='h-4 w-4' />
+                Add New State
+              </Button>
+
               <Button
                 type='gray'
                 size='xs'
@@ -305,14 +291,14 @@ const WorkflowRunDetailsHeader = () => {
         isOpenRerunWorkflowDialog={isOpenRerunWorkflowDialog}
         workflowRunName={workflowRunDetail?.workflowRunName || ''}
         workflowName={workflowRunDetail?.workflow.workflowName || ''}
-        workflowRunRerunValidateDetail={workflowRunRerunValidateDetail || null}
+        workflowRunRerunValidMapData={workflowRunRerunValidMapData || null}
         selectedDataset={selectedDataset || ''}
         setSelectedDataset={setSelectedDataset}
         isDeprecated={isDeprecated}
         setIsDeprecated={setIsDeprecated}
         handleCloseRerunWorkflowDialog={handleCloseRerunWorkflowDialog}
         handleRerunWorkflow={handleRerunWorkflow}
-        isFetchingWorkflowRunRerunAllowedWorkflows={isFetchingWorkflowRunRerunAllowedWorkflows}
+        isFetchingWorkflowRunRerunValidMap={isFetchingWorkflowRunRerunValidMap}
       />
       {/* comment dialog */}
       <CommentDialog
@@ -331,15 +317,13 @@ const WorkflowRunDetailsHeader = () => {
         user={user}
       />
       {/* state dialog */}
-      <StatesDialog
+      <StateDialog
         isOpenAddStateDialog={isOpenAddStateDialog}
         isOpenUpdateStateDialog={false}
         user={user}
-        validState={validState}
-        stateStatus={stateStatus}
-        setStateStatus={setStateStatus}
-        selectedState={null}
-        currentState={null}
+        validStatesToCreate={validState}
+        selectedState={stateStatus}
+        setSelectedState={setStateStatus}
         handleClose={() => {
           setIsOpenAddStateDialog(false);
         }}

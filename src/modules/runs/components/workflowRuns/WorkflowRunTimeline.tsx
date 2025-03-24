@@ -9,7 +9,6 @@ import {
   useWorkflowRunCommentUpdateModel,
   useWorkflowRunCommentDeleteModel,
   useWorkflowRunStateUpdateModel,
-  useWorkflowRunStateValidMapModel,
 } from '@/api/workflow';
 import { keepPreviousData } from '@tanstack/react-query';
 import {
@@ -30,21 +29,22 @@ import { BackdropWithText } from '@/components/common/backdrop';
 import { useWorkflowRunContext } from './WorkflowRunContext';
 import { Button } from '@/components/common/buttons';
 import CommentDialog from '../common/CommentDialog';
-import StatesDialog from '../common/StatesDialog';
+import StateDialog from '../common/StateDialog';
 import { Accordion } from '@/components/common/accordion';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 const WorkflowRunTimeline = () => {
   const { orcabusId } = useParams();
   const { user } = useAuthContext();
   const {
-    refreshWorkflowRuns,
-    setRefreshWorkflowRuns,
     workflowStateData,
     refetchWorkflowState,
+    isFetchingWorkflowState,
     workflowCommentData,
     refetchWorkflowComment,
-    isFetchingWorkflowState,
     isFetchingWorkflowComment,
+    workflowRunStateCreationValidMapData,
+    isFetchingWorkflowRunStateCreationValidMap,
   } = useWorkflowRunContext();
   const [currentState, setCurrentState] = useState<string | null>(null);
   const [selectedPayloadId, setSelectedPayloadId] = useState<string | null>(null);
@@ -55,35 +55,20 @@ const WorkflowRunTimeline = () => {
   const [commentId, setCommentId] = useState<string | null>(null);
   const [comment, setComment] = useState<string>('');
 
-  const [isReverseOrder, setIsReverseOrder] = useState<boolean>(false);
+  const [isReverseOrder, setIsReverseOrder] = useLocalStorage(
+    'workflow-run-timeline-reverse-order',
+    false
+  );
 
   const [isOpenUpdateStateDialog, setIsOpenUpdateStateDialog] = useState<boolean>(false);
-  const [stateStatus, setStateStatus] = useState<string | null>(null);
   const [stateId, setStateId] = useState<string | null>(null);
   const [stateComment, setStateComment] = useState<string>('');
 
   const [showPayload, setShowPayload] = useState(false);
 
-  useEffect(() => {
-    if (refreshWorkflowRuns) {
-      refetchWorkflowState();
-      setRefreshWorkflowRuns(false);
-    }
-  }, [refreshWorkflowRuns, refetchWorkflowState, setRefreshWorkflowRuns]);
-
-  const { data: workflowRunStateValidMapData } = useWorkflowRunStateValidMapModel({
-    params: { path: { orcabusId: orcabusId as string } },
-    reactQuery: {
-      enabled: !!orcabusId,
-    },
-  });
-
-  const workflowLastState = workflowStateData?.[workflowStateData.length - 1]?.status;
-
-  // find all valid state key who has vale of workflowLastState
-  const validState = Object.entries(workflowRunStateValidMapData || {})
-    .filter(([, value]) => (value as string[]).includes(workflowLastState || ''))
-    .map(([key]) => key);
+  const workflowLastState = workflowStateData?.sort((a, b) =>
+    dayjs(a.timestamp).isAfter(dayjs(b.timestamp)) ? -1 : 1
+  )[0];
 
   const workflowStateTimelineData = useMemo(
     () =>
@@ -91,7 +76,9 @@ const WorkflowRunTimeline = () => {
         ? workflowStateData.map((state) => ({
             id: state.orcabusId as string,
             title: 'Workflow State Update',
-            actionsList: Object.keys(workflowRunStateValidMapData || {}).includes(state.status)
+            actionsList: Object.keys(workflowRunStateCreationValidMapData || {}).includes(
+              state.status
+            )
               ? [
                   {
                     label: 'Edit',
@@ -112,7 +99,7 @@ const WorkflowRunTimeline = () => {
             eventType: 'stateChange' as const,
           }))
         : [],
-    [workflowStateData, workflowRunStateValidMapData]
+    [workflowStateData, workflowRunStateCreationValidMapData]
   );
 
   const workflowCommentTimelineData = useMemo(
@@ -154,17 +141,17 @@ const WorkflowRunTimeline = () => {
     [workflowCommentData]
   );
 
-  const workflowRuntimelineData = [
+  const workflowRunTimelineData = [
     ...workflowStateTimelineData,
     ...workflowCommentTimelineData,
   ].sort((a, b) => (dayjs(a.datetime).isAfter(dayjs(b.datetime)) ? -1 : 1));
 
   useEffect(() => {
-    if (workflowStateTimelineData.length > 0) {
-      setCurrentState(workflowStateTimelineData[0].status);
-      setSelectedPayloadId(workflowStateTimelineData[0].payloadId);
+    if (workflowLastState) {
+      setCurrentState(workflowLastState?.status || '');
+      setSelectedPayloadId(workflowLastState?.payload || '');
     }
-  }, [workflowStateTimelineData]);
+  }, [workflowLastState]);
 
   const { data: selectedWorkflowPayloadData, isFetching } = useWorkflowPayloadModel({
     params: { path: { id: selectedPayloadId || '' } },
@@ -343,26 +330,29 @@ const WorkflowRunTimeline = () => {
               label: 'Payload Data',
               content: (
                 <div className='flex flex-col gap-3 p-2'>
-                  {Object.entries(selectedWorkflowPayloadData?.data as Record<string, unknown>).map(
-                    ([key, value]) => (
+                  {selectedWorkflowPayloadData ? (
+                    Object.entries(
+                      selectedWorkflowPayloadData?.data as Record<string, unknown>
+                    ).map(([key, value]) => (
                       <Accordion
                         key={key}
                         title={key}
                         defaultOpen={true}
                         chevronPosition='right'
                         className={classNames(
-                          'overflow-hidden rounded-lg',
-                          'bg-gradient-to-r from-white to-gray-50/50',
-                          'dark:from-gray-900 dark:to-gray-800/50',
+                          'rounded-lg',
+                          'bg-gradient-to-r from-white via-gray-50/80 to-gray-100/50',
+                          'dark:from-gray-900 dark:via-gray-800/80 dark:to-gray-800/50',
                           'shadow-sm hover:shadow-md',
+                          'ring-1 ring-gray-200/50 dark:ring-gray-700/50',
                           'transition-all duration-200 ease-in-out',
                           'group'
                         )}
                         buttonClassName={classNames(
                           'border-0',
-                          'bg-gradient-to-r from-gray-50/80 to-transparent',
-                          'dark:from-gray-800/80 dark:to-transparent',
-                          'group-hover:from-blue-50/50 dark:group-hover:from-blue-900/20',
+                          'bg-gradient-to-r from-blue-50/90 to-transparent',
+                          'dark:from-blue-900/30 dark:to-transparent',
+                          'group-hover:from-blue-100/80 dark:group-hover:from-blue-800/40',
                           'transition-all duration-300'
                         )}
                       >
@@ -377,7 +367,15 @@ const WorkflowRunTimeline = () => {
                           />
                         </div>
                       </Accordion>
-                    )
+                    ))
+                  ) : (
+                    <div className='flex flex-col gap-3 p-2'>
+                      <div className='flex flex-col gap-1'>
+                        <span className='text-sm font-medium text-gray-600 dark:text-gray-400'>
+                          No payload data found
+                        </span>
+                      </div>
+                    </div>
                   )}
                 </div>
               ),
@@ -392,10 +390,20 @@ const WorkflowRunTimeline = () => {
                     'font-mono text-sm'
                   )}
                 >
-                  <JsonDisplay
-                    data={selectedWorkflowPayloadData as Record<string, unknown>}
-                    isFetchingData={isFetching}
-                  />
+                  {selectedWorkflowPayloadData ? (
+                    <JsonDisplay
+                      data={selectedWorkflowPayloadData as Record<string, unknown>}
+                      isFetchingData={isFetching}
+                    />
+                  ) : (
+                    <div className='flex flex-col gap-3 p-2'>
+                      <div className='flex flex-col gap-1'>
+                        <span className='text-sm font-medium text-gray-600 dark:text-gray-400'>
+                          No payload data found
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ),
             },
@@ -407,8 +415,10 @@ const WorkflowRunTimeline = () => {
 
   return (
     <div>
-      {(isFetchingWorkflowState || isFetchingWorkflowComment) && (
-        <BackdropWithText text='Loading Timeline data...' />
+      {(isFetchingWorkflowState ||
+        isFetchingWorkflowComment ||
+        isFetchingWorkflowRunStateCreationValidMap) && (
+        <BackdropWithText text='Loading Workflow Run Timeline data...' />
       )}
       <div className='flex flex-col gap-1 pb-4'>
         {/* timeline header part */}
@@ -416,7 +426,7 @@ const WorkflowRunTimeline = () => {
           <div className='flex items-center gap-3'>
             <h2 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>Timeline</h2>
             <span className='text-sm text-gray-500 dark:text-gray-400'>
-              {workflowRuntimelineData.length} events
+              {workflowRunTimelineData.length} events
             </span>
           </div>
           <div className='flex items-center gap-2'>
@@ -464,8 +474,8 @@ const WorkflowRunTimeline = () => {
           <div className='flex-1'>
             <div className='shrink-0'>
               <Timeline
-                timeline={
-                  isReverseOrder ? workflowRuntimelineData.reverse() : workflowRuntimelineData
+                timelineEvents={
+                  isReverseOrder ? workflowRunTimelineData.reverse() : workflowRunTimelineData
                 }
                 handldEventClick={handleTimelineSelect}
                 isCollapsed={showPayload}
@@ -501,14 +511,10 @@ const WorkflowRunTimeline = () => {
             user={user}
           />
           {/* state dialog */}
-          <StatesDialog
+          <StateDialog
             isOpenAddStateDialog={false}
             isOpenUpdateStateDialog={isOpenUpdateStateDialog}
             user={user}
-            validState={validState}
-            stateStatus={stateStatus}
-            setStateStatus={setStateStatus}
-            selectedState={selectedState}
             currentState={currentState}
             handleClose={() => {
               setIsOpenUpdateStateDialog(false);

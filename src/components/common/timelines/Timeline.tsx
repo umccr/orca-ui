@@ -30,19 +30,19 @@ export interface TimelineEvent {
 }
 
 export interface TimelineProps {
-  timeline: TimelineEvent[];
+  timelineEvents: TimelineEvent[];
   handldEventClick?: (event: TimelineEvent) => void;
   selectId?: string;
   isCollapsed?: boolean;
 }
 
 const Timeline: FC<TimelineProps> = ({
-  timeline,
+  timelineEvents,
   handldEventClick = undefined,
   selectId = '',
   isCollapsed = false,
 }) => {
-  const [selectedEventId, setSelectedEventId] = useState<string>(timeline[0]?.id || '');
+  const [selectedEventId, setSelectedEventId] = useState<string>(timelineEvents[0]?.id || '');
   useEffect(() => {
     if (selectId) {
       setSelectedEventId(selectId);
@@ -68,10 +68,10 @@ const Timeline: FC<TimelineProps> = ({
   return (
     <div className='flow-root'>
       <ul role='list' className='-mb-8'>
-        {timeline.map((event, eventIdx) => (
+        {timelineEvents.map((event, eventIdx) => (
           <li key={eventIdx}>
             <div className='relative pb-8'>
-              {eventIdx !== timeline.length - 1 ? (
+              {eventIdx !== timelineEvents.length - 1 ? (
                 <span
                   aria-hidden='true'
                   className='absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200 dark:bg-gray-700'

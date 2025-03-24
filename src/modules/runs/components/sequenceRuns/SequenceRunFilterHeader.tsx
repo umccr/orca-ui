@@ -48,31 +48,17 @@ const SequenceRunFilterHeader = () => {
           })),
         ]
       : [
-          {
-            label: 'All',
+          ...['All', 'Started', 'Succeeded', 'Failed', 'Aborted'].map((status) => ({
+            label: status,
             subLabel: '',
-            onClick: () => setQueryParams({ sequenceRunStatus: null }),
-          },
-          {
-            label: 'Started',
-            subLabel: '',
-            onClick: () => setQueryParams({ sequenceRunStatus: 'started' }),
-          },
-          {
-            label: 'Succeeded',
-            subLabel: '',
-            onClick: () => setQueryParams({ sequenceRunStatus: 'succeeded' }),
-          },
-          {
-            label: 'Failed',
-            subLabel: '',
-            onClick: () => setQueryParams({ sequenceRunStatus: 'failed' }),
-          },
-          {
-            label: 'Aborted',
-            subLabel: '',
-            onClick: () => setQueryParams({ sequenceRunStatus: 'aborted' }),
-          },
+            onClick: () => {
+              if (status === 'All') {
+                setQueryParams({ sequenceRunStatus: null });
+              } else {
+                setQueryParams({ sequenceRunStatus: status.toLowerCase() });
+              }
+            },
+          })),
         ];
   }, [setQueryParams, sequenceRunStatusCountData]);
   return (

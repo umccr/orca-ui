@@ -146,9 +146,20 @@ export function createSequenceRunDeleteMutationHook<K extends keyof paths>(path:
 export type SequenceRunModel = components['schemas']['Sequence'];
 
 export const useSequenceRunListModel = createSequenceRunQueryHook('/api/v1/sequence/');
-export const useSequenceRunDetailModel = createSequenceRunQueryHook('/api/v1/sequence/{id}/');
+export const useSequenceRunDetailModel = createSequenceRunQueryHook(
+  '/api/v1/sequence/{orcabusId}/'
+);
 export const useSequenceRunStateListModel = createSequenceRunQueryHook(
   '/api/v1/sequence/{orcabusId}/state/'
+);
+export const useSequenceRunStateCreateModel = createSequenceRunPostMutationHook(
+  '/api/v1/sequence/{orcabusId}/state/'
+);
+export const useSequenceRunStateUpdateModel = createSequenceRunPatchMutationHook(
+  '/api/v1/sequence/{orcabusId}/state/{id}/'
+);
+export const useSequenceRunStateValidMapModel = createSequenceRunQueryHook(
+  '/api/v1/sequence/{orcabusId}/state/valid_states_map/'
 );
 export const useSequenceRunCommentListModel = createSequenceRunQueryHook(
   '/api/v1/sequence/{orcabusId}/comment/'
@@ -165,4 +176,8 @@ export const useSequenceRunCommentDeleteModel = createSequenceRunDeleteMutationH
 
 export const useSequenceRunStatusCountModel = createSequenceRunQueryHook(
   '/api/v1/sequence/stats/status_counts/'
+);
+
+export const useSequenceRunSampleSheetModel = createSequenceRunQueryHook(
+  '/api/v1/sequence/{orcabusId}/sample_sheet/'
 );

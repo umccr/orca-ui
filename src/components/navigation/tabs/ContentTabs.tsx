@@ -9,15 +9,22 @@ export interface TabsProps {
   tabs: TabItemProps[];
   selectedLabel?: string;
   className?: string;
+  onChange?: (index: number) => void;
 }
 
-export const Tabs: FC<TabsProps> = ({ tabs, selectedLabel = tabs[0]?.label ?? '', className }) => {
+export const Tabs: FC<TabsProps> = ({
+  tabs,
+  selectedLabel = tabs[0]?.label ?? '',
+  className,
+  onChange,
+}) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(
     tabs.findIndex((tab) => tab.label === selectedLabel)
   );
 
   const onChangeTabs = (index: number) => {
     setSelectedTabIndex(index);
+    onChange?.(index);
   };
 
   useEffect(() => {

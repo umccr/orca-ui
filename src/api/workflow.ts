@@ -160,7 +160,7 @@ export type AnalysisModel = components['schemas']['AnalysisMin'];
 export type ComputeContextModel = components['schemas']['AnalysisContext'];
 export type StorageContextModel = components['schemas']['AnalysisContext'];
 export type WorkflowRunPaginatedModel = components['schemas']['PaginatedWorkflowRunDetailList'];
-export type WorkflowRunRerunValidateDetailModel = components['schemas']['AllowedRerunWorkflow'];
+export type WorkflowRunRerunValidMapDataModel = components['schemas']['AllowedRerunWorkflow'];
 
 export const useWorkflowModel = createWorkflowQueryHook('/api/v1/workflow/');
 export const useWorkflowRunListModel = createWorkflowQueryHook('/api/v1/workflowrun/');
@@ -197,7 +197,7 @@ export const useWorkflowRunStateCreateModel = createWorkflowPostMutationHook(
 export const useWorkflowRunStateUpdateModel = createWorkflowPatchMutationHook(
   '/api/v1/workflowrun/{orcabusId}/state/{id}/'
 );
-export const useWorkflowRunStateValidMapModel = createWorkflowQueryHook(
+export const useWorkflowRunStateCreationValidMapModel = createWorkflowQueryHook(
   '/api/v1/workflowrun/{orcabusId}/state/valid_states_map/'
 );
 

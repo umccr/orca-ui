@@ -1,5 +1,5 @@
 import Table, { Column, TableProps, TableData } from './Table';
 import GroupedTable, { Column as GroupedTableColumn } from './GroupedRowTable';
-
-export { Table, GroupedTable };
+import ListTable from './ListTable';
+export { Table, GroupedTable, ListTable };
 export type { Column, TableProps, TableData, GroupedTableColumn };

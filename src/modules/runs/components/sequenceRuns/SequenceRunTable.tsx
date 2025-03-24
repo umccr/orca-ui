@@ -1,19 +1,19 @@
-import { useSequenceRunListModel, SequenceRunModel } from '@/api/sequenceRun';
+import { useSequenceRunListModel } from '@/api/sequenceRun';
 import { Table, TableData } from '@/components/tables';
 import { Column } from '@/components/tables/Table';
 import { classNames } from '@/utils/commonUtils';
-import { useState, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { dayjs } from '@/utils/dayjs';
 import { Badge } from '@/components/common/badges';
-import SequenceRunDetailsDrawer from './SequenceRunDetailsDrawer';
+// import SequenceRunDetailsDrawer from './SequenceRunDetailsDrawer';
 import { MultiqcIcon } from '@/components/icons/MultiqcIcon';
 import { Tooltip } from '@/components/common/tooltips';
-
+// import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
 const SequenceRunTable = () => {
-  const [selectedSequenceRun, setSelectedSequenceRun] = useState<SequenceRunModel | null>(null);
+  // const [selectedSequenceRun, setSelectedSequenceRun] = useState<SequenceRunModel | null>(null);
 
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
 
@@ -39,35 +39,38 @@ const SequenceRunTable = () => {
     throw sequenceError;
   }
 
-  const onCloseDrawer = () => {
-    setSelectedSequenceRun(null);
-    setQueryParams({ sequenceRunId: null });
-  };
+  // const onCloseDrawer = () => {
+  //   setSelectedSequenceRun(null);
+  //   setQueryParams({ sequenceRunId: null });
+  // };
 
   const sequenceRunColumn: Column[] = [
     {
-      header: 'Instrument Run ID',
-      accessor: 'instrumentRunId',
-      cell: (instrumentRunId: unknown, sequenceRunRowData: TableData) => {
-        if (!instrumentRunId) {
+      header: 'Experiment Name',
+      accessor: 'experimentName',
+      cell: (experimentName: unknown, sequenceRunRowData: TableData) => {
+        const id = sequenceRunRowData.orcabusId;
+        if (!experimentName) {
           return <div>-</div>;
         } else {
           return (
-            <div>
-              <div
-                className={classNames(
-                  'ml-2 flex cursor-pointer flex-row items-center text-sm font-medium uppercase text-blue-500 hover:text-blue-700'
-                )}
-                onClick={() => {
-                  setSelectedSequenceRun(sequenceRunRowData as SequenceRunModel);
-                  setQueryParams({ sequenceRunId: sequenceRunRowData.orcabusId });
-                }}
-              >
-                {instrumentRunId as string}
-              </div>
-            </div>
+            <Link
+              to={`/runs/sequence/${id}`}
+              className={classNames(
+                'flex cursor-pointer flex-row items-center text-sm font-medium text-blue-500 hover:text-blue-700'
+              )}
+            >
+              <div>{experimentName as string}</div>
+            </Link>
           );
         }
+      },
+    },
+    {
+      header: 'Instrument Run ID',
+      accessor: 'instrumentRunId',
+      cell: (instrumentRunId: unknown) => {
+        return <div>{instrumentRunId as string}</div>;
       },
     },
     {
@@ -115,11 +118,24 @@ const SequenceRunTable = () => {
           bucketOp: 'or',
         });
         return (
-          <Tooltip text='MultiQC Report' size='small' background='light'>
-            <Link to={`/files?${params.toString()}`} className='flex items-center p-1'>
-              <MultiqcIcon className='size-4 text-orange-300 hover:text-orange-600' />
-            </Link>
-          </Tooltip>
+          <div className='flex flex-row gap-2'>
+            {/* <Tooltip text='Comment' size='small' background='light'>
+              <div
+                className='flex cursor-pointer items-center'
+                onClick={() => {
+                  setSelectedSequenceRun(sequenceRunRowData as SequenceRunModel);
+                  setQueryParams({ sequenceRunId: sequenceRunRowData.orcabusId });
+                }}
+              >
+                <ChatBubbleBottomCenterTextIcon className='size-5 stroke-orange-300 stroke-[3] hover:stroke-orange-600' />
+              </div>
+            </Tooltip> */}
+            <Tooltip text='MultiQC Report' size='small' background='light'>
+              <Link to={`/files?${params.toString()}`} className='flex items-center p-1'>
+                <MultiqcIcon className='size-4 text-orange-300 hover:text-orange-600' />
+              </Link>
+            </Tooltip>
+          </div>
         );
       },
     },
@@ -204,12 +220,12 @@ const SequenceRunTable = () => {
         }}
       />
 
-      {(getQueryParams().sequenceRunId || selectedSequenceRun) && (
+      {/* {(getQueryParams().sequenceRunId || selectedSequenceRun) && (
         <SequenceRunDetailsDrawer
           selectedSequenceRunId={getQueryParams().sequenceRunId}
           onCloseDrawer={onCloseDrawer}
         />
-      )}
+      )} */}
     </div>
   );
 };

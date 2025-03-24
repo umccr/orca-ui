@@ -21,6 +21,7 @@ export interface DialogProps {
   closeBtn?: DialogButtonProps;
   confirmBtn?: DialogButtonProps;
   children?: ReactNode;
+  className?: string;
 }
 
 const SimpleDialog: FC<DialogProps> = ({
@@ -34,6 +35,7 @@ const SimpleDialog: FC<DialogProps> = ({
   closeBtn,
   confirmBtn,
   children,
+  className,
 }) => {
   return (
     <Dialog open={open} onClose={onClose} className='relative z-50'>
@@ -50,9 +52,12 @@ const SimpleDialog: FC<DialogProps> = ({
               'relative w-full max-w-[calc(100vw-2rem)] transform rounded-xl bg-white shadow-xl ring-1 ring-gray-900/5 transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in',
               size === 'sm' &&
                 'sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95',
-              size === 'md' && 'md:max-w-2xl',
-              size === 'lg' && 'lg:max-w-7xl',
-              'dark:bg-gray-800 dark:ring-white/5'
+              size === 'md' &&
+                'md:max-w-2xl data-[closed]:md:translate-y-0 data-[closed]:md:scale-95',
+              size === 'lg' &&
+                'lg:max-w-6xl data-[closed]:lg:translate-y-0 data-[closed]:lg:scale-95',
+              'dark:bg-gray-800 dark:ring-white/5',
+              className || ''
             )}
           >
             {/* Close button */}
@@ -60,7 +65,7 @@ const SimpleDialog: FC<DialogProps> = ({
               <button
                 type='button'
                 onClick={onClose}
-                className='rounded-lg p-2 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 dark:hover:text-gray-300 dark:focus:ring-blue-400/50 dark:focus:ring-offset-gray-800'
+                className='rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 dark:hover:text-gray-300 dark:focus:ring-blue-400/50 dark:focus:ring-offset-gray-800'
               >
                 <span className='sr-only'>Close</span>
                 <XMarkIcon className='h-5 w-5' />
@@ -78,7 +83,7 @@ const SimpleDialog: FC<DialogProps> = ({
                 <div className='w-full flex-1'>
                   <DialogTitle
                     as='h3'
-                    className='text-lg font-semibold leading-6 text-gray-900 dark:text-white'
+                    className='pt-2 text-lg font-semibold leading-6 text-gray-900 dark:text-white'
                   >
                     {title}
                   </DialogTitle>
