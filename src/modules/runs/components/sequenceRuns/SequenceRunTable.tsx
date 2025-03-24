@@ -50,20 +50,16 @@ const SequenceRunTable = () => {
       accessor: 'experimentName',
       cell: (experimentName: unknown, sequenceRunRowData: TableData) => {
         const id = sequenceRunRowData.orcabusId;
-        if (!experimentName) {
-          return <div>-</div>;
-        } else {
-          return (
-            <Link
-              to={`/runs/sequence/${id}`}
-              className={classNames(
-                'flex cursor-pointer flex-row items-center text-sm font-medium text-blue-500 hover:text-blue-700'
-              )}
-            >
-              <div>{experimentName as string}</div>
-            </Link>
-          );
-        }
+        return (
+          <Link
+            to={`/runs/sequence/${id}`}
+            className={classNames(
+              'flex cursor-pointer flex-row items-center text-sm font-medium text-blue-500 hover:text-blue-700'
+            )}
+          >
+            <div>{experimentName ? (experimentName as string) : '-'}</div>
+          </Link>
+        );
       },
     },
     {
