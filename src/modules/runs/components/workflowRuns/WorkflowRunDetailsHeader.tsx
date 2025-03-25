@@ -207,7 +207,7 @@ const WorkflowRunDetailsHeader = () => {
   };
 
   return (
-    <div className={classNames('flex w-full flex-col gap-3', 'bg-white dark:bg-gray-800')}>
+    <div className={classNames('flex w-full flex-col gap-3', 'bg-white dark:bg-gray-900')}>
       {/* header: workflow run name */}
       {isFetchingWorkflowRunDetail ||
       isFetchingWorkflowRunStateCreationValidMap ||

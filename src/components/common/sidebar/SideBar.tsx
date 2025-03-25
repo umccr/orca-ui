@@ -34,7 +34,7 @@ const Sidebar: FC<SidebarProps> = ({
       className={classNames(
         'relative flex h-full flex-col',
         'border-gray-200 dark:border-gray-700',
-        'bg-white dark:bg-gray-800',
+        'bg-white dark:bg-gray-900',
         'transition-all duration-200 ease-in-out',
         position === 'left' ? 'border-r' : 'border-l',
         isOpen ? openWidth : collapsedWidth,
@@ -56,7 +56,7 @@ const Sidebar: FC<SidebarProps> = ({
               onClick={() => setIsOpen(false)}
               className={classNames(
                 'rounded-md p-2',
-                'bg-white dark:bg-gray-800',
+                'bg-white dark:bg-gray-900',
                 'text-gray-500 dark:text-gray-400',
                 'shadow-lg ring-1 ring-gray-200 dark:ring-gray-700',
                 'hover:bg-gray-50 dark:hover:bg-gray-700',
@@ -75,7 +75,7 @@ const Sidebar: FC<SidebarProps> = ({
           </div>
 
           {title && (
-            <div className='sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800'>
+            <div className='sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900'>
               <div className='px-6 py-4'>
                 <h2 className='truncate text-lg font-semibold text-gray-900 dark:text-white'>
                   {title}
@@ -108,7 +108,7 @@ const Sidebar: FC<SidebarProps> = ({
             onClick={() => setIsOpen(true)}
             className={classNames(
               'rounded-md p-2',
-              'bg-white dark:bg-gray-800',
+              'bg-white dark:bg-gray-900',
               'text-gray-500 dark:text-gray-400',
               'shadow-lg ring-1 ring-gray-200 dark:ring-gray-700',
               'hover:bg-gray-50 dark:hover:bg-gray-700',

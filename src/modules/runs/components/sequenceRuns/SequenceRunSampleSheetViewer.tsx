@@ -82,21 +82,14 @@ const SampleSheetViewer: FC<SampleSheetViewerProps> = ({ sampleSheetData, sample
 
   const [isOpenFileViewDialog, setIsOpenFileViewDialog] = useState(false);
 
-  if (!sampleSheetData)
-    return (
-      <div className='rounded-lg bg-white shadow'>
-        <div className='flex h-full items-center justify-center'>
-          <p className='text-sm text-gray-500'>No sample sheet data available</p>
-        </div>
-      </div>
-    );
-
   return (
     <div className='flex flex-col gap-6'>
       {/* Header with Title and Actions */}
-      <div className='flex items-center justify-between rounded-lg bg-white p-4 shadow'>
+      <div className='flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow dark:border-gray-700 dark:bg-gray-900 dark:shadow-gray-900/30'>
         <div className='flex items-center gap-2'>
-          <h2 className='text-lg font-medium text-gray-900'>{sampleSheetName || 'Sample Sheet'}</h2>
+          <h2 className='text-lg font-medium text-gray-900 dark:text-white'>
+            {sampleSheetName || 'Sample Sheet'}
+          </h2>
         </div>
 
         <div className='flex items-center gap-4'>
@@ -121,9 +114,9 @@ const SampleSheetViewer: FC<SampleSheetViewerProps> = ({ sampleSheetData, sample
       </div>
 
       {/* Header and Reads Section */}
-      <div className='min-w-fit rounded-lg bg-white shadow'>
+      <div className='min-w-fit rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-900 dark:shadow-gray-900/30'>
         <div className='grid grid-cols-3 gap-4 p-6'>
-          <div className='col-span-2 grid grid-cols-3 gap-2 border-r border-gray-200'>
+          <div className='col-span-2 grid grid-cols-3 gap-2 border-r border-gray-200 dark:border-gray-700'>
             {Object.keys(header).map((key, idx) => (
               <div
                 key={idx}
@@ -131,8 +124,12 @@ const SampleSheetViewer: FC<SampleSheetViewerProps> = ({ sampleSheetData, sample
                   key === 'runName' || key === 'runDescription' ? 'col-span-2' : 'col-span-1'
                 )}
               >
-                <h3 className='text-sm font-medium text-gray-500'>{formatSpaceCase(key)}</h3>
-                <p className='mt-1 text-lg font-medium'>{header[key as keyof HeaderModel]}</p>
+                <h3 className='text-sm font-medium text-gray-500 dark:text-gray-400'>
+                  {formatSpaceCase(key)}
+                </h3>
+                <p className='mt-1 text-lg font-medium text-gray-900 dark:text-white'>
+                  {header[key as keyof HeaderModel]}
+                </p>
               </div>
             ))}
           </div>
@@ -140,8 +137,12 @@ const SampleSheetViewer: FC<SampleSheetViewerProps> = ({ sampleSheetData, sample
           <div className='col-span-1 grid grid-cols-2 gap-2 px-2'>
             {Object.keys(reads).map((key, idx) => (
               <div key={idx}>
-                <h3 className='text-sm font-medium text-gray-500'>{formatSpaceCase(key)}</h3>
-                <p className='mt-1 text-lg font-medium'>{reads[key as keyof ReadsModel]}</p>
+                <h3 className='text-sm font-medium text-gray-500 dark:text-gray-400'>
+                  {formatSpaceCase(key)}
+                </h3>
+                <p className='mt-1 text-lg font-medium text-gray-900 dark:text-white'>
+                  {reads[key as keyof ReadsModel]}
+                </p>
               </div>
             ))}
           </div>
@@ -156,34 +157,36 @@ const SampleSheetViewer: FC<SampleSheetViewerProps> = ({ sampleSheetData, sample
         </div>
       )}
 
-      {/* Settings and Data  Section */}
+      {/* Settings and Data Sections */}
       {settingsAndDataSections.map((section, idx) => (
         <div key={idx}>
           {section.settings && (
-            <div className='rounded-lg bg-white shadow'>
-              <div>
-                <div className='p-6'>
-                  <h2 className='mb-4 text-lg font-medium text-gray-700'>{section.title}</h2>
-                  <div className='grid grid-cols-4 gap-2'>
-                    {Object.keys(section.settings).map((key, idx) => (
-                      <div
-                        key={idx}
-                        className={classNames(
-                          key.endsWith('Pipeline') || key == 'urn' ? 'col-span-2' : 'col-span-1'
-                        )}
-                      >
-                        <h3 className='text-sm font-medium text-gray-500'>
-                          {formatSpaceCase(key)}
-                        </h3>
-                        <p className='mt-1 overflow-hidden text-sm'>
-                          {section.settings?.[key as keyof typeof section.settings] || ''}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+            <div className='rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-900 dark:shadow-gray-900/30'>
+              <div className='p-6'>
+                <h2 className='mb-4 text-lg font-medium text-gray-700 dark:text-gray-200'>
+                  {section.title}
+                </h2>
+                <div className='grid grid-cols-4 gap-4'>
+                  {Object.keys(section.settings).map((key, idx) => (
+                    <div
+                      key={idx}
+                      className={classNames(
+                        'rounded-lg bg-gray-50 p-4 dark:bg-gray-800',
+                        key.endsWith('Pipeline') || key == 'urn' ? 'col-span-2' : 'col-span-1'
+                      )}
+                    >
+                      <h3 className='text-sm font-medium text-gray-500 dark:text-gray-400'>
+                        {formatSpaceCase(key)}
+                      </h3>
+                      <p className='mt-1 overflow-hidden text-sm text-gray-900 dark:text-gray-100'>
+                        {section.settings?.[key as keyof typeof section.settings] || ''}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
-              {/* Wrap ListTable in a container with fixed height and vertical scroll */}
+
+              {/* Table Section */}
               <div className='w-full overflow-x-auto'>
                 <div className='min-w-fit'>
                   <ListTable data={section.data as Record<string, number | string>[]} />
@@ -194,16 +197,14 @@ const SampleSheetViewer: FC<SampleSheetViewerProps> = ({ sampleSheetData, sample
         </div>
       ))}
 
-      {/*  dialog for viewing original file */}
-      <div>
-        <FileViewDialog
-          isOpenFileViewDialog={isOpenFileViewDialog}
-          setIsOpenFileViewDialog={setIsOpenFileViewDialog}
-          fileName={sampleSheetName}
-          fileContent={sampleSheetData}
-          isLoading={false}
-        />
-      </div>
+      {/* File View Dialog */}
+      <FileViewDialog
+        isOpenFileViewDialog={isOpenFileViewDialog}
+        setIsOpenFileViewDialog={setIsOpenFileViewDialog}
+        fileName={sampleSheetName}
+        fileContent={sampleSheetData}
+        isLoading={false}
+      />
     </div>
   );
 };
