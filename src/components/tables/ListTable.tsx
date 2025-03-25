@@ -94,119 +94,117 @@ const ListTable: FC<ListTableProps> = ({
   }
 
   return (
-    <div className={`overflow-x-auto ${className}`}>
-      <div className='p-6'>
-        {/* Table header with pagination controls */}
-        <div className='mb-4 flex items-center justify-between'>
-          <h2 className='text-sm font-medium text-gray-700'>
-            {startIndex + 1} - {Math.min(startIndex + itemsPerPage, totalItems)} of {totalItems}
-          </h2>
+    <div className={classNames('flex flex-col p-4', className)}>
+      {/* Table header with pagination controls */}
+      <div className='mb-4 flex items-center justify-between px-6'>
+        <h2 className='text-sm font-medium text-gray-700 dark:text-gray-200'>
+          {startIndex + 1} - {Math.min(startIndex + itemsPerPage, totalItems)} of {totalItems}
+        </h2>
 
-          <div className='flex items-center gap-2'>
-            <span className='text-sm text-gray-500'>Show</span>
-            <div className='relative'>
-              <select
-                value={itemsPerPage}
-                onChange={handleItemsPerPageChange}
-                className='appearance-none rounded-md border border-gray-300 py-1 pl-2 pr-8 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500'
-              >
-                {itemsPerPageOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-              <ChevronDownIcon className='pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500' />
-            </div>
+        <div className='flex items-center gap-2'>
+          <span className='text-sm text-gray-500 dark:text-gray-400'>Show</span>
+          <div className='relative'>
+            <select
+              value={itemsPerPage}
+              onChange={handleItemsPerPageChange}
+              className='appearance-none rounded-md border border-gray-300 bg-white py-1 pl-2 pr-8 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100'
+            >
+              {itemsPerPageOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+            <ChevronDownIcon className='pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500 dark:text-gray-400' />
           </div>
         </div>
+      </div>
 
-        {/* Wrap table in scrollable container */}
-        <div className='overflow-x-auto rounded-lg border border-gray-200'>
-          <table className='w-full table-fixed divide-y divide-gray-200'>
-            <thead className='bg-gray-50'>
-              <tr>
-                {columns.map((column, index) => (
-                  <th
-                    key={index}
-                    className='min-w-[200px] truncate px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500'
+      {/* Table */}
+      <div className='overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700'>
+        <table className='w-full table-fixed divide-y divide-gray-200 dark:divide-gray-700'>
+          <thead className='bg-gray-50 dark:bg-gray-800'>
+            <tr>
+              {columns.map((column, index) => (
+                <th
+                  key={index}
+                  className='min-w-[200px] truncate px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'
+                >
+                  {column}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className='divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900'>
+            {paginatedData.map((row, rowIndex) => (
+              <tr key={rowIndex} className='hover:bg-gray-50 dark:hover:bg-gray-800'>
+                {columns.map((column, colIndex) => (
+                  <td
+                    key={colIndex}
+                    className='min-w-[200px] truncate px-4 py-4 text-sm text-gray-900 dark:text-gray-100'
+                    title={row[column]?.toString()}
                   >
-                    {column}
-                  </th>
+                    {row[column]}
+                  </td>
                 ))}
               </tr>
-            </thead>
-            <tbody className='divide-y divide-gray-200 bg-white'>
-              {paginatedData.map((row, rowIndex) => (
-                <tr key={rowIndex} className='hover:bg-gray-50'>
-                  {columns.map((column, colIndex) => (
-                    <td
-                      key={colIndex}
-                      className='truncate px-4 py-4 text-sm text-gray-900'
-                      title={row[column]?.toString()}
-                    >
-                      {row[column]}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className='mt-4 flex justify-center'>
-            <nav className='flex items-center space-x-1'>
-              <button
-                onClick={() => handlePageChange(1)}
-                disabled={currentPage === 1}
-                className={classNames(
-                  'rounded px-2 py-1 text-xs',
-                  currentPage === 1
-                    ? 'cursor-not-allowed text-gray-400'
-                    : 'text-gray-700 hover:bg-gray-100'
-                )}
-              >
-                First
-              </button>
-
-              {paginationNumbers.map((pageNum, idx) => (
-                <Fragment key={idx}>
-                  {pageNum === '...' ? (
-                    <span className='px-2 py-1 text-gray-500'>...</span>
-                  ) : (
-                    <button
-                      onClick={() => handlePageChange(pageNum as number)}
-                      className={classNames(
-                        'rounded px-3 py-1 text-sm',
-                        currentPage === pageNum
-                          ? 'bg-blue-50 text-blue-600'
-                          : 'text-gray-700 hover:bg-gray-100'
-                      )}
-                    >
-                      {pageNum}
-                    </button>
-                  )}
-                </Fragment>
-              ))}
-
-              <button
-                onClick={() => handlePageChange(totalPages)}
-                disabled={currentPage === totalPages}
-                className={classNames(
-                  'rounded px-2 py-1 text-xs',
-                  currentPage === totalPages
-                    ? 'cursor-not-allowed text-gray-400'
-                    : 'text-gray-700 hover:bg-gray-100'
-                )}
-              >
-                Last
-              </button>
-            </nav>
-          </div>
-        )}
+            ))}
+          </tbody>
+        </table>
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className='mt-4 flex justify-center'>
+          <nav className='flex items-center space-x-1'>
+            <button
+              onClick={() => handlePageChange(1)}
+              disabled={currentPage === 1}
+              className={classNames(
+                'rounded px-2 py-1 text-xs',
+                currentPage === 1
+                  ? 'cursor-not-allowed text-gray-400 dark:text-gray-600'
+                  : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+              )}
+            >
+              First
+            </button>
+
+            {paginationNumbers.map((pageNum, idx) => (
+              <Fragment key={idx}>
+                {pageNum === '...' ? (
+                  <span className='px-2 py-1 text-gray-500 dark:text-gray-400'>...</span>
+                ) : (
+                  <button
+                    onClick={() => handlePageChange(pageNum as number)}
+                    className={classNames(
+                      'rounded px-3 py-1 text-sm',
+                      currentPage === pageNum
+                        ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400'
+                        : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+                    )}
+                  >
+                    {pageNum}
+                  </button>
+                )}
+              </Fragment>
+            ))}
+
+            <button
+              onClick={() => handlePageChange(totalPages)}
+              disabled={currentPage === totalPages}
+              className={classNames(
+                'rounded px-2 py-1 text-xs',
+                currentPage === totalPages
+                  ? 'cursor-not-allowed text-gray-400 dark:text-gray-600'
+                  : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+              )}
+            >
+              Last
+            </button>
+          </nav>
+        </div>
+      )}
     </div>
   );
 };

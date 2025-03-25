@@ -115,7 +115,7 @@ const SequenceRunDetailsActions = () => {
   }, [sequenceRunStateValidMapData, sequenceRunDetail]);
 
   return (
-    <div className={classNames('flex w-full flex-col gap-3', 'bg-white dark:bg-gray-800')}>
+    <div className={classNames('flex w-full flex-col gap-3', 'bg-white dark:bg-gray-900')}>
       <div className='flex flex-col gap-2 py-2'>
         <div className='flex flex-wrap items-center gap-2'>
           <Button

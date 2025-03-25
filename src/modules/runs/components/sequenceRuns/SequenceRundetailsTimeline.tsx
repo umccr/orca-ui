@@ -36,6 +36,8 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
     sequenceRunCommentData,
     isFetchingSequenceRunComment,
     refetchSequenceRunComment,
+    sequenceRunStateValidMapData,
+    isFetchingSequenceRunStateValidMap,
   } = useSequenceRunContext();
 
   // comment dialog
@@ -61,17 +63,19 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
       ? sequenceRunStateData?.map((state) => ({
           id: state.orcabusId || '',
           title: 'Status Updated',
-          actionsList: [
-            {
-              label: 'Edit',
-              icon: PencilIcon,
-              onClick: () => {
-                setStateId(state.orcabusId as string);
-                setStateComment(state.comment || '');
-                setIsOpenUpdateStateDialog(true);
-              },
-            },
-          ],
+          actionsList: Object.keys(sequenceRunStateValidMapData || {}).includes(state.status)
+            ? [
+                {
+                  label: 'Edit',
+                  icon: PencilIcon,
+                  onClick: () => {
+                    setStateId(state.orcabusId as string);
+                    setStateComment(state.comment || '');
+                    setIsOpenUpdateStateDialog(true);
+                  },
+                },
+              ]
+            : [],
           datetime: dayjs(state.timestamp).format('YYYY-MM-DD HH:mm'),
           comment: state.comment || '',
           status: state.status,
@@ -80,7 +84,7 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
           eventType: 'stateChange' as const,
         }))
       : [];
-  }, [sequenceRunStateData]);
+  }, [sequenceRunStateData, sequenceRunStateValidMapData]);
 
   const SequenceRunCommentTimelineData = useMemo(() => {
     return sequenceRunCommentData
@@ -234,11 +238,14 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
     isErrorUpdatingSequenceRunState,
   ]);
 
+  const isFetching =
+    isFetchingSequenceRunState ||
+    isFetchingSequenceRunComment ||
+    isFetchingSequenceRunStateValidMap;
+
   return (
     <div className='h-full gap-4 px-4 pb-2'>
-      {(isFetchingSequenceRunState || isFetchingSequenceRunComment) && (
-        <BackdropWithText text='Loading Timeline data...' />
-      )}
+      {isFetching && <BackdropWithText text='Loading Timeline data...' />}
       <div className='flex h-full flex-col gap-4'>
         {/* timeline header part */}
         <div className='mb-4 flex items-center justify-between'>
