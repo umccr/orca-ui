@@ -177,7 +177,7 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
           <InformationCircleIcon className='2-5 mx-2 h-5' />
         </Tooltip>
       </div>
-      <div key={`${libraryDetail.orcabusId}`}>
+      <div key={libraryDetail.orcabusId}>
         {libraryDetail.type === 'WGS' ? (
           <>
             <DetailedErrorBoundary errorTitle={`Unable to load 'sash' report files`}>
@@ -270,9 +270,6 @@ export const AnalysisTable = ({
   }).data;
 
   const workflowRunResults = workflowRun?.results;
-  if (workflowType === 'sash') {
-    throw new Error(`No '${workflowType}' run found!`);
-  }
   if (!workflowRunResults || workflowRunResults.length <= 0) {
     throw new Error(`No '${workflowType}' run found!`);
   }
