@@ -177,75 +177,72 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
           <InformationCircleIcon className='2-5 mx-2 h-5' />
         </Tooltip>
       </div>
-      {libraryDetail.type === 'WGS' ? (
-        <>
-          <DetailedErrorBoundary errorTitle={`Unable to load 'sash' report files`}>
+      <div key={libraryDetail.orcabusId}>
+        {libraryDetail.type === 'WGS' ? (
+          <>
+            <DetailedErrorBoundary errorTitle={`Unable to load 'sash' report files`}>
+              <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
+                <AnalysisTable
+                  libraryOrcabusId={libraryDetail.orcabusId}
+                  workflowType='sash'
+                  keyPatterns={WORKFLOW_ANALYSIS_TABLE['sash']['keyPatterns']}
+                  getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['sash']['getTableData']}
+                />
+              </Suspense>
+            </DetailedErrorBoundary>
+            <div className='py-4'></div>
+            <DetailedErrorBoundary errorTitle={`Unable to load 'tumor-normal' report files`}>
+              <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
+                <AnalysisTable
+                  libraryOrcabusId={libraryDetail.orcabusId}
+                  workflowType='tumor-normal'
+                  keyPatterns={WORKFLOW_ANALYSIS_TABLE['tumor-normal']['keyPatterns']}
+                  getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['tumor-normal']['getTableData']}
+                />
+              </Suspense>
+            </DetailedErrorBoundary>
+          </>
+        ) : libraryDetail.type === 'WTS' ? (
+          <>
+            <DetailedErrorBoundary errorTitle={`Unable to load 'wts' report files`}>
+              <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
+                <AnalysisTable
+                  libraryOrcabusId={libraryDetail.orcabusId}
+                  workflowType='wts'
+                  keyPatterns={WORKFLOW_ANALYSIS_TABLE['wts']['keyPatterns']}
+                  getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['wts']['getTableData']}
+                />
+              </Suspense>
+            </DetailedErrorBoundary>
+            <div className='py-4'></div>
+            <DetailedErrorBoundary errorTitle={`Unable to load 'rnasum' report files`}>
+              <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
+                <AnalysisTable
+                  libraryOrcabusId={libraryDetail.orcabusId}
+                  workflowType='rnasum'
+                  keyPatterns={WORKFLOW_ANALYSIS_TABLE['rnasum']['keyPatterns']}
+                  getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['rnasum']['getTableData']}
+                />
+              </Suspense>
+            </DetailedErrorBoundary>
+          </>
+        ) : libraryDetail.type === 'ctDNA' &&
+          (libraryDetail.assay?.toLowerCase() === 'cttso' ||
+            libraryDetail.assay?.toLowerCase() == 'cttsov2') ? (
+          <DetailedErrorBoundary errorTitle={`Unable to load 'cttsov2' report files`}>
             <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
               <AnalysisTable
-                key={`${libraryDetail.orcabusId}-sash`}
                 libraryOrcabusId={libraryDetail.orcabusId}
-                workflowType='sash'
-                keyPatterns={WORKFLOW_ANALYSIS_TABLE['sash']['keyPatterns']}
-                getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['sash']['getTableData']}
+                workflowType='cttsov2'
+                keyPatterns={WORKFLOW_ANALYSIS_TABLE['cttsov2']['keyPatterns']}
+                getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['cttsov2']['getTableData']}
               />
             </Suspense>
           </DetailedErrorBoundary>
-          <div className='py-4'></div>
-          <DetailedErrorBoundary errorTitle={`Unable to load 'tumor-normal' report files`}>
-            <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
-              <AnalysisTable
-                key={`${libraryDetail.orcabusId}-tumor-normal`}
-                libraryOrcabusId={libraryDetail.orcabusId}
-                workflowType='tumor-normal'
-                keyPatterns={WORKFLOW_ANALYSIS_TABLE['tumor-normal']['keyPatterns']}
-                getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['tumor-normal']['getTableData']}
-              />
-            </Suspense>
-          </DetailedErrorBoundary>
-        </>
-      ) : libraryDetail.type === 'WTS' ? (
-        <>
-          <DetailedErrorBoundary errorTitle={`Unable to load 'wts' report files`}>
-            <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
-              <AnalysisTable
-                key={`${libraryDetail.orcabusId}-wts`}
-                libraryOrcabusId={libraryDetail.orcabusId}
-                workflowType='wts'
-                keyPatterns={WORKFLOW_ANALYSIS_TABLE['wts']['keyPatterns']}
-                getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['wts']['getTableData']}
-              />
-            </Suspense>
-          </DetailedErrorBoundary>
-          <div className='py-4'></div>
-          <DetailedErrorBoundary errorTitle={`Unable to load 'rnasum' report files`}>
-            <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
-              <AnalysisTable
-                key={`${libraryDetail.orcabusId}-rnasum`}
-                libraryOrcabusId={libraryDetail.orcabusId}
-                workflowType='rnasum'
-                keyPatterns={WORKFLOW_ANALYSIS_TABLE['rnasum']['keyPatterns']}
-                getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['rnasum']['getTableData']}
-              />
-            </Suspense>
-          </DetailedErrorBoundary>
-        </>
-      ) : libraryDetail.type === 'ctDNA' &&
-        (libraryDetail.assay?.toLowerCase() === 'cttso' ||
-          libraryDetail.assay?.toLowerCase() == 'cttsov2') ? (
-        <DetailedErrorBoundary errorTitle={`Unable to load 'cttsov2' report files`}>
-          <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
-            <AnalysisTable
-              key={`${libraryDetail.orcabusId}-cttsov2`}
-              libraryOrcabusId={libraryDetail.orcabusId}
-              workflowType='cttsov2'
-              keyPatterns={WORKFLOW_ANALYSIS_TABLE['cttsov2']['keyPatterns']}
-              getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['cttsov2']['getTableData']}
-            />
-          </Suspense>
-        </DetailedErrorBoundary>
-      ) : (
-        <pre>No file highlights available for this library</pre>
-      )}
+        ) : (
+          <pre>No file highlights available for this library</pre>
+        )}
+      </div>
     </Suspense>
   );
 };
