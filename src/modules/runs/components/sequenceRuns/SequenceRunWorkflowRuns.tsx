@@ -22,6 +22,7 @@ const SequenceRunWorkflowRuns = () => {
         libraries__libraryId: libraryIds,
         page: getQueryParams().page || 1,
         rowsPerPage: getPaginationParams().rowsPerPage || DEFAULT_PAGE_SIZE,
+        status: getQueryParams().workflowRunStatus || null,
       },
     },
   });
@@ -84,6 +85,15 @@ const SequenceRunWorkflowRuns = () => {
     ],
     []
   );
+
+  if (
+    !libraryIds ||
+    libraryIds.length === 0 ||
+    !workflowRuns ||
+    (workflowRuns.results.length === 0 && getQueryParams().workflowRunStatus === undefined)
+  ) {
+    return;
+  }
 
   return (
     <div>
