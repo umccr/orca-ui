@@ -19,15 +19,18 @@ import { useQueryParams } from '@/hooks/useQueryParams';
 import { Tooltip } from '@/components/common/tooltips';
 import { IgvDesktopButton } from '@/components/files/igv/IgvDesktop';
 import { FileOpenInNewTab } from './FileOpenInNewTab';
+import { Checkbox } from '@/components/common/checkbox';
 
 export const FileAPITable = ({
   additionalQueryParam,
   tableColumn = getTableColumn({}),
   isSearchBoxKey,
+  isUmccriseWorkflowType,
 }: {
   isSearchBoxKey?: boolean;
   tableColumn?: Column[];
   additionalQueryParam?: Record<string, string | string[] | undefined>;
+  isUmccriseWorkflowType?: boolean;
 }) => {
   const [searchBox, setSearchBox] = useState('');
 
@@ -46,28 +49,58 @@ export const FileAPITable = ({
 
   if (!data) throw new Error('Data is not available');
 
+  // FIX ME: This is specifically for `umccrise` use only to hide the `work` directory
+  const [isHideWorkDirectory, setIsHideWorkDirectory] = useState(false);
+  useEffect(() => {
+    if (data.links.next !== null) {
+      setIsHideWorkDirectory(false);
+    }
+  }, [data.links.next]);
+
+  const recordData = isHideWorkDirectory
+    ? data.results.filter(({ key }) => !key.includes('/work/'))
+    : data.results;
+
   return (
-    <Table
-      columns={tableColumn}
-      tableHeader={isSearchBoxKey && <SearchBox onSearch={(s) => setSearchBox(s)} />}
-      tableData={data.results.map((item) => ({
-        lastModifiedDate: item.lastModifiedDate,
-        size: item.size,
-        fileRecord: item,
-      }))}
-      paginationProps={{
-        totalCount: data.pagination.count ?? 0,
-        rowsPerPage: data.pagination.rowsPerPage ?? 0,
-        currentPage: data.pagination.page ?? 0,
-        setPage: (n: number) => {
-          setQueryParams({ page: n });
-        },
-        countUnit: 'files',
-        setRowsPerPage: (n) => {
-          setQueryParams({ rowsPerPage: n });
-        },
-      }}
-    />
+    <>
+      {isUmccriseWorkflowType && (
+        <div className='flex flex-row gap-2'>
+          <Checkbox
+            disabled={data.links.next !== null}
+            className='flex flex-row gap-2 text-sm font-medium'
+            checked={isHideWorkDirectory}
+            onChange={() => setIsHideWorkDirectory((p) => !p)}
+            label="Hide 'work' directory"
+          />
+          <Tooltip text={`Does not work for paginated results.`} position='right' size='small'>
+            <div className='flex items-center'>
+              <InformationCircleIcon className='flex h-4 w-4 items-center' />
+            </div>
+          </Tooltip>
+        </div>
+      )}
+      <Table
+        columns={tableColumn}
+        tableHeader={isSearchBoxKey && <SearchBox onSearch={(s) => setSearchBox(s)} />}
+        tableData={recordData.map((item) => ({
+          lastModifiedDate: item.lastModifiedDate,
+          size: item.size,
+          fileRecord: item,
+        }))}
+        paginationProps={{
+          totalCount: data.pagination.count ?? 0,
+          rowsPerPage: data.pagination.rowsPerPage ?? 0,
+          currentPage: data.pagination.page ?? 0,
+          setPage: (n: number) => {
+            setQueryParams({ page: n });
+          },
+          countUnit: 'files',
+          setRowsPerPage: (n) => {
+            setQueryParams({ rowsPerPage: n });
+          },
+        }}
+      />
+    </>
   );
 };
 
