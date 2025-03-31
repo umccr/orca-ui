@@ -31,7 +31,7 @@ import { Button } from '@/components/common/buttons';
 import CommentDialog from '../common/CommentDialog';
 import StateDialog from '../common/StateDialog';
 import { Accordion } from '@/components/common/accordion';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { useUserPreferencesLocalStorage } from '@/hooks/useLocalStorage';
 
 const WorkflowRunTimeline = () => {
   const { orcabusId } = useParams();
@@ -55,7 +55,7 @@ const WorkflowRunTimeline = () => {
   const [commentId, setCommentId] = useState<string | null>(null);
   const [comment, setComment] = useState<string>('');
 
-  const [isReverseOrder, setIsReverseOrder] = useLocalStorage(
+  const [isReverseOrder, setIsReverseOrder] = useUserPreferencesLocalStorage(
     'workflow-run-timeline-reverse-order',
     false
   );

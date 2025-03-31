@@ -4,7 +4,7 @@ import {
   ArrowRightStartOnRectangleIcon,
 } from '@heroicons/react/16/solid';
 import { classNames } from '@/utils/commonUtils';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { useUserPreferencesLocalStorage } from '@/hooks/useLocalStorage';
 
 export interface SidebarProps {
   position: 'left' | 'right';
@@ -27,7 +27,10 @@ const Sidebar: FC<SidebarProps> = ({
   openWidth = 'w-92',
   collapsedWidth = 'w-16',
 }) => {
-  const [isOpen, setIsOpen] = useLocalStorage(preferenceStorageKey ?? 'sidebar-open', true);
+  const [isOpen, setIsOpen] = useUserPreferencesLocalStorage(
+    preferenceStorageKey ?? 'sidebar-open',
+    true
+  );
 
   return (
     <aside

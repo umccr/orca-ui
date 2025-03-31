@@ -4,7 +4,7 @@ import { FC, useState, ReactNode, FunctionComponent, SVGProps } from 'react';
 import { XMarkIcon } from '@heroicons/react/16/solid';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import { Tooltip } from '@/components/common/tooltips';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { useUserPreferencesLocalStorage } from '@/hooks/useLocalStorage';
 
 export interface NavigationChildrenItem {
   name: string;
@@ -27,7 +27,7 @@ export interface ModuleNavbarProps {
 
 const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer, preferenceStorageKey }) => {
   const location = useLocation();
-  const [isOpenNavbar, setIsOpenNavbar] = useLocalStorage(
+  const [isOpenNavbar, setIsOpenNavbar] = useUserPreferencesLocalStorage(
     preferenceStorageKey ?? 'isOpenNavbar',
     true
   );

@@ -2,7 +2,7 @@
 // https://github.com/ArnaudBarre/eslint-plugin-react-refresh/issues/25#issuecomment-1729071347
 
 import { createContext, useContext, useState, useEffect, PropsWithChildren } from 'react';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useUserPreferencesLocalStorage } from '../hooks/useLocalStorage';
 
 interface ThemeContextType {
   currentTheme: string;
@@ -19,7 +19,7 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider = ({ children }: PropsWithChildren) => {
-  const [persistedTheme, setPersistedTheme] = useLocalStorage('theme', 'system');
+  const [persistedTheme, setPersistedTheme] = useUserPreferencesLocalStorage('theme', 'system');
   const [currentTheme, setCurrentTheme] = useState<string>(persistedTheme || 'system');
 
   const changeCurrentTheme = (newTheme: string) => {
