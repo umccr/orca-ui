@@ -13,7 +13,7 @@ import { FilePreviewDrawer } from './FilePreviewDrawer';
 import { Dialog } from '@/components/common/dialogs';
 import { JsonToTable } from '@/components/common/json-to-table';
 import { FileDownloadButton } from './FileDownloadButton';
-import { DOWNLOADABLE_FILETYPE_LIST, IGV_FILETYPE_LIST } from '@/components/files';
+import { isFileDownloadable, IGV_FILETYPE_LIST } from '@/components/files';
 import { getFilenameFromKey } from '@/utils/commonUtils';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { Tooltip } from '@/components/common/tooltips';
@@ -175,9 +175,7 @@ export const getTableColumn = ({
       cell: (data: unknown) => {
         const { key: s3Key, s3ObjectId, bucket } = data as S3Record;
 
-        const splitPath = s3Key.split('.');
-        const filetype = splitPath[splitPath.length - 1].toLowerCase();
-        const isDownloadable = DOWNLOADABLE_FILETYPE_LIST.includes(filetype);
+        const isDownloadable = isFileDownloadable(s3Key);
         const isIgvFile = !!IGV_FILETYPE_LIST.find((f) => s3Key.endsWith(f));
         return (
           <div className='flex flex-row justify-end'>
@@ -252,9 +250,7 @@ const DataActionButton = ({ fileRecord }: { fileRecord: S3Record }) => {
 
   const s3Uri = `s3://${bucket}/${s3Key}`;
 
-  const splitPath = s3Key.split('.');
-  const filetype = splitPath[splitPath.length - 1].toLowerCase();
-  const isDownloadable = DOWNLOADABLE_FILETYPE_LIST.includes(filetype);
+  const isDownloadable = isFileDownloadable(s3Key);
 
   const [isOpenRecordDetails, setIsOpenRecordDetails] = useState(false);
   const [isGenerateDownloadableLink, setIsGenerateDownloadableLink] = useState(false);
