@@ -12,6 +12,7 @@ import InputBadgeBox, { InputBadgeBoxType } from '@/modules/files/components/Inp
 import { Button } from '@/components/common/buttons';
 import { CursorArrowRaysIcon } from '@heroicons/react/24/outline';
 import { areArraysEqual } from '@/modules/files/components/utils';
+import { Checkbox } from '@/components/common/checkbox';
 
 interface KeyPatternType {
   label: string;
@@ -84,6 +85,8 @@ export default function LibraryWorkflowPage() {
     inputState: sanitizedSearchKey,
     inputDraft: '',
   });
+
+  const [isHidePrefix, setIsHidePrefix] = useState(true);
 
   useEffect(() => {
     if (!searchKey) {
@@ -227,12 +230,21 @@ export default function LibraryWorkflowPage() {
                 {isSearchNeedUpdate && <CursorArrowRaysIcon className='h-5 w-5' />}
               </Button>
             </div>
+            <div className='flex flex-row gap-6'>
+              <Checkbox
+                className='flex flex-row gap-2 text-sm font-medium'
+                checked={isHidePrefix}
+                onChange={() => setIsHidePrefix((p) => !p)}
+                label='Hide S3 key prefix'
+              />
+            </div>
             <FileAPITable
               additionalQueryParam={{
                 'attributes[portalRunId]': portalRunId,
                 [`key[${searchKeyOpParam ?? DEFAULT_FILTER_OP}][]`]: searchKey ? searchKey : '*',
               }}
-              tableColumn={getTableColumn({ isHideKeyPrefix: true })}
+              tableColumn={getTableColumn({ isHideKeyPrefix: isHidePrefix })}
+              isUmccriseWorkflowType={workflowType === 'umccrise'}
             />
           </Suspense>
         </div>

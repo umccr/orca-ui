@@ -11,16 +11,6 @@ export const PLAIN_FILETYPE_LIST: string[] = ['txt', 'md5sum'];
 export const OTHER_FILETYPE_LIST: string[] = ['json', 'yaml', 'yml'];
 export const IGV_FILETYPE_LIST: string[] = ['bam', 'vcf', 'vcf.gz', 'cram'];
 
-export const DOWNLOADABLE_FILETYPE_LIST: string[] = [
-  'vcf.gz',
-  'maf',
-  ...IMAGE_FILETYPE_LIST,
-  ...IFRAME_FILETYPE_LIST,
-  ...DELIMITER_SEPARATED_VALUE_FILETYPE_LIST,
-  ...PLAIN_FILETYPE_LIST,
-  ...OTHER_FILETYPE_LIST,
-];
-
 type Props = { bucket: string; s3Key: string; s3ObjectId: string };
 
 export const FileViewer = (props: Props) => {
@@ -70,4 +60,21 @@ export const isFileSizeAcceptable = (objectSize: number): boolean => {
     return true;
   }
   return false;
+};
+
+export const isFileDownloadable = (s3Key: string): boolean => {
+  const filetypeList: string[] = [
+    'vcf',
+    'maf',
+    ...IMAGE_FILETYPE_LIST,
+    ...IFRAME_FILETYPE_LIST,
+    ...DELIMITER_SEPARATED_VALUE_FILETYPE_LIST,
+    ...PLAIN_FILETYPE_LIST,
+    ...OTHER_FILETYPE_LIST,
+  ];
+
+  // Remove the compressed (`.gz`) extension
+  const normalizedKey = s3Key.replace(/\.gz$/, '');
+
+  return !!filetypeList.find((f) => normalizedKey.endsWith(f));
 };

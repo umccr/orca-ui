@@ -291,20 +291,12 @@ export const AnalysisTable = ({
     throw new Error('No report found!');
   }
 
-  /**
-   * FIX ME
-   * Filter out files that are not intended for output (e.g., files under the 'work/' folder)
-   * and map the remaining files to the desired table data format.
-   * Ideally, if the file manager API supports regex, we should switch to that approach.
-   */
-  const tableData = filesApiData.results
-    .filter(({ key }) => !key.includes('/work/'))
-    .map((item) => ({
-      key: item.key,
-      lastModifiedDate: item.lastModifiedDate,
-      size: item.size,
-      fileRecord: item,
-    }));
+  const tableData = filesApiData.results.map((item) => ({
+    key: item.key,
+    lastModifiedDate: item.lastModifiedDate,
+    size: item.size,
+    fileRecord: item,
+  }));
 
   const isMultipleRuns = workflowRunResults.length > 1;
   const currentSelectedWorkflowDetail = workflowRunResults.find(
