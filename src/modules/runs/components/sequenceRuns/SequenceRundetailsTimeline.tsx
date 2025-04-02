@@ -16,7 +16,7 @@ import CommentDialog from '../common/CommentDialog';
 import { useParams } from 'react-router-dom';
 import { Button } from '@/components/common/buttons';
 import { BarsArrowUpIcon, BarsArrowDownIcon } from '@heroicons/react/24/outline';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { useUserPreferencesLocalStorage } from '@/hooks/useLocalStorage';
 import StateDialog from '../common/StateDialog';
 import { useSequenceRunContext } from './SequenceRunContext';
 
@@ -51,7 +51,7 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
   const [stateId, setStateId] = useState<string | null>(null);
   const [stateComment, setStateComment] = useState<string>('');
 
-  const [isReverseOrder, setIsReverseOrder] = useLocalStorage(
+  const [isReverseOrder, setIsReverseOrder] = useUserPreferencesLocalStorage(
     'sequence-run-timeline-reverse-order',
     false
   );

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+const USER_PREFERENCES_KEY = 'user-preferences';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getStorageValue(key: string, defaultValue: any) {
   const saved = localStorage.getItem(key);
@@ -42,6 +44,46 @@ export const useLocalStorage = (key: string, defaultValue: any, expirationTime?:
     // storing input name
     localStorage.setItem(key, JSON.stringify(itemToStore));
   }, [expirationTime, key, value]);
+
+  return [value, setValue];
+};
+
+// LocalStorage hooks specific for user preferences
+function getUserPreferencesStorageValue(key: string, defaultValue: string | number | boolean) {
+  const storedPreferences = localStorage.getItem(USER_PREFERENCES_KEY);
+  if (storedPreferences) {
+    const parsed = JSON.parse(storedPreferences);
+    if (parsed.expiration && Date.now() > parsed.expiration) {
+      localStorage.removeItem(USER_PREFERENCES_KEY);
+      return defaultValue;
+    }
+    return parsed[key] ?? defaultValue;
+  }
+  return defaultValue;
+}
+
+export const useUserPreferencesLocalStorage = (
+  key: string,
+  defaultValue: string | number | boolean,
+  expirationTime?: number
+) => {
+  const [value, setValue] = useState(() => {
+    return getUserPreferencesStorageValue(key, defaultValue);
+  });
+
+  useEffect(() => {
+    const storedPreferences = localStorage.getItem(USER_PREFERENCES_KEY);
+    const preferences = storedPreferences ? JSON.parse(storedPreferences) : {};
+    if (value === null) {
+      delete preferences[key];
+    } else {
+      preferences[key] = value;
+    }
+
+    preferences.expiration = expirationTime ? new Date().getTime() + expirationTime : null;
+
+    localStorage.setItem(USER_PREFERENCES_KEY, JSON.stringify(preferences));
+  }, [key, value, expirationTime]);
 
   return [value, setValue];
 };
