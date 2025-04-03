@@ -70,7 +70,7 @@ const Table: FC<TableProps> = ({
             <div
               className={classNames(
                 inCard
-                  ? 'border-opacity-5 overflow-hidden border-2 border-gray-500 sm:rounded-lg'
+                  ? 'border-opacity-5 overflow-hidden border-2 border-gray-500/5 sm:rounded-lg'
                   : ''
               )}
             >
