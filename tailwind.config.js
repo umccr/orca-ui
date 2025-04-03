@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 import colorPalette from './src/utils/colorPalette';
+import forms from '@tailwindcss/forms';
 
 export default {
   darkMode: 'selector',
@@ -25,5 +26,5 @@ export default {
       },
     },
   },
-  plugins: [import('@tailwindcss/forms')],
+  plugins: [forms],
 };
