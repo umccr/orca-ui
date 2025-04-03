@@ -55,7 +55,7 @@ export const LibraryBreadCrumb: FC<LibraryBreadcrumbProps> = ({ className }) => 
             <div className='flex items-center'>
               {key > 0 && (
                 <ChevronRightIcon
-                  className='h-4 w-4 flex-shrink-0 text-gray-400 dark:text-gray-600'
+                  className='h-4 w-4 shrink-0 text-gray-400 dark:text-gray-600'
                   aria-hidden='true'
                 />
               )}

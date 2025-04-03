@@ -26,7 +26,7 @@ export const uriLinkFormatter = {
       return (
         <Link
           to={`/files?bucket=${encodeURIComponent(bucket)}&key=${encodeURIComponent(key)}*`}
-          className='text-sm font-medium text-blue-500 transition-colors hover:text-blue-700 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500/50'
+          className='text-sm font-medium text-blue-500 transition-colors hover:text-blue-700 hover:underline focus:ring-2 focus:ring-blue-500/50 focus:outline-hidden'
           title={`View files in: ${value}`}
         >
           {value}

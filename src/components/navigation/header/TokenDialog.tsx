@@ -96,14 +96,14 @@ const TokenDialog = ({ onClose }: Props) => {
               <div className='group relative'>
                 <div className='rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50'>
                   <div className='max-h-24 overflow-y-auto px-4 py-2'>
-                    <code className='break-all font-mono text-sm text-gray-900 dark:text-gray-100'>
+                    <code className='font-mono text-sm break-all text-gray-900 dark:text-gray-100'>
                       {jwtData.token}
                     </code>
                   </div>
                 </div>
                 <button
                   onClick={handleCopyButton}
-                  className='absolute right-5 top-2 rounded-md bg-white/80 p-1.5 text-gray-500 backdrop-blur-sm transition-all hover:bg-white hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:bg-gray-700/80 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200'
+                  className='absolute top-2 right-5 rounded-md bg-white/80 p-1.5 text-gray-500 backdrop-blur-xs transition-all hover:bg-white hover:text-gray-700 focus:ring-2 focus:ring-blue-500/50 focus:outline-hidden dark:bg-gray-700/80 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200'
                 >
                   {copied ? (
                     <CheckIcon className='h-4 w-4 text-green-500' />
@@ -118,7 +118,7 @@ const TokenDialog = ({ onClose }: Props) => {
             <div className='mt-4'>
               <Button
                 onClick={handleCopyButton}
-                className='w-full justify-center bg-blue-500 text-white shadow-sm outline-none ring-0 hover:bg-blue-600 focus:ring-0 dark:bg-blue-600 dark:hover:bg-blue-700'
+                className='w-full justify-center bg-blue-500 text-white shadow-xs ring-0 outline-hidden hover:bg-blue-600 focus:ring-0 dark:bg-blue-600 dark:hover:bg-blue-700'
                 size='sm'
                 type='primary'
               >

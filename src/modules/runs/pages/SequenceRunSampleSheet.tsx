@@ -6,7 +6,7 @@ import { SpinnerWithText } from '@/components/common/spinner';
 import { DocumentIcon } from '@heroicons/react/24/outline';
 
 const NoSampleSheetFound = () => (
-  <div className='flex h-full items-center justify-center rounded-lg border border-gray-200 bg-white p-8 shadow dark:border-gray-700 dark:bg-gray-900'>
+  <div className='flex h-full items-center justify-center rounded-lg border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-700 dark:bg-gray-900'>
     <div className='flex flex-col items-center gap-3 text-center'>
       <div className='rounded-full bg-gray-100 p-3 dark:bg-gray-800'>
         <DocumentIcon className='h-8 w-8 text-gray-400 dark:text-gray-500' />

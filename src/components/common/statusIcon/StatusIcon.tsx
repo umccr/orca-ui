@@ -40,7 +40,7 @@ const StatusIcon: FC<{ status: string; className?: string }> = ({ status, classN
     case 'IN_PROGRESS':
       return (
         <ArrowPathIcon
-          className={iconStyles + ' h-[17px] w-[17px] animate-spin text-kookaburra-light-100'}
+          className={iconStyles + ' text-kookaburra-light-100 h-[17px] w-[17px] animate-spin'}
           title='In Progress'
         />
       );

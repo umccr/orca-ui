@@ -129,7 +129,7 @@ const SequenceRunDetailsActions = () => {
               'text-gray-700 dark:text-gray-300',
               'hover:bg-gray-50 dark:hover:bg-gray-700',
               'rounded-lg px-4 py-2',
-              'shadow-sm'
+              'shadow-xs'
             )}
           >
             <PlusIcon className='h-4 w-4' />
@@ -147,7 +147,7 @@ const SequenceRunDetailsActions = () => {
               'text-gray-700 dark:text-gray-300',
               'hover:bg-gray-50 dark:hover:bg-gray-700',
               'rounded-lg px-4 py-2',
-              'shadow-sm'
+              'shadow-xs'
             )}
           >
             <ChatBubbleLeftRightIcon className='h-4 w-4' />

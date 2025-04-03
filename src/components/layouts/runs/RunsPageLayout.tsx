@@ -11,7 +11,7 @@ const RunsPageLayout = ({ children }: PropsWithChildren) => {
         <div className='flex h-full'>
           <RunsSideNavBar />
         </div>
-        <div className='w-full !rounded-none p-4 sm:px-4 lg:px-8 lg:py-6'>
+        <div className='w-full rounded-none! p-4 sm:px-4 lg:px-8 lg:py-6'>
           <LocationBreadcrumb />
           <Suspense fallback={<SpinnerWithText text='Loading runs page ...' />}>
             <DetailedErrorBoundary errorTitle='Unable to load runs page'>

@@ -14,7 +14,7 @@ const DevelopmentPage = () => {
       </p>
       <div className='mt-6 flex space-x-4'>
         <button
-          className='rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500'
+          className='rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden'
           onClick={() => navigate('/')}
         >
           Go back home

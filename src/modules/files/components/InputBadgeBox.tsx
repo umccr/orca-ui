@@ -86,9 +86,9 @@ const InputBadgeBox: React.FC<InputBadgeBoxProps> = ({
             </div>
           </Badge>
         ))}
-        <span className='flex min-w-80 flex-grow flex-row'>
+        <span className='flex min-w-80 grow flex-row'>
           <input
-            className='min-w-60 flex-grow border-none px-2 py-2 text-sm focus-visible:outline-none'
+            className='min-w-60 grow border-none px-2 py-2 text-sm focus-visible:outline-hidden'
             onBlur={handleAddInput}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {

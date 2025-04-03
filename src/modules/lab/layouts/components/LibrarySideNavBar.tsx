@@ -78,7 +78,7 @@ export const LibrarySideNavBar = () => {
       // In case workflow return is beyond the first page, at least some warning as we do not have pagination implemented
       footer={
         workflow?.links?.next ? (
-          <div className='p-4 text-xs italic text-slate-400'>
+          <div className='p-4 text-xs text-slate-400 italic'>
             *Some workflows may not be listed.
           </div>
         ) : undefined

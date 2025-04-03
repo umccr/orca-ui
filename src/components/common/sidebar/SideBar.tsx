@@ -64,7 +64,7 @@ const Sidebar: FC<SidebarProps> = ({
                 'shadow-lg ring-1 ring-gray-200 dark:ring-gray-700',
                 'hover:bg-gray-50 dark:hover:bg-gray-700',
                 'hover:text-gray-700 dark:hover:text-gray-300',
-                'focus:outline-none focus:ring-2 focus:ring-blue-500/50',
+                'focus:ring-2 focus:ring-blue-500/50 focus:outline-hidden',
                 'transition-all duration-200'
               )}
             >
@@ -116,7 +116,7 @@ const Sidebar: FC<SidebarProps> = ({
               'shadow-lg ring-1 ring-gray-200 dark:ring-gray-700',
               'hover:bg-gray-50 dark:hover:bg-gray-700',
               'hover:text-gray-700 dark:hover:text-gray-300',
-              'focus:outline-none focus:ring-2 focus:ring-blue-500/50',
+              'focus:ring-2 focus:ring-blue-500/50 focus:outline-hidden',
               'transition-all duration-200'
             )}
           >

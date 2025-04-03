@@ -163,10 +163,10 @@ const WorkflowRunFilterHeader = () => {
                   clearQueryParams();
                 }}
                 className={classNames(
-                  'inline-flex items-center rounded border border-slate-200 bg-white p-1.5 leading-5 text-gray-400 shadow-sm',
+                  'inline-flex items-center rounded-sm border border-slate-200 bg-white p-1.5 leading-5 text-gray-400 shadow-xs',
                   'ring-1 ring-gray-300 ring-offset-0 ring-offset-gray-100',
                   'hover:bg-magpie-light-50 hover:text-gray-600',
-                  'focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-0 focus:ring-offset-gray-100',
+                  'focus:ring-2 focus:ring-gray-300 focus:ring-offset-0 focus:ring-offset-gray-100 focus:outline-hidden',
                   'transition duration-150 ease-in-out'
                 )}
               >

@@ -35,8 +35,8 @@ const AccordionList: FC<AccordionListProps> = ({
         'bg-white dark:bg-gray-900',
         'border border-gray-200 dark:border-gray-700',
         'overflow-hidden rounded-lg',
-        'hover:shadow-sm dark:hover:shadow-gray-800',
-        'shadow-sm dark:shadow-gray-800',
+        'hover:shadow-xs dark:hover:shadow-gray-800',
+        'shadow-xs dark:shadow-gray-800',
         className
       )}
       buttonClassName={buttonClassName}
@@ -54,7 +54,7 @@ const AccordionList: FC<AccordionListProps> = ({
             <div className='flex items-center justify-between'>
               <div className='flex items-center gap-3'>
                 {item.keyIcon && (
-                  <div className='flex-shrink-0'>
+                  <div className='shrink-0'>
                     <item.keyIcon
                       className={classNames(
                         'h-4 w-4',
@@ -92,7 +92,7 @@ const AccordionList: FC<AccordionListProps> = ({
                 'text-sm',
                 item.value
                   ? 'text-gray-900 dark:text-gray-100'
-                  : 'italic text-gray-500 dark:text-gray-400'
+                  : 'text-gray-500 italic dark:text-gray-400'
               )}
             >
               {item.value || 'None'}

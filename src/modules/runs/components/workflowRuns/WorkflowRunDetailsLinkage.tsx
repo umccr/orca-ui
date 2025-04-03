@@ -58,7 +58,7 @@ const WorkflowRunDetailsLinkage = () => {
           </div>
         }
         defaultOpen={false}
-        className='rounded-lg border border-gray-200 shadow-sm'
+        className='rounded-lg border border-gray-200 shadow-xs'
         chevronPosition='right'
       >
         <Table

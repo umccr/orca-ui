@@ -39,7 +39,7 @@ const AnalysisRunDetailsWorkflowRuns = () => {
               <div>
                 <div
                   className={classNames(
-                    'ml-2 flex cursor-pointer flex-row items-center text-sm font-medium lowercase text-blue-500 hover:text-blue-700'
+                    'ml-2 flex cursor-pointer flex-row items-center text-sm font-medium text-blue-500 lowercase hover:text-blue-700'
                   )}
                   // onClick={() => {
                   //   setSelectedWorkflowRun(workflowRunRowData as WorkflowRunModel);
@@ -49,7 +49,7 @@ const AnalysisRunDetailsWorkflowRuns = () => {
                   <Link
                     to={`${id}`}
                     className={classNames(
-                      'ml-2 flex cursor-pointer flex-row items-center text-sm font-medium capitalize text-blue-500 hover:text-blue-700'
+                      'ml-2 flex cursor-pointer flex-row items-center text-sm font-medium text-blue-500 capitalize hover:text-blue-700'
                     )}
                   >
                     {(workflowRunName as string).toLocaleLowerCase()}

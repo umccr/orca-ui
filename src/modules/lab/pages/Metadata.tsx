@@ -72,7 +72,7 @@ export default function MetadataPage() {
           <DocumentArrowUpIcon className='h-5 w-5' />
         </Button>
       </div>
-      <div className='border-b border-gray-200 text-center text-sm font-medium capitalize text-gray-500 dark:text-gray-400'>
+      <div className='border-b border-gray-200 text-center text-sm font-medium text-gray-500 capitalize dark:text-gray-400'>
         <ul className='-mb-px flex flex-wrap'>
           {tabs.map((tab, index) => {
             const isSelected = currentTabSelection === tab.label;

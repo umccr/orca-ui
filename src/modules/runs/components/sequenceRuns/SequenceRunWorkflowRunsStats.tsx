@@ -6,7 +6,7 @@ import { QueueListIcon } from '@heroicons/react/24/outline';
 import { useQueryParams } from '@/hooks/useQueryParams';
 
 const NoWorkflowsFound = () => (
-  <div className='flex h-full items-center justify-center rounded-lg border border-gray-200 bg-white p-8 shadow dark:border-gray-700 dark:bg-gray-900'>
+  <div className='flex h-full items-center justify-center rounded-lg border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-700 dark:bg-gray-900'>
     <div className='flex flex-col items-center gap-3 text-center'>
       <div className='rounded-full bg-gray-100 p-3 dark:bg-gray-800'>
         <QueueListIcon className='h-8 w-8 text-gray-400 dark:text-gray-500' />
@@ -65,14 +65,14 @@ const SequenceRunWorkflowRunsStats = () => {
 
   if (!workflowRunsCount) {
     return (
-      <div className='flex h-full items-center justify-center rounded-lg border border-gray-200 bg-white p-6 shadow dark:border-gray-700 dark:bg-gray-900'>
+      <div className='flex h-full items-center justify-center rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900'>
         <p className='text-sm text-gray-500 dark:text-gray-400'>No workflow runs found</p>
       </div>
     );
   }
 
   return (
-    <div className='grid grid-cols-7 gap-3 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900'>
+    <div className='grid grid-cols-7 gap-3 rounded-lg border border-gray-200 bg-white p-4 shadow-xs dark:border-gray-700 dark:bg-gray-900'>
       {Object.keys(workflowRunsCount).map((key, idx) => (
         <div
           key={idx}
@@ -82,7 +82,7 @@ const SequenceRunWorkflowRunsStats = () => {
             'border border-transparent',
             selectedStatus === key
               ? 'border-blue-100 bg-blue-50 dark:border-blue-500/20 dark:bg-blue-900/20'
-              : 'hover:border-gray-200 hover:bg-gray-50 hover:shadow-sm dark:hover:border-gray-700 dark:hover:bg-gray-800/50',
+              : 'hover:border-gray-200 hover:bg-gray-50 hover:shadow-xs dark:hover:border-gray-700 dark:hover:bg-gray-800/50',
             'group overflow-hidden'
           )}
         >

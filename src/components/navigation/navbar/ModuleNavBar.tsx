@@ -48,11 +48,11 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer, preferenceSto
     >
       {isOpen ? (
         <>
-          <div className='absolute right-0 top-0 z-20 p-4'>
+          <div className='absolute top-0 right-0 z-20 p-4'>
             <button
               type='button'
               onClick={toggleIsOpenNavbar}
-              className='rounded-lg bg-gray-50 p-1.5 text-gray-400 ring-1 ring-gray-200 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 dark:bg-gray-700 dark:ring-gray-600 dark:hover:bg-gray-600 dark:hover:text-gray-300'
+              className='rounded-lg bg-gray-50 p-1.5 text-gray-400 ring-1 ring-gray-200 hover:bg-gray-100 hover:text-gray-500 focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 focus:outline-hidden dark:bg-gray-700 dark:ring-gray-600 dark:hover:bg-gray-600 dark:hover:text-gray-300'
             >
               <span className='sr-only'>Close sidebar</span>
               <XMarkIcon className='h-5 w-5' />
@@ -119,7 +119,7 @@ const ModuleNavbar: FC<ModuleNavbarProps> = ({ navigation, footer, preferenceSto
           <div className='sticky top-0 z-10 flex h-16 items-center justify-center border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800'>
             <button
               onClick={toggleIsOpenNavbar}
-              className='rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 dark:hover:bg-gray-700 dark:hover:text-gray-300'
+              className='rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 focus:outline-hidden dark:hover:bg-gray-700 dark:hover:text-gray-300'
             >
               <span className='sr-only'>Open sidebar</span>
               <Bars3Icon className='h-5 w-5' aria-hidden='true' />

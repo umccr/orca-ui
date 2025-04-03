@@ -82,12 +82,12 @@ export const IgvDesktopButton = ({
   return (
     <div className={className}>
       {isAnyLoading ? (
-        <div className='!m-0 !p-2'>
+        <div className='m-0! p-2!'>
           <Spinner size='small' />
         </div>
       ) : isSimpleRoundedButton ? (
         <Button
-          className='!m-0 bg-transparent !p-2 !shadow-none focus:ring-0 focus:ring-offset-0'
+          className='m-0! bg-transparent p-2! shadow-none! focus:ring-0 focus:ring-offset-0'
           rounded
           size='md'
           type='gray'
@@ -99,7 +99,7 @@ export const IgvDesktopButton = ({
         </Button>
       ) : (
         <Button
-          className='!m-0 !p-2'
+          className='m-0! p-2!'
           size='md'
           onClick={() => {
             setIsEnabled(true);

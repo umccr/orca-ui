@@ -66,7 +66,7 @@ export const CheckboxGroupInput = <T,>({
       {options.map((item, key) => (
         <div
           key={`${title}-${key}`}
-          className='flex cursor-pointer items-center rounded ps-2 hover:bg-gray-100'
+          className='flex cursor-pointer items-center rounded-sm ps-2 hover:bg-gray-100'
           onClick={() => {
             handleIsCheckedFunc(keyFilter, item);
           }}
@@ -75,9 +75,9 @@ export const CheckboxGroupInput = <T,>({
             readOnly
             checked={isCheckedFunc(keyFilter, item)}
             type='checkbox'
-            className='h-4 w-4 cursor-pointer rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500/50'
+            className='h-4 w-4 cursor-pointer rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500/50'
           />
-          <label className='ms-2 w-full cursor-pointer rounded py-2 text-sm font-normal text-gray-900'>
+          <label className='ms-2 w-full cursor-pointer rounded-sm py-2 text-sm font-normal text-gray-900'>
             {item}
           </label>
         </div>

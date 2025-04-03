@@ -266,7 +266,7 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
                 'text-gray-700 dark:text-gray-300',
                 'hover:bg-gray-50 dark:hover:bg-gray-700',
                 'rounded-lg px-4 py-2',
-                'shadow-sm'
+                'shadow-xs'
               )}
             >
               {isReverseOrder ? (

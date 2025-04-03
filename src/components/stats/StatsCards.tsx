@@ -16,12 +16,12 @@ export interface StatsCardsProps {
 const StatsCards: FC<StatsCardsProps> = ({ header, items }) => {
   return (
     <div>
-      {header && <h3 className='text-base font-semibold leading-6 text-gray-900'>{header}</h3>}
+      {header && <h3 className='text-base leading-6 font-semibold text-gray-900'>{header}</h3>}
       <dl className='mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3 lg:grid-cols-4'>
         {items.map((item, index) => (
           <div
             key={index}
-            className='relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6'
+            className='relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-12 shadow-sm sm:px-6 sm:pt-6'
           >
             <dt>
               <div className='absolute rounded-md bg-indigo-500 p-3'>
@@ -40,12 +40,12 @@ const StatsCards: FC<StatsCardsProps> = ({ header, items }) => {
                 >
                   {item.changeType === 'increase' ? (
                     <ArrowUpIcon
-                      className='h-5 w-5 flex-shrink-0 self-center text-green-500'
+                      className='h-5 w-5 shrink-0 self-center text-green-500'
                       aria-hidden='true'
                     />
                   ) : (
                     <ArrowDownIcon
-                      className='h-5 w-5 flex-shrink-0 self-center text-red-500'
+                      className='h-5 w-5 shrink-0 self-center text-red-500'
                       aria-hidden='true'
                     />
                   )}

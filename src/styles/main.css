@@ -1,6 +1,147 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/forms';
+
+@source '../**/*.{js,ts,jsx,tsx}';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-heritage-blue-25: #bfc3d1;
+  --color-heritage-blue-50: #8087a2;
+  --color-heritage-blue-75: #404b74;
+  --color-heritage-blue-100: #000f46;
+
+  --color-heritage-dark-100: #000b34;
+
+  --color-greenstone-light-25: #eaefe9;
+  --color-greenstone-light-50: #d5e0d3;
+  --color-greenstone-light-75: #c0d0bd;
+  --color-greenstone-light-100: #abc1a7;
+
+  --color-greenstone-dark-25: #d0d2cf;
+  --color-greenstone-dark-50: #a2a49f;
+  --color-greenstone-dark-75: #737770;
+  --color-greenstone-dark-100: #444a40;
+
+  --color-magpie-light-25: #f1f1f1;
+  --color-magpie-light-50: #e4e4e4;
+  --color-magpie-light-75: #d6d6d6;
+  --color-magpie-light-100: #c8c8c8;
+
+  --color-magpie-dark-25: #cacaca;
+  --color-magpie-dark-50: #969696;
+  --color-magpie-dark-75: #616161;
+  --color-magpie-dark-100: #2d2d2d;
+
+  --color-kookaburra-light-25: #d1f1fb;
+  --color-kookaburra-light-50: #a3e4f7;
+  --color-kookaburra-light-75: #74d6f4;
+  --color-kookaburra-light-100: #46c8f0;
+
+  --color-kookaburra-dark-25: #bfced5;
+  --color-kookaburra-dark-50: #809daa;
+  --color-kookaburra-dark-75: #406d80;
+  --color-kookaburra-dark-100: #003c55;
+
+  --color-possum-pink-25: #fadeef;
+  --color-possum-pink-50: #f5bddf;
+  --color-possum-pink-75: #f09cce;
+  --color-possum-pink-100: #eb7bbe;
+
+  --color-possum-maroon-25: #dcc8d2;
+  --color-possum-maroon-50: #b991a5;
+  --color-possum-maroon-75: #965a78;
+  --color-possum-maroon-100: #73234b;
+
+  --color-sheoak-light-25: #ffcace;
+  --color-sheoak-light-50: #ff969d;
+  --color-sheoak-light-75: #ff616d;
+  --color-sheoak-light-100: #ff2d3c;
+
+  --color-sheoak-dark-25: #ddbfc2;
+  --color-sheoak-dark-50: #bb8086;
+  --color-sheoak-dark-75: #9a4049;
+  --color-sheoak-dark-100: #78000d;
+
+  --color-yam-daisy-yellow-25: #fff5c9;
+  --color-yam-daisy-yellow-50: #ffea94;
+  --color-yam-daisy-yellow-75: #ffe05e;
+  --color-yam-daisy-yellow-100: #ffd629;
+
+  --color-yam-daisy-brown-25: #e9d1bf;
+  --color-yam-daisy-brown-50: #d4a280;
+  --color-yam-daisy-brown-75: #be7440;
+  --color-yam-daisy-brown-100: #a84500;
+
+  --color-red-gum-light-25: #e7edc8;
+  --color-red-gum-light-50: #cfdc92;
+  --color-red-gum-light-75: #b7ca5b;
+  --color-red-gum-light-100: #9fb825;
+
+  --color-red-gum-dark-25: #cad0c6;
+  --color-red-gum-dark-50: #95a08e;
+  --color-red-gum-dark-75: #617156;
+  --color-red-gum-dark-100: #2c421d;
+
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-link: #083973;
+  --color-link-dark: #083468;
+  --color-link-light: #204c81;
+  --color-regal-blue: #0e297a;
+
+  --color-workflow-ica-cloud: #b0e3e6;
+  --color-workflow-aws-cloud: #e3c800;
+  --color-workflow-basespace-cloud: #d0cee2;
+  --color-workflow-uom-prem-unimelb: #fa6800;
+  --color-workflow-unactived: #969696;
+  --color-workflow-default: #ffffff;
+
+  --shadow-inner-lg: 0 4px 30px rgba(0, 0, 0, 0.8);
+
+  --flex-2: 2 2 0%;
+
+  --text-2xs: 0.625rem;
+
+  --font-sans: Inter, sans-serif;
+  --font-sans--font-feature-settings: 'cv11';
+  --font-mono: Inter, monospace;
+  --font-mono--font-feature-settings: 'tnum';
+  --font-code: Source Code Pro, monospace;
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@utility scrollbar-hide {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility no-scrollbar {
+  /* Hide scrollbar for IE, Edge and Firefox */
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
 
 @layer base {
   body {
@@ -12,22 +153,29 @@
   }
 }
 
-/* Hide horizontal overflow for the html tag */
-html {
-  overflow-x: hidden;
-  overflow-y: auto;
+@layer utilities {
+  /* Hide horizontal overflow for the html tag */
+  html {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 }
 
-@layer utilities {
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+}
 
-  /* Hide scrollbar for IE, Edge and Firefox */
-  /* Hide scrollbar for IE, Edge and Firefox */
-  .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+@layer base {
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@layer base {
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-gray-400);
   }
 }

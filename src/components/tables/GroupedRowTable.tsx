@@ -36,7 +36,7 @@ const GroupedTable: FC<GroupedTableProps> = ({
       <div className='mb-6 sm:flex sm:items-center'>
         <div className='sm:flex-auto'>
           {tableHeader && (
-            <h1 className='text-lg font-semibold leading-6 text-gray-900 dark:text-gray-100'>
+            <h1 className='text-lg leading-6 font-semibold text-gray-900 dark:text-gray-100'>
               {tableHeader}
             </h1>
           )}
@@ -68,7 +68,7 @@ const GroupedTable: FC<GroupedTableProps> = ({
                             index === 0 ? 'pl-4 sm:pl-6 lg:pl-8' : '',
                             index === columns.length - 1 ? 'pr-4 sm:pr-6 lg:pr-8' : '',
                             stickyHeader
-                              ? 'sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 backdrop-blur backdrop-filter dark:border-gray-700 dark:bg-gray-800'
+                              ? 'bg-opacity-75 sticky top-0 z-10 border-b border-gray-300 bg-gray-50 backdrop-blur-sm backdrop-filter dark:border-gray-700 dark:bg-gray-800'
                               : ''
                           )}
                         >
@@ -84,7 +84,7 @@ const GroupedTable: FC<GroupedTableProps> = ({
                         <th
                           scope='colgroup'
                           colSpan={columns.length}
-                          className='bg-gray-50 py-2 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 dark:bg-gray-800 dark:text-gray-200'
+                          className='bg-gray-50 py-2 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6 dark:bg-gray-800 dark:text-gray-200'
                         >
                           {data.groupTitle}
                         </th>
@@ -105,7 +105,7 @@ const GroupedTable: FC<GroupedTableProps> = ({
                               <td
                                 key={index}
                                 className={classNames(
-                                  'whitespace-nowrap px-3 py-2 text-sm text-gray-900 dark:text-gray-200',
+                                  'px-3 py-2 text-sm whitespace-nowrap text-gray-900 dark:text-gray-200',
                                   index === 0 ? 'pl-4 sm:pl-6' : '',
                                   index === columns.length - 1 ? 'pr-4 sm:pr-6' : ''
                                 )}

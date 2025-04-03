@@ -67,12 +67,12 @@ const RNASUMSelect = ({
         <div className='relative'>
           <ComboboxInput
             className={classNames(
-              'w-full rounded-lg py-2 pl-3 pr-3 text-sm',
+              'w-full rounded-lg py-2 pr-3 pl-3 text-sm',
               'bg-white dark:bg-gray-800',
               'text-gray-900 dark:text-white',
               'border border-gray-200 dark:border-gray-700',
               'placeholder-gray-500 dark:placeholder-gray-400',
-              'focus:outline-none data-[focus]:ring-2 data-[focus]:ring-blue-500',
+              'focus:outline-hidden data-focus:ring-2 data-focus:ring-blue-500',
               'transition duration-150'
             )}
             displayValue={(val: RNASUMOption) => (val ? val.project : placeholder)}
@@ -83,8 +83,8 @@ const RNASUMSelect = ({
             <ChevronUpDownIcon
               className={classNames(
                 'h-5 w-5',
-                'text-gray-400 group-data-[hover]:text-gray-600',
-                'dark:text-gray-500 dark:group-data-[hover]:text-gray-300'
+                'text-gray-400 group-data-hover:text-gray-600',
+                'dark:text-gray-500 dark:group-data-hover:text-gray-300'
               )}
             />
           </ComboboxButton>
@@ -101,13 +101,13 @@ const RNASUMSelect = ({
             'ring-1 ring-black/5 dark:ring-white/10',
             '[--anchor-gap:0.25rem]',
             'transition duration-100',
-            'data-[leave]:data-[closed]:opacity-0',
+            'data-leave:data-closed:opacity-0',
             'scrollbar-thin scrollbar-track-transparent',
             'scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-600'
           )}
         >
           {/* Table Header */}
-          <div className='grid grid-cols-12 gap-2 border-b border-gray-200 py-2 pl-3 pr-7 dark:border-gray-700'>
+          <div className='grid grid-cols-12 gap-2 border-b border-gray-200 py-2 pr-7 pl-3 dark:border-gray-700'>
             {' '}
             {/* Empty header for checkbox column - 8.33% */}
             <div className='col-span-2 pl-12 text-xs font-medium text-gray-500 dark:text-gray-400'>
@@ -141,9 +141,9 @@ const RNASUMSelect = ({
                   value={option}
                   className={classNames(
                     'grid grid-cols-12 gap-2',
-                    'select-none px-4 py-2',
+                    'px-4 py-2 select-none',
                     'text-gray-900 dark:text-gray-100',
-                    'data-[focus]:bg-blue-50 dark:data-[focus]:bg-blue-900/50',
+                    'data-focus:bg-blue-50 dark:data-focus:bg-blue-900/50',
                     'border-b border-gray-100 last:border-0 dark:border-gray-800',
                     'transition-colors duration-75',
                     'hover:bg-gray-50 dark:hover:bg-gray-800',
@@ -155,9 +155,9 @@ const RNASUMSelect = ({
                     <CheckIcon
                       className={classNames(
                         'size-4',
-                        'flex-shrink-0',
+                        'shrink-0',
                         'text-gray-300 dark:text-gray-600',
-                        'group-data-[selected]:visible group-data-[selected]:text-blue-500 dark:group-data-[selected]:text-blue-400'
+                        'group-data-selected:visible group-data-selected:text-blue-500 dark:group-data-selected:text-blue-400'
                       )}
                     />
                   </div> */}
@@ -165,7 +165,7 @@ const RNASUMSelect = ({
                     <CheckIcon
                       className={classNames(
                         'invisible size-4',
-                        'flex-shrink-0',
+                        'shrink-0',
                         'text-gray-300 dark:text-gray-600',
                         option.project === selectedValue &&
                           'visible text-blue-500 dark:text-blue-400'
@@ -176,7 +176,7 @@ const RNASUMSelect = ({
                       className={classNames(
                         'text-xs',
                         option.project === selectedValue && 'font-medium',
-                        'group-data-[focus]:text-blue-900 dark:group-data-[focus]:text-blue-100',
+                        'group-data-focus:text-blue-900 dark:group-data-focus:text-blue-100',
                         'truncate'
                       )}
                     >
@@ -189,7 +189,7 @@ const RNASUMSelect = ({
                       'col-span-7',
                       'text-xs',
                       option.name === selectedValue && 'font-medium',
-                      'group-data-[focus]:text-blue-900 dark:group-data-[focus]:text-blue-100',
+                      'group-data-focus:text-blue-900 dark:group-data-focus:text-blue-100',
                       'truncate'
                     )}
                   >
@@ -200,7 +200,7 @@ const RNASUMSelect = ({
                       'col-span-2',
                       'text-xs',
                       option.tissue_code === selectedValue && 'font-medium',
-                      'group-data-[focus]:text-blue-900 dark:group-data-[focus]:text-blue-100',
+                      'group-data-focus:text-blue-900 dark:group-data-focus:text-blue-100',
                       'truncate'
                     )}
                   >
@@ -211,7 +211,7 @@ const RNASUMSelect = ({
                       'col-span-1',
                       'text-xs',
                       option.samples_no === selectedValue && 'font-medium',
-                      'group-data-[focus]:text-blue-900 dark:group-data-[focus]:text-blue-100',
+                      'group-data-focus:text-blue-900 dark:group-data-focus:text-blue-100',
                       'truncate'
                     )}
                   >
@@ -243,7 +243,7 @@ const RNASUMSelect = ({
                   'bg-gray-100 dark:bg-gray-800',
                   'text-gray-700 dark:text-gray-300',
                   'hover:bg-gray-200 dark:hover:bg-gray-700',
-                  'data-[focus]:ring-2 data-[focus]:ring-blue-500',
+                  'data-focus:ring-2 data-focus:ring-blue-500',
                   'transition-colors duration-150'
                 )}
               >

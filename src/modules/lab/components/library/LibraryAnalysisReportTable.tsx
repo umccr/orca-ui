@@ -337,7 +337,7 @@ export const AnalysisTable = ({
               )}
             </div>
             {filesApiData.links?.next && (
-              <div className='pt-4 text-xs italic text-slate-400'>
+              <div className='pt-4 text-xs text-slate-400 italic'>
                 *Due to pagination, some files may not be shown here.
               </div>
             )}

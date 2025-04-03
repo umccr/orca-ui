@@ -38,7 +38,7 @@ const JsonToList: FC<JsonToListProps> = ({
     <div className='w-full'>
       <div className='px-4 pb-4 sm:px-0'>
         {title && (
-          <h3 className='text-lg font-semibold leading-7 text-gray-900 dark:text-gray-100'>
+          <h3 className='text-lg leading-7 font-semibold text-gray-900 dark:text-gray-100'>
             {title}
           </h3>
         )}
@@ -52,7 +52,7 @@ const JsonToList: FC<JsonToListProps> = ({
         className={classNames(
           'bg-white dark:bg-gray-800',
           inCard
-            ? 'overflow-hidden rounded-lg border border-gray-200 shadow-sm dark:border-gray-700'
+            ? 'overflow-hidden rounded-lg border border-gray-200 shadow-xs dark:border-gray-700'
             : ''
         )}
       >
@@ -66,7 +66,7 @@ const JsonToList: FC<JsonToListProps> = ({
             {listData ? (
               Object.entries(listData).map(([key, value], index) => (
                 <div key={index} className='px-4 py-2.5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-                  <dt className='text-sm font-medium leading-5 text-gray-900 dark:text-gray-200'>
+                  <dt className='text-sm leading-5 font-medium text-gray-900 dark:text-gray-200'>
                     {key}
                   </dt>
                   <dd className='mt-1 text-sm leading-5 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-300'>
@@ -76,7 +76,7 @@ const JsonToList: FC<JsonToListProps> = ({
               ))
             ) : (
               <div className='px-4 py-2.5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-                <dt className='text-sm font-medium leading-5 text-gray-500 dark:text-gray-400'>
+                <dt className='text-sm leading-5 font-medium text-gray-500 dark:text-gray-400'>
                   No data found
                 </dt>
               </div>

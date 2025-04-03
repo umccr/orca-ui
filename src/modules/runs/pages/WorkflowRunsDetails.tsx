@@ -9,7 +9,7 @@ const WorkflowRunsDetails = () => {
   return (
     <WorkflowRunProvider>
       <div className='no-scrollbar flex h-full w-full overflow-y-auto'>
-        <div className='flex-grow'>
+        <div className='grow'>
           <SideBarLayout
             main={
               <div className='flex flex-col gap-4'>

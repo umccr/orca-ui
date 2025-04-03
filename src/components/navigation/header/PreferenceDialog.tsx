@@ -72,7 +72,7 @@ const PreferenceDialog = ({ onClose }: Props) => {
                   <option.icon className='h-5 w-5' />
                 </div>
 
-                <div className='flex-grow text-left'>
+                <div className='grow text-left'>
                   <div
                     className={`font-medium ${
                       currentTheme === option.value

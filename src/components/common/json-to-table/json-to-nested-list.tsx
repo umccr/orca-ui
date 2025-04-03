@@ -50,10 +50,10 @@ const JsonToNestedList: FC<JsonToNestedListProps> = ({
               key={index}
               className='px-4 py-2 transition-colors sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'
             >
-              <dt className='text-pretty break-words text-sm font-medium text-gray-900 sm:col-span-1 dark:text-gray-100'>
+              <dt className='text-sm font-medium text-pretty break-words text-gray-900 sm:col-span-1 dark:text-gray-100'>
                 {key}
               </dt>
-              <dd className='mt-1 break-words text-sm text-gray-600 sm:col-span-2 sm:mt-0 dark:text-gray-300'>
+              <dd className='mt-1 text-sm break-words text-gray-600 sm:col-span-2 sm:mt-0 dark:text-gray-300'>
                 {renderValue(val)}
               </dd>
             </div>
@@ -85,7 +85,7 @@ const JsonToNestedList: FC<JsonToNestedListProps> = ({
       {/* Header */}
       <div className='px-4 sm:px-0'>
         {title && (
-          <h3 className='text-lg font-semibold leading-7 text-gray-900 dark:text-white'>{title}</h3>
+          <h3 className='text-lg leading-7 font-semibold text-gray-900 dark:text-white'>{title}</h3>
         )}
         {subtitle && (
           <p className='mt-1 max-w-2xl text-sm leading-6 text-gray-500 dark:text-gray-400'>
@@ -98,7 +98,7 @@ const JsonToNestedList: FC<JsonToNestedListProps> = ({
         className={classNames(
           'relative bg-white transition-colors dark:bg-gray-900',
           inCard
-            ? 'overflow-hidden rounded-lg border border-gray-200 shadow-sm dark:border-gray-700'
+            ? 'overflow-hidden rounded-lg border border-gray-200 shadow-xs dark:border-gray-700'
             : '',
           listClassName
         )}

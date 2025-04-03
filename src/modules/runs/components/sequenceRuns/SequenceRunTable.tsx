@@ -123,7 +123,7 @@ const SequenceRunTable = () => {
                   setQueryParams({ sequenceRunId: sequenceRunRowData.orcabusId });
                 }}
               >
-                <ChatBubbleBottomCenterTextIcon className='size-5 stroke-orange-300 stroke-[3] hover:stroke-orange-600' />
+                <ChatBubbleBottomCenterTextIcon className='size-5 stroke-orange-300 stroke-3 hover:stroke-orange-600' />
               </div>
             </Tooltip> */}
             <Tooltip text='MultiQC Report' size='small' background='light'>

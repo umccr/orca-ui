@@ -69,16 +69,16 @@ const SequenceRunDetailsDrawer: FC<SequenceRunDetailsDrawerProps> = ({
           chevronPosition='right'
           className={classNames(
             'rounded-lg',
-            'bg-gradient-to-r from-white via-gray-50/80 to-gray-100/50',
+            'bg-linear-to-r from-white via-gray-50/80 to-gray-100/50',
             'dark:from-gray-900 dark:via-gray-800/80 dark:to-gray-800/50',
-            'shadow-sm hover:shadow-md',
+            'shadow-xs hover:shadow-md',
             'ring-1 ring-gray-200/50 dark:ring-gray-700/50',
             'transition-all duration-200 ease-in-out',
             'group'
           )}
           buttonClassName={classNames(
             'border-0',
-            'bg-gradient-to-r from-blue-50/90 to-transparent',
+            'bg-linear-to-r from-blue-50/90 to-transparent',
             'dark:from-blue-900/30 dark:to-transparent',
             'group-hover:from-blue-100/80 dark:group-hover:from-blue-800/40',
             'transition-all duration-300'
@@ -93,16 +93,16 @@ const SequenceRunDetailsDrawer: FC<SequenceRunDetailsDrawerProps> = ({
           chevronPosition='right'
           className={classNames(
             'rounded-lg',
-            'bg-gradient-to-r from-white via-gray-50/80 to-gray-100/50',
+            'bg-linear-to-r from-white via-gray-50/80 to-gray-100/50',
             'dark:from-gray-900 dark:via-gray-800/80 dark:to-gray-800/50',
-            'shadow-sm hover:shadow-md',
+            'shadow-xs hover:shadow-md',
             'ring-1 ring-gray-200/50 dark:ring-gray-700/50',
             'transition-all duration-200 ease-in-out',
             'group'
           )}
           buttonClassName={classNames(
             'border-0',
-            'bg-gradient-to-r from-blue-50/90 to-transparent',
+            'bg-linear-to-r from-blue-50/90 to-transparent',
             'dark:from-blue-900/30 dark:to-transparent',
             'group-hover:from-blue-100/80 dark:group-hover:from-blue-800/40',
             'transition-all duration-300'

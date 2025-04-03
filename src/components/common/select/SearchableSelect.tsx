@@ -37,12 +37,12 @@ export const SearchableSelect = ({
         <div className='relative'>
           <ComboboxInput
             className={classNames(
-              'w-full rounded-lg py-2 pl-3 pr-10 text-sm',
+              'w-full rounded-lg py-2 pr-10 pl-3 text-sm',
               'bg-white dark:bg-gray-800',
               'text-gray-900 dark:text-white',
               'border border-gray-200 dark:border-gray-700',
               'placeholder-gray-500 dark:placeholder-gray-400',
-              'focus:outline-none data-[focus]:ring-2 data-[focus]:ring-blue-500',
+              'focus:outline-hidden data-focus:ring-2 data-focus:ring-blue-500',
               'transition duration-150'
             )}
             displayValue={(val: string) => val}
@@ -53,8 +53,8 @@ export const SearchableSelect = ({
             <ChevronUpDownIcon
               className={classNames(
                 'h-5 w-5',
-                'text-gray-400 group-data-[hover]:text-gray-600',
-                'dark:text-gray-500 dark:group-data-[hover]:text-gray-300'
+                'text-gray-400 group-data-hover:text-gray-600',
+                'dark:text-gray-500 dark:group-data-hover:text-gray-300'
               )}
             />
           </ComboboxButton>
@@ -71,7 +71,7 @@ export const SearchableSelect = ({
             'ring-1 ring-black/5 dark:ring-white/10',
             '[--anchor-gap:0.25rem]',
             'transition duration-100',
-            'data-[leave]:data-[closed]:opacity-0',
+            'data-leave:data-closed:opacity-0',
             'scrollbar-thin scrollbar-track-transparent',
             'scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-600'
           )}
@@ -85,17 +85,17 @@ export const SearchableSelect = ({
                 value={option}
                 className={classNames(
                   'group flex items-center justify-between gap-2',
-                  'select-none rounded-md px-3 py-1.5',
+                  'rounded-md px-3 py-1.5 select-none',
                   'text-gray-900 dark:text-gray-100',
-                  'data-[focus]:bg-blue-50 dark:data-[focus]:bg-blue-900/50',
+                  'data-focus:bg-blue-50 dark:data-focus:bg-blue-900/50',
                   'transition-colors duration-75'
                 )}
               >
                 <span
                   className={classNames(
                     'text-xs',
-                    'group-data-[selected]:font-medium',
-                    'group-data-[focus]:text-blue-900 dark:group-data-[focus]:text-blue-100',
+                    'group-data-selected:font-medium',
+                    'group-data-focus:text-blue-900 dark:group-data-focus:text-blue-100',
                     'truncate'
                   )}
                 >
@@ -104,9 +104,9 @@ export const SearchableSelect = ({
                 <CheckIcon
                   className={classNames(
                     'invisible h-3.5 w-3.5',
-                    'flex-shrink-0',
+                    'shrink-0',
                     'text-blue-500 dark:text-blue-400',
-                    'group-data-[selected]:visible'
+                    'group-data-selected:visible'
                   )}
                 />
               </ComboboxOption>
@@ -134,7 +134,7 @@ export const SearchableSelect = ({
                   'bg-gray-100 dark:bg-gray-800',
                   'text-gray-700 dark:text-gray-300',
                   'hover:bg-gray-200 dark:hover:bg-gray-700',
-                  'data-[focus]:ring-2 data-[focus]:ring-blue-500',
+                  'data-focus:ring-2 data-focus:ring-blue-500',
                   'transition-colors duration-150'
                 )}
               >

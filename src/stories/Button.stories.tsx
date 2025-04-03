@@ -45,7 +45,7 @@ export const Gradient: Story = {
     type: 'primary',
     size: 'md',
     children: 'Button',
-    className: 'bg-gradient-to-r from-blue-500 via-blue-600',
+    className: 'bg-linear-to-r from-blue-500 via-blue-600',
   },
 };
 
@@ -81,7 +81,7 @@ export const CircularButtons: Story = {
     size: 'md',
     children: <PlusIcon className='h-5 w-5' aria-hidden='true' />,
     rounded: true,
-    className: '!p-2 !m-0',
+    className: 'p-2! m-0!',
   },
 };
 

@@ -50,7 +50,7 @@ function SignInContainer() {
 
   const footer = (
     <span>
-      <Button onClick={() => loggingIn()} className='w-full bg-regal-blue text-center focus:ring-0'>
+      <Button onClick={() => loggingIn()} className='bg-regal-blue w-full text-center focus:ring-0'>
         {isLoading ? (
           <>
             <Spinner />
@@ -66,7 +66,7 @@ function SignInContainer() {
 
   return (
     <div className='flex h-full w-full items-center justify-center bg-transparent'>
-      <Card className='w-[40rem] rounded-lg border border-transparent bg-white bg-opacity-10 p-5 shadow-inner-lg backdrop-blur-sm'>
+      <Card className='bg-opacity-10 shadow-inner-lg w-[40rem] rounded-lg border border-transparent bg-white p-5 backdrop-blur-xs'>
         {header}
         <div style={{ textAlign: 'justify', color: 'white' }}>
           <h1 style={{ fontSize: '2em', textAlign: 'center' }}>UMCCR Orcabus</h1>
@@ -126,7 +126,7 @@ function SignInPage() {
     <div className='absolute h-full w-full overflow-hidden'>
       {!imageUrl && <Spinner className='w-[6px]' />}
       <div
-        className='bg-grey -z-1 bg-[url(imageUrl) bg-center] absolute h-full w-full bg-cover bg-no-repeat'
+        className='bg-grey bg-[url(imageUrl) bg-center] absolute -z-1 h-full w-full bg-cover bg-no-repeat'
         style={{
           backgroundColor: 'grey',
           height: '100%',

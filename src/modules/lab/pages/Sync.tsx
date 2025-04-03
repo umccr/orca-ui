@@ -18,7 +18,7 @@ export default function SyncPage() {
       </div>
 
       {syncType && (
-        <div className='max-w-screen-sm border-t-2 pt-6'>
+        <div className='max-w-(--breakpoint-sm) border-t-2 pt-6'>
           <DetailedErrorBoundary>
             {syncType === 'gsheet' ? (
               <GsheetTrigger />
@@ -84,13 +84,13 @@ const SuccessTriggerWrapper = ({
   children: React.ReactNode;
   onClose?: () => void;
 }) => (
-  <div className='h-18 relative flex flex-col items-center bg-green-100 p-4 text-green-800'>
+  <div className='relative flex h-18 flex-col items-center bg-green-100 p-4 text-green-800'>
     {children}
     <div className='mt-2 text-xs italic'>*sync may take up to 15 minutes</div>
     {onClose && (
       <button
         onClick={onClose}
-        className='absolute right-2 top-2 text-green-800 hover:text-green-600'
+        className='absolute top-2 right-2 text-green-800 hover:text-green-600'
       >
         <XMarkIcon className='h-5 w-5' />
       </button>

@@ -3,10 +3,11 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import checker from 'vite-plugin-checker';
 import { visualizer } from 'rollup-plugin-visualizer';
+import tailwindcss from '@tailwindcss/vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), checker({ typescript: true }), visualizer() as PluginOption],
+  plugins: [react(), checker({ typescript: true }), visualizer() as PluginOption, tailwindcss()],
   resolve: {
     alias: {
       './runtimeConfig$': './runtimeConfig.browser',

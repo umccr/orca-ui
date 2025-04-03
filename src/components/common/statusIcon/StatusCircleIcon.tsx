@@ -45,7 +45,7 @@ const StatusCircleIcon: FC<StatusCircleIconProps> = ({ status, className }) => {
     case 'IN_PROGRESS':
       return (
         <ArrowPathIcon
-          className={iconStyles + ' animate-spin text-kookaburra-light-100'}
+          className={iconStyles + ' text-kookaburra-light-100 animate-spin'}
           title='In Progress'
         />
       );

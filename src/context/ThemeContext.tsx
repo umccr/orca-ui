@@ -31,7 +31,7 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
     const handleThemeChange = () => {
-      document.documentElement.classList.add('[&_*]:!transition-none');
+      document.documentElement.classList.add('**:transition-none!');
 
       const isDark = currentTheme === 'dark' || (currentTheme === 'system' && mediaQuery.matches);
 
@@ -44,7 +44,7 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
       }
 
       const transitionTimeout = setTimeout(() => {
-        document.documentElement.classList.remove('[&_*]:!transition-none');
+        document.documentElement.classList.remove('**:transition-none!');
       }, 1);
 
       return () => clearTimeout(transitionTimeout);
