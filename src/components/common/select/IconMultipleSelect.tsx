@@ -66,16 +66,16 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
         }
         position='top'
         background='light'
-        className='z-50 min-w-[150px] max-w-[400px] whitespace-normal'
+        className='z-50 max-w-[400px] min-w-[150px] whitespace-normal'
         size='small'
       >
         <MenuButton
           className={classNames(
-            'inline-flex items-center rounded border border-slate-200 p-1.5 leading-5 text-gray-400 shadow-sm',
+            'inline-flex items-center rounded-sm border border-slate-200 p-1.5 leading-5 text-gray-400 shadow-xs',
             'ring-1 ring-gray-300 ring-offset-0 ring-offset-gray-100',
             'hover:bg-magpie-light-50 hover:text-gray-600',
-            'data-[open]:bg-magpie-light-50 data-[open]:ring-2 data-[open]:ring-offset-0',
-            'focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-0 focus:ring-offset-gray-100',
+            'data-open:bg-magpie-light-50 data-open:ring-2 data-open:ring-offset-0',
+            'focus:ring-2 focus:ring-gray-300 focus:ring-offset-0 focus:ring-offset-gray-100 focus:outline-hidden',
             'transition duration-150 ease-in-out',
             className
           )}
@@ -91,10 +91,10 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
 
       <MenuItems
         transition
-        className='absolute right-0 z-10 mt-2 w-72 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0'
+        className='ring-opacity-5 absolute right-0 z-10 mt-2 w-72 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-hidden data-closed:scale-95 data-closed:opacity-0'
         anchor='bottom end'
       >
-        <div className='border-b border-gray-200 bg-gray-50 px-3 pb-2 pt-2 text-xs font-semibold uppercase text-slate-400 dark:text-slate-500'>
+        <div className='border-b border-gray-200 bg-gray-50 px-3 pt-2 pb-2 text-xs font-semibold text-slate-400 uppercase dark:text-slate-500'>
           Filters
         </div>
         {options.map((option, key) => (
@@ -137,10 +137,10 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
                     }
                   }}
                   disabled={option.disabled || false}
-                  className='group size-4 cursor-pointer rounded border border-gray-300 bg-gray-100 p-[1px] data-[disabled]:cursor-not-allowed data-[checked]:bg-blue-600 data-[disabled]:bg-gray-100 data-[disabled]:text-gray-400'
+                  className='group size-4 cursor-pointer rounded-sm border border-gray-300 bg-gray-100 p-[1px] data-checked:bg-blue-600 data-disabled:cursor-not-allowed data-disabled:bg-gray-100 data-disabled:text-gray-400'
                 >
                   <svg
-                    className='stroke-white opacity-0 group-data-[checked]:opacity-100'
+                    className='stroke-white opacity-0 group-data-checked:opacity-100'
                     viewBox='0 0 14 14'
                     fill='none'
                   >
@@ -153,10 +153,10 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
                   </svg>
                 </Checkbox>
 
-                <Label className='flex flex-grow flex-row items-center'>
+                <Label className='flex grow flex-row items-center'>
                   <div
                     className={classNames(
-                      'rounded px-2 text-sm font-normal data-[selected]:font-semibold group-data-[selected]:font-semibold',
+                      'rounded-sm px-2 text-sm font-normal group-data-selected:font-semibold data-selected:font-semibold',
                       option.disabled
                         ? 'cursor-not-allowed text-gray-500'
                         : 'cursor-pointer text-gray-900'
@@ -168,7 +168,7 @@ const IconMultipleSelect: FC<IconMultipleSelectProps> = ({
                   {option.secondaryLabel && (
                     <div
                       className={classNames(
-                        'text-xs text-gray-500 data-[selected]:font-semibold group-data-[focus]:text-indigo-200',
+                        'text-xs text-gray-500 group-data-focus:text-indigo-200 data-selected:font-semibold',
                         option.disabled ? 'cursor-not-allowed' : 'cursor-pointer'
                       )}
                     >

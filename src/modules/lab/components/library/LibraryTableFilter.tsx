@@ -112,7 +112,7 @@ export const LibraryTableFilter = () => {
         handleFilterChange={handleFilterChange}
       />
 
-      <div className='text-s mb-2 border-b-2 pb-2 font-thin italic text-gray-700'>
+      <div className='text-s mb-2 border-b-2 pb-2 font-thin text-gray-700 italic'>
         {`*Text input support multi value with comma separated value. E.g. "L000001,L000002"`}
       </div>
       <CoverageFilter

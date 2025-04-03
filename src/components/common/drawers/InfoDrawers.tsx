@@ -16,7 +16,7 @@ const Drawer: FC<DrawerProps> = ({ isOpen, setIsOpen, title, dialogPanelClassNam
     <Dialog open={isOpen} onClose={setIsOpen} className='relative z-50'>
       <DialogBackdrop
         transition
-        className='fixed inset-0 bg-black/30 backdrop-blur-sm transition-opacity duration-300 ease-in-out data-[closed]:opacity-0 dark:bg-black/50'
+        className='fixed inset-0 bg-black/30 backdrop-blur-xs transition-opacity duration-300 ease-in-out data-closed:opacity-0 dark:bg-black/50'
       />
 
       <div className='fixed inset-0 overflow-hidden'>
@@ -25,7 +25,7 @@ const Drawer: FC<DrawerProps> = ({ isOpen, setIsOpen, title, dialogPanelClassNam
             <DialogPanel
               transition
               className={classNames(
-                'pointer-events-auto w-full max-w-md transform transition duration-300 ease-in-out data-[closed]:translate-x-full',
+                'pointer-events-auto w-full max-w-md transform transition duration-300 ease-in-out data-closed:translate-x-full',
                 'bg-white shadow-lg shadow-black/10 dark:bg-gray-900 dark:shadow-black/30',
                 dialogPanelClassName ?? ''
               )}
@@ -39,7 +39,7 @@ const Drawer: FC<DrawerProps> = ({ isOpen, setIsOpen, title, dialogPanelClassNam
                     <button
                       type='button'
                       onClick={() => setIsOpen(false)}
-                      className='rounded-full p-2 text-gray-400 transition-colors duration-200 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-400 dark:focus:ring-indigo-400 dark:focus:ring-offset-gray-900'
+                      className='rounded-full p-2 text-gray-400 transition-colors duration-200 hover:bg-gray-100 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-400 dark:focus:ring-indigo-400 dark:focus:ring-offset-gray-900'
                     >
                       <span className='sr-only'>Close panel</span>
                       <XMarkIcon className='h-5 w-5' aria-hidden='true' />

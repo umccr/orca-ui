@@ -7,7 +7,7 @@ const JsonToTable = ({ data, className }: { data: Record<string, any>; className
     'font-bold px-4 py-3 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap';
   const valueClassName = 'px-4 py-3 text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap';
   const rowClassName =
-    '!border-b !border-gray-300 !dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors';
+    'border-b! border-gray-300! !dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors';
 
   const renderValue = (value: any) => {
     if (!value) {
@@ -40,7 +40,7 @@ const JsonToTable = ({ data, className }: { data: Record<string, any>; className
   return (
     <table
       className={classNames(
-        'w-full overflow-hidden rounded-lg border border-gray-200 shadow-sm dark:border-gray-700',
+        'w-full overflow-hidden rounded-lg border border-gray-200 shadow-xs dark:border-gray-700',
         className
       )}
     >

@@ -21,7 +21,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({
   return (
     <div className={classNames('flex h-full w-full', 'overflow-hidden', containerClassName)}>
       {sideBarPosition === 'left' && (
-        <div className={classNames('h-full flex-shrink-0', sideBarClassName)}>{sideBar}</div>
+        <div className={classNames('h-full shrink-0', sideBarClassName)}>{sideBar}</div>
       )}
 
       <main className={classNames('min-w-0 flex-1', 'h-full overflow-auto', 'px-4', mainClassName)}>
@@ -29,7 +29,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({
       </main>
 
       {sideBarPosition === 'right' && (
-        <div className={classNames('h-full flex-shrink-0', sideBarClassName)}>{sideBar}</div>
+        <div className={classNames('h-full shrink-0', sideBarClassName)}>{sideBar}</div>
       )}
     </div>
   );

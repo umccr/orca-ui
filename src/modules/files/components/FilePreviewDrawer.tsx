@@ -34,7 +34,7 @@ export const FilePreviewDrawer = ({ s3Record }: { s3Record: S3Record }) => {
             setIsOpen={(b) => {
               setIsFilePreview(b);
             }}
-            dialogPanelClassName='!max-w-full'
+            dialogPanelClassName='max-w-full!'
             content={
               <DetailedErrorBoundary errorTitle='Unable to open file viewer'>
                 <Suspense fallback={<Spinner />}>
@@ -44,7 +44,7 @@ export const FilePreviewDrawer = ({ s3Record }: { s3Record: S3Record }) => {
             }
           />
           <Button
-            className='!m-0 bg-transparent !p-2 !shadow-none focus:ring-0 focus:ring-offset-0'
+            className='m-0! bg-transparent p-2! shadow-none! focus:ring-0 focus:ring-offset-0'
             onClick={() => {
               setIsFilePreview(true);
             }}
@@ -58,11 +58,11 @@ export const FilePreviewDrawer = ({ s3Record }: { s3Record: S3Record }) => {
         </>
       ) : (
         <div className='group relative'>
-          <span className='invisible absolute -mt-8 rounded bg-gray-100 p-1 text-red-500 shadow-lg group-hover:visible group-hover:z-50'>
+          <span className='invisible absolute -mt-8 rounded-sm bg-gray-100 p-1 text-red-500 shadow-lg group-hover:visible group-hover:z-50'>
             {!isFileAllowed ? 'File type is not supported' : 'File size is too large'}
           </span>
           <Button
-            className='!m-0 bg-transparent !p-2 !shadow-none focus:ring-0 focus:ring-offset-0'
+            className='m-0! bg-transparent p-2! shadow-none! focus:ring-0 focus:ring-offset-0'
             rounded
             size='md'
             type='gray'

@@ -17,7 +17,7 @@ const SequenceRunDetailsPage = () => {
   return (
     <SequenceRunProvider>
       <div className='no-scrollbar flex min-h-screen w-full overflow-y-auto'>
-        <div className='flex-grow'>
+        <div className='grow'>
           <SideBarLayout
             main={
               <div className='flex flex-col gap-4'>

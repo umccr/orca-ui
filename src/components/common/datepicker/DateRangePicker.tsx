@@ -58,7 +58,7 @@ const DateRangePicker: FC<DateRangePickerProps> = ({ align, startDate, endDate, 
   return (
     <div className='relative'>
       <FlatpickrComponent
-        className='form-input w-[15.5rem] rounded-lg border-0 bg-white py-1.5 !pl-9 font-medium text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 hover:bg-magpie-light-25 hover:text-slate-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-slate-200'
+        className='form-input hover:bg-magpie-light-25 w-[15.5rem] rounded-lg border-0 bg-white py-1.5 pl-9! font-medium text-gray-900 ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 hover:text-slate-600 focus:ring-2 focus:ring-indigo-600 focus:ring-inset sm:text-sm sm:leading-6 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-slate-200'
         options={options}
         value={
           selectedStartDate && selectedEndDate

@@ -32,18 +32,18 @@ const SideDrawer: FC<DrawerProps> = ({
     <Dialog open={isOpen} onClose={onClose} className='relative z-30'>
       {/* <DialogBackdrop
         transition
-        className='fixed inset-0 bg-magpie-light-75 bg-opacity-75 data-[closed]:opacity-0' //transition-opacity duration-200 ease-in-out
+        className='fixed inset-0 bg-magpie-light-75 bg-opacity-75 data-closed:opacity-0' //transition-opacity duration-200 ease-in-out
       /> */}
       <DialogBackdrop
         transition
-        className='fixed inset-0 bg-gray-500/75 backdrop-blur-sm transition-opacity duration-300 dark:bg-gray-900/80'
+        className='fixed inset-0 bg-gray-500/75 backdrop-blur-xs transition-opacity duration-300 dark:bg-gray-900/80'
       />
 
       <div className='pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16'>
         <DialogPanel
           transition
           className={classNames(
-            'pointer-events-auto w-screen transform shadow-2xl transition-all duration-300 ease-in-out data-[closed]:translate-x-full',
+            'pointer-events-auto w-screen transform shadow-2xl transition-all duration-300 ease-in-out data-closed:translate-x-full',
             'border-l border-gray-200 dark:border-gray-800',
             sizeToWidth[size],
             dialogPanelClassName
@@ -54,7 +54,7 @@ const SideDrawer: FC<DrawerProps> = ({
             <div className='bg-gray-50 px-4 py-6 sm:px-6 dark:bg-gray-800/50'>
               <div className='flex items-start justify-between space-x-3'>
                 <div className='space-y-1'>
-                  <DialogTitle className='text-lg font-semibold leading-6 text-gray-900 dark:text-white'>
+                  <DialogTitle className='text-lg leading-6 font-semibold text-gray-900 dark:text-white'>
                     {title}
                   </DialogTitle>
                   {subtitle && (

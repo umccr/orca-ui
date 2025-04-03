@@ -104,14 +104,14 @@ export const DropdownWithDisabledItems: Story = {
 
 export const IconDropdownStory: Story = {
   render: () => {
-    return <IconDropdown items={exampleItems} className='!bg-blue-700 !text-white' />;
+    return <IconDropdown items={exampleItems} className='bg-blue-700! text-white!' />;
   },
 };
 
 export const IconDropdownWithPlusIcon: Story = {
   render: () => {
     return (
-      <IconDropdown items={exampleItems} BtnIcon={PlusIcon} className='!bg-blue-700 !text-white' />
+      <IconDropdown items={exampleItems} BtnIcon={PlusIcon} className='bg-blue-700! text-white!' />
     );
   },
 };

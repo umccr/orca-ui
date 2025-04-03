@@ -16,22 +16,22 @@ export interface IconDropdownProps {
   className?: string;
   items: DropdownItemProps[];
   menuClassName?: string;
-  type?: 'rounded' | 'square';
+  type?: 'rounded-sm' | 'square';
 }
 
 const IconDropdown: FC<IconDropdownProps> = ({
   BtnIcon = EllipsisVerticalIcon,
   className = '',
   items,
-  type = 'rounded',
+  type = 'rounded-sm',
   menuClassName = '',
 }) => {
-  const roundedClass = type === 'rounded' ? 'rounded-full' : 'rounded-md';
+  const roundedClass = type === 'rounded-sm' ? 'rounded-full' : 'rounded-md';
   return (
     <Menu as='div' className='relative inline-block text-left'>
       <MenuButton
         className={classNames(
-          'flex items-center p-0.5 text-gray-400 hover:bg-magpie-light-50 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 focus:ring-offset-gray-100 data-[open]:bg-magpie-light-50 data-[open]:ring-2 data-[open]:ring-offset-2',
+          'hover:bg-magpie-light-50 data-open:bg-magpie-light-50 flex items-center p-0.5 text-gray-400 hover:text-gray-600 focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 focus:ring-offset-gray-100 focus:outline-hidden data-open:ring-2 data-open:ring-offset-2',
           className,
           roundedClass
         )}
@@ -42,7 +42,7 @@ const IconDropdown: FC<IconDropdownProps> = ({
 
       <MenuItems
         className={classNames(
-          'absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0',
+          'ring-opacity-5 absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-hidden data-closed:scale-95 data-closed:opacity-0',
           menuClassName
         )}
         transition
@@ -58,7 +58,7 @@ const IconDropdown: FC<IconDropdownProps> = ({
                     item.disabled
                       ? 'cursor-not-allowed bg-gray-100 text-gray-300'
                       : 'text-gray-700',
-                    'group flex w-full flex-row items-center gap-4 px-4 py-2 text-left text-sm data-[focus]:bg-gray-100 data-[focus]:text-gray-900'
+                    'group flex w-full flex-row items-center gap-4 px-4 py-2 text-left text-sm data-focus:bg-gray-100 data-focus:text-gray-900'
                   )}
                   onClick={item.onClick}
                 >

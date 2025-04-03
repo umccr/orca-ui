@@ -30,7 +30,7 @@ const ButtonGroup: FC<ButtonGroupProps> = ({ buttonItems, selectedItemLabel }) =
     'transition-all duration-200 ease-in-out', // Smoother transition
     'hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900', // Enhanced hover state
     'dark:hover:bg-slate-700 dark:hover:border-slate-600 dark:hover:text-white',
-    'shadow-sm hover:shadow', // Enhanced shadow on hover
+    'shadow-xs hover:shadow-sm', // Enhanced shadow on hover
     'active:scale-95' // Subtle click animation
   );
 
@@ -38,7 +38,7 @@ const ButtonGroup: FC<ButtonGroupProps> = ({ buttonItems, selectedItemLabel }) =
     'bg-indigo-500 hover:bg-indigo-600', // Darker hover state
     'border-transparent', // Remove border when selected
     'text-white hover:text-white',
-    'shadow-sm hover:shadow-md',
+    'shadow-xs hover:shadow-md',
     'dark:bg-indigo-500 dark:hover:bg-indigo-600',
     'dark:border-transparent',
     'focus:ring-indigo-500' // Matching focus ring

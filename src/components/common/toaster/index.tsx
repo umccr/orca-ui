@@ -40,7 +40,7 @@ export const Msg: FC<MsgProps> = ({ title, message, type }) => {
           {title}
         </h3>
         {message && (
-          <p className='text-current/80 break-words text-xs font-normal leading-relaxed'>
+          <p className='text-xs leading-relaxed font-normal break-words text-current/80'>
             {message}
           </p>
         )}

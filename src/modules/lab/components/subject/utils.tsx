@@ -58,7 +58,7 @@ export const getSubjectTableColumn = ({
               <Link
                 to={`/lab/?tab=subject&orcabusId=${sbj.subjectOrcabusId}`}
                 className={classNames(
-                  'ml-2 text-sm font-medium capitalize text-blue-500 hover:text-blue-700'
+                  'ml-2 text-sm font-medium text-blue-500 capitalize hover:text-blue-700'
                 )}
               >
                 {sbj.subjectId ?? '-'}

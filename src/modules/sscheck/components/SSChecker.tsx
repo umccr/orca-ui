@@ -63,7 +63,7 @@ export const SSChecker = () => {
         <div className='flex w-44 flex-row text-sm'>Sample sheet file</div>
         <div className='flex w-full flex-wrap rounded-lg px-1 py-1'>
           <input
-            className='block h-10 w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 placeholder-gray-400 file:h-full file:border-0 focus:outline-none'
+            className='block h-10 w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 file:mr-4 file:cursor-pointer file:rounded-l-md file:border-0 file:border-r file:border-gray-300 file:bg-gray-100 file:px-4 file:py-2 file:text-sm file:font-medium file:text-gray-700 hover:file:bg-gray-50 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:file:border-gray-600 dark:file:bg-gray-800 dark:file:text-gray-400 dark:hover:file:bg-gray-700'
             type='file'
             onChange={(e) => {
               if (e.target.files && e.target.files[0]) {

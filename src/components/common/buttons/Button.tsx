@@ -30,7 +30,7 @@ const Button: FC<ButtonProps> = ({
   tooltipBackground = 'dark',
 }) => {
   const baseStyles =
-    'relative inline-flex gap-2 items-center justify-center font-medium tracking-wide transition-all duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-offset-2 active:transform active:scale-90 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none';
+    'relative inline-flex gap-2 items-center justify-center font-medium tracking-wide transition-all duration-200 ease-in-out focus:outline-hidden focus:ring-1 focus:ring-offset-2 active:transform active:scale-90 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none';
 
   const typeStyles: { [key: string]: string } = {
     primary:
@@ -70,8 +70,8 @@ const Button: FC<ButtonProps> = ({
         baseStyles,
         typeStyles[type],
         sizeStyles[size],
-        rounded ? 'rounded-full' : 'rounded',
-        disabled ? 'cursor-not-allowed opacity-50 hover:!bg-transparent' : ' ',
+        rounded ? 'rounded-full' : 'rounded-sm',
+        disabled ? 'cursor-not-allowed opacity-50 hover:bg-transparent!' : ' ',
         loading ? 'cursor-wait' : ' ',
         className
       )}
@@ -79,7 +79,7 @@ const Button: FC<ButtonProps> = ({
       disabled={disabled}
     >
       {loading ? (
-        <span className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
+        <span className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
           <svg className='h-5 w-5 animate-spin' viewBox='0 0 24 24'>
             <circle
               className='opacity-25'

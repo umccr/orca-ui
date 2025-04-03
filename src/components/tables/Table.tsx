@@ -53,7 +53,7 @@ const Table: FC<TableProps> = ({
       <div className='sm:flex sm:items-center'>
         <div className='sm:flex-auto'>
           {tableHeader && (
-            <h1 className='text-base font-semibold leading-7 text-gray-900 dark:text-gray-100'>
+            <h1 className='text-base leading-7 font-semibold text-gray-900 dark:text-gray-100'>
               {tableHeader}
             </h1>
           )}
@@ -70,7 +70,7 @@ const Table: FC<TableProps> = ({
             <div
               className={classNames(
                 inCard
-                  ? 'overflow-hidden border-2 border-gray-500 border-opacity-5 sm:rounded-lg'
+                  ? 'border-opacity-5 overflow-hidden border-2 border-gray-500 sm:rounded-lg'
                   : ''
               )}
             >
@@ -116,11 +116,11 @@ const Table: FC<TableProps> = ({
                             'divide-y divide-gray-200 dark:divide-gray-700',
                             'transition-colors duration-200',
                             column.onSort &&
-                              '!cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700/50',
+                              'cursor-pointer! hover:bg-gray-100 dark:hover:bg-gray-700/50',
                             index == 0 ? 'pl-4 sm:pl-6 lg:pl-8' : '',
                             index == columns.length - 1 ? 'pr-4 sm:pr-6 lg:pr-8' : '',
                             stickyHeader
-                              ? 'sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75'
+                              ? 'bg-opacity-75 sticky top-0 z-10 border-b border-gray-300 bg-white'
                               : '',
                             column.headerClassName ? column.headerClassName : ''
                           )}
@@ -131,7 +131,7 @@ const Table: FC<TableProps> = ({
                           >
                             {column.header}
                             {column.sortDirection && (
-                              <span className='visible ml-2 flex-none rounded text-gray-400'>
+                              <span className='visible ml-2 flex-none rounded-sm text-gray-400'>
                                 <ChevronDownIcon
                                   className={classNames(
                                     'h-5 w-5 cursor-pointer stroke-gray-500 opacity-100 transition-opacity duration-200',
@@ -176,7 +176,7 @@ const Table: FC<TableProps> = ({
                               <td
                                 key={index}
                                 className={classNames(
-                                  'whitespace-nowrap px-3 py-2 text-sm',
+                                  'px-3 py-2 text-sm whitespace-nowrap',
                                   'text-gray-900 dark:text-gray-400',
                                   index == 0 ? 'pl-4 sm:pl-6' : '',
                                   index == columns.length - 1 ? 'pr-4 sm:pr-6' : '',
@@ -196,7 +196,7 @@ const Table: FC<TableProps> = ({
                                     <Tooltip text='Copy' size='small' background='light'>
                                       <ClipboardDocumentIcon
                                         className={classNames(
-                                          'h-5 w-5 !cursor-pointer',
+                                          'h-5 w-5 cursor-pointer!',
                                           'stroke-gray-600 dark:stroke-gray-400',
                                           'opacity-0 group-hover:opacity-100',
                                           'transition-all duration-200',
@@ -224,7 +224,7 @@ const Table: FC<TableProps> = ({
                           {columns.map((_column, index) => (
                             <td
                               key={index}
-                              className='whitespace-nowrap px-3 py-2 text-sm font-medium text-gray-900'
+                              className='px-3 py-2 text-sm font-medium whitespace-nowrap text-gray-900'
                             >
                               <Skeleton />
                             </td>

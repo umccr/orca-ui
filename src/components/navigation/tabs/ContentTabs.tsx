@@ -32,7 +32,7 @@ export const Tabs: FC<TabsProps> = ({
   }, [selectedLabel, tabs]);
 
   const selectedClassName =
-    'border-blue-500 text-blue-500 rounded-t-lg active dark:text-blue-500 focus:outline-none';
+    'border-blue-500 text-blue-500 rounded-t-lg active dark:text-blue-500 focus:outline-hidden';
   const regularClassName =
     'border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300';
 

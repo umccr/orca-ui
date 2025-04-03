@@ -24,7 +24,7 @@ export const LinkTabs: FC<LinkTabsProps> = ({ tabs, className }) => {
           id='tabs'
           name='tabs'
           defaultValue={tabs.find((tab) => tab.current)?.name}
-          className='block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-blue-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:bg-gray-800 dark:text-gray-300'
+          className='block w-full rounded-md border-gray-300 py-2 pr-10 pl-3 text-base focus:border-blue-500 focus:ring-indigo-500 focus:outline-hidden sm:text-sm dark:bg-gray-800 dark:text-gray-300'
           onChange={(e) => {
             navigate(e.target.value);
           }}
@@ -48,7 +48,7 @@ export const LinkTabs: FC<LinkTabsProps> = ({ tabs, className }) => {
                   tab.current
                     ? 'border-blue-500 text-blue-500'
                     : 'border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700',
-                  'flex whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium'
+                  'flex border-b-2 px-1 py-4 text-sm font-medium whitespace-nowrap'
                 )}
               >
                 <span>{tab.name}</span>
