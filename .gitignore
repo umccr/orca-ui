@@ -52,3 +52,4 @@ public/assets/metadata-schema.svg
 
 # ignore cursor rules
 .cursorrules
+.cursor
