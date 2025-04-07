@@ -53,17 +53,18 @@ const StatesDialog: FC<StatesDialogProps> = ({
                   <div className='mb-1 pt-1 text-xs font-medium'>
                     Please select the state status:
                   </div>
-                  <div className='flex flex-wrap gap-1'>
+                  <div className='flex flex-wrap gap-2'>
                     {validStatesToCreate?.map((state, idx) => (
                       <label
                         key={idx}
-                        className='flex cursor-pointer items-center rounded-md border px-2 py-1 transition-colors'
+                        className='flex cursor-pointer items-center gap-2 rounded-md border px-2 py-2 transition-colors'
                       >
                         <input
                           type='radio'
                           name='state'
                           value={state}
                           onChange={() => setSelectedState?.(state)}
+                          className='focus:ring-0 focus:ring-offset-0 focus:outline-none'
                         />
                         <span className='ml-1 text-xs font-medium'>{state}</span>
                       </label>

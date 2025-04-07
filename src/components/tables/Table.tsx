@@ -112,29 +112,46 @@ const Table: FC<TableProps> = ({
                           scope='col'
                           className={classNames(
                             'px-3 py-3 text-left text-sm font-semibold',
-                            'text-gray-900 dark:bg-gray-800/50 dark:text-gray-200',
-                            'divide-y divide-gray-200 dark:divide-gray-700',
-                            'transition-colors duration-200',
-                            column.onSort &&
-                              'cursor-pointer! hover:bg-gray-100 dark:hover:bg-gray-700/50',
-                            index == 0 ? 'pl-4 sm:pl-6 lg:pl-8' : '',
-                            index == columns.length - 1 ? 'pr-4 sm:pr-6 lg:pr-8' : '',
-                            stickyHeader
-                              ? 'bg-opacity-75 sticky top-0 z-10 border-b border-gray-300 bg-white'
-                              : '',
-                            column.headerClassName ? column.headerClassName : ''
+                            'bg-gray-50 text-gray-900',
+                            'dark:bg-gray-800/90 dark:text-gray-200',
+                            'border-b border-gray-200 dark:border-gray-700',
+                            'transition-all duration-200 ease-in-out',
+                            column.onSort && [
+                              'cursor-pointer',
+                              'hover:bg-gray-100 dark:hover:bg-gray-700/80',
+                              'group relative',
+                            ],
+                            index === 0 ? 'pl-4 sm:pl-6 lg:pl-8' : '',
+                            index === columns.length - 1 ? 'pr-4 sm:pr-6 lg:pr-8' : '',
+                            stickyHeader && [
+                              'sticky top-0 z-10',
+                              'backdrop-blur-sm backdrop-saturate-150',
+                              'bg-white/90 dark:bg-gray-800/90',
+                              'shadow-sm dark:shadow-gray-900/10',
+                            ],
+                            column.headerClassName
                           )}
                           onClick={() => column.onSort && column.onSort()}
                         >
                           <div
-                            className={classNames(column.onSort ? 'group inline-flex gap-2' : '')}
+                            className={classNames(
+                              'flex items-center gap-2',
+                              column.onSort && [
+                                'group/sort',
+                                'text-gray-900 dark:text-gray-200',
+                                'hover:text-gray-950 dark:hover:text-white',
+                              ]
+                            )}
                           >
                             {column.header}
                             {column.sortDirection && (
-                              <span className='visible ml-2 flex-none rounded-sm text-gray-400'>
+                              <span className='flex items-center'>
                                 <ChevronDownIcon
                                   className={classNames(
-                                    'h-5 w-5 cursor-pointer stroke-gray-500 opacity-100 transition-opacity duration-200',
+                                    'h-5 w-5',
+                                    'text-gray-400 dark:text-gray-500',
+                                    'group-hover/sort:text-gray-600 dark:group-hover/sort:text-gray-300',
+                                    'transition-all duration-200',
                                     column.sortDirection === 'asc' ? '-rotate-180' : 'rotate-0'
                                   )}
                                 />

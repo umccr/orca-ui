@@ -126,7 +126,7 @@ const WorkflowRunFilterHeader = () => {
   return (
     <>
       <div className='flex w-full flex-row items-center justify-between gap-1 p-2 md:flex-row'>
-        <div className='w-1/4'>
+        <div className='w-1/3'>
           <Search
             onSearch={(searchContent) => setQueryParams({ search: searchContent })}
             searchBoxContent={getQueryParams().search || ''}
@@ -155,7 +155,7 @@ const WorkflowRunFilterHeader = () => {
             />
           </div>
 
-          <div className='flex-none px-0'>
+          <div className='flex-none'>
             <Tooltip text='Clear all filters' size='small' background='light'>
               <Button
                 size='md'
@@ -163,11 +163,18 @@ const WorkflowRunFilterHeader = () => {
                   clearQueryParams();
                 }}
                 className={classNames(
-                  'inline-flex items-center rounded-sm border border-slate-200 bg-white p-1.5 leading-5 text-gray-400 shadow-xs',
-                  'ring-1 ring-gray-300 ring-offset-0 ring-offset-gray-100',
-                  'hover:bg-magpie-light-50 hover:text-gray-600',
-                  'focus:ring-2 focus:ring-gray-300 focus:ring-offset-0 focus:ring-offset-gray-100 focus:outline-hidden',
-                  'transition duration-150 ease-in-out'
+                  'inline-flex items-center rounded-md p-1.5',
+                  'border border-gray-200 dark:border-gray-700',
+                  'bg-white dark:bg-gray-800',
+                  'text-gray-500 dark:text-gray-400',
+                  'shadow-sm dark:shadow-gray-900/30',
+                  'hover:bg-gray-50 dark:hover:bg-gray-700/50',
+                  'hover:text-gray-600 dark:hover:text-gray-300',
+                  'hover:border-gray-300 dark:hover:border-gray-600',
+                  'focus:ring-2 focus:outline-none',
+                  'focus:ring-blue-500/30 dark:focus:ring-blue-400/30',
+                  'active:bg-gray-100 dark:active:bg-gray-700',
+                  'transition-all duration-200'
                 )}
               >
                 <XCircleIcon className='h-5 w-5' />
