@@ -115,6 +115,16 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement 
   const initializeAuth = useCallback(async () => {
     setIsAuthenticating(true);
 
+    // check local storage to see if has cognito info (start with CognitoIdentityServiceProvider)
+    // if no cognito info, set isAuthenticating to false, else continue to fetch user info
+    const hasCognitoInfo = Object.keys(localStorage).some((key) =>
+      key.startsWith('CognitoIdentityServiceProvider')
+    );
+    if (!hasCognitoInfo) {
+      setIsAuthenticating(false);
+      return;
+    }
+
     try {
       const user = await fetchUserAttributes();
       dispatch({ type: AuthActionTypes.INIT, payload: { isAuthenticated: true, user } });
