@@ -12,18 +12,12 @@ const clientId = env.VITE_UNSPLASH_CLIENT_ID;
 
 function Copyright() {
   return (
-    <div
-      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}
-    >
-      <p>{'©'}&nbsp;</p>
-      <a
-        style={{ color: 'white', textDecoration: 'underline', fontSize: 'small' }}
-        href='https://umccr.org'
-      >
-        {'UMCCR'}
+    <div className='flex items-center justify-center'>
+      <span className='text-white/80'>© </span>
+      <a href='https://umccr.org' className='mx-1 text-white/80 underline hover:text-white'>
+        UMCCR
       </a>
-      &nbsp;
-      <p>{new Date().getFullYear()}</p>
+      <span className='text-white/80'>{new Date().getFullYear()}</span>
     </div>
   );
 }
@@ -34,49 +28,41 @@ function SignInContainer() {
 
   const loggingIn = () => {
     setIsLoading(true);
-
-    // signInWithRedirect() will redirect out from page (Not expecting to setIsLoading(false))
     signInWithGoogle();
   };
-  const header = (
-    <div className='flex items-center justify-center p-[20px]' style={{ padding: '20px' }}>
-      <img
-        src='/assets/logo/uomlogo.png'
-        style={{ width: '30%', height: 'auto' }}
-        alt='uomlogo.png'
-      />
-    </div>
-  );
-
-  const footer = (
-    <span>
-      <Button onClick={() => loggingIn()} className='bg-regal-blue w-full text-center focus:ring-0'>
-        {isLoading ? (
-          <>
-            <Spinner />
-            <div className='w-full pr-6 text-center'>Signing</div>
-          </>
-        ) : (
-          <div className='w-full text-center'>Sign in</div>
-        )}
-      </Button>
-      <Copyright />
-    </span>
-  );
 
   return (
     <div className='flex h-full w-full items-center justify-center bg-transparent'>
-      <Card className='bg-opacity-10 shadow-inner-lg w-[40rem] rounded-lg border border-transparent bg-white p-5 backdrop-blur-xs'>
-        {header}
-        <div style={{ textAlign: 'justify', color: 'white' }}>
-          <h1 style={{ fontSize: '2em', textAlign: 'center' }}>UMCCR Orcabus</h1>
-          <p className='m-2' style={{ lineHeight: '1.5' }}>
+      <Card className='w-[40rem] border border-gray-700/30 bg-gray-800/30 shadow-2xl backdrop-blur-none'>
+        <div className='flex items-center justify-center p-[20px]'>
+          <img src='/assets/logo/uomlogo.png' className='h-auto w-[30%]' alt='uomlogo.png' />
+        </div>
+        <div className='px-5 text-center'>
+          <h1 className='mb-4 text-[2em] text-white'>UMCCR Orcabus</h1>
+          <p className='mb-6 text-left leading-relaxed text-white/80'>
             Led by Professor Sean Grimmond, UMCCR aims to foster innovation and integration in
             cancer care, research, education and training to achieve a world-leading cancer centre
             and workforce.
           </p>
         </div>
-        {footer}
+        <div className='px-5 pb-5'>
+          <Button
+            onClick={loggingIn}
+            className='w-full rounded-md bg-[#00204E] py-3 text-white shadow-lg transition-colors hover:bg-[#002c6e]'
+          >
+            {isLoading ? (
+              <div className='flex items-center justify-center'>
+                <Spinner className='mr-2' />
+                <span>Sign in</span>
+              </div>
+            ) : (
+              <span>Sign in</span>
+            )}
+          </Button>
+          <div className='mt-4'>
+            <Copyright />
+          </div>
+        </div>
       </Card>
     </div>
   );
@@ -101,7 +87,6 @@ function SignInPage() {
       })
       .then((result) => {
         if (result.errors) {
-          // console.log('error occurred: ', result.errors[0]);
           setImageUrl('iStock-529081597-2.jpg');
         } else {
           const randoms: Random[] = result.response as Random[];
@@ -112,12 +97,10 @@ function SignInPage() {
         }
       })
       .catch(() => {
-        // console.log('fetch error occurred: ', err);
         setImageUrl('iStock-529081597-2.jpg');
       });
   }, []);
 
-  // if user Already signedIn, redirect to HomePage, avoid render signIn page
   if (isAuthenticated) {
     return <Navigate replace to='/' />;
   }
@@ -126,47 +109,30 @@ function SignInPage() {
     <div className='absolute h-full w-full overflow-hidden'>
       {!imageUrl && <Spinner className='w-[6px]' />}
       <div
-        className='bg-grey bg-[url(imageUrl) bg-center] absolute -z-1 h-full w-full bg-cover bg-no-repeat'
+        className='absolute inset-0 bg-gray-900 bg-cover bg-center'
         style={{
-          backgroundColor: 'grey',
-          height: '100%',
-          width: '100%',
-          zIndex: -1,
-          backgroundImage:
-            'linear-gradient(rgba(0, 0, 0, 0.527),rgba(0, 0, 0, 0.5)), url(' + imageUrl + ')',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${imageUrl})`,
         }}
       />
-      <div className='z-1 flex h-full items-center justify-center'>
+      <div className='relative flex h-full items-center justify-center'>
         <SignInContainer />
       </div>
       {userLink && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: 0,
-            right: 0,
-            padding: '20px',
-            fontSize: 'small',
-            color: 'lightgrey',
-          }}
-        >
-          Photo by&nbsp;
+        <div className='fixed right-0 bottom-0 p-5 text-sm text-white/60'>
+          Photo by{' '}
           <a
-            style={{ fontSize: 'small', color: 'lightgrey', textDecoration: 'underline' }}
-            href={userLink + '?utm_source=umccr_data_portal&utm_medium=referral'}
-            target={'_blank'}
+            className='text-white/60 underline hover:text-white'
+            href={`${userLink}?utm_source=umccr_data_portal&utm_medium=referral`}
+            target='_blank'
             rel='noreferrer'
           >
             {userName}
-          </a>
-          &nbsp;on&nbsp;
+          </a>{' '}
+          on{' '}
           <a
-            style={{ fontSize: 'small', color: 'lightgrey', textDecoration: 'underline' }}
-            href={imageLink + '?utm_source=umccr_data_portal&utm_medium=referral'}
-            target={'_blank'}
+            className='text-white/60 underline hover:text-white'
+            href={`${imageLink}?utm_source=umccr_data_portal&utm_medium=referral`}
+            target='_blank'
             rel='noreferrer'
           >
             Unsplash
