@@ -30,9 +30,23 @@ export const getSubjectTableColumn = ({
         </Tooltip>
       </div>
     ),
-    headerClassName: headerClassName,
+    headerClassName: classNames(
+      'bg-amber-50/80 dark:bg-amber-950/20',
+      'text-gray-900 dark:text-gray-100',
+      'transition-colors duration-200',
+      headerClassName
+    ),
     // The length of Column array is 1
-    headerGroup: { label: headerGroupLabel, colSpan: 1, additionalClassName: headerClassName },
+    headerGroup: {
+      label: headerGroupLabel,
+      colSpan: 1,
+      additionalClassName: classNames(
+        'bg-amber-50/80 dark:bg-amber-950/20',
+        'text-gray-900 dark:text-gray-100',
+        'transition-colors duration-200',
+        headerClassName
+      ),
+    },
     onSort: setSort
       ? () => {
           setSort(getSortValue(currentSort, 'subject_id'));
@@ -58,7 +72,8 @@ export const getSubjectTableColumn = ({
               <Link
                 to={`/lab/?tab=subject&orcabusId=${sbj.subjectOrcabusId}`}
                 className={classNames(
-                  'ml-2 text-sm font-medium text-blue-500 capitalize hover:text-blue-700'
+                  'ml-2 text-sm font-medium text-blue-500 capitalize hover:text-blue-700',
+                  'dark:text-blue-400 dark:hover:text-blue-300'
                 )}
               >
                 {sbj.subjectId ?? '-'}
@@ -68,6 +83,10 @@ export const getSubjectTableColumn = ({
         </>
       );
     },
-    cellClassName: cellClassName,
+    cellClassName: classNames(
+      'bg-amber-50/60 dark:bg-amber-950/10',
+      'transition-colors duration-200',
+      cellClassName
+    ),
   },
 ];

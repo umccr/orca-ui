@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { ClosePopoverWrapper, PopoverDropdown } from '@/components/common/dropdowns';
 import { useQueryParams } from '@/hooks/useQueryParams';
-
 import { Button } from '@/components/common/buttons';
 import { FunnelIcon } from '@heroicons/react/24/outline';
 import { FilterTextInput } from '../utils';
+import { classNames } from '@/utils/commonUtils';
 
 type FilterType = {
   orcabusId?: string[];
@@ -26,23 +26,26 @@ export const IndividualTableFilter = () => {
   };
 
   const IndividualFilter = () => (
-    <>
+    <div className='space-y-4'>
       <FilterTextInput
         title='Orcabus ID *'
         keyFilter='orcabusId'
-        defaultInput={filter.orcabusId ? filter.orcabusId : []}
+        defaultInput={filter.orcabusId || []}
         handleFilterChange={handleFilterChange}
+        placeholder='Enter Orcabus IDs...'
       />
       <FilterTextInput
         title='Individual ID *'
         keyFilter='individualId'
-        defaultInput={filter.individualId ? filter.individualId : []}
+        defaultInput={filter.individualId || []}
         handleFilterChange={handleFilterChange}
+        placeholder='Enter Individual IDs...'
       />
-      <div className='text-s mb-2 border-b-2 pb-2 font-thin text-gray-700 italic'>
-        {`*Text input support multi value with comma separated value. E.g. "L000001,L000002"`}
+      <div className='border-b border-gray-200 pb-3 text-xs text-gray-500 italic dark:border-gray-700 dark:text-gray-400'>
+        * Text inputs support multiple values with comma separation (e.g.,
+        &quot;L000001,L000002&quot;)
       </div>
-    </>
+    </div>
   );
 
   return (
@@ -51,37 +54,43 @@ export const IndividualTableFilter = () => {
         <Button
           type='gray'
           size='sm'
-          className='w-full justify-center rounded-md ring-1 ring-gray-300'
+          className={classNames(
+            'w-full justify-center rounded-md',
+            'ring-1 ring-gray-300 dark:ring-gray-700',
+            'hover:bg-gray-50 dark:hover:bg-gray-800',
+            'transition-colors duration-200'
+          )}
         >
           <FunnelIcon className='h-5 w-5' />
         </Button>
       }
       content={
-        <div className='z-10 w-80 rounded-lg bg-white'>
-          <div className='max-h-[500px] overflow-y-auto px-3 pb-3 text-sm text-gray-700'>
+        <div className='w-80 rounded-lg bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-900 dark:ring-white/10'>
+          <div className='max-h-[500px] overflow-y-auto p-4 text-sm'>
             <IndividualFilter />
           </div>
-          <ClosePopoverWrapper className='mt-4'>
-            <Button
-              className='w-full justify-center'
-              type='red'
-              onClick={() => {
-                clearQueryParams();
-              }}
-            >
-              Reset
-            </Button>
-          </ClosePopoverWrapper>
 
-          <Button
-            className='mt-2 w-full justify-center'
-            type='primary'
-            onClick={() => {
-              setQueryParams({ ...filter }, true);
-            }}
-          >
-            Apply
-          </Button>
+          <div className='space-y-2 border-t border-gray-200 p-4 dark:border-gray-700'>
+            <ClosePopoverWrapper>
+              <Button
+                className='w-full justify-center'
+                type='red'
+                onClick={() => clearQueryParams()}
+              >
+                Reset
+              </Button>
+            </ClosePopoverWrapper>
+
+            <ClosePopoverWrapper>
+              <Button
+                className='w-full justify-center'
+                type='primary'
+                onClick={() => setQueryParams({ ...filter }, true)}
+              >
+                Apply
+              </Button>
+            </ClosePopoverWrapper>
+          </div>
         </div>
       }
     />

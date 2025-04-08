@@ -135,7 +135,7 @@ export default function LibraryWorkflowPage() {
   return (
     <div>
       {/* Header */}
-      <div className='flex flex-row justify-between'>
+      <div className='flex flex-row justify-between gap-2'>
         <div className='flex flex-row'>
           <h1 className='flex h-full items-center font-bold'>{`${workflowType}`}</h1>
           <WorkflowDialogDetail

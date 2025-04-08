@@ -1,4 +1,5 @@
 import { Column } from '@/components/tables';
+import { classNames } from '@/utils/commonUtils';
 import { getCurrentSortDirection, getSortValue, multiRowCell } from '@/components/tables/Table';
 
 export const getContactTableColumn = ({
@@ -16,9 +17,23 @@ export const getContactTableColumn = ({
 }): Column[] => [
   {
     header: 'Contact Id',
-    headerClassName: headerClassName,
+    headerClassName: classNames(
+      'bg-purple-50/80 dark:bg-purple-950/20',
+      'text-gray-900 dark:text-gray-100',
+      'transition-colors duration-200',
+      headerClassName
+    ),
     // colSpan=2 because the length of Column array
-    headerGroup: { colSpan: 2, label: headerGroupLabel, additionalClassName: headerClassName },
+    headerGroup: {
+      colSpan: 2,
+      label: headerGroupLabel,
+      additionalClassName: classNames(
+        'bg-purple-50/80 dark:bg-purple-950/20',
+        'text-gray-900 dark:text-gray-100',
+        'transition-colors duration-200',
+        headerClassName
+      ),
+    },
     accessor: 'contactIds',
     onSort: setSort
       ? () => {
@@ -39,27 +54,43 @@ export const getContactTableColumn = ({
 
       return (
         <>
-          {data.map((prj, idx) => (
-            <div className='py-2' key={idx}>
-              {prj.contactId}
+          {data.map((contact, idx) => (
+            <div
+              className={classNames(
+                'py-2',
+                'text-gray-900 dark:text-gray-300',
+                'transition-colors duration-200'
+              )}
+              key={idx}
+            >
+              {contact.contactId}
               {/* <Link
-                to={`/lab/?tab=contact&orcabusId=${prj.contactOrcabusId}`}
+                to={`/lab/?tab=contact&orcabusId=${contact.contactOrcabusId}`}
                 className={classNames(
-                  'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
+                  'ml-2 text-sm font-medium text-blue-500 capitalize hover:text-blue-700',
+                  'dark:text-blue-400 dark:hover:text-blue-300'
                 )}
               >
-                {prj.contactId}
+                {contact.contactId}
               </Link> */}
             </div>
           ))}
         </>
       );
     },
-    cellClassName: cellClassName,
+    cellClassName: classNames(
+      'bg-purple-50/60 dark:bg-purple-950/10',
+      'transition-colors duration-200',
+      cellClassName
+    ),
   },
   {
     header: 'Name',
-    headerClassName: headerClassName,
+    headerClassName: classNames(
+      'bg-purple-50/80 dark:bg-purple-950/20',
+      'transition-colors duration-200',
+      headerClassName
+    ),
     accessor: 'contactName',
     onSort: setSort
       ? () => {
@@ -67,7 +98,11 @@ export const getContactTableColumn = ({
         }
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'name'),
-    cellClassName: cellClassName,
+    cellClassName: classNames(
+      'bg-purple-50/60 dark:bg-purple-950/10',
+      'transition-colors duration-200',
+      cellClassName
+    ),
     cell: multiRowCell,
   },
 ];

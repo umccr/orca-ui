@@ -1,4 +1,5 @@
 import { Column } from '@/components/tables';
+import { classNames } from '@/utils/commonUtils';
 import { getCurrentSortDirection, getSortValue } from '@/components/tables/Table';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Tooltip } from '@/components/common/tooltips';
@@ -20,14 +21,29 @@ export const getIndividualTableColumn = ({
     header: (
       <div className='flex flex-row items-center'>
         <div>Individual Id</div>
-        <Tooltip text={`This is now the 'SubjectID' from the tracking sheet`} position='right'>
-          <InformationCircleIcon className='ml-2 h-4' />
+        <Tooltip
+          text={`This is now the 'ExternalIndividualID' from the tracking sheet`}
+          position='right'
+        >
+          <InformationCircleIcon className='ml-2 h-4 text-gray-500 dark:text-gray-400' />
         </Tooltip>
       </div>
     ),
-    headerClassName: headerClassName,
+    headerClassName: classNames(
+      'bg-emerald-50/80 dark:bg-emerald-950/20',
+      'transition-colors duration-200',
+      headerClassName
+    ),
     // Number '2' is the length of this array
-    headerGroup: { colSpan: 2, label: headerGroupLabel, additionalClassName: headerClassName },
+    headerGroup: {
+      colSpan: 2,
+      label: headerGroupLabel,
+      additionalClassName: classNames(
+        'bg-emerald-50/80 dark:bg-emerald-950/20',
+        'transition-colors duration-200',
+        headerClassName
+      ),
+    },
     accessor: 'individualIds',
     onSort: setSort
       ? () => {
@@ -37,13 +53,30 @@ export const getIndividualTableColumn = ({
     sortDirection: getCurrentSortDirection(currentSort, 'individual_id'),
     cell: (p: unknown) => {
       const ids = p as { individualOrcabusId: string; individualId: string };
-      return <>{ids.individualId}</>;
+      return (
+        <div
+          className={classNames(
+            'text-gray-900 dark:text-gray-300',
+            'transition-colors duration-200'
+          )}
+        >
+          {ids.individualId}
+        </div>
+      );
     },
-    cellClassName: cellClassName,
+    cellClassName: classNames(
+      'bg-emerald-50/60 dark:bg-emerald-950/10',
+      'transition-colors duration-200',
+      cellClassName
+    ),
   },
   {
     header: 'Record Source',
-    headerClassName: headerClassName,
+    headerClassName: classNames(
+      'bg-emerald-50/80 dark:bg-emerald-950/20',
+      'transition-colors duration-200',
+      headerClassName
+    ),
     accessor: 'individualSource',
     onSort: setSort
       ? () => {
@@ -51,6 +84,10 @@ export const getIndividualTableColumn = ({
         }
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'source'),
-    cellClassName: cellClassName,
+    cellClassName: classNames(
+      'bg-emerald-50/60 dark:bg-emerald-950/10',
+      'transition-colors duration-200',
+      cellClassName
+    ),
   },
 ];

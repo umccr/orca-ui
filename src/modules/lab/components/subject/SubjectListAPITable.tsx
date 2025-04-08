@@ -13,6 +13,7 @@ import { Tooltip } from '@/components/common/tooltips';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { getLibraryTableColumn } from '../library/utils';
 import { getSubjectTableColumn } from './utils';
+import { classNames } from '@/utils/commonUtils';
 
 export const SubjectListAPITable = ({ queryParams }: { queryParams: SubjectListQueryParams }) => {
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
@@ -132,8 +133,16 @@ const processSubjectResult = (data: components['schemas']['SubjectDetail'][]) =>
 
 export const individualTableColumn = (): Column[] => {
   const cellColor = {
-    headerClassName: 'bg-orange-100',
-    cellClassName: 'bg-orange-50',
+    headerClassName: classNames(
+      'bg-amber-100/90 dark:bg-amber-800/40',
+      'text-gray-800 dark:text-gray-100',
+      'transition-all duration-200'
+    ),
+    cellClassName: classNames(
+      'bg-amber-50/90 dark:bg-amber-800/30',
+      'text-gray-800 dark:text-gray-100',
+      'transition-all duration-200'
+    ),
   };
   return [
     {
@@ -141,7 +150,7 @@ export const individualTableColumn = (): Column[] => {
         <div className='flex flex-row items-center'>
           <div>Individual ID</div>
           <Tooltip text={`This is now the 'SubjectID' from the tracking sheet`} position='right'>
-            <InformationCircleIcon className='ml-2 h-4' />
+            <InformationCircleIcon className='ml-2 h-4 text-amber-700 dark:text-amber-300' />
           </Tooltip>
         </div>
       ),
@@ -157,7 +166,11 @@ export const individualTableColumn = (): Column[] => {
           <Fragment>
             {data.map((idv, idx) => {
               if (!idv.individualId) {
-                return <div key={idx}>-</div>;
+                return (
+                  <div key={idx} className='py-2 text-amber-400 dark:text-amber-500'>
+                    -
+                  </div>
+                );
               }
               return (
                 <div className='py-2' key={idx}>

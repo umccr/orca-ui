@@ -18,9 +18,22 @@ export const getSampleTableColumn = ({
 }): Column[] => [
   {
     header: 'Sample Id',
-    headerClassName: headerClassName,
-    // colSpan=3 because the length of Column array
-    headerGroup: { colSpan: 3, label: headerGroupLabel, additionalClassName: headerClassName },
+    headerClassName: classNames(
+      'bg-emerald-50/90 dark:bg-emerald-900/40',
+      'text-gray-900 dark:text-gray-100',
+      'transition-all duration-200',
+      headerClassName
+    ),
+    headerGroup: {
+      colSpan: 3,
+      label: headerGroupLabel,
+      additionalClassName: classNames(
+        'bg-emerald-50/90 dark:bg-emerald-900/40',
+        'text-gray-900 dark:text-gray-100',
+        'transition-all duration-200',
+        headerClassName
+      ),
+    },
     accessor: 'sampleIds',
     onSort: setSort
       ? () => {
@@ -37,7 +50,9 @@ export const getSampleTableColumn = ({
           <Link
             to={`/lab/?tab=sample&orcabusId=${props.sampleOrcabusId}`}
             className={classNames(
-              'ml-2 text-sm font-medium text-blue-500 capitalize hover:text-blue-700'
+              'ml-2 text-sm font-medium text-emerald-600 hover:text-emerald-700',
+              'dark:text-emerald-400 dark:hover:text-emerald-300',
+              'transition-colors duration-200'
             )}
           >
             {props.sampleId}
@@ -45,11 +60,21 @@ export const getSampleTableColumn = ({
         </div>
       );
     },
-    cellClassName: cellClassName,
+    cellClassName: classNames(
+      'bg-emerald-50/80 dark:bg-emerald-900/30',
+      'text-gray-900 dark:text-gray-100',
+      'transition-all duration-200',
+      cellClassName
+    ),
   },
   {
     header: 'External Sample Id',
-    headerClassName: headerClassName,
+    headerClassName: classNames(
+      'bg-emerald-50/90 dark:bg-emerald-900/40',
+      'text-gray-900 dark:text-gray-100',
+      'transition-all duration-200',
+      headerClassName
+    ),
     accessor: 'sampleExternalId',
     onSort: setSort
       ? () => {
@@ -57,11 +82,21 @@ export const getSampleTableColumn = ({
         }
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'externalSampleId'),
-    cellClassName: cellClassName,
+    cellClassName: classNames(
+      'bg-emerald-50/80 dark:bg-emerald-900/30',
+      'text-gray-900 dark:text-gray-100',
+      'transition-all duration-200',
+      cellClassName
+    ),
   },
   {
     header: 'Source',
-    headerClassName: headerClassName,
+    headerClassName: classNames(
+      'bg-emerald-50/90 dark:bg-emerald-900/40',
+      'text-gray-900 dark:text-gray-100',
+      'transition-all duration-200',
+      headerClassName
+    ),
     accessor: 'sampleSource',
     onSort: setSort
       ? () => {
@@ -69,6 +104,11 @@ export const getSampleTableColumn = ({
         }
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'source'),
-    cellClassName: cellClassName,
+    cellClassName: classNames(
+      'bg-emerald-50/80 dark:bg-emerald-900/30',
+      'text-gray-900 dark:text-gray-100',
+      'transition-all duration-200',
+      cellClassName
+    ),
   },
 ];

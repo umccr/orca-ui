@@ -18,9 +18,22 @@ export const getProjectTableColumn = ({
 }): Column[] => [
   {
     header: 'Project Id',
-    headerClassName: headerClassName,
-    // colSpan=2 because the length of Column array
-    headerGroup: { colSpan: 2, label: headerGroupLabel, additionalClassName: headerClassName },
+    headerClassName: classNames(
+      'bg-indigo-50/80 dark:bg-indigo-950/20',
+      'text-gray-900 dark:text-gray-100',
+      'transition-colors duration-200',
+      headerClassName
+    ),
+    headerGroup: {
+      colSpan: 2,
+      label: headerGroupLabel,
+      additionalClassName: classNames(
+        'bg-indigo-50/80 dark:bg-indigo-950/20',
+        'text-gray-900 dark:text-gray-100',
+        'transition-colors duration-200',
+        headerClassName
+      ),
+    },
     accessor: 'projectIds',
     onSort: setSort
       ? () => {
@@ -56,11 +69,21 @@ export const getProjectTableColumn = ({
         </>
       );
     },
-    cellClassName: cellClassName,
+    cellClassName: classNames(
+      'bg-indigo-50/60 dark:bg-indigo-950/10',
+      'text-gray-900 dark:text-gray-100',
+      'transition-colors duration-200',
+      cellClassName
+    ),
   },
   {
     header: 'Name',
-    headerClassName: headerClassName,
+    headerClassName: classNames(
+      'bg-indigo-50/80 dark:bg-indigo-950/20',
+      'text-gray-900 dark:text-gray-100',
+      'transition-colors duration-200',
+      headerClassName
+    ),
     accessor: 'projectName',
     onSort: setSort
       ? () => {
@@ -68,6 +91,11 @@ export const getProjectTableColumn = ({
         }
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'name'),
-    cellClassName: cellClassName,
+    cellClassName: classNames(
+      'bg-indigo-50/60 dark:bg-indigo-950/10',
+      'text-gray-900 dark:text-gray-100',
+      'transition-colors duration-200',
+      cellClassName
+    ),
   },
 ];
