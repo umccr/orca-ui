@@ -24,6 +24,9 @@ export const getIndividualTableColumn = ({
         <Tooltip
           text={`This is now the 'ExternalIndividualID' from the tracking sheet`}
           position='right'
+          background='light'
+          size='small'
+          className='z-50 w-96 text-wrap whitespace-normal'
         >
           <InformationCircleIcon className='ml-2 h-4 text-gray-500 dark:text-gray-400' />
         </Tooltip>

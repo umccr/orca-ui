@@ -172,7 +172,7 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
           position='bottom'
           background='light'
           size='large'
-          className='w-96'
+          className='w-96 dark:bg-gray-800 dark:text-gray-400'
         >
           <InformationCircleIcon className='2-5 mx-2 h-5' />
         </Tooltip>

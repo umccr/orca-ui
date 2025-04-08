@@ -149,7 +149,13 @@ export const individualTableColumn = (): Column[] => {
       header: (
         <div className='flex flex-row items-center'>
           <div>Individual ID</div>
-          <Tooltip text={`This is now the 'SubjectID' from the tracking sheet`} position='right'>
+          <Tooltip
+            text={`This is now the 'SubjectID' from the tracking sheet`}
+            position='right'
+            background='light'
+            size='small'
+            className='z-50 w-96 text-wrap whitespace-normal'
+          >
             <InformationCircleIcon className='ml-2 h-4 text-amber-700 dark:text-amber-300' />
           </Tooltip>
         </div>
