@@ -53,7 +53,7 @@ export const IndividualLibraryTable = ({ individualIdArray }: { individualIdArra
             Determined based on the same individual ID
           </div>
           {isPaginationAvailable && (
-            <div className='pt-4 text-xs italic text-slate-400'>
+            <div className='pt-4 text-xs text-slate-400 italic'>
               *Due to pagination, some libraries may not be shown here.
             </div>
           )}
@@ -69,7 +69,7 @@ export const IndividualLibraryTable = ({ individualIdArray }: { individualIdArra
               <Link
                 to={`/lab/library/${libOrcabusId}/overview`}
                 className={classNames(
-                  'ml-2 text-sm font-medium capitalize text-blue-500 hover:text-blue-700'
+                  'ml-2 text-sm font-medium text-blue-500 capitalize hover:text-blue-700'
                 )}
               >
                 {libraryId as string}
@@ -94,7 +94,7 @@ export const IndividualLibraryTable = ({ individualIdArray }: { individualIdArra
                     key={ind.orcabusId}
                     to={`/lab/?tab=subject&individualId=${ind.individualId}`}
                     className={classNames(
-                      'ml-2 text-sm font-medium capitalize text-blue-500 hover:text-blue-700'
+                      'ml-2 text-sm font-medium text-blue-500 capitalize hover:text-blue-700'
                     )}
                   >
                     {ind.individualId as string}

@@ -24,10 +24,10 @@ const SideNavbar: FC<SideNavbarProps> = ({ navigation, className }) => {
   }, [location.pathname, navigation]);
 
   return (
-    <div className={`border-0 bg-heritage-blue-100 ${className ?? ''}`}>
+    <div className={`bg-heritage-blue-100 border-0 ${className ?? ''}`}>
       {/* slide indicator */}
       <div
-        className='absolute left-[1px] top-0 z-50 h-[48px] w-[2px] bg-white transition-transform duration-300'
+        className='absolute top-0 left-[1px] z-50 h-[48px] w-[2px] bg-white transition-transform duration-300'
         style={{ transform: `translateY(${activeIndex * 56 + 40 + 2}px)` }} // header height 44px + mt-10 + space -y-2 + padding 4px + space -y-2
       />
 
@@ -40,7 +40,7 @@ const SideNavbar: FC<SideNavbarProps> = ({ navigation, className }) => {
               <Link
                 to={item.href}
                 className={classNames(
-                  'group flex flex-1 transform flex-col items-center p-[4px] text-2xs leading-5 transition-colors duration-300 hover:bg-heritage-blue-50',
+                  'group text-2xs hover:bg-heritage-blue-50 flex flex-1 transform flex-col items-center p-[4px] leading-5 transition-colors duration-300',
                   location.pathname.includes(item.href)
                     ? 'font-semibold text-white'
                     : 'font-normal text-gray-300'

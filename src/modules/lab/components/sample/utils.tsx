@@ -37,7 +37,7 @@ export const getSampleTableColumn = ({
           <Link
             to={`/lab/?tab=sample&orcabusId=${props.sampleOrcabusId}`}
             className={classNames(
-              'ml-2 text-sm font-medium capitalize text-blue-500 hover:text-blue-700'
+              'ml-2 text-sm font-medium text-blue-500 capitalize hover:text-blue-700'
             )}
           >
             {props.sampleId}

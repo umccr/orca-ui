@@ -85,7 +85,7 @@ const SampleSheetViewer: FC<SampleSheetViewerProps> = ({ sampleSheetData, sample
   return (
     <div className='flex flex-col gap-6'>
       {/* Header with Title and Actions */}
-      <div className='flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow dark:border-gray-700 dark:bg-gray-900 dark:shadow-gray-900/30'>
+      <div className='flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:shadow-gray-900/30'>
         <div className='flex items-center gap-2'>
           <h2 className='text-lg font-medium text-gray-900 dark:text-white'>
             {sampleSheetName || 'Sample Sheet'}
@@ -104,7 +104,7 @@ const SampleSheetViewer: FC<SampleSheetViewerProps> = ({ sampleSheetData, sample
               'text-gray-700 dark:text-gray-300',
               'hover:bg-gray-50 dark:hover:bg-gray-700',
               'rounded-lg px-4 py-2',
-              'shadow-sm'
+              'shadow-xs'
             )}
           >
             <EyeIcon className='h-4 w-4' />
@@ -114,7 +114,7 @@ const SampleSheetViewer: FC<SampleSheetViewerProps> = ({ sampleSheetData, sample
       </div>
 
       {/* Header and Reads Section */}
-      <div className='min-w-fit rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-900 dark:shadow-gray-900/30'>
+      <div className='min-w-fit rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:shadow-gray-900/30'>
         <div className='grid grid-cols-3 gap-4 p-6'>
           <div className='col-span-2 grid grid-cols-3 gap-2 border-r border-gray-200 dark:border-gray-700'>
             {Object.keys(header).map((key, idx) => (
@@ -150,7 +150,7 @@ const SampleSheetViewer: FC<SampleSheetViewerProps> = ({ sampleSheetData, sample
       </div>
       {/* Sequence Run Section */}
       {sequencing && (
-        <div className='rounded-lg bg-white shadow'>
+        <div className='rounded-lg bg-white shadow-sm'>
           <div className='p-6'>
             <h2 className='mb-4 text-lg font-medium text-gray-700'>Sequence Run</h2>
           </div>
@@ -161,7 +161,7 @@ const SampleSheetViewer: FC<SampleSheetViewerProps> = ({ sampleSheetData, sample
       {settingsAndDataSections.map((section, idx) => (
         <div key={idx}>
           {section.settings && (
-            <div className='rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-900 dark:shadow-gray-900/30'>
+            <div className='rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:shadow-gray-900/30'>
               <div className='p-6'>
                 <h2 className='mb-4 text-lg font-medium text-gray-700 dark:text-gray-200'>
                   {section.title}

@@ -73,10 +73,6 @@ const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) =
         header: 'Portal Run ID',
         accessor: 'portalRunId',
         copyable: true,
-        onSort: () => {
-          console.log('sorting');
-        },
-        sortDirection: 'asc',
         cell: (portalRunId: unknown) => {
           if (!portalRunId) {
             return <div>-</div>;

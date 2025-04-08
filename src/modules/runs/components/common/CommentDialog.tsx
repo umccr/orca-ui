@@ -58,7 +58,7 @@ const CommentDialog: FC<CommentDialogProps> = ({
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 placeholder='Write your comment here...'
-                className='min-h-[120px] w-full rounded-lg border border-gray-300 p-3 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100'
+                className='min-h-[120px] w-full rounded-lg border border-gray-300 p-3 text-sm text-gray-900 shadow-xs focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100'
               />
             </div>
           )}

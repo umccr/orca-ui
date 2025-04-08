@@ -63,7 +63,7 @@ const HorizontalTimeline: FC<TimelineProps> = ({ timeline, handldEventClick, sel
     <div className='relative'>
       <button
         onClick={() => scroll('left')}
-        className='absolute left-0 top-1/2 z-10 -translate-y-1/2 transform rounded-full bg-white p-1 shadow-md'
+        className='absolute top-1/2 left-0 z-10 -translate-y-1/2 transform rounded-full bg-white p-1 shadow-md'
         aria-label='Scroll left'
       >
         <ChevronLeftIcon className='h-6 w-6 text-gray-600' />
@@ -76,11 +76,11 @@ const HorizontalTimeline: FC<TimelineProps> = ({ timeline, handldEventClick, sel
           style={{ transform: `translateX(${translateX}px)` }}
         >
           {timeline.map((event, eventIdx) => (
-            <li key={event.id} className='relative flex-shrink-0 px-4'>
+            <li key={event.id} className='relative shrink-0 px-4'>
               {eventIdx !== timeline.length - 1 ? (
                 <span
                   aria-hidden='true'
-                  className='absolute left-24 top-4 h-0.5 w-full bg-gray-200'
+                  className='absolute top-4 left-24 h-0.5 w-full bg-gray-200'
                 />
               ) : null}
 
@@ -121,10 +121,10 @@ const HorizontalTimeline: FC<TimelineProps> = ({ timeline, handldEventClick, sel
                   >
                     {event.content}
                   </Badge>
-                  <div className='whitespace-nowrap text-center text-sm text-gray-500'>
+                  <div className='text-center text-sm whitespace-nowrap text-gray-500'>
                     <time dateTime={event.datetime}>{event.datetime}</time>
                   </div>
-                  <div className='whitespace-nowrap text-center text-sm text-gray-500'>
+                  <div className='text-center text-sm whitespace-nowrap text-gray-500'>
                     {event.comment}
                   </div>
                 </div>
@@ -135,7 +135,7 @@ const HorizontalTimeline: FC<TimelineProps> = ({ timeline, handldEventClick, sel
       </div>
       <button
         onClick={() => scroll('right')}
-        className='absolute right-0 top-1/2 z-10 -translate-y-1/2 transform rounded-full bg-white p-1 shadow-md'
+        className='absolute top-1/2 right-0 z-10 -translate-y-1/2 transform rounded-full bg-white p-1 shadow-md'
         aria-label='Scroll right'
       >
         <ChevronRightIcon className='h-6 w-6 text-gray-600' />

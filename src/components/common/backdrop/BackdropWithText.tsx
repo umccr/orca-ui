@@ -18,7 +18,7 @@ const BackdropWithText: FC<BackdropWithTextProps> = ({
 
   return (
     <div
-      className={`absolute inset-0 z-50 flex items-center justify-center bg-magpie-light-75 font-medium text-indigo-500 transition-opacity duration-200 ease-in-out ${className} ${isShow ? 'bg-opacity-80' : 'bg-opacity-0'}`}
+      className={`bg-magpie-light-75 absolute inset-0 z-50 flex items-center justify-center font-medium text-indigo-500 transition-opacity duration-200 ease-in-out ${className} ${isShow ? 'bg-opacity-80' : 'bg-opacity-0'}`}
     >
       <SpinnerWithText text={text} />
     </div>

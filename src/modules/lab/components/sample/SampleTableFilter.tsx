@@ -54,7 +54,7 @@ export const SampleTableFilter = () => {
         defaultInput={filter.source ? filter.source : []}
         handleFilterChange={handleFilterChange}
       />
-      <div className='text-s mb-2 border-b-2 pb-2 font-thin italic text-gray-700'>
+      <div className='text-s mb-2 border-b-2 pb-2 font-thin text-gray-700 italic'>
         {`*Text input support multi value with comma separated value. E.g. "L000001,L000002"`}
       </div>
     </>
@@ -77,7 +77,7 @@ export const SampleTableFilter = () => {
             <SampleFilter />
             <div className='font-medium'>{`Library`}</div>
             <div
-              className='flex cursor-pointer items-center rounded ps-2 hover:bg-gray-100'
+              className='flex cursor-pointer items-center rounded-sm ps-2 hover:bg-gray-100'
               onClick={() => {
                 setFilter((prev) => ({ ...prev, isLibraryNone: !prev['isLibraryNone'] }));
               }}
@@ -86,9 +86,9 @@ export const SampleTableFilter = () => {
                 readOnly
                 checked={filter['isLibraryNone']}
                 type='checkbox'
-                className='h-4 w-4 cursor-pointer rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500/50'
+                className='h-4 w-4 cursor-pointer rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500/50'
               />
-              <label className='ms-2 w-full cursor-pointer rounded py-2 text-sm font-normal text-gray-900'>
+              <label className='ms-2 w-full cursor-pointer rounded-sm py-2 text-sm font-normal text-gray-900'>
                 Empty library
               </label>
             </div>

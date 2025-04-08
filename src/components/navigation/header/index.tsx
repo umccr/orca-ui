@@ -37,7 +37,10 @@ const Header = ({ className }: { className?: string }) => {
   const openPreferenceDialogOpen = () => setIsPreferenceDialogOpen(true);
 
   return (
-    <Disclosure as='nav' className={`z-10 w-full bg-heritage-blue-100 shadow ${className ?? ''}`}>
+    <Disclosure
+      as='nav'
+      className={`bg-heritage-blue-100 z-10 w-full shadow-sm ${className ?? ''}`}
+    >
       {({ open }) => (
         <>
           {isTokenDialogOpen && (
@@ -53,7 +56,7 @@ const Header = ({ className }: { className?: string }) => {
           <div className='max-w-8xl mx-auto sm:px-4 md:divide-y md:divide-gray-700 md:px-8'>
             <div className='flex h-10 justify-between'>
               <div className='flex px-2 md:px-0'>
-                <div className='flex flex-shrink-0 items-center'>
+                <div className='flex shrink-0 items-center'>
                   <Link to='/'>
                     <div className='text-xl text-white'>UMCCR</div>
                   </Link>
@@ -97,7 +100,7 @@ const Header = ({ className }: { className?: string }) => {
                   </div>
                 </div> */}
                 {/* Mobile menu button */}
-                <DisclosureButton className='relative inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500'>
+                <DisclosureButton className='relative inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-gray-100 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden focus:ring-inset'>
                   <span className='absolute' />
                   <span className='sr-only'>Open main menu</span>
                   {open ? (
@@ -112,7 +115,7 @@ const Header = ({ className }: { className?: string }) => {
               <div className='hidden md:ml-4 md:flex md:items-center'>
                 {/* <button
                   type='button'
-                  className='relative flex-shrink-0 rounded-full bg-heritage-blue-100 p-1 text-white hover:text-gray-500 focus:outline-none '
+                  className='relative shrink-0 rounded-full bg-heritage-blue-100 p-1 text-white hover:text-gray-500 focus:outline-hidden '
                 >
                   <span className='absolute -inset-1.5' />
                   <span className='sr-only'>View notifications</span>
@@ -123,9 +126,9 @@ const Header = ({ className }: { className?: string }) => {
                 {/* <hr className='mx-2 h-6 w-px border-none bg-slate-200 dark:bg-slate-700' /> */}
 
                 {/* Profile dropdown */}
-                <Menu as='div' className='relative ml-4 flex-shrink-0'>
+                <Menu as='div' className='relative ml-4 shrink-0'>
                   <div>
-                    <MenuButton className='bg-heritage-blue-200/20 hover:bg-heritage-blue-200/30 relative flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/20 dark:bg-gray-700 dark:hover:bg-gray-600'>
+                    <MenuButton className='bg-heritage-blue-200/20 hover:bg-heritage-blue-200/30 relative flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-white transition-colors focus:ring-2 focus:ring-white/20 focus:outline-hidden dark:bg-gray-700 dark:hover:bg-gray-600'>
                       <UserCircleIcon className='h-5 w-5' aria-hidden='true' />
                       <span>{userName}</span>
                     </MenuButton>
@@ -134,7 +137,7 @@ const Header = ({ className }: { className?: string }) => {
                   <MenuItems
                     transition
                     anchor='bottom end'
-                    className='right-0 z-10 mt-2 w-64 origin-top-right divide-y divide-gray-100 rounded-lg bg-white py-2 shadow-lg ring-1 ring-black/5 transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 dark:divide-gray-700 dark:bg-gray-800 dark:ring-white/10'
+                    className='right-0 z-10 mt-2 w-64 origin-top-right divide-y divide-gray-100 rounded-lg bg-white py-2 shadow-lg ring-1 ring-black/5 transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-hidden data-closed:scale-95 data-closed:opacity-0 dark:divide-gray-700 dark:bg-gray-800 dark:ring-white/10'
                   >
                     <div className='px-4 py-3'>
                       <div className='flex items-center gap-3'>
@@ -154,7 +157,7 @@ const Header = ({ className }: { className?: string }) => {
 
                     <div className='flex flex-col py-1'>
                       <MenuItem as='button' onClick={openPreferenceDialogOpen}>
-                        <span className='flex w-full items-center px-4 py-2 text-sm text-gray-700 transition-colors data-[focus]:bg-gray-50 data-[focus]:text-gray-900 dark:text-gray-200 dark:data-[focus]:bg-gray-700/50 dark:data-[focus]:text-white'>
+                        <span className='flex w-full items-center px-4 py-2 text-sm text-gray-700 transition-colors data-focus:bg-gray-50 data-focus:text-gray-900 dark:text-gray-200 dark:data-focus:bg-gray-700/50 dark:data-focus:text-white'>
                           <Cog6ToothIcon className='mr-2 size-4' />
                           Preferences
                         </span>
@@ -164,13 +167,13 @@ const Header = ({ className }: { className?: string }) => {
                     <div className='flex flex-col py-1'>
                       {/* buttons for token and logout */}
                       <MenuItem as='button' onClick={openTokenDialogOpen}>
-                        <span className='flex w-full items-center px-4 py-2 text-sm text-gray-700 transition-colors data-[focus]:bg-gray-50 data-[focus]:text-gray-900 dark:text-gray-200 dark:data-[focus]:bg-gray-700/50 dark:data-[focus]:text-white'>
+                        <span className='flex w-full items-center px-4 py-2 text-sm text-gray-700 transition-colors data-focus:bg-gray-50 data-focus:text-gray-900 dark:text-gray-200 dark:data-focus:bg-gray-700/50 dark:data-focus:text-white'>
                           <KeyIcon className='mr-2 size-4' />
                           Get Token
                         </span>
                       </MenuItem>
                       <MenuItem as='button' onClick={logout}>
-                        <span className='flex w-full items-center px-4 py-2 text-sm text-red-500 transition-colors data-[focus]:bg-gray-50 data-[focus]:text-red-600 dark:text-red-400 dark:data-[focus]:bg-gray-700/50 dark:data-[focus]:text-red-400'>
+                        <span className='flex w-full items-center px-4 py-2 text-sm text-red-500 transition-colors data-focus:bg-gray-50 data-focus:text-red-600 dark:text-red-400 dark:data-focus:bg-gray-700/50 dark:data-focus:text-red-400'>
                           <ArrowRightStartOnRectangleIcon className='mr-2 size-4' />
                           Sign out
                         </span>
@@ -183,7 +186,7 @@ const Header = ({ className }: { className?: string }) => {
           </div>
 
           <DisclosurePanel className='md:hidden'>
-            <div className='border-t border-gray-200/20 pb-3 pt-4'>
+            <div className='border-t border-gray-200/20 pt-4 pb-3'>
               <div className='flex items-center justify-between px-4'>
                 <div className='flex items-center gap-3'>
                   <div className='flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900'>

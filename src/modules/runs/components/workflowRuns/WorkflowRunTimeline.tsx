@@ -310,13 +310,13 @@ const WorkflowRunTimeline = () => {
       <div
         className={classNames(
           'flex items-center gap-3 rounded-lg p-3',
-          'bg-gradient-to-r from-gray-50/80 to-white dark:from-gray-800/80 dark:to-gray-800/50'
+          'bg-linear-to-r from-gray-50/80 to-white dark:from-gray-800/80 dark:to-gray-800/50'
         )}
       >
         <span className='text-sm font-medium text-gray-600 dark:text-gray-400'>
           {selectedState ? 'Selected State' : 'Current State'}:
         </span>
-        <Badge status={selectedState || currentState || 'unknown'} className='shadow-sm'>
+        <Badge status={selectedState || currentState || 'unknown'} className='shadow-xs'>
           {selectedState || currentState || 'unknown'}
         </Badge>
       </div>
@@ -324,7 +324,7 @@ const WorkflowRunTimeline = () => {
       {/* Content Section */}
       <div className='flex flex-col space-y-1 rounded-lg'>
         <ContentTabs
-          className='rounded-lg bg-white bg-gradient-to-r from-gray-50/80 to-white shadow-sm dark:bg-gray-900 dark:from-gray-800/80 dark:to-gray-800/50'
+          className='rounded-lg bg-white bg-linear-to-r from-gray-50/80 to-white shadow-xs dark:bg-gray-900 dark:from-gray-800/80 dark:to-gray-800/50'
           tabs={[
             {
               label: 'Payload Data',
@@ -341,30 +341,36 @@ const WorkflowRunTimeline = () => {
                         chevronPosition='right'
                         className={classNames(
                           'rounded-lg',
-                          'bg-gradient-to-r from-white via-gray-50/80 to-gray-100/50',
+                          'bg-linear-to-r from-white via-gray-50/80 to-gray-100/50',
                           'dark:from-gray-900 dark:via-gray-800/80 dark:to-gray-800/50',
-                          'shadow-sm hover:shadow-md',
+                          'shadow-xs hover:shadow-md',
                           'ring-1 ring-gray-200/50 dark:ring-gray-700/50',
                           'transition-all duration-200 ease-in-out',
                           'group'
                         )}
                         buttonClassName={classNames(
                           'border-0',
-                          'bg-gradient-to-r from-blue-50/90 to-transparent',
+                          'bg-linear-to-r from-blue-50/90 to-transparent',
                           'dark:from-blue-900/30 dark:to-transparent',
                           'group-hover:from-blue-100/80 dark:group-hover:from-blue-800/40',
                           'transition-all duration-300'
                         )}
                       >
                         <div className='divide-y divide-gray-100 bg-white/50 dark:divide-gray-800 dark:bg-gray-900/50'>
-                          <JsonToNestedList
-                            data={value as Record<string, unknown>}
-                            isURIIncluded={true}
-                            isFetchingData={isFetching}
-                            inCard={false}
-                            className='space-y-0'
-                            listClassName='hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors duration-200'
-                          />
+                          {typeof value === 'string' ? (
+                            <div className='max-w-lg overflow-auto p-2 text-sm break-words whitespace-pre-wrap text-gray-700 dark:text-gray-300'>
+                              {value}
+                            </div>
+                          ) : (
+                            <JsonToNestedList
+                              data={value as Record<string, unknown>}
+                              isURIIncluded={true}
+                              isFetchingData={isFetching}
+                              inCard={false}
+                              className='space-y-0'
+                              listClassName='hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors duration-200'
+                            />
+                          )}
                         </div>
                       </Accordion>
                     ))
@@ -441,7 +447,7 @@ const WorkflowRunTimeline = () => {
                 'text-gray-700 dark:text-gray-300',
                 'hover:bg-gray-50 dark:hover:bg-gray-700',
                 'rounded-lg px-4 py-2',
-                'shadow-sm'
+                'shadow-xs'
               )}
             >
               {showPayload ? <EyeSlashIcon className='h-4 w-4' /> : <EyeIcon className='h-4 w-4' />}
@@ -457,7 +463,7 @@ const WorkflowRunTimeline = () => {
                 'text-gray-700 dark:text-gray-300',
                 'hover:bg-gray-50 dark:hover:bg-gray-700',
                 'rounded-lg px-4 py-2',
-                'shadow-sm'
+                'shadow-xs'
               )}
             >
               {isReverseOrder ? (

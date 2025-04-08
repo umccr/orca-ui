@@ -48,7 +48,7 @@ export default function DisplayResult({ validationResponse, onClose }: DisplayRe
         </pre>
         <div className='mt-2 grid'>
           <button
-            className='rounded border border-current px-4 py-2 text-gray-700 hover:bg-gray-200'
+            className='rounded-sm border border-current px-4 py-2 text-gray-700 hover:bg-gray-200'
             onClick={() => download({ filename, content: strFile })}
           >
             Save as file
@@ -67,7 +67,7 @@ export default function DisplayResult({ validationResponse, onClose }: DisplayRe
   }
 
   return (
-    <div className={`relative rounded p-4 ${alertVariant}`}>
+    <div className={`relative rounded-sm p-4 ${alertVariant}`}>
       <div className='text-lg font-bold'>
         Check Result: <b>{validationResponse.check_status}</b>
       </div>
@@ -102,7 +102,7 @@ export default function DisplayResult({ validationResponse, onClose }: DisplayRe
       {onClose && (
         <button
           onClick={onClose}
-          className='absolute right-4 top-4 text-green-800 hover:text-green-600'
+          className='absolute top-4 right-4 text-green-800 hover:text-green-600'
         >
           <XMarkIcon className='h-5 w-5' />
         </button>

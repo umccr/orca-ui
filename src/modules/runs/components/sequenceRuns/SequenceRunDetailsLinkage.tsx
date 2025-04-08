@@ -78,13 +78,13 @@ const SequenceRunDetailsLinkage = () => {
         title={
           <div className='flex items-center gap-2'>
             <span>Linked Libraries</span>
-            <span className='rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600'>
+            <span className='rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-400'>
               {librariesTableData.length}
             </span>
           </div>
         }
         defaultOpen={false}
-        className='rounded-lg border border-gray-200 shadow-sm'
+        className='rounded-lg border border-gray-200 shadow-xs'
         chevronPosition='right'
       >
         <Table

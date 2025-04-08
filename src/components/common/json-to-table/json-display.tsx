@@ -33,22 +33,22 @@ const JsonDisplay: FC<JsonDisplayProps> = ({ isFetchingData, data, className }) 
   return (
     <div
       className={classNames(
-        'relative rounded-lg border border-gray-200 bg-gradient-to-b from-gray-50/80 to-white p-4 transition-all duration-200 dark:border-gray-700 dark:from-gray-800/50 dark:to-gray-800/80',
+        'relative rounded-lg border border-gray-200 bg-linear-to-b from-gray-50/80 to-white p-4 transition-all duration-200 dark:border-gray-700 dark:from-gray-800/50 dark:to-gray-800/80',
         className
       )}
     >
       {isFetchingData ? <BackdropWithText text='Loading data...' isVisible={true} /> : null}
       {data ? (
         <div className='group flex flex-row justify-between gap-4'>
-          <pre className='w-full whitespace-pre-wrap text-wrap break-all font-mono text-sm text-gray-800 dark:text-gray-200'>
+          <pre className='w-full font-mono text-sm text-wrap break-all whitespace-pre-wrap text-gray-800 dark:text-gray-200'>
             {JSON.stringify(data || {}, null, 2)}
           </pre>
-          <div className='flex-shrink-0'>
+          <div className='shrink-0'>
             {isCopied ? (
-              <CheckCircleIcon className='h-6 w-6 cursor-pointer stroke-gray-500 opacity-0 transition-all duration-200 hover:stroke-blue-500 group-hover:opacity-100 dark:stroke-gray-400 dark:hover:stroke-blue-400' />
+              <CheckCircleIcon className='h-6 w-6 cursor-pointer stroke-gray-500 opacity-0 transition-all duration-200 group-hover:opacity-100 hover:stroke-blue-500 dark:stroke-gray-400 dark:hover:stroke-blue-400' />
             ) : (
               <ClipboardDocumentIcon
-                className='h-6 w-6 cursor-pointer stroke-gray-500 opacity-0 transition-all duration-200 hover:stroke-blue-500 group-hover:opacity-100 dark:stroke-gray-400 dark:hover:stroke-blue-400'
+                className='h-6 w-6 cursor-pointer stroke-gray-500 opacity-0 transition-all duration-200 group-hover:opacity-100 hover:stroke-blue-500 dark:stroke-gray-400 dark:hover:stroke-blue-400'
                 onClick={handleCopy}
               />
             )}

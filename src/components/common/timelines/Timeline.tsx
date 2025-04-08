@@ -74,7 +74,7 @@ const Timeline: FC<TimelineProps> = ({
               {eventIdx !== timelineEvents.length - 1 ? (
                 <span
                   aria-hidden='true'
-                  className='absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200 dark:bg-gray-700'
+                  className='absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200 dark:bg-gray-700'
                 />
               ) : null}
 
@@ -124,8 +124,8 @@ const Timeline: FC<TimelineProps> = ({
                     'flex h-full min-w-0 flex-1 flex-col pt-1',
                     'rounded-lg transition-all duration-300 ease-in-out',
                     selectedEventId === event.id && [
-                      'bg-gradient-to-r from-blue-50/80 to-white dark:from-blue-900/20 dark:to-gray-800/50',
-                      'shadow-sm shadow-blue-100/50 dark:shadow-blue-900/20',
+                      'bg-linear-to-r from-blue-50/80 to-white dark:from-blue-900/20 dark:to-gray-800/50',
+                      'shadow-xs shadow-blue-100/50 dark:shadow-blue-900/20',
                       'ring-1 ring-blue-100/50 dark:ring-blue-900/20',
                       '-mt-1 p-3 pl-4',
                       'transform-gpu',
@@ -302,7 +302,7 @@ const Timeline: FC<TimelineProps> = ({
                       <pre
                         className={classNames(
                           'text-sm text-gray-600 dark:text-gray-300',
-                          'whitespace-pre-wrap break-all', // Preserves formatting while allowing wrapping
+                          'break-all whitespace-pre-wrap', // Preserves formatting while allowing wrapping
                           'font-sans' // Keep the regular font instead of monospace
                         )}
                       >

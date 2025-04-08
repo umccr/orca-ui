@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/16/solid';
 import { useEffect, useState } from 'react';
 import { DEFAULT_PAGE_SIZE_OPTIONS } from '@/utils/constant';
+import { Field, Select, Label } from '@headlessui/react';
 
 export type PaginationProps = {
   totalCount: number;
@@ -39,7 +40,7 @@ const PaginationDirectionButton = ({
       onClick={onClick}
       className={classNames(
         disabled ? 'bg-gray-50' : 'hover:bg-gray-100',
-        'relative inline-flex h-7 items-center rounded-full !p-0 text-gray-400 focus:z-20 focus:outline-offset-0',
+        'relative inline-flex h-7 items-center rounded-full p-0! text-gray-400 focus:z-20 focus:outline-offset-0',
         className ?? ''
       )}
     >
@@ -118,27 +119,29 @@ export default function Pagination({
         </div>
 
         {/* Rows per page: */}
-        <div className='flex flex-row items-center'>
-          <label
+        <Field className='flex flex-row items-center'>
+          <Label
             htmlFor='rows-per-page'
-            className='whitespace-nowrap px-2 text-sm font-medium text-gray-700 dark:text-gray-300'
+            className='px-2 text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-300'
           >
             Rows per page:
-          </label>
-          <select
-            id='rows-per-page'
-            name='rows-per-page'
-            className='block h-8 w-16 rounded-md border-2 border-gray-500/5 bg-white text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400 dark:focus:ring-blue-400'
-            value={rowsPerPageNumber}
-            onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
-          >
-            {pageSizeOptions.map((size) => (
-              <option key={size} value={size}>
-                {size}
-              </option>
-            ))}
-          </select>
-        </div>
+          </Label>
+          <div className='relative'>
+            <Select
+              id='rows-per-page'
+              name='rows-per-page'
+              className='block h-8 w-20 appearance-none rounded-md border border-gray-300 bg-white py-1 pr-8 pl-3 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400 dark:focus:ring-blue-400'
+              value={rowsPerPageNumber}
+              onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
+            >
+              {pageSizeOptions.map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </Select>
+          </div>
+        </Field>
 
         <div>
           <nav

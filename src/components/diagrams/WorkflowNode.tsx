@@ -33,7 +33,7 @@ const WorkflowNode: FC<WorkflowNodeProps> = ({ data }) => {
         </div>
         <div className='flex items-center p-2 px-4 py-1'>
           <StatusCircleIcon status={data.detail.status} className='text-lg' />
-          <div className='max-w-[200px] pl-2 pr-4'>
+          <div className='max-w-[200px] pr-4 pl-2'>
             <div className='text-lg'>{data.detail?.status}</div>
             <span className='text-gray-500'>{data.detail?.description}</span>
           </div>

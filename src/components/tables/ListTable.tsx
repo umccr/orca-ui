@@ -107,7 +107,7 @@ const ListTable: FC<ListTableProps> = ({
             <select
               value={itemsPerPage}
               onChange={handleItemsPerPageChange}
-              className='appearance-none rounded-md border border-gray-300 bg-white py-1 pl-2 pr-8 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100'
+              className='appearance-none rounded-md border border-gray-300 bg-white py-1 pr-8 pl-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-hidden dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100'
             >
               {itemsPerPageOptions.map((option) => (
                 <option key={option} value={option}>
@@ -115,7 +115,7 @@ const ListTable: FC<ListTableProps> = ({
                 </option>
               ))}
             </select>
-            <ChevronDownIcon className='pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500 dark:text-gray-400' />
+            <ChevronDownIcon className='pointer-events-none absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2 text-gray-500 dark:text-gray-400' />
           </div>
         </div>
       </div>
@@ -128,7 +128,7 @@ const ListTable: FC<ListTableProps> = ({
               {columns.map((column, index) => (
                 <th
                   key={index}
-                  className='min-w-[200px] truncate px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'
+                  className='min-w-[200px] truncate px-4 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-400'
                 >
                   {column}
                 </th>
@@ -161,7 +161,7 @@ const ListTable: FC<ListTableProps> = ({
               onClick={() => handlePageChange(1)}
               disabled={currentPage === 1}
               className={classNames(
-                'rounded px-2 py-1 text-xs',
+                'rounded-sm px-2 py-1 text-xs',
                 currentPage === 1
                   ? 'cursor-not-allowed text-gray-400 dark:text-gray-600'
                   : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
@@ -178,7 +178,7 @@ const ListTable: FC<ListTableProps> = ({
                   <button
                     onClick={() => handlePageChange(pageNum as number)}
                     className={classNames(
-                      'rounded px-3 py-1 text-sm',
+                      'rounded-sm px-3 py-1 text-sm',
                       currentPage === pageNum
                         ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400'
                         : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
@@ -194,7 +194,7 @@ const ListTable: FC<ListTableProps> = ({
               onClick={() => handlePageChange(totalPages)}
               disabled={currentPage === totalPages}
               className={classNames(
-                'rounded px-2 py-1 text-xs',
+                'rounded-sm px-2 py-1 text-xs',
                 currentPage === totalPages
                   ? 'cursor-not-allowed text-gray-400 dark:text-gray-600'
                   : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'

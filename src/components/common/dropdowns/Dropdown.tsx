@@ -15,6 +15,8 @@ export interface DropdownProps {
   floatingLabelClassName?: string;
   value: string;
   className?: string;
+  menuButtonClassName?: string;
+  menuItemsClassName?: string;
   items: DropdownItemProps[];
 }
 
@@ -23,67 +25,109 @@ const Dropdown: FC<DropdownProps> = ({
   floatingLabelClassName,
   value,
   className = '',
+  menuButtonClassName = '',
+  menuItemsClassName = '',
   items,
 }) => {
   return (
-    <div className={`min-w-20 ${className}`}>
-      <Menu as='div' className='relative inline-block w-full min-w-2 cursor-pointer text-left'>
-        {floatingLabel && (
-          <label
+    <Menu
+      as='div'
+      className={classNames('relative inline-block w-full min-w-2 text-left', className)}
+    >
+      {floatingLabel && (
+        <label
+          className={classNames(
+            'absolute start-1 top-2 z-2 origin-[0] -translate-y-4 scale-75',
+            'bg-white px-2 text-sm dark:bg-gray-800',
+            'text-gray-500 dark:text-gray-400',
+            floatingLabelClassName
+          )}
+        >
+          {floatingLabel}
+        </label>
+      )}
+      <MenuButton as={'div'} className='w-full'>
+        {({ open }) => (
+          <div
             className={classNames(
-              'z-2 absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 bg-white px-2 text-sm text-gray-500',
-              floatingLabelClassName ? floatingLabelClassName : ''
+              'inline-flex w-full items-center justify-between gap-x-1.5',
+              'rounded-md px-3 py-2 text-sm font-medium',
+              'bg-white dark:bg-gray-800',
+              'text-gray-900 dark:text-gray-100',
+              'border border-gray-200 dark:border-gray-700',
+              'transition-all duration-200',
+              'hover:bg-gray-50 dark:hover:bg-gray-700/50',
+              'cursor-pointer',
+              open && 'bg-gray-50 dark:bg-gray-700/50',
+              open && 'ring-2 ring-blue-500/30 dark:ring-blue-400/30',
+              menuButtonClassName
             )}
           >
-            {floatingLabel}
-          </label>
-        )}
-        <MenuButton as={'div'}>
-          {({ active }) => (
-            <div
+            {value}
+            <ChevronDownIcon
               className={classNames(
-                'data-[hover]:bg-gray-70 data-[open]:bg-gray-70 inline-flex w-full justify-between gap-x-1.5 rounded-md p-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white',
-                active ? 'bg-gray-100' : 'bg-white'
+                'h-5 w-5',
+                'text-gray-400 dark:text-gray-500',
+                'transition-transform duration-200',
+                open ? 'rotate-180' : 'rotate-0'
               )}
-            >
-              {value}
-              <ChevronDownIcon
-                className={classNames(
-                  '-mr-1 h-5 w-5 text-gray-400 transition-transform duration-300',
-                  active ? 'rotate-180' : 'rotate-0'
-                )}
-                aria-hidden='true'
-              />
-            </div>
-          )}
-        </MenuButton>
+              aria-hidden='true'
+            />
+          </div>
+        )}
+      </MenuButton>
 
-        <MenuItems
-          className='absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0'
-          transition
-          anchor='bottom end'
-        >
-          {items.map((item, key) => (
-            <div key={key}>
-              {item.showDivider && <MenuSeparator className='my-1 h-px bg-gray-200' />}
-              {item.label && (
-                <MenuItem disabled={item.disabled}>
-                  <button
-                    className={classNames(
-                      item.disabled ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'group flex w-full px-4 py-2 text-left text-sm data-[focus]:bg-gray-100 data-[focus]:text-gray-900'
-                    )}
-                    onClick={item.onClick}
-                  >
-                    {item.label}
-                  </button>
-                </MenuItem>
-              )}
-            </div>
-          ))}
-        </MenuItems>
-      </Menu>
-    </div>
+      <MenuItems
+        className={classNames(
+          'absolute right-0 z-10 mt-0.5 w-56 origin-top-right',
+          'overflow-hidden rounded-lg',
+          'bg-white dark:bg-gray-800',
+          'border border-gray-200 dark:border-gray-700',
+          'shadow-lg dark:shadow-black/20',
+          'divide-y divide-gray-100 dark:divide-gray-700',
+          'focus:outline-none',
+          '[--anchor-gap:0.5rem]',
+          'transition duration-200 ease-out',
+          'data-closed:scale-95 data-closed:opacity-0',
+          menuItemsClassName
+        )}
+        transition
+        anchor='bottom end'
+      >
+        {items.map((item, key) => (
+          <div key={key}>
+            {item.showDivider && (
+              <MenuSeparator className='my-1 h-px bg-gray-200 dark:bg-gray-700' />
+            )}
+            {item.label && (
+              <MenuItem disabled={item.disabled}>
+                <button
+                  className={classNames(
+                    'group flex w-full items-center px-4 py-2.5 text-left text-sm',
+                    'transition-colors duration-200',
+                    item.disabled && [
+                      'cursor-not-allowed',
+                      'bg-gray-50/50 dark:bg-gray-800/50',
+                      'text-gray-400 dark:text-gray-500',
+                    ],
+                    !item.disabled && [
+                      'text-gray-700 dark:text-gray-200',
+                      'hover:bg-gray-50 dark:hover:bg-gray-700/50',
+                      'hover:text-gray-900 dark:hover:text-white',
+                      'data-focus:bg-blue-50 dark:data-focus:bg-blue-900/20',
+                      'data-focus:text-blue-700 dark:data-focus:text-blue-200',
+                    ]
+                  )}
+                  onClick={item.onClick}
+                >
+                  {item.label}
+                </button>
+              </MenuItem>
+            )}
+          </div>
+        ))}
+      </MenuItems>
+    </Menu>
   );
 };
 
