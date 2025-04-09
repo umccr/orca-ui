@@ -33,7 +33,7 @@ export const getIndividualTableColumn = ({
       </div>
     ),
     headerClassName: classNames(
-      'bg-violet-50/90 dark:bg-violet-800/30',
+      'bg-cyan-100/60 dark:bg-cyan-800/30',
       'text-gray-800 dark:text-gray-100',
       'transition-colors duration-200',
       headerClassName
@@ -43,7 +43,7 @@ export const getIndividualTableColumn = ({
       colSpan: 2,
       label: headerGroupLabel,
       additionalClassName: classNames(
-        'bg-violet-50/90 dark:bg-violet-800/30',
+        'bg-cyan-100/60 dark:bg-cyan-800/30',
         'text-gray-800 dark:text-gray-100',
         'transition-colors duration-200',
         headerClassName
@@ -71,7 +71,7 @@ export const getIndividualTableColumn = ({
       );
     },
     cellClassName: classNames(
-      'bg-violet-50/90 dark:bg-violet-800/30',
+      'bg-cyan-100/60 dark:bg-cyan-800/30',
       'text-gray-800 dark:text-gray-100',
       'transition-colors duration-200',
       cellClassName
@@ -80,7 +80,7 @@ export const getIndividualTableColumn = ({
   {
     header: 'Record Source',
     headerClassName: classNames(
-      'bg-violet-50/90 dark:bg-violet-800/30',
+      'bg-cyan-100/60 dark:bg-cyan-800/30',
       'text-gray-800 dark:text-gray-100',
       'transition-colors duration-200',
       headerClassName
@@ -93,7 +93,7 @@ export const getIndividualTableColumn = ({
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'source'),
     cellClassName: classNames(
-      'bg-violet-50/90 dark:bg-violet-800/30',
+      'bg-cyan-100/60 dark:bg-cyan-800/30',
       'text-gray-800 dark:text-gray-100',
       'transition-colors duration-200',
       cellClassName

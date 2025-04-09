@@ -136,12 +136,12 @@ const processSubjectResult = (data: components['schemas']['SubjectDetail'][]) =>
 export const individualTableColumn = (): Column[] => {
   const cellColor = {
     headerClassName: classNames(
-      'bg-violet-50/90 dark:bg-violet-800/30',
+      'bg-cyan-100/60 dark:bg-cyan-800/30',
       'text-gray-800 dark:text-gray-100',
       'transition-colors duration-200'
     ),
     cellClassName: classNames(
-      'bg-violet-50/90 dark:bg-violet-800/30',
+      'bg-cyan-100/60 dark:bg-cyan-800/30',
       'text-gray-800 dark:text-gray-100',
       'transition-colors duration-200'
     ),
