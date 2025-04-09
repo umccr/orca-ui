@@ -1,9 +1,7 @@
 import { useSequenceRunListModel } from '@/api/sequenceRun';
 import { Table, TableData } from '@/components/tables';
 import { Column } from '@/components/tables/Table';
-import { classNames } from '@/utils/commonUtils';
 import { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { dayjs } from '@/utils/dayjs';
@@ -11,6 +9,7 @@ import { Badge } from '@/components/common/badges';
 // import SequenceRunDetailsDrawer from './SequenceRunDetailsDrawer';
 import { MultiqcIcon } from '@/components/icons/MultiqcIcon';
 import { Tooltip } from '@/components/common/tooltips';
+import { RedirectLink } from '@/components/common/link';
 // import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
 const SequenceRunTable = () => {
   // const [selectedSequenceRun, setSelectedSequenceRun] = useState<SequenceRunModel | null>(null);
@@ -51,14 +50,9 @@ const SequenceRunTable = () => {
       cell: (instrumentRunId: unknown, sequenceRunRowData: TableData) => {
         const id = sequenceRunRowData.orcabusId;
         return (
-          <Link
-            to={`/runs/sequence/${id}`}
-            className={classNames(
-              'flex cursor-pointer flex-row items-center text-sm font-medium text-blue-500 hover:text-blue-700'
-            )}
-          >
+          <RedirectLink to={`/runs/sequence/${id}`} className='flex items-center p-1'>
             <div>{instrumentRunId ? (instrumentRunId as string) : '-'}</div>
-          </Link>
+          </RedirectLink>
         );
       },
     },
@@ -127,9 +121,9 @@ const SequenceRunTable = () => {
               </div>
             </Tooltip> */}
             <Tooltip text='MultiQC Report' size='small' background='light'>
-              <Link to={`/files?${params.toString()}`} className='flex items-center p-1'>
+              <RedirectLink to={`/files?${params.toString()}`}>
                 <MultiqcIcon className='size-4 text-orange-300 hover:text-orange-600' />
-              </Link>
+              </RedirectLink>
             </Tooltip>
           </div>
         );

@@ -1,7 +1,7 @@
 import { Column } from '@/components/tables';
 import { classNames } from '@/utils/commonUtils';
-import { Link } from 'react-router-dom';
 import { getCurrentSortDirection, getSortValue, multiRowCell } from '@/components/tables/Table';
+import { RedirectLink } from '@/components/common/link';
 
 export const getLibraryTableColumn = ({
   cellClassName,
@@ -19,7 +19,7 @@ export const getLibraryTableColumn = ({
   {
     header: 'Library Id',
     headerClassName: classNames(
-      'bg-blue-50/90 dark:bg-blue-900/40',
+      'bg-green-50/90 dark:bg-green-900/40',
       'text-gray-900 dark:text-gray-100',
       'transition-all duration-200',
       headerClassName
@@ -28,7 +28,7 @@ export const getLibraryTableColumn = ({
       colSpan: 8,
       label: headerGroupLabel,
       additionalClassName: classNames(
-        'bg-blue-50/90 dark:bg-blue-900/40',
+        'bg-green-50/90 dark:bg-green-900/40',
         'text-gray-900 dark:text-gray-100',
         'transition-all duration-200',
         headerClassName
@@ -56,23 +56,16 @@ export const getLibraryTableColumn = ({
         <>
           {data.map((lib, idx) => (
             <div className='py-2' key={idx}>
-              <Link
-                to={`/lab/library/${lib.libraryOrcabusId}/overview`}
-                className={classNames(
-                  'ml-2 text-sm font-medium text-blue-600 hover:text-blue-700',
-                  'dark:text-blue-400 dark:hover:text-blue-300',
-                  'transition-colors duration-200'
-                )}
-              >
+              <RedirectLink to={`/lab/library/${lib.libraryOrcabusId}`}>
                 {lib.libraryId}
-              </Link>
+              </RedirectLink>
             </div>
           ))}
         </>
       );
     },
     cellClassName: classNames(
-      'bg-blue-50/80 dark:bg-blue-900/30',
+      'bg-green-50/80 dark:bg-green-900/30',
       'text-gray-900 dark:text-gray-100',
       'transition-all duration-200',
       cellClassName
@@ -81,7 +74,7 @@ export const getLibraryTableColumn = ({
   {
     header: 'Phenotype',
     headerClassName: classNames(
-      'bg-blue-50/90 dark:bg-blue-900/40',
+      'bg-green-50/90 dark:bg-green-900/40',
       'text-gray-900 dark:text-gray-100',
       'transition-all duration-200',
       headerClassName
@@ -95,7 +88,7 @@ export const getLibraryTableColumn = ({
     sortDirection: getCurrentSortDirection(currentSort, 'phenotype'),
     cell: multiRowCell,
     cellClassName: classNames(
-      'bg-blue-50/80 dark:bg-blue-900/30',
+      'bg-green-50/80 dark:bg-green-900/30',
       'text-gray-900 dark:text-gray-100',
       'transition-all duration-200',
       cellClassName
@@ -104,7 +97,7 @@ export const getLibraryTableColumn = ({
   {
     header: 'Workflow',
     headerClassName: classNames(
-      'bg-blue-50/90 dark:bg-blue-900/40',
+      'bg-green-50/90 dark:bg-green-900/40',
       'text-gray-900 dark:text-gray-100',
       'transition-all duration-200',
       headerClassName
@@ -118,7 +111,7 @@ export const getLibraryTableColumn = ({
     sortDirection: getCurrentSortDirection(currentSort, 'workflow'),
     cell: multiRowCell,
     cellClassName: classNames(
-      'bg-blue-50/80 dark:bg-blue-900/30',
+      'bg-green-50/80 dark:bg-green-900/30',
       'text-gray-900 dark:text-gray-100',
       'transition-all duration-200',
       cellClassName
@@ -127,7 +120,7 @@ export const getLibraryTableColumn = ({
   {
     header: 'Quality',
     headerClassName: classNames(
-      'bg-blue-50/90 dark:bg-blue-900/40',
+      'bg-green-50/90 dark:bg-green-900/40',
       'text-gray-900 dark:text-gray-100',
       'transition-all duration-200',
       headerClassName
@@ -141,7 +134,7 @@ export const getLibraryTableColumn = ({
     sortDirection: getCurrentSortDirection(currentSort, 'quality'),
     cell: multiRowCell,
     cellClassName: classNames(
-      'bg-blue-50/80 dark:bg-blue-900/30',
+      'bg-green-50/80 dark:bg-green-900/30',
       'text-gray-900 dark:text-gray-100',
       'transition-all duration-200',
       cellClassName
@@ -150,7 +143,7 @@ export const getLibraryTableColumn = ({
   {
     header: 'Type',
     headerClassName: classNames(
-      'bg-blue-50/90 dark:bg-blue-900/40',
+      'bg-green-50/90 dark:bg-green-900/40',
       'text-gray-900 dark:text-gray-100',
       'transition-all duration-200',
       headerClassName
@@ -164,7 +157,7 @@ export const getLibraryTableColumn = ({
     sortDirection: getCurrentSortDirection(currentSort, 'type'),
     cell: multiRowCell,
     cellClassName: classNames(
-      'bg-blue-50/80 dark:bg-blue-900/30',
+      'bg-green-50/80 dark:bg-green-900/30',
       'text-gray-900 dark:text-gray-100',
       'transition-all duration-200',
       cellClassName
@@ -173,7 +166,7 @@ export const getLibraryTableColumn = ({
   {
     header: 'Assay',
     headerClassName: classNames(
-      'bg-blue-50/90 dark:bg-blue-900/40',
+      'bg-green-50/90 dark:bg-green-900/40',
       'text-gray-900 dark:text-gray-100',
       'transition-all duration-200',
       headerClassName
@@ -187,7 +180,7 @@ export const getLibraryTableColumn = ({
     sortDirection: getCurrentSortDirection(currentSort, 'assay'),
     cell: multiRowCell,
     cellClassName: classNames(
-      'bg-blue-50/80 dark:bg-blue-900/30',
+      'bg-green-50/80 dark:bg-green-900/30',
       'text-gray-900 dark:text-gray-100',
       'transition-all duration-200',
       cellClassName
@@ -196,7 +189,7 @@ export const getLibraryTableColumn = ({
   {
     header: 'Coverage',
     headerClassName: classNames(
-      'bg-blue-50/90 dark:bg-blue-900/40',
+      'bg-green-50/90 dark:bg-green-900/40',
       'text-gray-900 dark:text-gray-100',
       'transition-all duration-200',
       headerClassName
@@ -210,7 +203,7 @@ export const getLibraryTableColumn = ({
     sortDirection: getCurrentSortDirection(currentSort, 'coverage'),
     cell: multiRowCell,
     cellClassName: classNames(
-      'bg-blue-50/80 dark:bg-blue-900/30',
+      'bg-green-50/80 dark:bg-green-900/30',
       'text-gray-900 dark:text-gray-100',
       'transition-all duration-200',
       cellClassName
@@ -219,7 +212,7 @@ export const getLibraryTableColumn = ({
   {
     header: 'Override Cycles',
     headerClassName: classNames(
-      'bg-blue-50/90 dark:bg-blue-900/40',
+      'bg-green-50/90 dark:bg-green-900/40',
       'text-gray-900 dark:text-gray-100',
       'transition-all duration-200',
       headerClassName
@@ -233,7 +226,7 @@ export const getLibraryTableColumn = ({
     sortDirection: getCurrentSortDirection(currentSort, 'overrideCycles'),
     cell: multiRowCell,
     cellClassName: classNames(
-      'bg-blue-50/80 dark:bg-blue-900/30',
+      'bg-green-50/80 dark:bg-green-900/30',
       'text-gray-900 dark:text-gray-100',
       'transition-all duration-200',
       cellClassName

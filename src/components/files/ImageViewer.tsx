@@ -1,7 +1,8 @@
 import { usePresignedFileObjectId } from '@/api/file';
 import { getMimeType } from './utils';
 import { classNames } from '@/utils/commonUtils';
-import { PhotoIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
+import { PhotoIcon } from '@heroicons/react/24/outline';
+import { ExternalLink } from '@/components/common/link';
 
 type Props = { s3ObjectId: string; s3Key: string };
 
@@ -36,24 +37,11 @@ export const ImageViewer = ({ s3ObjectId, s3Key }: Props) => {
             <PhotoIcon className='h-4 w-4 text-gray-500 dark:text-gray-400' />
             <h3 className='text-sm font-medium text-gray-900 dark:text-gray-100'>Image Preview</h3>
           </div>
-          <div className='flex items-center gap-2'>
+          <ExternalLink url={url}>
             <span className='text-xs text-gray-500 dark:text-gray-400'>
               {s3Key.split('/').pop()}
             </span>
-            <button
-              onClick={() => window.open(url, '_blank')}
-              className={classNames(
-                'rounded-md p-1',
-                'text-gray-500 hover:text-gray-700',
-                'dark:text-gray-400 dark:hover:text-gray-200',
-                'hover:bg-gray-100 dark:hover:bg-gray-700',
-                'transition-all duration-200'
-              )}
-              title='Open in new tab'
-            >
-              <ArrowTopRightOnSquareIcon className='h-4 w-4' />
-            </button>
-          </div>
+          </ExternalLink>
         </div>
       </div>
 

@@ -75,7 +75,7 @@ export const ProjectTableFilter = () => {
       }
       content={
         <div className='w-80 rounded-lg bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-900 dark:ring-white/10'>
-          <div className='max-h-[500px] overflow-y-auto p-4 text-sm'>
+          <div className='max-h-[500px] overflow-y-auto p-6 text-sm'>
             <ProjectFilter />
           </div>
 

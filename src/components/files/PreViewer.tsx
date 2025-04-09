@@ -3,6 +3,7 @@ import { getMimeType, getPreSignedUrlData } from './utils';
 import { usePresignedFileObjectId } from '@/api/file';
 import { classNames } from '@/utils/commonUtils';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { ExternalLink } from '@/components/common/link';
 
 type Props = { s3ObjectId: string; s3Key: string };
 
@@ -60,9 +61,11 @@ export const PreViewer = ({ s3ObjectId, s3Key }: Props) => {
         >
           <div className='flex items-center justify-between'>
             <h3 className='text-sm font-medium text-gray-900 dark:text-gray-100'>File Preview</h3>
-            <span className='text-xs text-gray-500 dark:text-gray-400'>
-              {s3Key.split('/').pop()}
-            </span>
+            <ExternalLink url={url}>
+              <span className='text-xs text-gray-500 dark:text-gray-400'>
+                {s3Key.split('/').pop()}
+              </span>
+            </ExternalLink>
           </div>
         </div>
 

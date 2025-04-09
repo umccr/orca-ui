@@ -18,7 +18,7 @@ export const getContactTableColumn = ({
   {
     header: 'Contact Id',
     headerClassName: classNames(
-      'bg-purple-50/80 dark:bg-purple-950/20',
+      'bg-rose-50/80 dark:bg-rose-900/20',
       'text-gray-900 dark:text-gray-100',
       'transition-colors duration-200',
       headerClassName
@@ -28,7 +28,7 @@ export const getContactTableColumn = ({
       colSpan: 2,
       label: headerGroupLabel,
       additionalClassName: classNames(
-        'bg-purple-50/80 dark:bg-purple-950/20',
+        'bg-rose-50/80 dark:bg-rose-900/20',
         'text-gray-900 dark:text-gray-100',
         'transition-colors duration-200',
         headerClassName
@@ -63,7 +63,7 @@ export const getContactTableColumn = ({
               )}
               key={idx}
             >
-              {contact.contactId}
+              {contact.contactId ?? '-'}
               {/* <Link
                 to={`/lab/?tab=contact&orcabusId=${contact.contactOrcabusId}`}
                 className={classNames(
@@ -79,7 +79,8 @@ export const getContactTableColumn = ({
       );
     },
     cellClassName: classNames(
-      'bg-purple-50/60 dark:bg-purple-950/10',
+      'bg-rose-50/60 dark:bg-rose-900/10',
+      'text-gray-900 dark:text-gray-100',
       'transition-colors duration-200',
       cellClassName
     ),
@@ -87,7 +88,8 @@ export const getContactTableColumn = ({
   {
     header: 'Name',
     headerClassName: classNames(
-      'bg-purple-50/80 dark:bg-purple-950/20',
+      'bg-rose-50/80 dark:bg-rose-900/20',
+      'text-gray-900 dark:text-gray-100',
       'transition-colors duration-200',
       headerClassName
     ),
@@ -99,7 +101,8 @@ export const getContactTableColumn = ({
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'name'),
     cellClassName: classNames(
-      'bg-purple-50/60 dark:bg-purple-950/10',
+      'bg-rose-50/60 dark:bg-rose-900/10',
+      'text-gray-900 dark:text-gray-100',
       'transition-colors duration-200',
       cellClassName
     ),

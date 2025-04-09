@@ -33,7 +33,8 @@ export const getIndividualTableColumn = ({
       </div>
     ),
     headerClassName: classNames(
-      'bg-emerald-50/80 dark:bg-emerald-950/20',
+      'bg-slate-50/90 dark:bg-slate-800/30',
+      'text-gray-800 dark:text-gray-100',
       'transition-colors duration-200',
       headerClassName
     ),
@@ -42,7 +43,8 @@ export const getIndividualTableColumn = ({
       colSpan: 2,
       label: headerGroupLabel,
       additionalClassName: classNames(
-        'bg-emerald-50/80 dark:bg-emerald-950/20',
+        'bg-slate-50/90 dark:bg-slate-800/30',
+        'text-gray-800 dark:text-gray-100',
         'transition-colors duration-200',
         headerClassName
       ),
@@ -60,7 +62,8 @@ export const getIndividualTableColumn = ({
         <div
           className={classNames(
             'text-gray-900 dark:text-gray-300',
-            'transition-colors duration-200'
+            'transition-colors duration-200',
+            cellClassName
           )}
         >
           {ids.individualId}
@@ -68,7 +71,8 @@ export const getIndividualTableColumn = ({
       );
     },
     cellClassName: classNames(
-      'bg-emerald-50/60 dark:bg-emerald-950/10',
+      'bg-slate-50/90 dark:bg-slate-800/30',
+      'text-gray-800 dark:text-gray-100',
       'transition-colors duration-200',
       cellClassName
     ),
@@ -76,7 +80,8 @@ export const getIndividualTableColumn = ({
   {
     header: 'Record Source',
     headerClassName: classNames(
-      'bg-emerald-50/80 dark:bg-emerald-950/20',
+      'bg-slate-50/90 dark:bg-slate-800/30',
+      'text-gray-800 dark:text-gray-100',
       'transition-colors duration-200',
       headerClassName
     ),
@@ -88,7 +93,8 @@ export const getIndividualTableColumn = ({
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'source'),
     cellClassName: classNames(
-      'bg-emerald-50/60 dark:bg-emerald-950/10',
+      'bg-slate-50/90 dark:bg-slate-800/30',
+      'text-gray-800 dark:text-gray-100',
       'transition-colors duration-200',
       cellClassName
     ),

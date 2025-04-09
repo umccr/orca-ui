@@ -2,6 +2,7 @@ import { usePresignedFileObjectId } from '@/api/file';
 import { getMimeType } from './utils';
 import { classNames } from '@/utils/commonUtils';
 import { DocumentIcon } from '@heroicons/react/24/outline';
+import { ExternalLink } from '@/components/common/link';
 
 type Props = { s3ObjectId: string; s3Key: string };
 
@@ -41,7 +42,12 @@ export const IFrameViewer = ({ s3ObjectId, s3Key }: Props) => {
               Document Preview
             </h3>
           </div>
-          <span className='text-xs text-gray-500 dark:text-gray-400'>{s3Key.split('/').pop()}</span>
+
+          <ExternalLink url={url}>
+            <span className='text-xs text-gray-500 dark:text-gray-400'>
+              {s3Key.split('/').pop()}
+            </span>
+          </ExternalLink>
         </div>
       </div>
 

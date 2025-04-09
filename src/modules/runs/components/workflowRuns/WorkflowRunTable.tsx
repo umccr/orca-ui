@@ -1,13 +1,12 @@
 import { useMemo } from 'react';
 import { Table, Column, TableData } from '@/components/tables';
-import { classNames } from '@/utils/commonUtils';
 import { keepPreviousData } from '@tanstack/react-query';
 import { dayjs } from '@/utils/dayjs';
 import { Badge } from '@/components/common/badges';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { useWorkflowRunListModel } from '@/api/workflow';
-import { Link } from 'react-router-dom';
+import { RedirectLink } from '@/components/common/link';
 
 const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) => {
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
@@ -57,14 +56,9 @@ const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) =
             return <div>-</div>;
           } else {
             return (
-              <Link
-                to={`/runs/workflow/${id}`}
-                className={classNames(
-                  'flex cursor-pointer flex-row items-center text-sm font-medium text-blue-500 hover:text-blue-700'
-                )}
-              >
+              <RedirectLink to={`/runs/workflow/${id}`} className='flex items-center p-1'>
                 <div>{workflowRunName as string}</div>
-              </Link>
+              </RedirectLink>
             );
           }
         },

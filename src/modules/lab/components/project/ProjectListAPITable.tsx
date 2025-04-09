@@ -44,17 +44,18 @@ export const ProjectListAPITable = ({ queryParams }: { queryParams: ProjectListQ
       columns={[
         // Not showing library as 1 project contain hundreds of libraries
         // Will need to show in a paginated way
-
         ...getProjectTableColumn({
           setSort: (newOrder: string) => {
             setQueryParams({ ordering: newOrder });
           },
           currentSort: queryParams?.ordering,
+          headerClassName: 'bg-transparent',
+          cellClassName: 'bg-transparent',
         }),
         ...getContactTableColumn({
           headerGroupLabel: 'Contact',
-          headerClassName: 'bg-orange-100',
-          cellClassName: 'bg-orange-50',
+          // headerClassName: 'bg-orange-100',
+          // cellClassName: 'bg-orange-50',
         }),
       ]}
       tableData={flatData}

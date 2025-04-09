@@ -3,13 +3,25 @@ import { classNames } from '@/utils/commonUtils';
 
 export type CardProps = {
   className?: string;
+  headerClassName?: string;
+  bodyClassName?: string;
+  footerClassName?: string;
   header?: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
   noPadding?: boolean;
 };
 
-const SimpleCard: FC<CardProps> = ({ className, header, children, footer, noPadding = false }) => {
+const SimpleCard: FC<CardProps> = ({
+  className,
+  headerClassName,
+  bodyClassName,
+  footerClassName,
+  header,
+  children,
+  footer,
+  noPadding = false,
+}) => {
   return (
     <div
       className={classNames(
@@ -26,14 +38,21 @@ const SimpleCard: FC<CardProps> = ({ className, header, children, footer, noPadd
         <div
           className={classNames(
             'bg-gray-50 dark:bg-gray-800/50',
-            !noPadding && 'px-4 py-5 sm:px-6'
+            !noPadding && 'px-4 py-5 sm:px-6',
+            headerClassName
           )}
         >
           {/* Header Content goes here */}
           {header}
         </div>
       )}
-      <div className={classNames(!noPadding && 'px-4 py-5 sm:p-6', 'bg-white dark:bg-gray-900')}>
+      <div
+        className={classNames(
+          !noPadding && 'px-4 py-5 sm:p-6',
+          'bg-white dark:bg-gray-900',
+          bodyClassName
+        )}
+      >
         {/* Body Content goes here */}
         {children}
       </div>
@@ -41,7 +60,8 @@ const SimpleCard: FC<CardProps> = ({ className, header, children, footer, noPadd
         <div
           className={classNames(
             'bg-gray-50 dark:bg-gray-800/50',
-            !noPadding && 'px-4 py-4 sm:px-6'
+            !noPadding && 'px-4 py-4 sm:px-6',
+            footerClassName
           )}
         >
           {/* Footer Content goes here */}

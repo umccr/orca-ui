@@ -1,7 +1,7 @@
 import { Column } from '@/components/tables';
 import { classNames } from '@/utils/commonUtils';
-import { Link } from 'react-router-dom';
 import { getCurrentSortDirection, getSortValue } from '@/components/tables/Table';
+import { RedirectLink } from '@/components/common/link';
 
 export const getProjectTableColumn = ({
   cellClassName,
@@ -19,7 +19,7 @@ export const getProjectTableColumn = ({
   {
     header: 'Project Id',
     headerClassName: classNames(
-      'bg-indigo-50/80 dark:bg-indigo-950/20',
+      'bg-sky-50/80 dark:bg-sky-900/20',
       'text-gray-900 dark:text-gray-100',
       'transition-colors duration-200',
       headerClassName
@@ -28,7 +28,7 @@ export const getProjectTableColumn = ({
       colSpan: 2,
       label: headerGroupLabel,
       additionalClassName: classNames(
-        'bg-indigo-50/80 dark:bg-indigo-950/20',
+        'bg-sky-50/80 dark:bg-sky-900/20',
         'text-gray-900 dark:text-gray-100',
         'transition-colors duration-200',
         headerClassName
@@ -56,21 +56,16 @@ export const getProjectTableColumn = ({
         <>
           {data.map((prj, idx) => (
             <div className='py-2' key={idx}>
-              <Link
-                to={`/lab/?tab=project&orcabusId=${prj.projectOrcabusId}`}
-                className={classNames(
-                  'ml-2 text-sm font-medium text-blue-500 capitalize hover:text-blue-700'
-                )}
-              >
+              <RedirectLink to={`/lab/?tab=project&orcabusId=${prj.projectOrcabusId}`}>
                 {prj.projectId}
-              </Link>
+              </RedirectLink>
             </div>
           ))}
         </>
       );
     },
     cellClassName: classNames(
-      'bg-indigo-50/60 dark:bg-indigo-950/10',
+      'bg-sky-50/60 dark:bg-sky-900/10',
       'text-gray-900 dark:text-gray-100',
       'transition-colors duration-200',
       cellClassName
@@ -79,7 +74,7 @@ export const getProjectTableColumn = ({
   {
     header: 'Name',
     headerClassName: classNames(
-      'bg-indigo-50/80 dark:bg-indigo-950/20',
+      'bg-sky-50/80 dark:bg-sky-900/20',
       'text-gray-900 dark:text-gray-100',
       'transition-colors duration-200',
       headerClassName
@@ -92,7 +87,7 @@ export const getProjectTableColumn = ({
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'name'),
     cellClassName: classNames(
-      'bg-indigo-50/60 dark:bg-indigo-950/10',
+      'bg-sky-50/60 dark:bg-sky-900/10',
       'text-gray-900 dark:text-gray-100',
       'transition-colors duration-200',
       cellClassName

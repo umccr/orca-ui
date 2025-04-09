@@ -1,9 +1,9 @@
 import { Column } from '@/components/tables';
 import { classNames } from '@/utils/commonUtils';
-import { Link } from 'react-router-dom';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Tooltip } from '@/components/common/tooltips';
 import { getCurrentSortDirection, getSortValue } from '@/components/tables/Table';
+import { RedirectLink } from '@/components/common/link';
 
 export const getSubjectTableColumn = ({
   cellClassName,
@@ -34,9 +34,9 @@ export const getSubjectTableColumn = ({
       </div>
     ),
     headerClassName: classNames(
-      'bg-amber-50/80 dark:bg-amber-950/20',
-      'text-gray-900 dark:text-gray-100',
-      'transition-colors duration-200',
+      'bg-indigo-50/90 dark:bg-indigo-900/30',
+      'text-gray-800 dark:text-gray-100',
+      'transition-all duration-200',
       headerClassName
     ),
     // The length of Column array is 1
@@ -44,9 +44,9 @@ export const getSubjectTableColumn = ({
       label: headerGroupLabel,
       colSpan: 1,
       additionalClassName: classNames(
-        'bg-amber-50/80 dark:bg-amber-950/20',
-        'text-gray-900 dark:text-gray-100',
-        'transition-colors duration-200',
+        'bg-indigo-50/90 dark:bg-indigo-900/30',
+        'text-gray-800 dark:text-gray-100',
+        'transition-all duration-200',
         headerClassName
       ),
     },
@@ -72,22 +72,17 @@ export const getSubjectTableColumn = ({
         <>
           {data.map((sbj, idx) => (
             <div className='py-2' key={idx}>
-              <Link
-                to={`/lab/?tab=subject&orcabusId=${sbj.subjectOrcabusId}`}
-                className={classNames(
-                  'ml-2 text-sm font-medium text-blue-500 capitalize hover:text-blue-700',
-                  'dark:text-blue-400 dark:hover:text-blue-300'
-                )}
-              >
+              <RedirectLink to={`/lab/?tab=subject&orcabusId=${sbj.subjectOrcabusId}`}>
                 {sbj.subjectId ?? '-'}
-              </Link>
+              </RedirectLink>
             </div>
           ))}
         </>
       );
     },
     cellClassName: classNames(
-      'bg-amber-50/60 dark:bg-amber-950/10',
+      'bg-indigo-50/80 dark:bg-indigo-950/10',
+      'text-gray-800 dark:text-gray-100',
       'transition-colors duration-200',
       cellClassName
     ),

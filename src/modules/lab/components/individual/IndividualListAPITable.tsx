@@ -50,11 +50,13 @@ export const IndividualListAPITable = ({
             setQueryParams({ ordering: newOrder });
           },
           currentSort: queryParams?.ordering,
+          headerClassName: 'bg-transparent',
+          cellClassName: 'bg-transparent',
         }),
         ...getSubjectTableColumn({
           headerGroupLabel: 'Subject',
-          headerClassName: 'bg-orange-100',
-          cellClassName: 'bg-orange-50',
+          // headerClassName: 'bg-orange-100',
+          // cellClassName: 'bg-orange-50',
         }),
       ]}
       tableData={flatData}

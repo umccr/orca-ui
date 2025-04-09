@@ -52,12 +52,14 @@ export const SubjectListAPITable = ({ queryParams }: { queryParams: SubjectListQ
             setQueryParams({ ordering: newOrder });
           },
           currentSort: queryParams?.ordering,
+          headerClassName: 'bg-transparent',
+          cellClassName: 'bg-transparent',
         }),
         ...individualTableColumn(),
         ...getLibraryTableColumn({
           headerGroupLabel: 'Library',
-          headerClassName: 'bg-red-100',
-          cellClassName: 'bg-red-50',
+          // headerClassName: 'bg-red-100',
+          // cellClassName: 'bg-red-50',
         }),
       ]}
       tableData={tableData}
@@ -134,14 +136,14 @@ const processSubjectResult = (data: components['schemas']['SubjectDetail'][]) =>
 export const individualTableColumn = (): Column[] => {
   const cellColor = {
     headerClassName: classNames(
-      'bg-amber-100/90 dark:bg-amber-800/40',
+      'bg-teal-50/90 dark:bg-teal-800/30',
       'text-gray-800 dark:text-gray-100',
-      'transition-all duration-200'
+      'transition-colors duration-200'
     ),
     cellClassName: classNames(
-      'bg-amber-50/90 dark:bg-amber-800/30',
+      'bg-teal-50/90 dark:bg-teal-800/30',
       'text-gray-800 dark:text-gray-100',
-      'transition-all duration-200'
+      'transition-colors duration-200'
     ),
   };
   return [
@@ -171,24 +173,9 @@ export const individualTableColumn = (): Column[] => {
         return (
           <Fragment>
             {data.map((idv, idx) => {
-              if (!idv.individualId) {
-                return (
-                  <div key={idx} className='py-2 text-amber-400 dark:text-amber-500'>
-                    -
-                  </div>
-                );
-              }
               return (
-                <div className='py-2' key={idx}>
-                  {idv.individualId}
-                  {/* <Link
-                  to={`individual/${idv.individualId}`}
-                  className={classNames(
-                    'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
-                  )}
-                >
-                  {idv.individualId}
-                </Link> */}
+                <div key={idx} className='py-2'>
+                  {!idv.individualId ? '-' : idv.individualId}
                 </div>
               );
             })}
