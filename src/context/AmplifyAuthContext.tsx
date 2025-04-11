@@ -151,7 +151,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement 
       aliasDomain.includes(window.location.hostname) &&
       !window.location.hostname.includes('localhost')
     ) {
-      window.location.href = MAIN_DOMAIN;
+      window.location.href = window.location.href.replace(window.location.hostname, MAIN_DOMAIN);
     }
   }, []);
 
