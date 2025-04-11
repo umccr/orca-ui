@@ -41,6 +41,83 @@ const TYPE_OPTION: TypeEnum[] = [
 ];
 const WORKFLOW_OPTION: WorkflowEnum[] = ['clinical', 'research', 'qc', 'control', 'bcl', 'manual'];
 
+const CoverageFilter = ({
+  defaultMinInput,
+  defaultMaxInput,
+  handleFilterChange,
+  disabled = false,
+}: {
+  defaultMinInput?: number;
+  defaultMaxInput?: number;
+  handleFilterChange: (key: keyof FilterType, value: string[]) => void;
+  disabled?: boolean;
+}) => {
+  const [minInput, setMinInput] = useState(defaultMinInput);
+  const [maxInput, setMaxInput] = useState(defaultMaxInput);
+
+  const inputStyles = classNames(
+    'block w-full rounded-md border-0 py-1.5 text-sm',
+    'bg-white dark:bg-gray-800',
+    'text-gray-900 dark:text-gray-100',
+    'ring-1 ring-inset ring-gray-300 dark:ring-gray-700',
+    'focus:ring-2 focus:ring-inset focus:ring-blue-500/50 dark:focus:ring-blue-500/40',
+    'hover:ring-gray-400 dark:hover:ring-gray-600',
+    'placeholder:text-gray-400 dark:placeholder:text-gray-500',
+    disabled && 'cursor-not-allowed opacity-50',
+    'transition-all duration-200'
+  );
+
+  const labelStyles = classNames(
+    'absolute -top-2 left-2 z-10',
+    'px-1 text-xs font-medium',
+    'bg-white dark:bg-transparent',
+    'text-gray-500 dark:text-gray-400',
+    disabled && 'opacity-50'
+  );
+
+  return (
+    <div className='space-y-3'>
+      <label className='block text-sm font-medium text-gray-900 dark:text-gray-100'>Coverage</label>
+      <div className='flex items-center gap-3'>
+        <div className='relative flex-1'>
+          <label className={labelStyles}>Minimum</label>
+          <input
+            disabled={disabled}
+            value={minInput && !isNaN(minInput) ? minInput : ''}
+            onChange={(e) => setMinInput(e.target.value ? parseInt(e.target.value) : undefined)}
+            onBlur={() => {
+              if (minInput) {
+                handleFilterChange('coverage[gte]', [minInput.toString()]);
+              } else {
+                handleFilterChange('coverage[gte]', []);
+              }
+            }}
+            type='number'
+            className={inputStyles}
+          />
+        </div>
+        <div className='relative flex-1'>
+          <label className={labelStyles}>Maximum</label>
+          <input
+            disabled={disabled}
+            value={maxInput && !isNaN(maxInput) ? maxInput : ''}
+            onChange={(e) => setMaxInput(e.target.value ? parseInt(e.target.value) : undefined)}
+            onBlur={() => {
+              if (maxInput) {
+                handleFilterChange('coverage[lte]', [maxInput.toString()]);
+              } else {
+                handleFilterChange('coverage[lte]', []);
+              }
+            }}
+            type='number'
+            className={inputStyles}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const LibraryTableFilter = () => {
   const [filter, setFilter] = useState<FilterType>({});
 
@@ -54,11 +131,11 @@ export const LibraryTableFilter = () => {
   const handleIsCheckedFunc = (key: keyof FilterType, value: string) => {
     const currentFilterValue: string[] = [];
 
-    if (typeof filter[key] == 'string') {
-      currentFilterValue.push(filter[key]);
+    if (typeof filter[key] === 'string') {
+      currentFilterValue.push(filter[key] as string);
     }
     if (Array.isArray(filter[key])) {
-      currentFilterValue.push(...filter[key]);
+      currentFilterValue.push(...(filter[key] as string[]));
     }
 
     if (currentFilterValue.includes(value)) {
@@ -70,6 +147,7 @@ export const LibraryTableFilter = () => {
 
     setFilter((prev) => ({ ...prev, [key]: currentFilterValue }));
   };
+
   const isCheckedFilterActive = (key: keyof FilterType, value: string) => {
     const currentFilterValue = filter[key] || [];
     return currentFilterValue.includes(value);
@@ -80,41 +158,48 @@ export const LibraryTableFilter = () => {
   };
 
   const LibraryFilter = () => (
-    <>
+    <div className='space-y-4'>
       <FilterTextInput
         title='Orcabus ID *'
         keyFilter='orcabusId'
-        defaultInput={filter.orcabusId ? filter.orcabusId : []}
+        defaultInput={filter.orcabusId || []}
         handleFilterChange={handleFilterChange}
+        placeholder='Enter Orcabus IDs...'
       />
       <FilterTextInput
         title='Library ID *'
         keyFilter='libraryId'
-        defaultInput={filter.libraryId ? filter.libraryId : []}
+        defaultInput={filter.libraryId || []}
         handleFilterChange={handleFilterChange}
+        placeholder='Enter Library IDs...'
       />
       <FilterTextInput
         title='Assay *'
         keyFilter='assay'
-        defaultInput={filter.assay ? filter.assay : []}
+        defaultInput={filter.assay || []}
         handleFilterChange={handleFilterChange}
+        placeholder='Enter Assays...'
       />
       <FilterTextInput
         title='Individual ID (SBJ ID) *'
         keyFilter='individualId'
-        defaultInput={filter.individualId ? filter.individualId : []}
+        defaultInput={filter.individualId || []}
         handleFilterChange={handleFilterChange}
+        placeholder='Enter Individual IDs...'
       />
       <FilterTextInput
         title='Project ID *'
         keyFilter='projectId'
-        defaultInput={filter.projectId ? filter.projectId : []}
+        defaultInput={filter.projectId || []}
         handleFilterChange={handleFilterChange}
+        placeholder='Enter Project IDs...'
       />
 
-      <div className='text-s mb-2 border-b-2 pb-2 font-thin text-gray-700 italic'>
-        {`*Text input support multi value with comma separated value. E.g. "L000001,L000002"`}
+      <div className='border-b border-gray-200 pb-3 text-xs text-gray-500 italic dark:border-gray-700 dark:text-gray-400'>
+        * Text inputs support multiple values with comma separation (e.g.,
+        &quot;L000001,L000002&quot;)
       </div>
+
       <CoverageFilter
         handleFilterChange={handleFilterChange}
         defaultMaxInput={filter['coverage[lte]'] ? parseInt(filter['coverage[lte]']) : undefined}
@@ -149,7 +234,7 @@ export const LibraryTableFilter = () => {
         handleIsCheckedFunc={handleIsCheckedFunc}
         isCheckedFunc={isCheckedFilterActive}
       />
-    </>
+    </div>
   );
 
   return (
@@ -158,109 +243,45 @@ export const LibraryTableFilter = () => {
         <Button
           type='gray'
           size='sm'
-          className='w-full justify-center rounded-md ring-1 ring-gray-300'
+          className={classNames(
+            'w-full justify-center rounded-md',
+            'ring-1 ring-gray-300 dark:ring-gray-700',
+            'hover:bg-gray-50 dark:hover:bg-gray-800',
+            'transition-colors duration-200'
+          )}
         >
           <FunnelIcon className='h-5 w-5' />
         </Button>
       }
       content={
-        <div className='z-10 w-80 rounded-lg bg-white'>
-          <div className='max-h-[500px] overflow-y-auto px-3 pb-3 text-sm text-gray-700'>
+        <div className='w-80 rounded-lg bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-900 dark:ring-white/10'>
+          <div className='max-h-[500px] overflow-y-auto p-6 text-sm'>
             <LibraryFilter />
           </div>
-          <ClosePopoverWrapper className='mt-4'>
-            <Button
-              className='w-full justify-center'
-              type='red'
-              onClick={() => {
-                clearQueryParams();
-              }}
-            >
-              Reset
-            </Button>
-          </ClosePopoverWrapper>
 
-          <ClosePopoverWrapper>
-            <Button
-              className='mt-2 w-full justify-center'
-              type='primary'
-              onClick={() => {
-                setQueryParams({ ...filter }, true);
-              }}
-            >
-              Apply
-            </Button>
-          </ClosePopoverWrapper>
+          <div className='space-y-2 border-t border-gray-200 p-4 dark:border-gray-700'>
+            <ClosePopoverWrapper>
+              <Button
+                className='w-full justify-center'
+                type='red'
+                onClick={() => clearQueryParams()}
+              >
+                Reset
+              </Button>
+            </ClosePopoverWrapper>
+
+            <ClosePopoverWrapper>
+              <Button
+                className='w-full justify-center'
+                type='primary'
+                onClick={() => setQueryParams({ ...filter }, true)}
+              >
+                Apply
+              </Button>
+            </ClosePopoverWrapper>
+          </div>
         </div>
       }
     />
-  );
-};
-
-const CoverageFilter = ({
-  defaultMinInput,
-  defaultMaxInput,
-  handleFilterChange,
-  disabled = false,
-}: {
-  defaultMinInput?: number;
-  defaultMaxInput?: number;
-  handleFilterChange: (key: keyof FilterType, value: string[]) => void;
-  disabled?: boolean;
-}) => {
-  const [minInput, setMinInput] = useState(defaultMinInput);
-  const [maxInput, setMaxInput] = useState(defaultMaxInput);
-
-  return (
-    <>
-      <div className='mb-2 font-medium'>{`Coverage`}</div>
-      <div className='relative inline-block w-24 cursor-pointer text-left'>
-        <label
-          className={classNames(
-            'absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 bg-white px-2 text-sm text-gray-500'
-          )}
-        >
-          {`Minimum`}
-        </label>
-        <input
-          disabled={disabled}
-          value={minInput && !isNaN(minInput) ? minInput : ''}
-          onChange={(e) => setMinInput(e.target.value ? parseInt(e.target.value) : undefined)}
-          onBlur={() => {
-            console.log(minInput);
-            if (minInput) {
-              handleFilterChange('coverage[gte]', [minInput.toString()]);
-            } else {
-              handleFilterChange('coverage[gte]', []);
-            }
-          }}
-          type='number'
-          className='my-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500/50 focus:ring-blue-500/50'
-        />
-      </div>
-      <div className='relative ml-2 inline-block w-24 cursor-pointer text-left'>
-        <label
-          className={classNames(
-            'absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 bg-white px-2 text-sm text-gray-500'
-          )}
-        >
-          {`Maximum`}
-        </label>
-        <input
-          disabled={disabled}
-          value={maxInput && !isNaN(maxInput) ? maxInput : ''}
-          onChange={(e) => setMaxInput(e.target.value ? parseInt(e.target.value) : undefined)}
-          onBlur={() => {
-            if (maxInput) {
-              handleFilterChange('coverage[lte]', [maxInput.toString()]);
-            } else {
-              handleFilterChange('coverage[lte]', []);
-            }
-          }}
-          type='number'
-          className='my-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500/50 focus:ring-blue-500/50'
-        />
-      </div>
-    </>
   );
 };

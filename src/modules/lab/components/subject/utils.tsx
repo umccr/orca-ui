@@ -1,9 +1,9 @@
 import { Column } from '@/components/tables';
 import { classNames } from '@/utils/commonUtils';
-import { Link } from 'react-router-dom';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Tooltip } from '@/components/common/tooltips';
 import { getCurrentSortDirection, getSortValue } from '@/components/tables/Table';
+import { RedirectLink } from '@/components/common/link';
 
 export const getSubjectTableColumn = ({
   cellClassName,
@@ -25,14 +25,31 @@ export const getSubjectTableColumn = ({
         <Tooltip
           text={`This is now the 'ExternalSubjectID' from the tracking sheet`}
           position='right'
+          background='light'
+          size='small'
+          className='z-50 w-96 text-wrap whitespace-normal'
         >
           <InformationCircleIcon className='ml-2 h-4' />
         </Tooltip>
       </div>
     ),
-    headerClassName: headerClassName,
+    headerClassName: classNames(
+      'bg-indigo-50/90 dark:bg-indigo-900/30',
+      'text-gray-800 dark:text-gray-100',
+      'transition-all duration-200',
+      headerClassName
+    ),
     // The length of Column array is 1
-    headerGroup: { label: headerGroupLabel, colSpan: 1, additionalClassName: headerClassName },
+    headerGroup: {
+      label: headerGroupLabel,
+      colSpan: 1,
+      additionalClassName: classNames(
+        'bg-indigo-50/90 dark:bg-indigo-900/30',
+        'text-gray-800 dark:text-gray-100',
+        'transition-all duration-200',
+        headerClassName
+      ),
+    },
     onSort: setSort
       ? () => {
           setSort(getSortValue(currentSort, 'subject_id'));
@@ -55,19 +72,19 @@ export const getSubjectTableColumn = ({
         <>
           {data.map((sbj, idx) => (
             <div className='py-2' key={idx}>
-              <Link
-                to={`/lab/?tab=subject&orcabusId=${sbj.subjectOrcabusId}`}
-                className={classNames(
-                  'ml-2 text-sm font-medium text-blue-500 capitalize hover:text-blue-700'
-                )}
-              >
+              <RedirectLink to={`/lab/?tab=subject&orcabusId=${sbj.subjectOrcabusId}`}>
                 {sbj.subjectId ?? '-'}
-              </Link>
+              </RedirectLink>
             </div>
           ))}
         </>
       );
     },
-    cellClassName: cellClassName,
+    cellClassName: classNames(
+      'bg-indigo-50/80 dark:bg-indigo-950/10',
+      'text-gray-800 dark:text-gray-100',
+      'transition-colors duration-200',
+      cellClassName
+    ),
   },
 ];

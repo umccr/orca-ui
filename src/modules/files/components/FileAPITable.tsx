@@ -72,7 +72,12 @@ export const FileAPITable = ({
             onChange={() => setIsHideWorkDirectory((p) => !p)}
             label="Hide 'work' directory"
           />
-          <Tooltip text={`Does not work for paginated results.`} position='right' size='small'>
+          <Tooltip
+            text={`Does not work for paginated results.`}
+            position='right'
+            size='small'
+            className='z-50 w-96 text-wrap whitespace-normal'
+          >
             <div className='flex items-center'>
               <InformationCircleIcon className='flex h-4 w-4 items-center' />
             </div>

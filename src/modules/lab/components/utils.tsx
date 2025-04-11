@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { Checkbox } from '@/components/common/checkbox';
+import { classNames } from '@/utils/commonUtils';
 
 interface FilterTextInputProps<T> {
   title?: string;
@@ -6,6 +8,7 @@ interface FilterTextInputProps<T> {
   defaultInput: string | string[];
   handleFilterChange: (key: keyof T, value: string[]) => void;
   disabled?: boolean;
+  placeholder?: string;
 }
 
 export const FilterTextInput = <T,>({
@@ -13,6 +16,8 @@ export const FilterTextInput = <T,>({
   keyFilter,
   defaultInput,
   handleFilterChange,
+  disabled,
+  placeholder = 'Enter values separated by commas...',
 }: FilterTextInputProps<T>) => {
   const [input, setInput] = useState<string>('');
 
@@ -24,25 +29,40 @@ export const FilterTextInput = <T,>({
   }, [defaultInput]);
 
   return (
-    <>
-      {title && <div className='font-medium'>{title}</div>}
-      <div className='pl-2'>
+    <div className='space-y-1.5'>
+      {title && (
+        <label className='block text-sm font-medium text-gray-900 dark:text-gray-100'>
+          {title}
+        </label>
+      )}
+      <div className='relative'>
         <input
           value={input}
+          disabled={disabled}
           onChange={(e) => setInput(e.target.value.trim())}
           onBlur={() => {
-            if (input == '') {
+            if (input === '') {
               handleFilterChange(keyFilter, []);
               return;
-            } else {
-              handleFilterChange(keyFilter, input.split(','));
             }
+            handleFilterChange(keyFilter, input.split(','));
           }}
           type='text'
-          className='my-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500/50 focus:ring-blue-500/50'
+          placeholder={placeholder}
+          className={classNames(
+            'block w-full rounded-md border-0 px-3 py-1.5 text-sm',
+            'bg-white dark:bg-gray-800',
+            'text-gray-900 dark:text-gray-100',
+            'ring-1 ring-gray-300 ring-inset dark:ring-gray-700',
+            'placeholder:text-gray-400 dark:placeholder:text-gray-500',
+            'focus:ring-2 focus:ring-blue-500/50 focus:ring-inset dark:focus:ring-blue-500/40',
+            'hover:ring-gray-400 dark:hover:ring-gray-600',
+            disabled && 'cursor-not-allowed opacity-50',
+            'transition-all duration-200'
+          )}
         />
       </div>
-    </>
+    </div>
   );
 };
 
@@ -52,36 +72,44 @@ interface CheckboxGroupInputProps<T> {
   options: string[];
   handleIsCheckedFunc: (key: keyof T, value: string) => void;
   isCheckedFunc: (key: keyof T, value: string) => boolean;
+  disabled?: boolean;
 }
+
 export const CheckboxGroupInput = <T,>({
   title,
   keyFilter,
   options,
   handleIsCheckedFunc,
   isCheckedFunc,
+  disabled,
 }: CheckboxGroupInputProps<T>) => {
   return (
-    <>
-      {title && <div className='font-medium'>{title}</div>}
-      {options.map((item, key) => (
-        <div
-          key={`${title}-${key}`}
-          className='flex cursor-pointer items-center rounded-sm ps-2 hover:bg-gray-100'
-          onClick={() => {
-            handleIsCheckedFunc(keyFilter, item);
-          }}
-        >
-          <input
-            readOnly
-            checked={isCheckedFunc(keyFilter, item)}
-            type='checkbox'
-            className='h-4 w-4 cursor-pointer rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500/50'
-          />
-          <label className='ms-2 w-full cursor-pointer rounded-sm py-2 text-sm font-normal text-gray-900'>
-            {item}
-          </label>
-        </div>
-      ))}
-    </>
+    <div className='space-y-2'>
+      {title && (
+        <label className='block text-sm font-medium text-gray-900 dark:text-gray-100'>
+          {title}
+        </label>
+      )}
+      <div className='space-y-1'>
+        {options.map((item, index) => (
+          <div
+            key={`${title}-${index}`}
+            className={classNames(
+              'rounded-md px-2 py-0.5',
+              !disabled && 'hover:bg-gray-50 dark:hover:bg-gray-800/50',
+              'transition-colors duration-150'
+            )}
+          >
+            <Checkbox
+              checked={isCheckedFunc(keyFilter, item)}
+              onChange={() => handleIsCheckedFunc(keyFilter, item)}
+              label={item}
+              disabled={disabled}
+              size='sm'
+            />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };

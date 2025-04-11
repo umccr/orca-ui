@@ -1,9 +1,8 @@
 import { FC } from 'react';
 import { JsonToTable } from '@/components/common/json-to-table';
 import { components } from '@/api/types/metadata';
-import { Link } from 'react-router-dom';
 import { classNames } from '@/utils/commonUtils';
-
+import { RedirectLink } from '@/components/common/link';
 type LibraryTableDetailsProps = {
   libraryDetail: components['schemas']['LibraryDetail'];
 };
@@ -16,29 +15,25 @@ export const LibraryTableDetails: FC<LibraryTableDetailsProps> = ({ libraryDetai
         data={{
           'Library ID': library.libraryId ?? '-',
           'Individual ID': library.subject.individualSet.map((individual) => (
-            <Link
+            <RedirectLink
               key={individual.orcabusId}
               to={`/lab/?tab=subject&individualId=${individual.individualId}`}
-              className={classNames('text-blue-500 hover:text-blue-700')}
             >
               {individual.individualId ?? '-'}
-            </Link>
+            </RedirectLink>
           )),
           'Subject ID': (
-            <Link
-              to={`/lab/?tab=subject&orcabusId=${library.subject.orcabusId}`}
-              className={classNames('text-blue-500 hover:text-blue-700')}
-            >
+            <RedirectLink to={`/lab/?tab=subject&orcabusId=${library.subject.orcabusId}`}>
               {library.subject.subjectId ?? '-'}
-            </Link>
+            </RedirectLink>
           ),
           'Sample ID': (
-            <Link
+            <RedirectLink
               to={`/lab/?tab=sample&orcabusId=${library.sample.orcabusId}`}
               className={classNames('text-blue-500 hover:text-blue-700')}
             >
               {library.sample.sampleId ?? '-'}
-            </Link>
+            </RedirectLink>
           ),
           'Sample Source': library.sample.source ?? '-',
           'External Sample ID': library.sample.externalSampleId ?? '-',
@@ -49,13 +44,13 @@ export const LibraryTableDetails: FC<LibraryTableDetailsProps> = ({ libraryDetai
           Assay: library.assay ?? '-',
           'Override Cycles': library.overrideCycles ?? '-',
           Project: library.projectSet.map((project) => (
-            <Link
+            <RedirectLink
               key={project.orcabusId}
               to={`/lab/?tab=library&projectId=${project.projectId}`}
               className={classNames('text-blue-500 hover:text-blue-700')}
             >
               {project.projectId ?? '-'}
-            </Link>
+            </RedirectLink>
           )),
         }}
       />

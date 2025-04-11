@@ -11,9 +11,9 @@ import { DocumentArrowUpIcon } from '@heroicons/react/24/outline';
 import { ProjectListAPITable } from '../components/project/ProjectListAPITable';
 
 const selectedClassName =
-  'inline-block p-4 text-blue-500 border-b-2 border-blue-500 rounded-t-lg active';
+  'inline-flex items-center gap-2 p-4 text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400 rounded-t-lg font-medium transition-colors duration-200';
 const regularClassName =
-  'cursor-pointer	inline-block p-4 border-b-2 border-transparent rounded-t-lg text-gray-500 border-transparent hover:border-gray-200 hover:text-gray-700';
+  'inline-flex items-center gap-2 p-4 text-gray-600 dark:text-gray-300 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-900 dark:hover:text-gray-100 rounded-t-lg cursor-pointer transition-all duration-200';
 
 export default function MetadataPage() {
   const { getQueryParams, setQueryParams } = useQueryParams();
@@ -49,7 +49,15 @@ export default function MetadataPage() {
     },
     {
       label: 'MODEL',
-      content: <img alt=' Metadata Schema' src='/assets/metadata-schema.svg' />,
+      content: (
+        <div className='flex justify-center rounded-lg bg-gray-50 p-4 shadow-sm dark:bg-gray-800/50'>
+          <img
+            alt='Metadata Schema'
+            src='/assets/metadata-schema.svg'
+            className='h-auto max-w-full'
+          />
+        </div>
+      ),
     },
   ];
 
@@ -58,50 +66,52 @@ export default function MetadataPage() {
   }
 
   return (
-    <>
-      <div className='flex w-full justify-end'>
+    <div>
+      <div className='flex items-center justify-end'>
         <Button
-          onClick={() => {
-            navigate('./sync');
-          }}
+          onClick={() => navigate('./sync')}
           type='green'
           size='sm'
-          className='justify-center rounded-md ring-1 ring-gray-300'
+          className='shadow-sm ring-1 ring-green-600/20 transition-shadow duration-200 hover:shadow-md dark:ring-green-400/20'
+          tooltip='Import metadata'
         >
-          Import
-          <DocumentArrowUpIcon className='h-5 w-5' />
+          <span className='flex items-center gap-2'>
+            Import
+            <DocumentArrowUpIcon className='h-5 w-5' />
+          </span>
         </Button>
       </div>
-      <div className='border-b border-gray-200 text-center text-sm font-medium text-gray-500 capitalize dark:text-gray-400'>
-        <ul className='-mb-px flex flex-wrap'>
+
+      <div className='rounded-lg bg-white dark:bg-gray-900'>
+        <div className='border-b border-gray-200 text-sm font-medium dark:border-gray-700'>
+          <ul className='-mb-px flex flex-wrap'>
+            {tabs.map((tab, index) => {
+              const isSelected = currentTabSelection === tab.label;
+              return (
+                <li key={index}>
+                  <div
+                    onClick={() => setQueryParams({ tab: tab.label }, true)}
+                    className={isSelected ? selectedClassName : regularClassName}
+                  >
+                    {tab.label.charAt(0).toUpperCase() + tab.label.slice(1)}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <div className='mt-2 px-2'>
           {tabs.map((tab, index) => {
-            const isSelected = currentTabSelection === tab.label;
-            return (
-              <li key={index} className='me-2'>
-                <div
-                  onClick={() => {
-                    setQueryParams({ tab: tab.label }, true);
-                  }}
-                  className={isSelected ? selectedClassName : regularClassName}
-                >
-                  {tab.label}
-                </div>
-              </li>
-            );
+            if (currentTabSelection === tab.label) {
+              return (
+                <Fragment key={index}>
+                  <Suspense fallback={<SpinnerWithText />}>{tab.content}</Suspense>
+                </Fragment>
+              );
+            }
           })}
-        </ul>
+        </div>
       </div>
-      <div className='mt-4'>
-        {tabs.map((tab, index) => {
-          if (currentTabSelection === tab.label) {
-            return (
-              <Fragment key={index}>
-                <Suspense fallback={<SpinnerWithText />}>{tab.content}</Suspense>
-              </Fragment>
-            );
-          }
-        })}
-      </div>
-    </>
+    </div>
   );
 }

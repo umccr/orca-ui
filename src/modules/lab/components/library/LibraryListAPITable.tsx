@@ -27,7 +27,7 @@ export const LibraryListAPITable = ({ queryParams }: { queryParams: LibraryListQ
     <Table
       inCard={false}
       tableHeader={
-        <div className='flex flex-col'>
+        <div className='flex flex-col md:flex-row'>
           <div className='flex items-center justify-center'>{'Library Table'}</div>
           <div className='flex flex-1 items-center justify-end pt-2'>
             <div className='w-1/5'>
@@ -49,21 +49,23 @@ export const LibraryListAPITable = ({ queryParams }: { queryParams: LibraryListQ
             setQueryParams({ ordering: newOrder });
           },
           currentSort: queryParams?.ordering,
+          headerClassName: 'bg-transparent',
+          cellClassName: 'bg-transparent',
         }),
         ...getSubjectTableColumn({
           headerGroupLabel: 'Subject',
-          headerClassName: 'bg-orange-100',
-          cellClassName: 'bg-orange-50',
+          // headerClassName: 'bg-orange-100',
+          // cellClassName: 'bg-orange-50',
         }),
         ...getSampleTableColumn({
           headerGroupLabel: 'Sample',
-          headerClassName: 'bg-red-100',
-          cellClassName: 'bg-red-50',
+          // headerClassName: 'bg-red-100',
+          // cellClassName: 'bg-red-50',
         }),
         ...getProjectTableColumn({
           headerGroupLabel: 'Project',
-          headerClassName: 'bg-indigo-100',
-          cellClassName: 'bg-indigo-50',
+          // headerClassName: 'bg-indigo-100',
+          // cellClassName: 'bg-indigo-50',
         }),
       ]}
       tableData={flatData}

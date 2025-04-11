@@ -13,6 +13,7 @@ import { Tooltip } from '@/components/common/tooltips';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { getLibraryTableColumn } from '../library/utils';
 import { getSubjectTableColumn } from './utils';
+import { classNames } from '@/utils/commonUtils';
 
 export const SubjectListAPITable = ({ queryParams }: { queryParams: SubjectListQueryParams }) => {
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
@@ -51,12 +52,14 @@ export const SubjectListAPITable = ({ queryParams }: { queryParams: SubjectListQ
             setQueryParams({ ordering: newOrder });
           },
           currentSort: queryParams?.ordering,
+          headerClassName: 'bg-transparent',
+          cellClassName: 'bg-transparent',
         }),
         ...individualTableColumn(),
         ...getLibraryTableColumn({
           headerGroupLabel: 'Library',
-          headerClassName: 'bg-red-100',
-          cellClassName: 'bg-red-50',
+          // headerClassName: 'bg-red-100',
+          // cellClassName: 'bg-red-50',
         }),
       ]}
       tableData={tableData}
@@ -132,16 +135,30 @@ const processSubjectResult = (data: components['schemas']['SubjectDetail'][]) =>
 
 export const individualTableColumn = (): Column[] => {
   const cellColor = {
-    headerClassName: 'bg-orange-100',
-    cellClassName: 'bg-orange-50',
+    headerClassName: classNames(
+      'bg-cyan-100/60 dark:bg-cyan-800/30',
+      'text-gray-800 dark:text-gray-100',
+      'transition-colors duration-200'
+    ),
+    cellClassName: classNames(
+      'bg-cyan-100/60 dark:bg-cyan-800/30',
+      'text-gray-800 dark:text-gray-100',
+      'transition-colors duration-200'
+    ),
   };
   return [
     {
       header: (
         <div className='flex flex-row items-center'>
           <div>Individual ID</div>
-          <Tooltip text={`This is now the 'SubjectID' from the tracking sheet`} position='right'>
-            <InformationCircleIcon className='ml-2 h-4' />
+          <Tooltip
+            text={`This is now the 'SubjectID' from the tracking sheet`}
+            position='right'
+            background='light'
+            size='small'
+            className='z-50 w-96 text-wrap whitespace-normal'
+          >
+            <InformationCircleIcon className='ml-2 h-4 text-amber-700 dark:text-amber-300' />
           </Tooltip>
         </div>
       ),
@@ -156,20 +173,9 @@ export const individualTableColumn = (): Column[] => {
         return (
           <Fragment>
             {data.map((idv, idx) => {
-              if (!idv.individualId) {
-                return <div key={idx}>-</div>;
-              }
               return (
-                <div className='py-2' key={idx}>
-                  {idv.individualId}
-                  {/* <Link
-                  to={`individual/${idv.individualId}`}
-                  className={classNames(
-                    'ml-2 text-sm capitalize font-medium hover:text-blue-700 text-blue-500'
-                  )}
-                >
-                  {idv.individualId}
-                </Link> */}
+                <div key={idx} className='py-2'>
+                  {!idv.individualId ? '-' : idv.individualId}
                 </div>
               );
             })}
