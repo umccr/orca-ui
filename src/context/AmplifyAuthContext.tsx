@@ -140,13 +140,18 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement 
   // redirect to main domain in production environment
   // as callback is only working for main domain, refer: https://github.com/umccr/orca-ui/issues/68
   const PROD_DOMAIN = 'orcaui.prod.umccr.org';
-  const MAIN_DOMAIN = 'orcaui.umccr.org';
+  const PROD_PORTAL_DOMAIN = 'portal.prod.umccr.org';
+  const MAIN_PORTAL_DOMAIN = 'portal.umccr.org';
+  const MAIN_DOMAIN = 'orcaui.umccr.org'; // main domain
 
   useEffect(() => {
+    const aliasDomain = [PROD_DOMAIN, PROD_PORTAL_DOMAIN, MAIN_PORTAL_DOMAIN];
     // Only redirect in production environment
-    if (window.location.hostname === PROD_DOMAIN) {
-      window.location.href = window.location.href.replace(PROD_DOMAIN, MAIN_DOMAIN);
-      return;
+    if (
+      aliasDomain.includes(window.location.hostname) &&
+      !window.location.hostname.includes('localhost')
+    ) {
+      window.location.href = MAIN_DOMAIN;
     }
   }, []);
 
