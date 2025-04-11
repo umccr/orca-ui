@@ -22,7 +22,14 @@ const SequenceRunWorkflowRuns = () => {
         libraries__libraryId: libraryIds,
         page: getQueryParams().page || 1,
         rowsPerPage: getPaginationParams().rowsPerPage || DEFAULT_PAGE_SIZE,
-        status: getQueryParams().workflowRunStatus || null,
+        status: ['succeeded', 'failed', 'aborted', 'resolved', 'deprecated'].includes(
+          getQueryParams().workflowRunStatus
+        )
+          ? getQueryParams().workflowRunStatus
+          : undefined,
+        is_ongoing: getQueryParams().workflowRunStatus == 'ongoing' || undefined,
+        start_time: sequenceRunDetail?.endTime,
+        end_time: dayjs(sequenceRunDetail?.endTime).add(2, 'days').toISOString(),
       },
     },
   });
