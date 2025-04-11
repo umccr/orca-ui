@@ -33,7 +33,10 @@ function SignInContainer() {
 
   return (
     <div className='flex h-full w-full items-center justify-center bg-transparent'>
-      <Card className='w-[40rem] border border-gray-700/30 bg-gray-800/30 shadow-2xl backdrop-blur-none'>
+      <Card
+        className='w-[40rem] border border-gray-700/30 bg-gray-900/20 shadow-2xl ring-1 ring-gray-700/30 backdrop-blur-none'
+        bodyClassName='bg-gray-900/20'
+      >
         <div className='flex items-center justify-center p-[20px]'>
           <img src='/assets/logo/uomlogo.png' className='h-auto w-[30%]' alt='uomlogo.png' />
         </div>
