@@ -115,6 +115,16 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement 
   const initializeAuth = useCallback(async () => {
     setIsAuthenticating(true);
 
+    // check local storage to see if has cognito info (start with CognitoIdentityServiceProvider)
+    // if no cognito info, set isAuthenticating to false, else continue to fetch user info
+    const hasCognitoInfo = Object.keys(localStorage).some((key) =>
+      key.startsWith('CognitoIdentityServiceProvider')
+    );
+    if (!hasCognitoInfo) {
+      setIsAuthenticating(false);
+      return;
+    }
+
     try {
       const user = await fetchUserAttributes();
       dispatch({ type: AuthActionTypes.INIT, payload: { isAuthenticated: true, user } });
@@ -130,13 +140,18 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement 
   // redirect to main domain in production environment
   // as callback is only working for main domain, refer: https://github.com/umccr/orca-ui/issues/68
   const PROD_DOMAIN = 'orcaui.prod.umccr.org';
-  const MAIN_DOMAIN = 'orcaui.umccr.org';
+  const PROD_PORTAL_DOMAIN = 'portal.prod.umccr.org';
+  const MAIN_PORTAL_DOMAIN = 'portal.umccr.org';
+  const MAIN_DOMAIN = 'orcaui.umccr.org'; // main domain
 
   useEffect(() => {
+    const aliasDomain = [PROD_DOMAIN, PROD_PORTAL_DOMAIN, MAIN_PORTAL_DOMAIN];
     // Only redirect in production environment
-    if (window.location.hostname === PROD_DOMAIN) {
-      window.location.href = window.location.href.replace(PROD_DOMAIN, MAIN_DOMAIN);
-      return;
+    if (
+      aliasDomain.includes(window.location.hostname) &&
+      !window.location.hostname.includes('localhost')
+    ) {
+      window.location.href = window.location.href.replace(window.location.hostname, MAIN_DOMAIN);
     }
   }, []);
 

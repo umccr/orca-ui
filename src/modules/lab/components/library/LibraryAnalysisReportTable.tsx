@@ -172,7 +172,7 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
           position='bottom'
           background='light'
           size='large'
-          className='w-96'
+          className='w-96 dark:bg-gray-800 dark:text-gray-400'
         >
           <InformationCircleIcon className='2-5 mx-2 h-5' />
         </Tooltip>
@@ -310,20 +310,23 @@ export const AnalysisTable = ({
     <>
       <GroupedTable
         tableHeader={
-          <div className='flex flex-col'>
-            <div className='flex flex-row items-center justify-between'>
-              <div className='flex flex-row'>
-                <div>{workflowType}</div>
+          <div className='flex flex-col space-y-2'>
+            <div className='flex items-center justify-between'>
+              <div className='flex items-center'>
+                <div className='text-gray-900 dark:text-gray-100'>{workflowType}</div>
                 <WorkflowDialogDetail
                   portalRunId={selectedPortalRunId}
                   workflowDetail={currentSelectedWorkflowDetail}
                 />
               </div>
               {isMultipleRuns && (
-                <div className='flex flex-row'>
-                  <Badge type='warning' className='mr-2'>
+                <div className='flex items-center space-x-3'>
+                  <Badge
+                    type='warning'
+                    className='inline-flex items-center py-2 text-sm font-medium whitespace-nowrap'
+                  >
                     <ExclamationTriangleIcon className='mr-2 h-5 w-5' />
-                    <p className='mt-0.5'>Multiple runs</p>
+                    <span>Multiple Runs</span>
                   </Badge>
                   <Dropdown
                     floatingLabel='Portal Run ID'
@@ -332,13 +335,14 @@ export const AnalysisTable = ({
                       label: i.portalRunId,
                       onClick: () => setSelectedPortalRunId(i.portalRunId),
                     }))}
+                    className='min-w-[200px] dark:bg-gray-800 dark:text-gray-200'
                   />
                 </div>
               )}
             </div>
             {filesApiData.links?.next && (
-              <div className='pt-4 text-xs text-slate-400 italic'>
-                *Due to pagination, some files may not be shown here.
+              <div className='text-xs text-gray-500 italic dark:text-gray-400'>
+                * Due to pagination, some files may not be shown here.
               </div>
             )}
           </div>

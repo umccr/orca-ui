@@ -21,12 +21,16 @@ export const PortalRunIdDropdown = ({
   }
 
   return (
-    <div className='flex'>
-      <div className='flex flex-row flex-wrap content-center font-medium'>
-        <Badge type='warning' className='mr-2'>
+    <div className='flex flex-col space-y-2'>
+      <div className='flex items-center space-x-3'>
+        <Badge
+          type='warning'
+          className='inline-flex items-center py-2 text-sm font-medium whitespace-nowrap'
+        >
           <ExclamationTriangleIcon className='mr-2 h-5 w-5' />
-          <p className='mt-0.5'>Multiple runs</p>
+          <span>Multiple Runs</span>
         </Badge>
+
         <Dropdown
           floatingLabel='Portal Run ID'
           value={portalRunId}
@@ -34,15 +38,15 @@ export const PortalRunIdDropdown = ({
             label: i.portalRunId,
             onClick: () => navigate(`../${i.portalRunId}`),
           }))}
+          className='min-w-[200px] dark:bg-gray-800 dark:text-gray-200'
         />
       </div>
-      {/* In case portalRunId return is beyond the first page, at least some warning as we do not have
-      pagination implemented */}
-      {workflowRun?.links.next ? (
-        <div className='p-4 text-xs text-slate-400 italic'>
-          *Some portal run id may not be listed.
+
+      {workflowRun?.links.next && (
+        <div className='text-xs text-gray-500 italic dark:text-gray-400'>
+          * Some portal run IDs may not be listed
         </div>
-      ) : undefined}
+      )}
     </div>
   );
 };

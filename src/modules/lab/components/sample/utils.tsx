@@ -1,7 +1,7 @@
 import { Column } from '@/components/tables';
 import { classNames } from '@/utils/commonUtils';
-import { Link } from 'react-router-dom';
 import { getCurrentSortDirection, getSortValue } from '@/components/tables/Table';
+import { RedirectLink } from '@/components/common/link';
 
 export const getSampleTableColumn = ({
   cellClassName,
@@ -18,9 +18,22 @@ export const getSampleTableColumn = ({
 }): Column[] => [
   {
     header: 'Sample Id',
-    headerClassName: headerClassName,
-    // colSpan=3 because the length of Column array
-    headerGroup: { colSpan: 3, label: headerGroupLabel, additionalClassName: headerClassName },
+    headerClassName: classNames(
+      'bg-red-50/90 dark:bg-red-900/40',
+      'text-gray-900 dark:text-gray-100',
+      'transition-all duration-200',
+      headerClassName
+    ),
+    headerGroup: {
+      colSpan: 3,
+      label: headerGroupLabel,
+      additionalClassName: classNames(
+        'bg-red-50/90 dark:bg-red-900/40',
+        'text-gray-900 dark:text-gray-100',
+        'transition-all duration-200',
+        headerClassName
+      ),
+    },
     accessor: 'sampleIds',
     onSort: setSort
       ? () => {
@@ -34,22 +47,25 @@ export const getSampleTableColumn = ({
 
       return (
         <div className='py-2'>
-          <Link
-            to={`/lab/?tab=sample&orcabusId=${props.sampleOrcabusId}`}
-            className={classNames(
-              'ml-2 text-sm font-medium text-blue-500 capitalize hover:text-blue-700'
-            )}
-          >
-            {props.sampleId}
-          </Link>
+          <RedirectLink to={`/lab/sample/${props.sampleOrcabusId}`}>{props.sampleId}</RedirectLink>
         </div>
       );
     },
-    cellClassName: cellClassName,
+    cellClassName: classNames(
+      'bg-red-50/80 dark:bg-red-900/30',
+      'text-gray-900 dark:text-gray-100',
+      'transition-all duration-200',
+      cellClassName
+    ),
   },
   {
     header: 'External Sample Id',
-    headerClassName: headerClassName,
+    headerClassName: classNames(
+      'bg-red-50/90 dark:bg-red-900/40',
+      'text-gray-900 dark:text-gray-100',
+      'transition-all duration-200',
+      headerClassName
+    ),
     accessor: 'sampleExternalId',
     onSort: setSort
       ? () => {
@@ -57,11 +73,21 @@ export const getSampleTableColumn = ({
         }
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'externalSampleId'),
-    cellClassName: cellClassName,
+    cellClassName: classNames(
+      'bg-red-50/80 dark:bg-red-900/30',
+      'text-gray-900 dark:text-gray-100',
+      'transition-all duration-200',
+      cellClassName
+    ),
   },
   {
     header: 'Source',
-    headerClassName: headerClassName,
+    headerClassName: classNames(
+      'bg-red-50/90 dark:bg-red-900/40',
+      'text-gray-900 dark:text-gray-100',
+      'transition-all duration-200',
+      headerClassName
+    ),
     accessor: 'sampleSource',
     onSort: setSort
       ? () => {
@@ -69,6 +95,11 @@ export const getSampleTableColumn = ({
         }
       : undefined,
     sortDirection: getCurrentSortDirection(currentSort, 'source'),
-    cellClassName: cellClassName,
+    cellClassName: classNames(
+      'bg-red-50/80 dark:bg-red-900/30',
+      'text-gray-900 dark:text-gray-100',
+      'transition-all duration-200',
+      cellClassName
+    ),
   },
 ];

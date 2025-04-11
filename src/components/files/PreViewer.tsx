@@ -1,8 +1,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getMimeType, getPreSignedUrlData } from './utils';
 import { usePresignedFileObjectId } from '@/api/file';
+import { classNames } from '@/utils/commonUtils';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { ExternalLink } from '@/components/common/link';
 
 type Props = { s3ObjectId: string; s3Key: string };
+
 export const PreViewer = ({ s3ObjectId, s3Key }: Props) => {
   const url = usePresignedFileObjectId({
     params: { path: { id: s3ObjectId }, query: { responseContentDisposition: 'inline' } },
@@ -25,15 +29,57 @@ export const PreViewer = ({ s3ObjectId, s3Key }: Props) => {
   const viewableRows = allRows.slice(0, 1000);
 
   return (
-    <>
+    <div className='space-y-4'>
       {viewableRows.length > 1000 && (
-        <div className='mb-3 w-full border bg-amber-100 p-2 text-amber-700'>
-          Only showing the first 1000 rows
+        <div
+          className={classNames(
+            'flex items-center gap-2 rounded-lg p-3',
+            'bg-amber-50 dark:bg-amber-900/30',
+            'border border-amber-200 dark:border-amber-700',
+            'text-amber-800 dark:text-amber-200'
+          )}
+        >
+          <ExclamationTriangleIcon className='h-5 w-5 flex-shrink-0' />
+          <p className='text-sm font-medium'>Only showing the first 1,000 rows for performance</p>
         </div>
       )}
-      <pre className='border-round-xs m-0 mt-4 inline-block w-full overflow-auto border border-solid border-current bg-white p-3'>
-        {viewableRows.join('\n')}
-      </pre>
-    </>
+
+      <div
+        className={classNames(
+          'overflow-hidden rounded-lg',
+          'border border-gray-200 dark:border-gray-700',
+          'bg-white dark:bg-gray-900',
+          'shadow-sm'
+        )}
+      >
+        <div
+          className={classNames(
+            'border-b px-4 py-2',
+            'border-gray-200 dark:border-gray-700',
+            'bg-gray-50 dark:bg-gray-800'
+          )}
+        >
+          <div className='flex items-center justify-between'>
+            <h3 className='text-sm font-medium text-gray-900 dark:text-gray-100'>File Preview</h3>
+            <ExternalLink url={url}>
+              <span className='text-xs text-gray-500 dark:text-gray-400'>
+                {s3Key.split('/').pop()}
+              </span>
+            </ExternalLink>
+          </div>
+        </div>
+
+        <pre
+          className={classNames(
+            'm-0 overflow-auto p-4',
+            'text-sm text-gray-800 dark:text-gray-200',
+            'font-mono',
+            'bg-white dark:bg-gray-900'
+          )}
+        >
+          {viewableRows.join('\n')}
+        </pre>
+      </div>
+    </div>
   );
 };
