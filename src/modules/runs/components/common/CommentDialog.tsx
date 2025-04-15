@@ -4,6 +4,7 @@ import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
 import { Textarea } from '@headlessui/react';
 import UserProfileSection from './UserProfileSection';
 import { FetchUserAttributesOutput } from '@aws-amplify/auth';
+import { Dropdown } from '@/components/common/dropdowns';
 interface CommentDialogProps {
   isOpenAddCommentDialog: boolean;
   isOpenUpdateCommentDialog: boolean;
@@ -15,6 +16,8 @@ interface CommentDialogProps {
   handleUpdateComment: () => void;
   handleDeleteComment: () => void;
   user: FetchUserAttributesOutput;
+  selectedRunId?: string;
+  runDetailDropdownItems?: { label: string; onClick: () => void }[];
 }
 const CommentDialog: FC<CommentDialogProps> = ({
   isOpenAddCommentDialog,
@@ -27,6 +30,8 @@ const CommentDialog: FC<CommentDialogProps> = ({
   handleUpdateComment,
   handleDeleteComment,
   user,
+  selectedRunId,
+  runDetailDropdownItems,
 }) => {
   return (
     <Dialog
@@ -43,6 +48,26 @@ const CommentDialog: FC<CommentDialogProps> = ({
         <div className='flex flex-col gap-4 p-2'>
           {/* User Info Section */}
           <UserProfileSection user={user} />
+
+          {/* selected sequence run id */}
+          {selectedRunId && runDetailDropdownItems && (
+            <div className='flex flex-col items-start gap-2'>
+              <div className='flex flex-row gap-2'>
+                <Dropdown
+                  floatingLabel='Sequence Run ID'
+                  value={selectedRunId}
+                  items={runDetailDropdownItems ?? []}
+                  className='min-w-[250px] dark:bg-gray-800 dark:text-gray-200'
+                  menuItemsClassName='min-w-[250px] overflow-y-auto'
+                />
+              </div>
+              <div className='flex flex-row gap-1 px-2 text-red-500'>
+                <span className='text-xs'>
+                  By default, the comment will be added to the latest sequence run.
+                </span>
+              </div>
+            </div>
+          )}
 
           {/* Comment Input Section */}
           {(isOpenAddCommentDialog || isOpenUpdateCommentDialog) && (

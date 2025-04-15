@@ -163,6 +163,8 @@ export type WorkflowRunPaginatedModel = components['schemas']['PaginatedWorkflow
 export type WorkflowRunRerunValidMapDataModel = components['schemas']['AllowedRerunWorkflow'];
 
 export const useWorkflowModel = createWorkflowQueryHook('/api/v1/workflow/');
+
+// workflow run
 export const useWorkflowRunListModel = createWorkflowQueryHook('/api/v1/workflowrun/');
 export const useWorkflowRunDetailModel = createWorkflowQueryHook(
   '/api/v1/workflowrun/{orcabusId}/'
@@ -176,6 +178,7 @@ export const useWorkflowRunStatusCountModel = createWorkflowQueryHook(
   '/api/v1/workflowrun/stats/count_by_status/'
 );
 
+// workflow run comment
 export const useWorkflowRunCommentModel = createWorkflowQueryHook(
   '/api/v1/workflowrun/{orcabusId}/comment/'
 );

@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import RunsModuleLayout from '@/components/layouts/runs/RunsModuleLayout';
 import { RouteObject } from 'react-router-dom';
-
+import { SpinnerWithText } from '@/components/common/spinner';
 const SequenceRunPage = lazy(() => import('@/modules/runs/pages/SequenceRuns'));
 const WorkflowRunPage = lazy(() => import('@/modules/runs/pages/WorkflowRuns'));
 const WorkflowRunsDetailsPage = lazy(() => import('@/modules/runs/pages/WorkflowRunsDetails'));
@@ -18,7 +18,7 @@ export const Router: RouteObject = {
   path: 'runs',
   element: (
     <RunsModuleLayout>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<SpinnerWithText text='Loading Runs data...' />}>
         <Outlet />
       </Suspense>
     </RunsModuleLayout>
@@ -34,7 +34,7 @@ export const Router: RouteObject = {
           children: [
             { path: '', element: <SequenceRunPage /> },
             {
-              path: ':orcabusId',
+              path: ':instrumentRunId',
               element: <SequenceRunDetailsPage />,
               children: [
                 { path: '', element: <Navigate to='details' replace /> },

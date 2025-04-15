@@ -3,9 +3,9 @@
 
 import { createContext, FC, PropsWithChildren, ReactElement, useContext } from 'react';
 import {
-  useSequenceRunDetailModel,
-  useSequenceRunCommentListModel,
-  useSequenceRunStateListModel,
+  useSequenceRunByInstrumentRunIdModel,
+  useSequenceRunCommentsByInstrumentRunIdModel,
+  useSequenceRunStatesByInstrumentRunIdModel,
   useSequenceRunStateValidMapModel,
 } from '@/api/sequenceRun';
 import { useParams } from 'react-router-dom';
@@ -15,14 +15,18 @@ const SequenceRunContext = createContext({
   // refreshSequenceRuns: false,
   // //eslint-disable-next-line @typescript-eslint/no-unused-vars
   // setRefreshSequenceRuns: (_value: boolean) => {},
-  sequenceRunDetail: undefined as ReturnType<typeof useSequenceRunDetailModel>['data'],
+  sequenceRunDetail: undefined as ReturnType<typeof useSequenceRunByInstrumentRunIdModel>['data'],
   isFetchingSequenceRunDetail: true,
   // comment
-  sequenceRunCommentData: undefined as ReturnType<typeof useSequenceRunCommentListModel>['data'],
+  sequenceRunCommentData: undefined as ReturnType<
+    typeof useSequenceRunCommentsByInstrumentRunIdModel
+  >['data'],
   isFetchingSequenceRunComment: true,
   refetchSequenceRunComment: () => {},
   // state
-  sequenceRunStateData: undefined as ReturnType<typeof useSequenceRunStateListModel>['data'],
+  sequenceRunStateData: undefined as ReturnType<
+    typeof useSequenceRunStatesByInstrumentRunIdModel
+  >['data'],
   isFetchingSequenceRunState: true,
   refetchSequenceRunState: () => {},
 
@@ -35,13 +39,13 @@ const SequenceRunContext = createContext({
 
 export const SequenceRunProvider: FC<PropsWithChildren> = ({ children }): ReactElement => {
   // const [refreshSequenceRuns, setRefreshSequenceRuns] = useState<boolean>(false);
-  const { orcabusId } = useParams();
+  const { instrumentRunId } = useParams();
 
   const { data: sequenceRunDetail, isFetching: isFetchingSequenceRunDetail } =
-    useSequenceRunDetailModel({
-      params: { path: { orcabusId: orcabusId as string } },
+    useSequenceRunByInstrumentRunIdModel({
+      params: { path: { instrumentRunId: instrumentRunId as string } },
       reactQuery: {
-        enabled: !!orcabusId,
+        enabled: !!instrumentRunId,
       },
     });
 
@@ -49,10 +53,10 @@ export const SequenceRunProvider: FC<PropsWithChildren> = ({ children }): ReactE
     data: sequenceRunCommentData,
     isFetching: isFetchingSequenceRunComment,
     refetch: refetchSequenceRunComment,
-  } = useSequenceRunCommentListModel({
-    params: { path: { orcabusId: orcabusId as string } },
+  } = useSequenceRunCommentsByInstrumentRunIdModel({
+    params: { path: { instrumentRunId: instrumentRunId as string } },
     reactQuery: {
-      enabled: !!orcabusId,
+      enabled: !!instrumentRunId,
     },
   });
 
@@ -60,18 +64,18 @@ export const SequenceRunProvider: FC<PropsWithChildren> = ({ children }): ReactE
     data: sequenceRunStateData,
     isFetching: isFetchingSequenceRunState,
     refetch: refetchSequenceRunState,
-  } = useSequenceRunStateListModel({
-    params: { path: { orcabusId: orcabusId as string } },
+  } = useSequenceRunStatesByInstrumentRunIdModel({
+    params: { path: { instrumentRunId: instrumentRunId as string } },
     reactQuery: {
-      enabled: !!orcabusId,
+      enabled: !!instrumentRunId,
     },
   });
 
   const { data: sequenceRunStateValidMapData, isFetching: isFetchingSequenceRunStateValidMap } =
     useSequenceRunStateValidMapModel({
-      params: { path: { orcabusId: orcabusId as string } },
+      params: { path: { instrumentRunId: instrumentRunId as string } },
       reactQuery: {
-        enabled: !!orcabusId,
+        enabled: !!instrumentRunId,
       },
     });
 
@@ -85,7 +89,7 @@ export const SequenceRunProvider: FC<PropsWithChildren> = ({ children }): ReactE
     <>
       {isFetching ? (
         <div className='h-screen'>
-          <SpinnerWithText text='Loading...' />
+          <SpinnerWithText text='Loading ...' />
         </div>
       ) : (
         <SequenceRunContext.Provider

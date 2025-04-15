@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useSequenceRunContext } from './SequenceRunContext';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
 import { classNames } from '@/utils/commonUtils';
@@ -12,10 +11,11 @@ import {
   useSequenceRunStateCreateModel,
 } from '@/api/sequenceRun';
 import toaster from '@/components/common/toaster';
+import { dayjs } from '@/utils/dayjs';
 
 const SequenceRunDetailsActions = () => {
   const { user } = useAuthContext();
-  const { orcabusId } = useParams();
+
   const {
     sequenceRunDetail,
     refetchSequenceRunComment,
@@ -23,6 +23,27 @@ const SequenceRunDetailsActions = () => {
     refetchSequenceRunState,
   } = useSequenceRunContext();
 
+  const orcabusIds =
+    sequenceRunDetail
+      ?.sort((a, b) => (dayjs(a.startTime).isAfter(dayjs(b.startTime)) ? -1 : 1))
+      .map((sequenceRun) => sequenceRun.orcabusId) ?? [];
+
+  const sequenceRunDetailDropdownItems = useMemo(() => {
+    return sequenceRunDetail
+      ? sequenceRunDetail
+          .sort((a, b) => (dayjs(a.startTime).isAfter(dayjs(b.startTime)) ? -1 : 1))
+          .map((sequenceRun) => ({
+            label: sequenceRun.sequenceRunId,
+            onClick: () => setSelectedSequenceRunOrcabusId(sequenceRun.orcabusId),
+          }))
+      : [];
+  }, [sequenceRunDetail]);
+
+  const [selectedSequenceRunOrcabusId, setSelectedSequenceRunOrcabusId] = useState<string>(
+    orcabusIds[0]
+  );
+
+  console.log(sequenceRunDetailDropdownItems);
   // comment dialog
   const [isOpenAddCommentDialog, setIsOpenAddCommentDialog] = useState(false);
   const [comment, setComment] = useState('');
@@ -33,7 +54,7 @@ const SequenceRunDetailsActions = () => {
     isError: isErrorCreatingSequenceRunComment,
     reset: resetCreateSequenceRunComment,
   } = useSequenceRunCommentCreateModel({
-    params: { path: { orcabusId: orcabusId as string } },
+    params: { path: { orcabusId: selectedSequenceRunOrcabusId as string } },
     body: {
       comment: comment,
       createdBy: user?.email,
@@ -75,7 +96,7 @@ const SequenceRunDetailsActions = () => {
     isError: isErrorCreatingSequenceRunState,
     reset: resetCreateSequenceRunState,
   } = useSequenceRunStateCreateModel({
-    params: { path: { orcabusId: orcabusId as string } },
+    params: { path: { orcabusId: selectedSequenceRunOrcabusId as string } },
     body: {
       status: stateStatus,
       comment: stateComment,
@@ -108,11 +129,17 @@ const SequenceRunDetailsActions = () => {
     isErrorCreatingSequenceRunState,
   ]);
 
+  const selectedSequenceRun = useMemo(() => {
+    return sequenceRunDetail?.find(
+      (sequenceRun) => sequenceRun.orcabusId === selectedSequenceRunOrcabusId
+    );
+  }, [sequenceRunDetail, selectedSequenceRunOrcabusId]);
+
   const validStateOptions = useMemo(() => {
     return Object.entries(sequenceRunStateValidMapData || {})
-      .filter(([, value]) => (value as string[]).includes(sequenceRunDetail?.status as string))
+      .filter(([, value]) => (value as string[]).includes(selectedSequenceRun?.status as string))
       .map(([key]) => key);
-  }, [sequenceRunStateValidMapData, sequenceRunDetail]);
+  }, [sequenceRunStateValidMapData, selectedSequenceRun]);
 
   return (
     <div className={classNames('flex w-full flex-col gap-3', 'bg-white dark:bg-gray-900')}>
@@ -166,11 +193,14 @@ const SequenceRunDetailsActions = () => {
         handleClose={() => {
           setIsOpenAddCommentDialog(false);
           setComment('');
+          setSelectedSequenceRunOrcabusId(orcabusIds[0]);
         }}
         handleAddComment={handleAddComment}
         handleUpdateComment={() => {}}
         handleDeleteComment={() => {}}
         user={user}
+        selectedRunId={selectedSequenceRun?.sequenceRunId}
+        runDetailDropdownItems={sequenceRunDetailDropdownItems}
       />
 
       {/* state dialog */}
@@ -183,11 +213,14 @@ const SequenceRunDetailsActions = () => {
         setSelectedState={setStateStatus}
         handleClose={() => {
           setIsOpenAddStateDialog(false);
+          setSelectedSequenceRunOrcabusId(orcabusIds[0]);
         }}
         stateComment={stateComment}
         setStateComment={setStateComment}
         handleStateCreationEvent={handleStateCreationEvent}
         handleUpdateState={() => {}}
+        selectedRunId={selectedSequenceRun?.sequenceRunId}
+        runDetailDropdownItems={sequenceRunDetailDropdownItems}
       />
     </div>
   );
