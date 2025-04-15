@@ -4,7 +4,7 @@ import { SpinnerWithText } from '@/components/common/spinner';
 import { classNames } from '@/utils/commonUtils';
 import { QueueListIcon } from '@heroicons/react/24/outline';
 import { useQueryParams } from '@/hooks/useQueryParams';
-
+import { dayjs } from '@/utils/dayjs';
 const NoWorkflowsFound = () => (
   <div className='flex h-full items-center justify-center rounded-lg border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-700 dark:bg-gray-900'>
     <div className='flex flex-col items-center gap-3 text-center'>
@@ -34,6 +34,8 @@ const SequenceRunWorkflowRunsStats = () => {
       params: {
         query: {
           libraries__libraryId: sequenceRunDetail?.libraries,
+          start_time: sequenceRunDetail?.endTime,
+          end_time: dayjs(sequenceRunDetail?.endTime).add(2, 'days').toISOString(),
         },
       },
     });
