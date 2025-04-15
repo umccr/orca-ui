@@ -1,9 +1,11 @@
 import { useParams } from 'react-router-dom';
-import { useSequenceRunSampleSheetModel } from '@/api/sequenceRun';
+import { useSequenceRunSampleSheetsByInstrumentRunIdModel } from '@/api/sequenceRun';
 import SequenceRunSampleSheetViewer from '@/modules/runs/components/sequenceRuns/SequenceRunSampleSheetViewer';
 import { SampleSheetModel } from '@/utils/samplesheetUtils';
 import { SpinnerWithText } from '@/components/common/spinner';
 import { DocumentIcon } from '@heroicons/react/24/outline';
+import FileViewDialog from '../components/common/FileViewDialog';
+import { useMemo, useState } from 'react';
 
 const NoSampleSheetFound = () => (
   <div className='flex h-full items-center justify-center rounded-lg border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-700 dark:bg-gray-900'>
@@ -23,15 +25,27 @@ const NoSampleSheetFound = () => (
   </div>
 );
 const SequenceRunsSampleSheet = () => {
-  const { orcabusId } = useParams();
+  const { instrumentRunId } = useParams();
+
+  const [isOpenFileViewDialog, setIsOpenFileViewDialog] = useState(false);
 
   const {
     data: sequenceRunSamplesheet,
     isLoading: isLoadingSequenceRunSamplesheet,
     error: sequenceRunSamplesheetError,
-  } = useSequenceRunSampleSheetModel({
-    params: { path: { orcabusId: orcabusId as string } },
+  } = useSequenceRunSampleSheetsByInstrumentRunIdModel({
+    params: { path: { instrumentRunId: instrumentRunId as string } },
   });
+
+  const [selectedSamplesheetOrcabusId, setSelectedSamplesheetOrcabusId] = useState<string | null>(
+    null
+  );
+  const selectedSamplesheet = useMemo(() => {
+    if (!selectedSamplesheetOrcabusId) return null;
+    return sequenceRunSamplesheet?.find(
+      (samplesheet) => samplesheet.orcabusId === selectedSamplesheetOrcabusId
+    );
+  }, [sequenceRunSamplesheet, selectedSamplesheetOrcabusId]);
 
   if (isLoadingSequenceRunSamplesheet) {
     return (
@@ -44,16 +58,34 @@ const SequenceRunsSampleSheet = () => {
   if (
     sequenceRunSamplesheetError ||
     !sequenceRunSamplesheet ||
-    !sequenceRunSamplesheet.sampleSheetContent
+    !sequenceRunSamplesheet[0].sampleSheetContent
   ) {
     return <NoSampleSheetFound />;
   }
 
+  const handleSelectSamplesheet = (orcabusId: string) => {
+    setSelectedSamplesheetOrcabusId(orcabusId);
+    setIsOpenFileViewDialog(true);
+  };
+
   return (
     <div className='flex flex-col gap-4'>
-      <SequenceRunSampleSheetViewer
-        sampleSheetData={sequenceRunSamplesheet?.sampleSheetContent as SampleSheetModel}
-        sampleSheetName={sequenceRunSamplesheet?.sampleSheetName}
+      {sequenceRunSamplesheet.map((samplesheet) => (
+        <SequenceRunSampleSheetViewer
+          key={samplesheet.orcabusId}
+          sampleSheetData={samplesheet.sampleSheetContent as SampleSheetModel}
+          sampleSheetName={samplesheet.sampleSheetName}
+          sampleSheetOrcabusId={samplesheet.orcabusId}
+          handleSelectSamplesheet={handleSelectSamplesheet}
+        />
+      ))}
+      {/* File View Dialog */}
+      <FileViewDialog
+        isOpenFileViewDialog={isOpenFileViewDialog}
+        setIsOpenFileViewDialog={setIsOpenFileViewDialog}
+        fileName={selectedSamplesheet?.sampleSheetName ?? ''}
+        fileContent={selectedSamplesheet?.sampleSheetContent ?? null}
+        isLoading={false}
       />
     </div>
   );

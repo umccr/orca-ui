@@ -13,46 +13,46 @@ const SequenceRunDetailsSidebar = () => {
         ? {
             sequenceRunInfo: [
               {
-                key: 'orcabusId',
-                value: sequenceRunDetail.orcabusId,
+                key: 'instrumentRunId',
+                value: sequenceRunDetail[0].instrumentRunId,
               },
               {
                 key: 'sequenceRunId',
-                value: sequenceRunDetail.sequenceRunId,
+                value: sequenceRunDetail[0].sequenceRunId,
               },
               {
                 key: 'experimentName',
-                value: sequenceRunDetail.experimentName,
+                value: sequenceRunDetail[0].experimentName,
               },
               {
                 key: 'icaProjectId',
-                value: sequenceRunDetail.icaProjectId,
+                value: sequenceRunDetail[0].icaProjectId,
               },
             ],
             runDetails: [
               {
                 key: 'runStatus',
-                value: sequenceRunDetail.status,
+                value: sequenceRunDetail[0].status,
               },
               {
                 key: 'runVolumeName',
-                value: sequenceRunDetail.runVolumeName,
+                value: sequenceRunDetail[0].runVolumeName,
               },
               {
                 key: 'runFolderPath',
-                value: sequenceRunDetail.runFolderPath,
+                value: sequenceRunDetail[0].runFolderPath,
               },
               {
                 key: 'runDataUri',
-                value: sequenceRunDetail.runDataUri,
+                value: sequenceRunDetail[0].runDataUri,
               },
               {
                 key: 'startTime',
-                value: sequenceRunDetail.startTime,
+                value: sequenceRunDetail[0].startTime,
               },
               {
                 key: 'endTime',
-                value: sequenceRunDetail.endTime,
+                value: sequenceRunDetail[0].endTime,
               },
             ],
             runProperties: [
@@ -62,19 +62,19 @@ const SequenceRunDetailsSidebar = () => {
               // },
               {
                 key: 'flowcellBarcode',
-                value: sequenceRunDetail.flowcellBarcode,
+                value: sequenceRunDetail[0].flowcellBarcode,
               },
               {
                 key: 'reagentBarcode',
-                value: sequenceRunDetail.reagentBarcode,
+                value: sequenceRunDetail[0].reagentBarcode,
               },
               {
                 key: 'sampleSheetName',
-                value: sequenceRunDetail.sampleSheetName,
+                value: sequenceRunDetail[0].sampleSheetName,
               },
               {
                 key: 'v1pre3Id',
-                value: sequenceRunDetail.v1pre3Id,
+                value: sequenceRunDetail[0].v1pre3Id,
               },
             ],
           }

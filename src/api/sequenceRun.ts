@@ -1,6 +1,6 @@
 import config from '@/config';
 import createClient, { ParamsOption } from 'openapi-fetch';
-import type { paths, components } from './types/sequence-run';
+import type { paths } from './types/sequence-run';
 import { useSuspenseQuery, useQuery, useMutation } from '@tanstack/react-query';
 import {
   authMiddleware,
@@ -143,41 +143,54 @@ export function createSequenceRunDeleteMutationHook<K extends keyof paths>(path:
   };
 }
 
-export type SequenceRunModel = components['schemas']['Sequence'];
-
-export const useSequenceRunListModel = createSequenceRunQueryHook('/api/v1/sequence/');
+export const useSequenceRunListModel = createSequenceRunQueryHook('/api/v1/sequence_run/');
 export const useSequenceRunDetailModel = createSequenceRunQueryHook(
-  '/api/v1/sequence/{orcabusId}/'
+  '/api/v1/sequence_run/{orcabusId}/'
 );
 export const useSequenceRunStateListModel = createSequenceRunQueryHook(
-  '/api/v1/sequence/{orcabusId}/state/'
+  '/api/v1/sequence_run/{orcabusId}/state/'
 );
 export const useSequenceRunStateCreateModel = createSequenceRunPostMutationHook(
-  '/api/v1/sequence/{orcabusId}/state/'
+  '/api/v1/sequence_run/{orcabusId}/state/'
 );
 export const useSequenceRunStateUpdateModel = createSequenceRunPatchMutationHook(
-  '/api/v1/sequence/{orcabusId}/state/{id}/'
+  '/api/v1/sequence_run/{orcabusId}/state/{id}/'
 );
-export const useSequenceRunStateValidMapModel = createSequenceRunQueryHook(
-  '/api/v1/sequence/{orcabusId}/state/valid_states_map/'
-);
+
 export const useSequenceRunCommentListModel = createSequenceRunQueryHook(
-  '/api/v1/sequence/{orcabusId}/comment/'
+  '/api/v1/sequence_run/{orcabusId}/comment/'
 );
 export const useSequenceRunCommentCreateModel = createSequenceRunPostMutationHook(
-  '/api/v1/sequence/{orcabusId}/comment/'
+  '/api/v1/sequence_run/{orcabusId}/comment/'
 );
 export const useSequenceRunCommentUpdateModel = createSequenceRunPatchMutationHook(
-  '/api/v1/sequence/{orcabusId}/comment/{id}/'
+  '/api/v1/sequence_run/{orcabusId}/comment/{id}/'
 );
 export const useSequenceRunCommentDeleteModel = createSequenceRunDeleteMutationHook(
-  '/api/v1/sequence/{orcabusId}/comment/{id}/soft_delete/'
+  '/api/v1/sequence_run/{orcabusId}/comment/{id}/soft_delete/'
 );
 
 export const useSequenceRunStatusCountModel = createSequenceRunQueryHook(
-  '/api/v1/sequence/stats/status_counts/'
+  '/api/v1/sequence_run/stats/status_counts/'
 );
 
 export const useSequenceRunSampleSheetModel = createSequenceRunQueryHook(
-  '/api/v1/sequence/{orcabusId}/sample_sheet/'
+  '/api/v1/sequence_run/{orcabusId}/sample_sheet/'
+);
+
+// sequence - sequence runs, comments, states, smaplesheet (group by instrument run id)
+export const useSequenceRunByInstrumentRunIdModel = createSequenceRunQueryHook(
+  '/api/v1/sequence/{instrumentRunId}/sequence_run/'
+);
+export const useSequenceRunCommentsByInstrumentRunIdModel = createSequenceRunQueryHook(
+  '/api/v1/sequence/{instrumentRunId}/comments/'
+);
+export const useSequenceRunStatesByInstrumentRunIdModel = createSequenceRunQueryHook(
+  '/api/v1/sequence/{instrumentRunId}/states/'
+);
+export const useSequenceRunSampleSheetsByInstrumentRunIdModel = createSequenceRunQueryHook(
+  '/api/v1/sequence/{instrumentRunId}/sample_sheets/'
+);
+export const useSequenceRunStateValidMapModel = createSequenceRunQueryHook(
+  '/api/v1/sequence/{instrumentRunId}/valid_states_map/'
 );

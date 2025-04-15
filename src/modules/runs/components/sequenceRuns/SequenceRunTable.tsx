@@ -57,11 +57,20 @@ const SequenceRunTable = () => {
       },
       sortDirection: getCurrentSortDirection(getQueryParams().ordering, 'instrument_run_id'),
       cell: (instrumentRunId: unknown, sequenceRunRowData: TableData) => {
-        const id = sequenceRunRowData.orcabusId;
+        // const id = sequenceRunRowData.orcabusId as string;
+        const sequenceRunId = sequenceRunRowData.sequenceRunId
+          ? (sequenceRunRowData.sequenceRunId as string)
+          : '-';
         return (
-          <RedirectLink to={`/runs/sequence/${id}`} className='flex items-center p-1'>
-            <div>{instrumentRunId ? (instrumentRunId as string) : '-'}</div>
-          </RedirectLink>
+          <div className='flex flex-col items-start space-y-1 px-1'>
+            <RedirectLink to={`/runs/sequence/${instrumentRunId}`}>
+              {instrumentRunId ? (instrumentRunId as string) : '-'}
+            </RedirectLink>
+            <div className='flex items-center pl-2 text-xs text-gray-500 dark:text-gray-400'>
+              <span className='font-medium'>Run ID:</span>
+              <span className='ml-1 font-mono'>{sequenceRunId}</span>
+            </div>
+          </div>
         );
       },
     },
@@ -95,11 +104,23 @@ const SequenceRunTable = () => {
       },
       sortDirection: getCurrentSortDirection(getQueryParams().ordering, 'start_time'),
       cell: (startTime: unknown) => {
+        // const endTime = sequenceRunRowData.endTime as string;
         if (!startTime) {
           return <div>-</div>;
         } else {
-          return <div>{startTime ? dayjs(startTime as string).format('lll') : '-'}</div>;
-          return <div>{startTime ? dayjs(startTime as string).format('lll') : '-'}</div>;
+          return (
+            // <div className='flex flex-col space-y-1 px-1'>
+            //   <div className='flex items-center text-sm text-gray-700 dark:text-gray-200'>
+            //     <span className='min-w-[3.5rem] font-medium'>Start:</span>
+            //     <span>{startTime ? dayjs(startTime as string).format('lll') : '-'}</span>
+            //   </div>
+            //   <div className='flex items-center text-sm text-gray-700 dark:text-gray-200'>
+            //     <span className='min-w-[3.5rem] font-medium'>End:</span>
+            //     <span>{endTime ? dayjs(endTime as string).format('lll') : '-'}</span>
+            //   </div>
+            // </div>
+            <div>{startTime ? dayjs(startTime as string).format('lll') : '-'}</div>
+          );
         }
       },
     },
