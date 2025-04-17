@@ -1,6 +1,6 @@
 import { useSequenceRunListModel } from '@/api/sequenceRun';
 import { Table, TableData } from '@/components/tables';
-import { Column } from '@/components/tables/Table';
+import { Column, getCurrentSortDirection } from '@/components/tables/Table';
 import { ReactNode } from 'react';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
@@ -30,6 +30,7 @@ const SequenceRunTable = () => {
         status: getQueryParams().sequenceRunStatus || undefined,
         start_time: getQueryParams().startDate || undefined,
         end_time: getQueryParams().endDate || undefined,
+        ordering: getQueryParams().ordering || 'start_time',
       },
     },
   });
@@ -47,6 +48,14 @@ const SequenceRunTable = () => {
     {
       header: 'Instrument Run ID',
       accessor: 'instrumentRunId',
+      onSort: () => {
+        if (getQueryParams().ordering === 'instrument_run_id') {
+          setQueryParams({ ordering: '-instrument_run_id' });
+        } else {
+          setQueryParams({ ordering: 'instrument_run_id' });
+        }
+      },
+      sortDirection: getCurrentSortDirection(getQueryParams().ordering, 'instrument_run_id'),
       cell: (instrumentRunId: unknown, sequenceRunRowData: TableData) => {
         const id = sequenceRunRowData.orcabusId;
         return (
@@ -77,6 +86,14 @@ const SequenceRunTable = () => {
     {
       header: 'Start Time',
       accessor: 'startTime',
+      onSort: () => {
+        if (getQueryParams().ordering === 'start_time') {
+          setQueryParams({ ordering: '-start_time' });
+        } else {
+          setQueryParams({ ordering: 'start_time' });
+        }
+      },
+      sortDirection: getCurrentSortDirection(getQueryParams().ordering, 'start_time'),
       cell: (startTime: unknown) => {
         if (!startTime) {
           return <div>-</div>;
@@ -89,6 +106,14 @@ const SequenceRunTable = () => {
     {
       header: 'End Time',
       accessor: 'endTime',
+      onSort: () => {
+        if (getQueryParams().ordering === 'end_time') {
+          setQueryParams({ ordering: '-end_time' });
+        } else {
+          setQueryParams({ ordering: 'end_time' });
+        }
+      },
+      sortDirection: getCurrentSortDirection(getQueryParams().ordering, 'end_time'),
       cell: (endTime: unknown) => {
         if (!endTime) {
           return <div>-</div>;
