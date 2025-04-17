@@ -102,7 +102,7 @@ const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) =
         header: 'Status',
         accessor: 'currentState',
         cell: (currentState: unknown) => {
-          const status = (currentState as { status: string }).status;
+          const status = currentState ? (currentState as { status: string }).status : 'unknown';
           return <Badge status={status || 'unknown'}>{status || 'unknown'}</Badge>;
         },
       },
@@ -110,7 +110,7 @@ const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) =
         header: 'Time Stamp',
         accessor: 'currentState',
         cell: (currentState: unknown) => {
-          const timestamp = (currentState as { timestamp: string }).timestamp;
+          const timestamp = currentState ? (currentState as { timestamp: string }).timestamp : null;
           if (!timestamp) {
             return <div>-</div>;
           } else {
