@@ -30,7 +30,7 @@ const SequenceRunTable = () => {
         status: getQueryParams().sequenceRunStatus || undefined,
         start_time: getQueryParams().startDate || undefined,
         end_time: getQueryParams().endDate || undefined,
-        ordering: getQueryParams().ordering || 'start_time',
+        ordering: getQueryParams().ordering || '-start_time',
       },
     },
   });
