@@ -3,12 +3,14 @@ import {
   ChartBarIcon,
   FolderIcon,
   ShieldCheckIcon,
+  InboxStackIcon,
 } from '@heroicons/react/24/outline';
 import {
   CircleStackIcon as SolidCircleStackIcon,
   ChartBarIcon as SolidChartBarIcon,
   FolderIcon as SolidFolderIcon,
   ShieldCheckIcon as SolidShieldCheckIcon,
+  InboxStackIcon as SolidInboxStackIcon,
 } from '@heroicons/react/24/solid';
 import { AppURLs } from './appURLs';
 import { SequenceIcon } from '@/components/icons/SequenceIcon';
@@ -26,6 +28,7 @@ const sideNavigation = [
     solidIcon: SolidShieldCheckIcon,
     href: AppURLs.Sscheck,
   },
+  { name: 'Vault', icon: InboxStackIcon, solidIcon: SolidInboxStackIcon, href: AppURLs.OrcaVault },
 ];
 
 const libraryModuleNavigation = [

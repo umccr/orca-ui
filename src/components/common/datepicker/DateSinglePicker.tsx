@@ -6,33 +6,27 @@ import type { DateTimePickerProps } from 'react-flatpickr';
 import { dayjs } from '@/utils/dayjs';
 import { classNames } from '@/utils/commonUtils';
 
-interface DateRangePickerProps {
+interface DateSinglePickerProps {
   align?: string;
-  startDate: string | null;
-  endDate: string | null;
-  onTimeChange: (startDate: string | null, endDate: string | null) => void;
+  selectedDate: string | null;
+  onDateChange: (date: string | null) => void;
   className?: string;
 }
 
-const DateRangePicker: FC<DateRangePickerProps> = ({
+const DateSinglePicker: FC<DateSinglePickerProps> = ({
   align,
-  startDate,
-  endDate,
-  onTimeChange,
+  selectedDate,
+  onDateChange,
   className,
 }) => {
-  const [selectedStartDate, setSelectedStartDate] = useState<string | null>(startDate);
-  // dayjs().subtract(1, 'years').format('YYYY-MM-DDTHH:mm:ss[Z]')
-  const [selectedEndDate, setSelectedEndDate] = useState<string | null>(endDate);
-  // const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedStartDate, setSelectedStartDate] = useState<string | null>(selectedDate);
 
   useEffect(() => {
-    setSelectedStartDate(startDate);
-    setSelectedEndDate(endDate);
-  }, [startDate, endDate]);
+    setSelectedStartDate(selectedDate);
+  }, [selectedDate]);
 
   const options: Partial<DateTimePickerProps['options']> = {
-    mode: 'range',
+    mode: 'single',
     static: true,
     monthSelectorType: 'static',
     dateFormat: 'j M Y',
@@ -52,11 +46,9 @@ const DateRangePicker: FC<DateRangePickerProps> = ({
       // console.log('on value update', selectedDates);
     },
     onChange: (selectedDates) => {
-      if (selectedDates.length === 2) {
-        onTimeChange(
-          dayjs(selectedDates[0]).utc(true).format(),
-          dayjs(selectedDates[1]).utc(true).format()
-        );
+      if (selectedDates.length === 1) {
+        const formattedDate = dayjs(selectedDates[0]).utc(true).format();
+        onDateChange(formattedDate);
       }
     },
   };
@@ -71,13 +63,7 @@ const DateRangePicker: FC<DateRangePickerProps> = ({
           className
         )}
         options={options}
-        value={
-          selectedStartDate && selectedEndDate
-            ? [new Date(selectedStartDate), new Date(selectedEndDate)]
-            : ''
-        }
-        // onOpen={() => setIsOpen(true)}
-        // onClose={() => setIsOpen(false)}
+        value={selectedStartDate ? new Date(selectedStartDate) : ''}
       />
       <div className='pointer-events-none absolute inset-0 right-auto flex items-center'>
         <svg
@@ -91,4 +77,4 @@ const DateRangePicker: FC<DateRangePickerProps> = ({
   );
 };
 
-export default DateRangePicker;
+export default DateSinglePicker;
