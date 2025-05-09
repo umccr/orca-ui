@@ -1,17 +1,29 @@
-import { ApolloClient, ApolloProvider } from '@apollo/client';
-
+import { ApolloClient, ApolloProvider, HttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { InMemoryCache } from '@apollo/client';
 import { LimsTable } from '../components/lims/LimsTable';
 import SideBarLayout from '../layouts/SideBar';
 import { FieldDefinition, GraphqlFilter } from '../components/graphqlFilter';
 import { fetchAuthSession } from 'aws-amplify/auth';
 
-const limsClient = new ApolloClient({
+const httpLink = new HttpLink({
   uri: 'https://lims.vault.prod.umccr.org/graphql',
+});
+
+const authLink = setContext(async (_, { headers }) => {
+  const session = await fetchAuthSession();
+  const token = session.tokens?.idToken?.toString();
+  return {
+    headers: {
+      ...headers,
+      Authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
+const limsClient = new ApolloClient({
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
-  headers: {
-    Authorization: `Bearer ${(await fetchAuthSession()).tokens?.idToken?.toString()}`,
-  },
 });
 
 const filterOptions: FieldDefinition[] = [
