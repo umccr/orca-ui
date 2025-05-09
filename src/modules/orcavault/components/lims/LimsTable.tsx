@@ -4,6 +4,7 @@ import { Table } from '@/components/tables';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { FieldDefinition } from '../graphqlFilter';
 import { getCurrentSortDirection, getSortValue } from '@/components/tables/Table';
+import { SpinnerWithText } from '@/components/common/spinner';
 
 export const LimsTable = ({ fieldDefinitions }: { fieldDefinitions: FieldDefinition[] }) => {
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
@@ -24,11 +25,15 @@ export const LimsTable = ({ fieldDefinitions }: { fieldDefinitions: FieldDefinit
     filter: filter,
     limit: pagination.rowsPerPage,
     offset: offset,
-    orderBy: sortKey ? [{ [sortKey]: sortDirection }] : [{ load_datetime: 'DESC' }],
+    orderBy: sortKey ? [{ [sortKey]: sortDirection }] : [{ sequencing_run_date: 'DESC' }],
   });
 
   if (libraryModel.loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <SpinnerWithText text='fetching LIMS records' />
+      </div>
+    );
   }
 
   const data = libraryModel.data;

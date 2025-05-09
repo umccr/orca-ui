@@ -7,7 +7,7 @@ import { FieldDefinition, GraphqlFilter } from '../components/graphqlFilter';
 import { fetchAuthSession } from 'aws-amplify/auth';
 
 const limsClient = new ApolloClient({
-  uri: 'https://2zsneh66avc5rmbqd37pp75uzi.appsync-api.ap-southeast-2.amazonaws.com/graphql/',
+  uri: 'https://lims.vault.prod.umccr.org/graphql',
   cache: new InMemoryCache(),
   headers: {
     Authorization: `Bearer ${(await fetchAuthSession()).tokens?.idToken?.toString()}`,
@@ -40,6 +40,12 @@ export default function LimsPage() {
     <SideBarLayout sideBar={<GraphqlFilter fieldFilters={filterOptions} />}>
       <div className='flex flex-col'>
         <h1 className='font-bold'>LIMS</h1>
+
+        <p className='my-2 text-xs text-gray-500 dark:text-gray-400'>
+          The LIMS data is updated daily from multiple sources, so there may be up to a one-day
+          delay in reflecting the latest changes.
+        </p>
+
         <ApolloProvider client={limsClient}>
           <LimsTable fieldDefinitions={filterOptions} />
         </ApolloProvider>
