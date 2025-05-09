@@ -26,9 +26,8 @@ const SideBarLayout = ({ children, sideBar }: Props) => {
                   aria-hidden='true'
                 />
                 <p className='text-xs'>
-                  <strong>Warning:</strong> This Vault page is experimental and may have some issues
-                  or inconsistencies. For more reliable data, please check the metadata table on the
-                  Lab page.
+                  <strong>Warning:</strong> This Vault page is still experimental and may have some
+                  issues. For more reliable data, please check the metadata table on the Lab page.
                 </p>
               </div>
               {children || <Outlet />}{' '}
