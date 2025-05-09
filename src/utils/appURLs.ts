@@ -41,4 +41,7 @@ export enum AppURLs {
 
   // 404
   NotFound = '/404',
+
+  // OrcaVault (Data Warehouse)
+  OrcaVault = '/vault',
 }
