@@ -127,11 +127,13 @@ const SequenceRunTable = () => {
       accessor: 'instrumentRunId',
       cell: (instrumentRunId: unknown) => {
         // Encode the URL parameters properly
-        const params = new URLSearchParams({
-          key: `*${instrumentRunId}_multiqc_report.html`,
-          keyOp: 'and',
-          bucketOp: 'or',
-        });
+        const params = new URLSearchParams([
+          ['key', `*${instrumentRunId}_multiqc_report.html`],
+          ['key', `*${instrumentRunId}_*_qlims.csv`],
+          ['keyOp', 'or'],
+          ['bucketOp', 'or'],
+        ]);
+
         return (
           <div className='flex flex-row gap-2'>
             {/* <Tooltip text='Comment' size='small' background='light'>
