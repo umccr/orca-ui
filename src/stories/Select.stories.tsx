@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Select, IconMultipleSelect } from '@/components/common/select';
+import { IconMultipleSelect, SingleSelect } from '@/components/common/select';
 import { ListBulletIcon } from '@heroicons/react/24/outline';
 
 const people = [
@@ -11,7 +11,7 @@ const people = [
 
 const meta: Meta = {
   title: 'Common/Select',
-  component: Select,
+  component: SingleSelect,
   parameters: {
     layout: 'centered',
   },
@@ -25,7 +25,7 @@ type Story = StoryObj<typeof meta>;
 export const SelectStory: Story = {
   render: () => {
     return (
-      <Select
+      <SingleSelect
         value={{ label: 'Wade Cooper', value: '1', secondaryLabel: 'Lead Developer' }}
         options={people}
         onChange={(value) => console.log(value)}
@@ -37,7 +37,7 @@ export const SelectStory: Story = {
 export const SelectWithGroupLabelStory: Story = {
   render: () => {
     return (
-      <Select
+      <SingleSelect
         value={{ label: 'Wade Cooper', value: '1', secondaryLabel: 'Lead Developer' }}
         options={people}
         groupLabel='Select Label'
