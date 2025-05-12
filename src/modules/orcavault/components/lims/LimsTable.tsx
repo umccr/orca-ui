@@ -2,9 +2,9 @@ import React from 'react';
 import { useMartListLimsQuery } from '../../api/lims';
 import { Table } from '@/components/tables';
 import { useQueryParams } from '@/hooks/useQueryParams';
-import { FieldDefinition } from '../graphqlFilter';
 import { getCurrentSortDirection, getSortValue } from '@/components/tables/Table';
 import { SpinnerWithText } from '@/components/common/spinner';
+import { FieldDefinition } from '../GraphqlFilter';
 
 export const LimsTable = ({ fieldDefinitions }: { fieldDefinitions: FieldDefinition[] }) => {
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();

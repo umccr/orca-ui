@@ -3,7 +3,7 @@ import { setContext } from '@apollo/client/link/context';
 import { InMemoryCache } from '@apollo/client';
 import { LimsTable } from '../components/lims/LimsTable';
 import SideBarLayout from '../layouts/SideBar';
-import { FieldDefinition, GraphqlFilter } from '../components/graphqlFilter';
+import { FieldDefinition, GraphqlFilter } from '../components/GraphqlFilter';
 import { fetchAuthSession } from 'aws-amplify/auth';
 
 const httpLink = new HttpLink({
