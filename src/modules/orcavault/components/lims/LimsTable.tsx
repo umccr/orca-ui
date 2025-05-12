@@ -1,4 +1,3 @@
-import React from 'react';
 import { useMartListLimsQuery } from '../../api/lims';
 import { Table } from '@/components/tables';
 import { useQueryParams } from '@/hooks/useQueryParams';

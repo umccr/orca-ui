@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { DateRangePicker, DateSinglePicker } from '@/components/common/datepicker';
 import { classNames } from '@/utils/commonUtils';
 import { Button } from '@/components/common/buttons';
