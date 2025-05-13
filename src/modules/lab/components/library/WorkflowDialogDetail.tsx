@@ -17,7 +17,7 @@ export const WorkflowDialogDetail = ({
 
   return (
     <div
-      className='ml-6 flex h-full cursor-pointer items-center text-xs font-light text-blue-500 hover:text-blue-700'
+      className='ml-3 flex h-full cursor-pointer items-center text-xs font-light text-blue-500 hover:text-blue-700'
       onClick={() => setIsOpenWorkflowDetails(true)}
     >
       <div className='text-sm font-medium text-blue-500 underline hover:text-blue-700'>

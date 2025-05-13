@@ -10,9 +10,10 @@ import { WorkflowDialogDetail } from '../../components/library/WorkflowDialogDet
 import { Badge } from '@/components/common/badges';
 import InputBadgeBox, { InputBadgeBoxType } from '@/modules/files/components/InputBadgeBox';
 import { Button } from '@/components/common/buttons';
-import { CursorArrowRaysIcon } from '@heroicons/react/24/outline';
+import { CursorArrowRaysIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import { areArraysEqual } from '@/modules/files/components/utils';
 import { Checkbox } from '@/components/common/checkbox';
+import { Tooltip } from '@/components/common/tooltips';
 
 interface KeyPatternType {
   label: string;
@@ -109,6 +110,7 @@ export default function LibraryWorkflowPage() {
         workflow__workflowName: workflowType,
         ordering: '-portalRunId',
         rowsPerPage: DEFAULT_NON_PAGINATE_PAGE_SIZE,
+        status: 'SUCCEEDED',
       },
     },
   }).data;
@@ -142,6 +144,17 @@ export default function LibraryWorkflowPage() {
             portalRunId={portalRunId}
             workflowDetail={currentWorkflowRunDetail}
           />
+          <div className='flex h-full items-center text-sm font-normal text-gray-500 dark:text-gray-400'>
+            <Tooltip
+              text={`This page will only show 'SUCCEEDED' workflow runs.`}
+              position='right'
+              background='light'
+              size='small'
+              className='z-50 w-96 text-wrap whitespace-normal'
+            >
+              <InformationCircleIcon className='ml-2 h-5 w-5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' />
+            </Tooltip>
+          </div>
         </div>
 
         {isMultipleRuns && (
