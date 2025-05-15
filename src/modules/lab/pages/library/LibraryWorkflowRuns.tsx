@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useQueryMetadataDetailLibraryModel } from '@/api/metadata';
 import WorkflowRunTable from '@/modules/runs/components/workflowRuns/WorkflowRunTable';
 import { classNames } from '@/utils/commonUtils';
+import { SpinnerWithText } from '@/components/common/spinner';
 
 export default function LibraryWorkflowRunsPage() {
   const { libraryOrcabusId } = useParams();
@@ -18,7 +19,7 @@ export default function LibraryWorkflowRunsPage() {
   });
 
   if (libraryDetail.isFetching) {
-    return <div>Loading...</div>;
+    return <SpinnerWithText text='Loading...' />;
   }
 
   const libraryDetailData = libraryDetail.data;

@@ -26,9 +26,6 @@ function createMetadataUseQueryHook<K extends GetPaths>(path: K) {
           throw new Error(response.statusText);
         }
 
-        // Set a timeout to simulate a delay
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-
         return data;
       },
     });

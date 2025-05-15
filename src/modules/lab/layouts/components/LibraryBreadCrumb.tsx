@@ -3,6 +3,7 @@ import { classNames } from '@/utils/commonUtils';
 import { FC } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useQueryMetadataDetailLibraryModel } from '@/api/metadata';
+import Skeleton from 'react-loading-skeleton';
 
 type LibraryBreadcrumbProps = { className?: string };
 
@@ -36,7 +37,7 @@ export const LibraryBreadCrumb: FC<LibraryBreadcrumbProps> = ({ className }) => 
   });
 
   if (libraryDetailRes.isFetching) {
-    <div>Loading...</div>;
+    return <Skeleton />;
   }
 
   const libraryData = libraryDetailRes.data;

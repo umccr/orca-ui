@@ -4,6 +4,7 @@ import { useQueryMetadataDetailLibraryModel } from '@/api/metadata';
 import { LibraryTableDetails } from '@/modules/lab/components/library/LibraryTableDetails';
 import { LibraryLinkTable } from '../../components/library/LibraryLinkTable';
 import { Accordion } from '@/components/common/accordion';
+import { SpinnerWithText } from '@/components/common/spinner';
 
 export const LibraryDetailBar = () => {
   const { libraryOrcabusId } = useParams();
@@ -20,7 +21,7 @@ export const LibraryDetailBar = () => {
   });
 
   if (libraryDetail.isFetching) {
-    return <div>Loading...</div>;
+    return <SpinnerWithText />;
   }
 
   const libraryDetailData = libraryDetail.data;

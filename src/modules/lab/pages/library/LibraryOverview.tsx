@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { LibraryAnalysisReportTable } from '../../components/library/LibraryAnalysisReportTable';
 import { useQueryMetadataDetailLibraryModel } from '@/api/metadata';
+import { SpinnerWithText } from '@/components/common/spinner';
 
 export default function LibraryOverviewPage() {
   const { libraryOrcabusId } = useParams();
@@ -17,7 +18,7 @@ export default function LibraryOverviewPage() {
   });
 
   if (libraryDetail.isFetching) {
-    return <div>Loading...</div>;
+    return <SpinnerWithText text='Loading...' />;
   }
 
   const libraryDetailData = libraryDetail.data;

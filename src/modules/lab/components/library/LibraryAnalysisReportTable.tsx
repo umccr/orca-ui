@@ -4,7 +4,7 @@ import { DetailedErrorBoundary } from '@/components/common/error';
 import { useState } from 'react';
 import { getTableColumn } from '@/modules/files/components/FileAPITable';
 import { useSuspenseWorkflowRunListModel } from '@/api/workflow';
-import { useSuspenseFileObject } from '@/api/file';
+import { useQueryFileObject } from '@/api/file';
 import { GroupedTable } from '@/components/tables';
 import { Column, TableData } from '@/components/tables/GroupedRowTable';
 import { Dropdown } from '@/components/common/dropdowns';
@@ -278,7 +278,7 @@ export const AnalysisTable = ({
   const initPortalRunId = workflowRunResults[0].portalRunId;
   const [selectedPortalRunId, setSelectedPortalRunId] = useState(initPortalRunId);
 
-  const filesApiData = useSuspenseFileObject({
+  const fileQueryResult = useQueryFileObject({
     params: {
       query: {
         'key[]': keyPatterns,
@@ -287,13 +287,19 @@ export const AnalysisTable = ({
         'attributes[portalRunId]': selectedPortalRunId,
       },
     },
-  }).data;
+  });
 
-  if (!filesApiData?.results) {
+  if (fileQueryResult.isFetching) {
+    return <SpinnerWithText text='Loading data ...' />;
+  }
+
+  const fileQueryData = fileQueryResult.data;
+  const isDataPaginated = !!fileQueryData && fileQueryData.links.next !== null;
+  if (!fileQueryData?.results) {
     throw new Error('No report found!');
   }
 
-  const tableData = filesApiData.results.map((item) => ({
+  const tableData = fileQueryData.results.map((item) => ({
     key: item.key,
     lastModifiedDate: item.lastModifiedDate,
     size: item.size,
@@ -354,7 +360,7 @@ export const AnalysisTable = ({
                 </div>
               )}
             </div>
-            {filesApiData.links?.next && (
+            {isDataPaginated && (
               <div className='text-xs text-gray-500 italic dark:text-gray-400'>
                 * Due to pagination, some files may not be shown here.
               </div>
