@@ -3851,7 +3851,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^19.1.4":
+"@types/react@npm:19.1.4":
   version: 19.1.4
   resolution: "@types/react@npm:19.1.4"
   dependencies:
@@ -7798,7 +7798,7 @@ __metadata:
     "@types/mime-db": "npm:^1.43.5"
     "@types/node": "npm:^22.15.18"
     "@types/pako": "npm:^2.0.3"
-    "@types/react": "npm:^19.1.4"
+    "@types/react": "npm:19.1.4"
     "@types/react-dom": "npm:^19.1.5"
     "@types/react-flatpickr": "npm:^3.8.11"
     "@typescript-eslint/eslint-plugin": "npm:^8.32.1"

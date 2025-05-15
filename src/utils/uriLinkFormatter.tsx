@@ -16,7 +16,7 @@ export const uriLinkFormatter = {
     }
   },
 
-  formatLink: (value: string): JSX.Element => {
+  formatLink: (value: string): React.JSX.Element => {
     try {
       // Parse URI components safely
       const [, path] = value.split('s3://');
