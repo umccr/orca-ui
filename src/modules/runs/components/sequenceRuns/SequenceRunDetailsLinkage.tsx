@@ -4,7 +4,7 @@ import { useSequenceRunContext } from './SequenceRunContext';
 import { Accordion } from '@/components/common/accordion';
 import { Table } from '@/components/tables';
 import { classNames } from '@/utils/commonUtils';
-import { useSuspenseMetadataLibraryModel } from '@/api/metadata';
+import { useQueryMetadataLibraryModel } from '@/api/metadata';
 import { keepPreviousData } from '@tanstack/react-query';
 
 const SequenceRunDetailsLinkage = () => {
@@ -15,7 +15,7 @@ const SequenceRunDetailsLinkage = () => {
     isFetching: isFetchingLibrariesData,
     isError: isErrorLibrariesData,
     error: errorLibrariesData,
-  } = useSuspenseMetadataLibraryModel({
+  } = useQueryMetadataLibraryModel({
     params: {
       query: {
         library_id: sequenceRunDetail?.libraries,

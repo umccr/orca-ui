@@ -1,4 +1,4 @@
-import { LibraryListQueryParams, useSuspenseMetadataLibraryModel } from '@/api/metadata';
+import { LibraryListQueryParams, useQueryMetadataLibraryModel } from '@/api/metadata';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { components } from '@/api/types/metadata';
 import { Table } from '@/components/tables';
@@ -12,19 +12,18 @@ import { getProjectTableColumn } from '../project/utils';
 export const LibraryListAPITable = ({ queryParams }: { queryParams: LibraryListQueryParams }) => {
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
 
-  const libraryModel = useSuspenseMetadataLibraryModel({
+  const libraryModel = useQueryMetadataLibraryModel({
     params: { query: { ...queryParams, ...getPaginationParams() } },
   });
 
   const data = libraryModel.data;
-  if (!data) {
-    throw new Error('No subject data found!');
-  }
 
-  const flatData = processLibraryResults(data.results);
-  const pagination = data.pagination;
+  const flatData = data ? processLibraryResults(data.results) : [];
+  const pagination = data?.pagination;
+
   return (
     <Table
+      isFetchingData={libraryModel.isFetching}
       inCard={false}
       tableHeader={
         <div className='flex flex-col md:flex-row'>
@@ -70,9 +69,9 @@ export const LibraryListAPITable = ({ queryParams }: { queryParams: LibraryListQ
       ]}
       tableData={flatData}
       paginationProps={{
-        totalCount: pagination.count ?? 0,
-        rowsPerPage: pagination.rowsPerPage ?? 0,
-        currentPage: pagination.page ?? 0,
+        totalCount: pagination?.count ?? 0,
+        rowsPerPage: pagination?.rowsPerPage ?? 0,
+        currentPage: pagination?.page ?? 0,
         setPage: (n: number) => {
           setQueryParams({ page: n });
         },

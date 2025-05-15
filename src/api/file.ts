@@ -18,11 +18,11 @@ type UseQueryOptions<T> = UseSuspenseQueryOptions<T> & {
 const s3Path = '/api/v1/s3';
 export type S3Record =
   paths[typeof s3Path]['get']['responses']['200']['content']['application/json']['results'][number];
-export function useSuspenseFileObject({
+export function useQueryFileObject({
   params,
   reactQuery,
 }: UseSuspenseQueryOptions<paths[typeof s3Path]['get']>) {
-  return useSuspenseQuery({
+  return useQuery({
     ...reactQuery,
     queryKey: ['GET', s3Path, params],
     queryFn: async ({ signal }) => {

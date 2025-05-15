@@ -14,15 +14,7 @@ import './styles/additional-styles/flatpickr.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Router
-      // remove when react router v7 is integrated
-      future={{
-        v7_relativeSplatPath: true,
-        // Many of the "Lab" pages use "useSuspenseQuery" which then doesn't show fallback (loading)
-        // when this startTransition feature is enabled
-        // v7_startTransition: true,
-      }}
-    >
+    <Router>
       <App />
     </Router>
   </StrictMode>

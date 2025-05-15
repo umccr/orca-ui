@@ -1,5 +1,5 @@
 import { FC, Suspense } from 'react';
-import { useSuspenseMetadataLibraryModel } from '@/api/metadata';
+import { useQueryMetadataLibraryModel } from '@/api/metadata';
 import { Table } from '@/components/tables';
 import { DetailedErrorBoundary } from '@/components/common/error';
 import { SpinnerWithText } from '@/components/common/spinner';
@@ -29,23 +29,21 @@ export const LibraryLinkTable: FC<LibraryLinkTableProps> = ({ libraryDetail }) =
 };
 
 export const IndividualLibraryTable = ({ individualIdArray }: { individualIdArray: string[] }) => {
-  const libraryData = useSuspenseMetadataLibraryModel({
+  const libraryModel = useQueryMetadataLibraryModel({
     params: {
       query: {
         individualId: individualIdArray,
         rowsPerPage: DEFAULT_NON_PAGINATE_PAGE_SIZE,
       },
     },
-  }).data;
+  });
+  const libraryData = libraryModel.data;
 
-  if (!libraryData) {
-    throw new Error('No subject data found!');
-  }
-
-  const isPaginationAvailable = libraryData.links?.next;
+  const isPaginationAvailable = libraryData?.links?.next;
 
   return (
     <Table
+      isFetchingData={libraryModel.isFetching}
       inCard={false}
       tableHeader={
         <div>
@@ -105,7 +103,7 @@ export const IndividualLibraryTable = ({ individualIdArray }: { individualIdArra
           },
         },
       ]}
-      tableData={libraryData.results}
+      tableData={libraryData?.results ?? []}
     />
   );
 };
