@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useSuspenseMetadataDetailLibraryModel } from '@/api/metadata';
+import { useQueryMetadataDetailLibraryModel } from '@/api/metadata';
 import WorkflowRunTable from '@/modules/runs/components/workflowRuns/WorkflowRunTable';
 import { classNames } from '@/utils/commonUtils';
 
@@ -9,15 +9,20 @@ export default function LibraryWorkflowRunsPage() {
     throw new Error('No library id in URL path!');
   }
 
-  const libraryDetailRes = useSuspenseMetadataDetailLibraryModel({
+  const libraryDetail = useQueryMetadataDetailLibraryModel({
     params: {
       path: {
         orcabusId: libraryOrcabusId,
       },
     },
-  }).data;
+  });
 
-  if (!libraryDetailRes) {
+  if (libraryDetail.isFetching) {
+    return <div>Loading...</div>;
+  }
+
+  const libraryDetailData = libraryDetail.data;
+  if (!libraryDetailData) {
     throw new Error('No library Id found in metadata!');
   }
   return (

@@ -1,4 +1,4 @@
-# OrcaUI (dev) 🚧
+# OrcaUI
 
 This project is the UI representation of our [OrcaBus project](https://github.com/umccr/orcabus).
 

@@ -59,6 +59,7 @@ export function createSequenceRunQueryHook<
       ...reactQuery,
       queryKey: [versionedPath, params],
       queryFn: async ({ signal: querySignal }) => {
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         // @ts-expect-error: params is dynamic type type for openapi-fetch
         const { data, error, response } = await client.GET(versionedPath, {
           params: params as ParamsOption<paths[K][M]>,

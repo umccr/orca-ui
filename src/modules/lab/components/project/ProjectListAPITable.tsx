@@ -1,4 +1,4 @@
-import { ProjectListQueryParams, useSuspenseMetadataProjectModel } from '@/api/metadata';
+import { ProjectListQueryParams, useQueryMetadataProjectModel } from '@/api/metadata';
 import { components } from '@/api/types/metadata';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { Search } from '@/components/common/search';
@@ -10,21 +10,19 @@ import { getContactTableColumn } from '../contact/utils';
 export const ProjectListAPITable = ({ queryParams }: { queryParams: ProjectListQueryParams }) => {
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
 
-  const projectModel = useSuspenseMetadataProjectModel({
+  const projectModel = useQueryMetadataProjectModel({
     params: { query: { ...queryParams, ...getPaginationParams() } },
   });
 
   const data = projectModel.data;
-  if (!data) {
-    throw new Error('No individual data found!');
-  }
 
-  const flatData = processDataResults(data.results);
-  const pagination = data.pagination;
+  const flatData = data ? processDataResults(data.results) : [];
+  const pagination = data?.pagination;
 
   return (
     <Table
       inCard={false}
+      isFetchingData={projectModel.isFetching}
       tableHeader={
         <div className='flex flex-col md:flex-row'>
           <div className='flex items-center justify-center'>{'Project Table'}</div>
@@ -60,9 +58,9 @@ export const ProjectListAPITable = ({ queryParams }: { queryParams: ProjectListQ
       ]}
       tableData={flatData}
       paginationProps={{
-        totalCount: pagination.count ?? 0,
-        rowsPerPage: pagination.rowsPerPage ?? 0,
-        currentPage: pagination.page ?? 0,
+        totalCount: pagination?.count ?? 0,
+        rowsPerPage: pagination?.rowsPerPage ?? 0,
+        currentPage: pagination?.page ?? 0,
         setPage: (n: number) => {
           setQueryParams({ page: n });
         },

@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { Sidebar } from '@/components/common/sidebar';
-import { useSuspenseMetadataDetailLibraryModel } from '@/api/metadata';
+import { useQueryMetadataDetailLibraryModel } from '@/api/metadata';
 import { LibraryTableDetails } from '@/modules/lab/components/library/LibraryTableDetails';
 import { LibraryLinkTable } from '../../components/library/LibraryLinkTable';
 import { Accordion } from '@/components/common/accordion';
@@ -11,15 +11,20 @@ export const LibraryDetailBar = () => {
     throw new Error('No library id in URL path!');
   }
 
-  const libraryDetailRes = useSuspenseMetadataDetailLibraryModel({
+  const libraryDetail = useQueryMetadataDetailLibraryModel({
     params: {
       path: {
         orcabusId: libraryOrcabusId,
       },
     },
-  }).data;
+  });
 
-  if (!libraryDetailRes) {
+  if (libraryDetail.isFetching) {
+    return <div>Loading...</div>;
+  }
+
+  const libraryDetailData = libraryDetail.data;
+  if (!libraryDetailData) {
     throw new Error('No library Id found in metadata!');
   }
   return (
@@ -31,7 +36,7 @@ export const LibraryDetailBar = () => {
           chevronPosition='right'
           buttonClassName='border-b  border-gray-200 dark:border-gray-700'
         >
-          <LibraryTableDetails libraryDetail={libraryDetailRes} />
+          <LibraryTableDetails libraryDetail={libraryDetailData} />
         </Accordion>
         <div className='mt-4'></div>
 
@@ -41,7 +46,7 @@ export const LibraryDetailBar = () => {
           chevronPosition='right'
           buttonClassName='border-b  border-gray-200 dark:border-gray-700'
         >
-          <LibraryLinkTable libraryDetail={libraryDetailRes} />
+          <LibraryLinkTable libraryDetail={libraryDetailData} />
         </Accordion>
       </div>
     </Sidebar>

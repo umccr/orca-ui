@@ -2,7 +2,7 @@
 // https://github.com/ArnaudBarre/eslint-plugin-react-refresh/issues/25#issuecomment-1729071347
 
 import { Fragment } from 'react';
-import { SubjectListQueryParams, useSuspenseMetadataSubjectModel } from '@/api/metadata';
+import { SubjectListQueryParams, useQueryMetadataSubjectModel } from '@/api/metadata';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { Column } from '@/components/tables';
 import Table, { multiRowCell } from '@/components/tables/Table';
@@ -18,17 +18,16 @@ import { classNames } from '@/utils/commonUtils';
 export const SubjectListAPITable = ({ queryParams }: { queryParams: SubjectListQueryParams }) => {
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
 
-  const fullLibraryModel = useSuspenseMetadataSubjectModel({
+  const fullLibraryModel = useQueryMetadataSubjectModel({
     params: { query: { ...queryParams, ...getPaginationParams() } },
   });
   const data = fullLibraryModel.data;
-  if (!data) {
-    throw new Error('No subject data found!');
-  }
-  const tableData = processSubjectResult(data.results);
-  const pagination = data.pagination;
+
+  const tableData = data ? processSubjectResult(data.results) : [];
+  const pagination = data?.pagination;
   return (
     <Table
+      isFetchingData={fullLibraryModel.isFetching}
       inCard={false}
       tableHeader={
         <div className='flex flex-col md:flex-row'>
@@ -64,9 +63,9 @@ export const SubjectListAPITable = ({ queryParams }: { queryParams: SubjectListQ
       ]}
       tableData={tableData}
       paginationProps={{
-        totalCount: pagination.count ?? 0,
-        rowsPerPage: pagination.rowsPerPage ?? 0,
-        currentPage: pagination.page ?? 0,
+        totalCount: pagination?.count ?? 0,
+        rowsPerPage: pagination?.rowsPerPage ?? 0,
+        currentPage: pagination?.page ?? 0,
         setPage: (n: number) => {
           setQueryParams({ page: n });
         },

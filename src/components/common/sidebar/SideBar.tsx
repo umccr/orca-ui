@@ -24,7 +24,7 @@ const Sidebar: FC<SidebarProps> = ({
   position,
   className,
   preferenceStorageKey,
-  openWidth = 'w-92',
+  openWidth = '',
   collapsedWidth = 'w-16',
 }) => {
   const [isOpen, setIsOpen] = useUserPreferencesLocalStorage(
@@ -88,7 +88,9 @@ const Sidebar: FC<SidebarProps> = ({
           )}
 
           <div className='flex-1'>
-            <div className='space-y-2 p-4'>{children}</div>
+            <div className={classNames('space-y-2 p-4', position === 'left' ? 'pl-0' : 'pr-0')}>
+              {children}
+            </div>
           </div>
 
           {footer && (
