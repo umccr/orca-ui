@@ -136,7 +136,10 @@ export class PipelineStack extends Stack {
           region: REGION,
         },
         gammaConfig
-      )
+      ),
+      {
+        post: [new ManualApprovalStep('Promote to Prod (Production)')],
+      }
     );
 
     /**
@@ -152,10 +155,7 @@ export class PipelineStack extends Stack {
           region: REGION,
         },
         prodConfig
-      ),
-      {
-        pre: [new ManualApprovalStep('Promote to Prod (Production)')],
-      }
+      )
     );
 
     /**
