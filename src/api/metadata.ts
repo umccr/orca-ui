@@ -1,17 +1,17 @@
 import config from '@/config';
 import createClient from 'openapi-fetch';
 import type { paths, components, operations } from './types/metadata';
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
-import { authMiddleware, UseSuspenseQueryOptions, UseMutationOptions, PathsWithGet } from './utils';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { authMiddleware, UseQueryOptions, UseMutationOptions, PathsWithGet } from './utils';
 
 const client = createClient<paths>({ baseUrl: config.apiEndpoint.metadata });
 client.use(authMiddleware);
 
 type GetPaths = PathsWithGet<paths>;
 
-function createMetadataFetchingHook<K extends GetPaths>(path: K) {
-  return function ({ params, reactQuery }: UseSuspenseQueryOptions<paths[K]['get']>) {
-    return useSuspenseQuery({
+function createMetadataUseQueryHook<K extends GetPaths>(path: K) {
+  return function ({ params, reactQuery }: UseQueryOptions<paths[K]['get']>) {
+    return useQuery({
       ...reactQuery,
       queryKey: [path, params],
       queryFn: async ({ signal }) => {
@@ -65,18 +65,18 @@ export type SampleListQueryParams = operations['sampleList']['parameters']['quer
 export type ContactListQueryParams = operations['contactList']['parameters']['query'];
 export type ProjectListQueryParams = operations['projectList']['parameters']['query'];
 
-export const useSuspenseMetadataSubjectModel = createMetadataFetchingHook('/api/v1/subject/');
-export const useSuspenseMetadataLibraryModel = createMetadataFetchingHook('/api/v1/library/');
-export const useSuspenseMetadataDetailLibraryModel = createMetadataFetchingHook(
+export const useQueryMetadataSubjectModel = createMetadataUseQueryHook('/api/v1/subject/');
+export const useQueryMetadataLibraryModel = createMetadataUseQueryHook('/api/v1/library/');
+export const useQueryMetadataDetailLibraryModel = createMetadataUseQueryHook(
   '/api/v1/library/{orcabusId}/'
 );
-export const useSuspenseMetadataDetailLibraryHistoryModel = createMetadataFetchingHook(
+export const useQueryMetadataDetailLibraryHistoryModel = createMetadataUseQueryHook(
   '/api/v1/library/{orcabusId}/history/'
 );
-export const useSuspenseMetadataIndividualModel = createMetadataFetchingHook('/api/v1/individual/');
-export const useSuspenseMetadataSampleModel = createMetadataFetchingHook('/api/v1/sample/');
-export const useSuspenseMetadataContactModel = createMetadataFetchingHook('/api/v1/contact/');
-export const useSuspenseMetadataProjectModel = createMetadataFetchingHook('/api/v1/project/');
+export const useQueryMetadataIndividualModel = createMetadataUseQueryHook('/api/v1/individual/');
+export const useQueryMetadataSampleModel = createMetadataUseQueryHook('/api/v1/sample/');
+export const useQueryMetadataContactModel = createMetadataUseQueryHook('/api/v1/contact/');
+export const useQueryMetadataProjectModel = createMetadataUseQueryHook('/api/v1/project/');
 
 // UseMutation
 export const useMutationSyncGsheet = createMetadataPostHook('/api/v1/sync/gsheet/');

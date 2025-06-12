@@ -4,7 +4,7 @@ import { useSequenceRunContext } from './SequenceRunContext';
 import { Accordion } from '@/components/common/accordion';
 import { Table } from '@/components/tables';
 import { classNames } from '@/utils/commonUtils';
-import { useSuspenseMetadataLibraryModel } from '@/api/metadata';
+import { useQueryMetadataLibraryModel } from '@/api/metadata';
 import { Badge } from '@/components/common/badges';
 import { keepPreviousData } from '@tanstack/react-query';
 import dayjs from 'dayjs';
@@ -21,7 +21,7 @@ const SequenceRunDetailsLinkage = () => {
     isFetching: isFetchingLibrariesData,
     isError: isErrorLibrariesData,
     error: errorLibrariesData,
-  } = useSuspenseMetadataLibraryModel({
+  } = useQueryMetadataLibraryModel({
     params: {
       query: {
         library_id: combinedLibraries,

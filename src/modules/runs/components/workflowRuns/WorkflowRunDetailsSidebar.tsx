@@ -72,7 +72,7 @@ const WorkflowRunDetailsSidebar = () => {
               },
               {
                 key: 'analysisRunStatus',
-                value: workflowRunDetail?.analysisRun?.status || '-',
+                value: workflowRunDetail?.analysisRun?.analysis?.status || '-',
               },
               {
                 key: 'analysisRunComment',

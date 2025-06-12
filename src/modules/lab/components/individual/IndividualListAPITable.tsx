@@ -1,4 +1,4 @@
-import { IndividualListQueryParams, useSuspenseMetadataIndividualModel } from '@/api/metadata';
+import { IndividualListQueryParams, useQueryMetadataIndividualModel } from '@/api/metadata';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { components } from '@/api/types/metadata';
 import { Table } from '@/components/tables';
@@ -14,19 +14,14 @@ export const IndividualListAPITable = ({
 }) => {
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
 
-  const individualModel = useSuspenseMetadataIndividualModel({
+  const individualModel = useQueryMetadataIndividualModel({
     params: { query: { ...queryParams, ...getPaginationParams() } },
   });
-
   const data = individualModel.data;
-  if (!data) {
-    throw new Error('No individual data found!');
-  }
 
-  const flatData = processResult(data.results);
-  const pagination = data.pagination;
   return (
     <Table
+      isFetchingData={individualModel.isFetching}
       inCard={false}
       tableHeader={
         <div className='flex flex-col md:flex-row'>
@@ -59,11 +54,11 @@ export const IndividualListAPITable = ({
           // cellClassName: 'bg-orange-50',
         }),
       ]}
-      tableData={flatData}
+      tableData={data ? processResult(data.results) : []}
       paginationProps={{
-        totalCount: pagination.count ?? 0,
-        rowsPerPage: pagination.rowsPerPage ?? 0,
-        currentPage: pagination.page ?? 0,
+        totalCount: data?.pagination.count ?? 0,
+        rowsPerPage: data?.pagination.rowsPerPage ?? 0,
+        currentPage: data?.pagination.page ?? 0,
         setPage: (n: number) => {
           setQueryParams({ page: n });
         },

@@ -25,7 +25,7 @@ const Tooltip: FC<TooltipProps> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isShowTooltips, setIsShowTooltips] = useState(true);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Add cleanup effect
   useEffect(() => {

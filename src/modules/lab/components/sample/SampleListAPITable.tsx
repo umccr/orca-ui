@@ -1,4 +1,4 @@
-import { SampleListQueryParams, useSuspenseMetadataSampleModel } from '@/api/metadata';
+import { SampleListQueryParams, useQueryMetadataSampleModel } from '@/api/metadata';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { components } from '@/api/types/metadata';
 import { Table } from '@/components/tables';
@@ -10,19 +10,17 @@ import { getSampleTableColumn } from './utils';
 export const SampleListAPITable = ({ queryParams }: { queryParams: SampleListQueryParams }) => {
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
 
-  const sampleModel = useSuspenseMetadataSampleModel({
+  const sampleModel = useQueryMetadataSampleModel({
     params: { query: { ...queryParams, ...getPaginationParams() } },
   });
 
   const data = sampleModel.data;
-  if (!data) {
-    throw new Error('No individual data found!');
-  }
 
-  const flatData = processDataResults(data.results);
-  const pagination = data.pagination;
+  const flatData = data ? processDataResults(data.results) : [];
+  const pagination = data?.pagination;
   return (
     <Table
+      isFetchingData={sampleModel.isFetching}
       inCard={false}
       tableHeader={
         <div className='flex flex-col md:flex-row'>
@@ -57,9 +55,9 @@ export const SampleListAPITable = ({ queryParams }: { queryParams: SampleListQue
       ]}
       tableData={flatData}
       paginationProps={{
-        totalCount: pagination.count ?? 0,
-        rowsPerPage: pagination.rowsPerPage ?? 0,
-        currentPage: pagination.page ?? 0,
+        totalCount: pagination?.count ?? 0,
+        rowsPerPage: pagination?.rowsPerPage ?? 0,
+        currentPage: pagination?.page ?? 0,
         setPage: (n: number) => {
           setQueryParams({ page: n });
         },

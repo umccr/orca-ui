@@ -136,7 +136,10 @@ export class PipelineStack extends Stack {
           region: REGION,
         },
         gammaConfig
-      )
+      ),
+      {
+        post: [new ManualApprovalStep('Promote to Prod (Production)')],
+      }
     );
 
     /**
@@ -152,10 +155,7 @@ export class PipelineStack extends Stack {
           region: REGION,
         },
         prodConfig
-      ),
-      {
-        pre: [new ManualApprovalStep('Promote to Prod (Production)')],
-      }
+      )
     );
 
     /**
@@ -359,21 +359,20 @@ export class PipelineStack extends Stack {
               input: buildOutput,
               runOrder: 2,
             }),
+            new ManualApprovalAction({
+              actionName: 'DeployToProdApproval',
+              runOrder: 3,
+            }),
           ],
         },
 
         {
           stageName: 'DeployToProd',
           actions: [
-            new ManualApprovalAction({
-              actionName: 'DeployToProdApproval',
-              runOrder: 1,
-            }),
             new CodeBuildAction({
               actionName: 'DeployToProd',
               project: deployProject(AppStage.PROD),
               input: buildOutput,
-              runOrder: 2,
             }),
           ],
         },

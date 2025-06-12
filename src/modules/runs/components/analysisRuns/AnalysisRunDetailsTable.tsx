@@ -20,7 +20,7 @@ const AnalysisRunDetailsTable = () => {
     () =>
       analysisRun
         ? {
-            currentStatus: analysisRun?.status,
+            currentStatus: analysisRun?.analysis?.status,
             comment: analysisRun?.comment,
             analysis: {
               analysisName: analysisRun?.analysis?.analysisName,

@@ -4,7 +4,7 @@ import { DetailedErrorBoundary } from '@/components/common/error';
 import { useState } from 'react';
 import { getTableColumn } from '@/modules/files/components/FileAPITable';
 import { useSuspenseWorkflowRunListModel } from '@/api/workflow';
-import { useSuspenseFileObject } from '@/api/file';
+import { useQueryFileObject } from '@/api/file';
 import { GroupedTable } from '@/components/tables';
 import { Column, TableData } from '@/components/tables/GroupedRowTable';
 import { Dropdown } from '@/components/common/dropdowns';
@@ -258,6 +258,7 @@ export const AnalysisTable = ({
   keyPatterns: string[];
   getTableDataFormat: (data: ({ key: string } & Record<string, unknown>)[]) => TableData[];
 }) => {
+  // Only shows successful workflow runs
   const workflowRun = useSuspenseWorkflowRunListModel({
     params: {
       query: {
@@ -265,6 +266,7 @@ export const AnalysisTable = ({
         workflow__workflowName: workflowType,
         ordering: '-portalRunId',
         rowsPerPage: DEFAULT_NON_PAGINATE_PAGE_SIZE,
+        status: 'SUCCEEDED',
       },
     },
   }).data;
@@ -276,7 +278,7 @@ export const AnalysisTable = ({
   const initPortalRunId = workflowRunResults[0].portalRunId;
   const [selectedPortalRunId, setSelectedPortalRunId] = useState(initPortalRunId);
 
-  const filesApiData = useSuspenseFileObject({
+  const fileQueryResult = useQueryFileObject({
     params: {
       query: {
         'key[]': keyPatterns,
@@ -285,13 +287,19 @@ export const AnalysisTable = ({
         'attributes[portalRunId]': selectedPortalRunId,
       },
     },
-  }).data;
+  });
 
-  if (!filesApiData?.results) {
+  if (fileQueryResult.isFetching) {
+    return <SpinnerWithText text='Loading data ...' />;
+  }
+
+  const fileQueryData = fileQueryResult.data;
+  const isDataPaginated = !!fileQueryData && fileQueryData.links.next !== null;
+  if (!fileQueryData?.results) {
     throw new Error('No report found!');
   }
 
-  const tableData = filesApiData.results.map((item) => ({
+  const tableData = fileQueryData.results.map((item) => ({
     key: item.key,
     lastModifiedDate: item.lastModifiedDate,
     size: item.size,
@@ -314,10 +322,22 @@ export const AnalysisTable = ({
             <div className='flex items-center justify-between'>
               <div className='flex items-center'>
                 <div className='text-gray-900 dark:text-gray-100'>{workflowType}</div>
+
                 <WorkflowDialogDetail
                   portalRunId={selectedPortalRunId}
                   workflowDetail={currentSelectedWorkflowDetail}
                 />
+                <div className='flex h-full items-center text-sm font-normal text-gray-500 dark:text-gray-400'>
+                  <Tooltip
+                    text={`This page will only show 'SUCCEEDED' workflow runs.`}
+                    position='right'
+                    background='light'
+                    size='small'
+                    className='z-50 w-96 text-wrap whitespace-normal'
+                  >
+                    <InformationCircleIcon className='ml-2 h-5 w-5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' />
+                  </Tooltip>
+                </div>
               </div>
               {isMultipleRuns && (
                 <div className='flex items-center space-x-3'>
@@ -340,7 +360,7 @@ export const AnalysisTable = ({
                 </div>
               )}
             </div>
-            {filesApiData.links?.next && (
+            {isDataPaginated && (
               <div className='text-xs text-gray-500 italic dark:text-gray-400'>
                 * Due to pagination, some files may not be shown here.
               </div>

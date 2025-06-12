@@ -2,7 +2,7 @@
 // https://github.com/ArnaudBarre/eslint-plugin-react-refresh/issues/25#issuecomment-1729071347
 
 import { useEffect, useState } from 'react';
-import { S3Record, useSuspenseFileObject, useQueryPresignedFileObjectId } from '@/api/file';
+import { S3Record, useQueryFileObject, useQueryPresignedFileObjectId } from '@/api/file';
 import { Table } from '@/components/tables';
 import { Column } from '@/components/tables/Table';
 import { Bars3Icon, InformationCircleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
@@ -36,7 +36,7 @@ export const FileAPITable = ({
 
   const { setQueryParams, getPaginationParams } = useQueryParams();
 
-  const data = useSuspenseFileObject({
+  const fileQueryResult = useQueryFileObject({
     params: {
       query: {
         currentState: true,
@@ -45,28 +45,31 @@ export const FileAPITable = ({
         ...additionalQueryParam,
       },
     },
-  }).data;
+  });
 
-  if (!data) throw new Error('Data is not available');
+  const data = fileQueryResult.data;
+  const recordResults = data?.results ?? [];
+  const pagination = data?.pagination;
+  const isDataPaginated = !!data && data.links.next !== null;
 
   // FIX ME: This is specifically for `umccrise` use only to hide the `work` directory
   const [isHideWorkDirectory, setIsHideWorkDirectory] = useState(false);
   useEffect(() => {
-    if (data.links.next !== null) {
+    if (isDataPaginated) {
       setIsHideWorkDirectory(false);
     }
-  }, [data.links.next]);
+  }, [isDataPaginated]);
 
   const recordData = isHideWorkDirectory
-    ? data.results.filter(({ key }) => !key.includes('/work/'))
-    : data.results;
+    ? recordResults.filter(({ key }) => !key.includes('/work/'))
+    : recordResults;
 
   return (
     <>
       {isUmccriseWorkflowType && (
         <div className='flex flex-row gap-2'>
           <Checkbox
-            disabled={data.links.next !== null}
+            disabled={isDataPaginated}
             className='flex flex-row gap-2 text-sm font-medium'
             checked={isHideWorkDirectory}
             onChange={() => setIsHideWorkDirectory((p) => !p)}
@@ -85,6 +88,7 @@ export const FileAPITable = ({
         </div>
       )}
       <Table
+        isFetchingData={fileQueryResult.isFetching}
         columns={tableColumn}
         tableHeader={isSearchBoxKey && <SearchBox onSearch={(s) => setSearchBox(s)} />}
         tableData={recordData.map((item) => ({
@@ -93,9 +97,9 @@ export const FileAPITable = ({
           fileRecord: item,
         }))}
         paginationProps={{
-          totalCount: data.pagination.count ?? 0,
-          rowsPerPage: data.pagination.rowsPerPage ?? 0,
-          currentPage: data.pagination.page ?? 0,
+          totalCount: pagination?.count ?? 0,
+          rowsPerPage: pagination?.rowsPerPage ?? 0,
+          currentPage: pagination?.page ?? 0,
           setPage: (n: number) => {
             setQueryParams({ page: n });
           },

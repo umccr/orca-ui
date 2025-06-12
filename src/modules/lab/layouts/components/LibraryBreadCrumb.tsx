@@ -2,7 +2,8 @@ import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { classNames } from '@/utils/commonUtils';
 import { FC } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { useSuspenseMetadataDetailLibraryModel } from '@/api/metadata';
+import { useQueryMetadataDetailLibraryModel } from '@/api/metadata';
+import Skeleton from 'react-loading-skeleton';
 
 type LibraryBreadcrumbProps = { className?: string };
 
@@ -27,17 +28,24 @@ export const LibraryBreadCrumb: FC<LibraryBreadcrumbProps> = ({ className }) => 
   if (!libraryOrcabusId) {
     throw new Error('No `libraryOrcabusId` in URL path!');
   }
-  const libraryDetailRes = useSuspenseMetadataDetailLibraryModel({
+  const libraryDetailRes = useQueryMetadataDetailLibraryModel({
     params: {
       path: {
         orcabusId: libraryOrcabusId,
       },
     },
-  }).data;
-  const libraryId = libraryDetailRes?.libraryId;
+  });
+
+  if (libraryDetailRes.isFetching) {
+    return <Skeleton />;
+  }
+
+  const libraryData = libraryDetailRes.data;
+  const libraryId = libraryData?.libraryId;
 
   const splitPath = fullPath.split('/');
   const currentPage = splitPath[splitPath.length - 1];
+
   return (
     <nav
       className={classNames(
