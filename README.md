@@ -46,18 +46,21 @@ Start Front-end Development Server
 make start
 ```
 
+| NOTICE: By default, DEV API will be used for local development, see [makefile](./Makefile) and [start.sh](./start.sh). Default values can be change in Makefile if local Orcabus API is set up for development |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+
 ## Run Orcabus API Locally
 
-For Run Orcabus API Locally, please refer [Running API Locally](https://github.com/umccr/orcabus?tab=readme-ov-file#running-api-locally)
+For Run Orcabus API Locally, please refer each Orcabus service repos.
 
 The APIs will run on `localhost` with the following port assignments:
 
-| Microservice         | Local Endpoint          |
-| -------------------- | ----------------------- |
-| Metadata Manager     | <http://localhost:8100> |
-| Workflow Manager     | <http://localhost:8200> |
-| Sequence Run Manager | <http://localhost:8300> |
-| File Manager         | <http://localhost:8400> |
+| Microservice         | Service repos                                             | Local Endpoint (default) |
+| -------------------- | --------------------------------------------------------- | ------------------------ |
+| Metadata Manager     | <https://github.com/OrcaBus/service-metadata-manager>     | <http://localhost:8100>  |
+| Workflow Manager     | <https://github.com/OrcaBus/service-workflow-manager>     | <http://localhost:8200>  |
+| Sequence Run Manager | <https://github.com/OrcaBus/service-sequence-run-manager> | <http://localhost:8300>  |
+| File Manager         | <https://github.com/OrcaBus/service-filemanager>          | <http://localhost:8400>  |
 
 ## Deployment
 
