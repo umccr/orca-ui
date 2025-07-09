@@ -26,6 +26,7 @@ export type FieldDefinition = {
   label: string;
   key: string;
   type: FieldType;
+  sortKeyPrefix: string;
 };
 
 const inputWidth = 'w-[10rem]';

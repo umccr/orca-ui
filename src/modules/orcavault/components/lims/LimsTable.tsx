@@ -1,10 +1,10 @@
 import { Table } from '@/components/tables';
 import { useQueryParams } from '@/hooks/useQueryParams';
-import { getCurrentSortDirection, getSortValue } from '@/components/tables/Table';
 import { SpinnerWithText } from '@/components/common/spinner';
 import { useAllLims } from '../../api/mart/lims';
 import { LimFilter, LimsOrderBy } from '../../api/graphql/codegen/graphql';
 import { FIELD_LABEL } from '../../api/graphql/queries/allLims';
+import { getMartSortDirection, getMartSortValue } from '../utils';
 
 export const LimsTable = () => {
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
@@ -14,7 +14,7 @@ export const LimsTable = () => {
   const filter = currentQueryFilter ? (JSON.parse(currentQueryFilter) as LimFilter) : undefined;
 
   const currentSort = queryParams?.ordering;
-  const currentSortType = LimsOrderBy[currentSort as keyof typeof LimsOrderBy];
+  const currentSortType = currentSort as LimsOrderBy;
 
   const pagination = getPaginationParams();
   const offset = (pagination.page - 1) * pagination.rowsPerPage;
@@ -47,9 +47,9 @@ export const LimsTable = () => {
           header: field.label,
           accessor: field.key,
           onSort: () => {
-            setQueryParams({ ordering: getSortValue(currentSort, field.key) });
+            setQueryParams({ ordering: getMartSortValue(currentSort, field.sortKeyPrefix) });
           },
-          sortDirection: getCurrentSortDirection(currentSort, field.key),
+          sortDirection: getMartSortDirection({ currentSort, key: field.sortKeyPrefix }),
         }))}
         tableData={data.nodes}
         paginationProps={{
