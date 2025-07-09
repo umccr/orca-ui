@@ -2,11 +2,18 @@ import { useState } from 'react';
 import { DateSinglePicker } from '@/components/common/datepicker';
 import { classNames } from '@/utils/commonUtils';
 import { Button } from '@/components/common/buttons';
-import { PlusCircleIcon, TrashIcon } from '@heroicons/react/24/outline';
+import {
+  CursorArrowRaysIcon,
+  InformationCircleIcon,
+  PlusCircleIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { Select } from '@/components/common/select';
 import dayjs from 'dayjs';
 import toaster from '@/components/common/toaster';
+import { Tooltip } from '@/components/common/tooltips';
+import { GraphQLFilterProps } from '../api/graphql/queries/allLims';
 
 type Filter = {
   key: string;
@@ -71,16 +78,21 @@ const operatorLabels: Record<string, string> = {
 
 type Props = {
   fieldFilters: FieldDefinition[];
-  buildGraphQLFilter: (filters: Filter[]) => unknown;
+  buildGraphQLFilter: (props: GraphQLFilterProps) => unknown;
 };
 
 export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
   const { setQueryParams, getQueryParams, clearQueryParams } = useQueryParams();
   const currentQueryFilter = getQueryParams().filter;
+  const jsonQueryFilter = currentQueryFilter ? JSON.parse(currentQueryFilter) : null;
+  const originalFilters = jsonQueryFilter ? parseGraphQLFilter(jsonQueryFilter) : [];
 
-  const [filters, setFilters] = useState<Filter[]>(
-    currentQueryFilter ? parseGraphQLFilter(JSON.parse(currentQueryFilter)) : []
-  );
+  const [filters, setFilters] = useState<Filter[]>(originalFilters);
+  // Take the first key from the JSON query filter to determine the current filter
+  const urlFilterOperator = (Object.keys(jsonQueryFilter || {})[0] ?? 'and') as 'and' | 'or';
+  const [filterOperator, setFilterOperator] = useState<'and' | 'or'>(urlFilterOperator);
+
+  // This is just to indicate visually if filter has changed to what is applied
 
   const handleOperatorFilterChange = (index: number, val: string) => {
     const newFilters = [...filters];
@@ -91,7 +103,6 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
   const handleValueFilterChange = (index: number, val: string) => {
     const newFilters = [...filters];
     newFilters[index]['value'] = val;
-    console.log(val);
     setFilters(newFilters);
   };
 
@@ -109,9 +120,37 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
     setFilters([...filters, { key: newFilterKey, operator: operatorOptions[0], value: '' }]);
   };
 
+  // Track if filter changes need to be applied (show visual indicator)
+  const isSearchNeedUpdate =
+    JSON.stringify(filters) !== JSON.stringify(originalFilters) ||
+    filterOperator !== urlFilterOperator;
+
   return (
     <div className='mt-12'>
-      <div className='mb-4 text-lg font-medium'>Filters</div>
+      <div className='mb-4 flex flex-row items-center justify-between gap-2 border-b border-gray-200 pb-3'>
+        <div className='flex text-lg font-medium'>Filters</div>
+        <div className='flex items-center gap-2'>
+          <Tooltip
+            text={
+              'Choose how to combine multiple filters: AND requires all filters to match, OR requires any filter to match.'
+            }
+            position='left'
+            background='light'
+            size='small'
+            className='z-50 w-96 text-wrap whitespace-normal'
+          >
+            <InformationCircleIcon className='ml-2 h-5 w-5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' />
+          </Tooltip>
+          <Select
+            value={filterOperator}
+            onChange={(value) => setFilterOperator(value as 'and' | 'or')}
+            options={[
+              { label: 'AND', value: 'and' },
+              { label: 'OR', value: 'or' },
+            ]}
+          />
+        </div>
+      </div>
       {filters.map((filter, index) => {
         // Take the filter information for the current filter
         const fieldMeta = fieldFilters.find((f) => f.key === filter.key);
@@ -213,6 +252,7 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
           <PlusCircleIcon className='h-5 w-5' />
         </Button>
       </div>
+
       <div className='mt-8 flex flex-col gap-2'>
         <Button
           className='w-full justify-center'
@@ -233,20 +273,33 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
               toaster.error({ title: 'Error', message: 'One or more filter value is empty!' });
               return;
             }
-            setQueryParams({ filter: JSON.stringify(buildGraphQLFilter(filters)) });
+            setQueryParams({
+              filter: JSON.stringify(
+                buildGraphQLFilter({ filterOp: filterOperator, filters: filters })
+              ),
+            });
           }}
         >
           Apply
+          {isSearchNeedUpdate && <CursorArrowRaysIcon className='h-5 w-5' />}
         </Button>
       </div>
     </div>
   );
 };
 
-function parseGraphQLFilter(graphqlFilter: {
-  and: Record<string, Record<string, string>>[];
-}): Filter[] {
-  return graphqlFilter.and.map((filterObj) => {
+function parseGraphQLFilter(
+  graphqlFilter:
+    | {
+        and: Record<string, Record<string, string>>[];
+      }
+    | {
+        or: Record<string, Record<string, string>>[];
+      }
+): Filter[] {
+  const filterArray = 'and' in graphqlFilter ? graphqlFilter.and : graphqlFilter.or;
+
+  return filterArray.map((filterObj) => {
     const [key, operatorObj] = Object.entries(filterObj)[0];
     const [operator, value] = Object.entries(operatorObj)[0];
     return { key, operator, value };

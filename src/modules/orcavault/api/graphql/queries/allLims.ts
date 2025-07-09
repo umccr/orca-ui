@@ -59,9 +59,13 @@ export const ALL_LIMS_QUERY = graphql(`
   }
 `);
 
-export function buildGraphQLFilter(filters: Filter[]): LimFilter {
+export type GraphQLFilterProps = {
+  filterOp: 'and' | 'or';
+  filters: Filter[];
+};
+export function buildGraphQLFilter({ filterOp, filters }: GraphQLFilterProps): LimFilter {
   return {
-    and: filters.map((f) => ({
+    [filterOp]: filters.map((f) => ({
       [f.key]: {
         [f.operator]: f.value,
       },
