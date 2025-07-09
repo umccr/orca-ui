@@ -4,13 +4,13 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
-const LimsPage = lazy(() => import('@/modules/orcavault/pages/Lims'));
+const MartLimsPage = lazy(() => import('@/modules/orcavault/pages/MartLims'));
 
 export const Router: RouteObject = {
   path: 'vault',
   element: (
     <>
-      <LimsPage />
+      <MartLimsPage />
     </>
   ),
 };

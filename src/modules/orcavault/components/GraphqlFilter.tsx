@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DateRangePicker, DateSinglePicker } from '@/components/common/datepicker';
+import { DateSinglePicker } from '@/components/common/datepicker';
 import { classNames } from '@/utils/commonUtils';
 import { Button } from '@/components/common/buttons';
 import { PlusCircleIcon, TrashIcon } from '@heroicons/react/24/outline';
@@ -11,7 +11,7 @@ import toaster from '@/components/common/toaster';
 type Filter = {
   key: string;
   operator: string;
-  value: string | string[];
+  value: string;
 };
 
 type FieldType = 'string' | 'int' | 'float' | 'date' | 'timestamp';
@@ -21,7 +21,7 @@ export type FieldDefinition = {
   type: FieldType;
 };
 
-const inputWidth = 'w-[16rem]';
+const inputWidth = 'w-[10rem]';
 
 const inputThemeClassName = classNames(
   'block w-full border text-sm',
@@ -36,28 +36,45 @@ const inputThemeClassName = classNames(
 );
 
 const operatorsByType: Record<FieldType, string[]> = {
-  string: ['eq', 'contains', 'beginsWith', 'ne'],
-  float: ['eq', 'ne', 'gt', 'lt', 'ge', 'le', 'between'],
-  int: ['eq', 'ne', 'gt', 'lt', 'ge', 'le', 'between'],
-  date: ['eq', 'ne', 'ge', 'le', 'between'],
-  timestamp: ['eq', 'ne', 'ge', 'le', 'between'],
+  string: ['equalTo', 'in', 'startsWith', 'notEqualTo'],
+  float: [
+    'equalTo',
+    'notEqualTo',
+    'greaterThan',
+    'lessThan',
+    'greaterThanOrEqualTo',
+    'lessThanOrEqualTo',
+  ],
+  int: [
+    'equalTo',
+    'notEqualTo',
+    'greaterThan',
+    'lessThan',
+    'greaterThanOrEqualTo',
+    'lessThanOrEqualTo',
+  ],
+  date: ['greaterThanOrEqualTo', 'lessThanOrEqualTo'],
+  timestamp: ['greaterThanOrEqualTo', 'lessThanOrEqualTo'],
 };
 
 const operatorLabels: Record<string, string> = {
-  eq: 'Equal',
-  ne: 'Not Equal',
-  gt: 'Greater Than',
-  lt: 'Less Than',
-  ge: 'Greater Than or Equal',
-  le: 'Less Than or Equal',
-  between: 'Between',
-  contains: 'Contains',
-  beginsWith: 'Begins With',
+  equalTo: 'Equal',
+  notEqualTo: 'Not equal',
+  greaterThan: 'Greater than',
+  lessThan: 'Less than',
+  greaterThanOrEqualTo: 'Greater equal',
+  lessThanOrEqualTo: 'Less equal',
+  in: 'in',
+  startsWith: 'Starts with',
+  endsWith: 'Ends with',
 };
 
-type Props = { fieldFilters: FieldDefinition[] };
+type Props = {
+  fieldFilters: FieldDefinition[];
+  buildGraphQLFilter: (filters: Filter[]) => unknown;
+};
 
-export const GraphqlFilter = ({ fieldFilters }: Props) => {
+export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
   const { setQueryParams, getQueryParams, clearQueryParams } = useQueryParams();
   const currentQueryFilter = getQueryParams().filter;
 
@@ -71,9 +88,10 @@ export const GraphqlFilter = ({ fieldFilters }: Props) => {
     setFilters(newFilters);
   };
 
-  const handleValueFilterChange = (index: number, val: string | string[]) => {
+  const handleValueFilterChange = (index: number, val: string) => {
     const newFilters = [...filters];
     newFilters[index]['value'] = val;
+    console.log(val);
     setFilters(newFilters);
   };
 
@@ -99,9 +117,6 @@ export const GraphqlFilter = ({ fieldFilters }: Props) => {
         const fieldMeta = fieldFilters.find((f) => f.key === filter.key);
         if (!fieldMeta) throw new Error('No Field filter found!');
         const operatorOptions = operatorsByType[fieldMeta?.type];
-
-        const currentFilterValue = filter.value;
-        const isCurrentFilterValueArray = Array.isArray(currentFilterValue);
 
         return (
           <div key={index} className='mt-2 flex flex-row items-center gap-2'>
@@ -141,55 +156,8 @@ export const GraphqlFilter = ({ fieldFilters }: Props) => {
             </div>
 
             {/* The value for each corresponding filter */}
-            <div className='relative flex w-[16rem] flex-wrap'>
-              {(filter.operator === 'between' && fieldMeta.type === 'date') ||
-              (filter.operator === 'between' && fieldMeta.type === 'timestamp') ? (
-                <>
-                  <DateRangePicker
-                    align='left'
-                    startDate={isCurrentFilterValueArray ? currentFilterValue[0] : null}
-                    endDate={isCurrentFilterValueArray ? currentFilterValue[1] : null}
-                    onTimeChange={(startDate: string | null, endDate: string | null) => {
-                      if (!startDate || !endDate) {
-                        throw new Error('Invalid date range');
-                      }
-
-                      if (fieldMeta.type === 'date') {
-                        // Convert to YYYY-MM-DD format (AWSDate format)
-                        handleValueFilterChange(index, [
-                          startDate.slice(0, 10),
-                          endDate.slice(0, 10),
-                        ]);
-                      } else {
-                        // For timestamp, we can keep the full date string
-                        handleValueFilterChange(index, [
-                          dayjs(startDate).format('YYYY-MM-DD HH:mm:ss'),
-                          dayjs(endDate).format('YYYY-MM-DD HH:mm:ss'),
-                        ]);
-                      }
-                    }}
-                    className={inputWidth}
-                  />
-                </>
-              ) : filter.operator === 'between' &&
-                (fieldMeta.type === 'int' || fieldMeta.type === 'float') ? (
-                <div className='flex w-full flex-row gap-2'>
-                  <input
-                    type='number'
-                    value={filter.value}
-                    placeholder='Enter value'
-                    onChange={(e) => handleValueFilterChange(index, e.target.value)}
-                    className={classNames(inputThemeClassName, '')}
-                  />
-                  <input
-                    type='number'
-                    value={filter.value}
-                    placeholder='Enter value'
-                    onChange={(e) => handleValueFilterChange(index, e.target.value)}
-                    className={classNames(inputThemeClassName, '')}
-                  />
-                </div>
-              ) : fieldMeta.type === 'date' || fieldMeta.type === 'timestamp' ? (
+            <div className='relative flex w-[10rem] flex-wrap'>
+              {fieldMeta.type === 'date' || fieldMeta.type === 'timestamp' ? (
                 <>
                   <DateSinglePicker
                     align='left'
@@ -198,14 +166,7 @@ export const GraphqlFilter = ({ fieldFilters }: Props) => {
                       if (!date) {
                         throw new Error('Invalid date range');
                       }
-
-                      // Convert to YYYY-MM-DD format (AWSDate format)
-                      if (fieldMeta.type === 'date') {
-                        handleValueFilterChange(index, date.slice(0, 10));
-                      } else {
-                        // For timestamp, we can keep the full date string
-                        handleValueFilterChange(index, dayjs(date).format('YYYY-MM-DD HH:mm:ss'));
-                      }
+                      handleValueFilterChange(index, dayjs(date).format('YYYY-MM-DD'));
                     }}
                     className={inputWidth}
                   />
@@ -282,18 +243,8 @@ export const GraphqlFilter = ({ fieldFilters }: Props) => {
   );
 };
 
-function buildGraphQLFilter(filters: Filter[]) {
-  return {
-    and: filters.map((f) => ({
-      [f.key]: {
-        [f.operator]: f.value,
-      },
-    })),
-  };
-}
-
 function parseGraphQLFilter(graphqlFilter: {
-  and: Record<string, Record<string, string | string[]>>[];
+  and: Record<string, Record<string, string>>[];
 }): Filter[] {
   return graphqlFilter.and.map((filterObj) => {
     const [key, operatorObj] = Object.entries(filterObj)[0];
