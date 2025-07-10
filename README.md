@@ -51,16 +51,12 @@ make start
 
 ## Run Orcabus API Locally
 
-For Run Orcabus API Locally, please refer each Orcabus service repos.
+Microservices are now split into separate repositories, so we will use the dev endpoint instead for local development.
 
-The APIs will run on `localhost` with the following port assignments:
+## Vault Page
 
-| Microservice         | Service repos                                             | Local Endpoint (default) |
-| -------------------- | --------------------------------------------------------- | ------------------------ |
-| Metadata Manager     | <https://github.com/OrcaBus/service-metadata-manager>     | <http://localhost:8100>  |
-| Workflow Manager     | <https://github.com/OrcaBus/service-workflow-manager>     | <http://localhost:8200>  |
-| Sequence Run Manager | <https://github.com/OrcaBus/service-sequence-run-manager> | <http://localhost:8300>  |
-| File Manager         | <https://github.com/OrcaBus/service-filemanager>          | <http://localhost:8400>  |
+To get the schema introspection and latest GraphQL API types, run `yarn run mart-codegen-graphql`. Ensure that
+`GRAPHQL_SCHEMA_TOKEN` is set to the JWT token to be able to access `https://mart.prod.umccr.org/graphql`
 
 ## Deployment
 

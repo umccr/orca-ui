@@ -1,0 +1,3667 @@
+schema {
+  query: Query
+}
+
+type Bam {
+  bucket: String
+  cohortId: String
+  eTag: String
+  filename: String
+  format: String
+  key: String
+  lastModifiedDate: Datetime
+  libraryId: String
+  portalRunId: String
+  size: BigInt
+  storageClass: String
+}
+
+"""
+A condition to be used against `Bam` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input BamCondition {
+  """
+  Checks for equality with the object’s `bucket` field.
+  """
+  bucket: String
+  """
+  Checks for equality with the object’s `cohortId` field.
+  """
+  cohortId: String
+  """
+  Checks for equality with the object’s `eTag` field.
+  """
+  eTag: String
+  """
+  Checks for equality with the object’s `filename` field.
+  """
+  filename: String
+  """
+  Checks for equality with the object’s `format` field.
+  """
+  format: String
+  """
+  Checks for equality with the object’s `key` field.
+  """
+  key: String
+  """
+  Checks for equality with the object’s `lastModifiedDate` field.
+  """
+  lastModifiedDate: Datetime
+  """
+  Checks for equality with the object’s `libraryId` field.
+  """
+  libraryId: String
+  """
+  Checks for equality with the object’s `portalRunId` field.
+  """
+  portalRunId: String
+  """
+  Checks for equality with the object’s `size` field.
+  """
+  size: BigInt
+  """
+  Checks for equality with the object’s `storageClass` field.
+  """
+  storageClass: String
+}
+
+"""
+A filter to be used against `Bam` object types. All fields are combined with a logical ‘and.’
+"""
+input BamFilter {
+  """
+  Checks for all expressions in this list.
+  """
+  and: [BamFilter!]
+  """
+  Filter by the object’s `bucket` field.
+  """
+  bucket: StringFilter
+  """
+  Filter by the object’s `cohortId` field.
+  """
+  cohortId: StringFilter
+  """
+  Filter by the object’s `eTag` field.
+  """
+  eTag: StringFilter
+  """
+  Filter by the object’s `filename` field.
+  """
+  filename: StringFilter
+  """
+  Filter by the object’s `format` field.
+  """
+  format: StringFilter
+  """
+  Filter by the object’s `key` field.
+  """
+  key: StringFilter
+  """
+  Filter by the object’s `lastModifiedDate` field.
+  """
+  lastModifiedDate: DatetimeFilter
+  """
+  Filter by the object’s `libraryId` field.
+  """
+  libraryId: StringFilter
+  """
+  Negates the expression.
+  """
+  not: BamFilter
+  """
+  Checks for any expressions in this list.
+  """
+  or: [BamFilter!]
+  """
+  Filter by the object’s `portalRunId` field.
+  """
+  portalRunId: StringFilter
+  """
+  Filter by the object’s `size` field.
+  """
+  size: BigIntFilter
+  """
+  Filter by the object’s `storageClass` field.
+  """
+  storageClass: StringFilter
+}
+
+"""
+A connection to a list of `Bam` values.
+"""
+type BamsConnection {
+  """
+  A list of edges which contains the `Bam` and cursor to aid in pagination.
+  """
+  edges: [BamsEdge!]!
+  """
+  A list of `Bam` objects.
+  """
+  nodes: [Bam!]!
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  The count of *all* `Bam` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+A `Bam` edge in the connection.
+"""
+type BamsEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor
+  """
+  The `Bam` at the end of the edge.
+  """
+  node: Bam!
+}
+
+"""
+Methods to use when ordering `Bam`.
+"""
+enum BamsOrderBy {
+  BUCKET_ASC
+  BUCKET_DESC
+  COHORT_ID_ASC
+  COHORT_ID_DESC
+  E_TAG_ASC
+  E_TAG_DESC
+  FILENAME_ASC
+  FILENAME_DESC
+  FORMAT_ASC
+  FORMAT_DESC
+  KEY_ASC
+  KEY_DESC
+  LAST_MODIFIED_DATE_ASC
+  LAST_MODIFIED_DATE_DESC
+  LIBRARY_ID_ASC
+  LIBRARY_ID_DESC
+  NATURAL
+  PORTAL_RUN_ID_ASC
+  PORTAL_RUN_ID_DESC
+  SIZE_ASC
+  SIZE_DESC
+  STORAGE_CLASS_ASC
+  STORAGE_CLASS_DESC
+}
+
+"""
+A floating point number that requires more precision than IEEE 754 binary 64
+"""
+scalar BigFloat
+
+"""
+A filter to be used against BigFloat fields. All fields are combined with a logical ‘and.’
+"""
+input BigFloatFilter {
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: BigFloat
+  """
+  Equal to the specified value.
+  """
+  equalTo: BigFloat
+  """
+  Greater than the specified value.
+  """
+  greaterThan: BigFloat
+  """
+  Greater than or equal to the specified value.
+  """
+  greaterThanOrEqualTo: BigFloat
+  """
+  Included in the specified list.
+  """
+  in: [BigFloat!]
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+  """
+  Less than the specified value.
+  """
+  lessThan: BigFloat
+  """
+  Less than or equal to the specified value.
+  """
+  lessThanOrEqualTo: BigFloat
+  """
+  Equal to the specified value, treating null like an ordinary value.
+  """
+  notDistinctFrom: BigFloat
+  """
+  Not equal to the specified value.
+  """
+  notEqualTo: BigFloat
+  """
+  Not included in the specified list.
+  """
+  notIn: [BigFloat!]
+}
+
+"""
+A signed eight-byte integer. The upper big integer values are greater than the
+max value for a JavaScript number. Therefore all big integers will be output as
+strings and not numbers.
+"""
+scalar BigInt
+
+"""
+A filter to be used against BigInt fields. All fields are combined with a logical ‘and.’
+"""
+input BigIntFilter {
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: BigInt
+  """
+  Equal to the specified value.
+  """
+  equalTo: BigInt
+  """
+  Greater than the specified value.
+  """
+  greaterThan: BigInt
+  """
+  Greater than or equal to the specified value.
+  """
+  greaterThanOrEqualTo: BigInt
+  """
+  Included in the specified list.
+  """
+  in: [BigInt!]
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+  """
+  Less than the specified value.
+  """
+  lessThan: BigInt
+  """
+  Less than or equal to the specified value.
+  """
+  lessThanOrEqualTo: BigInt
+  """
+  Equal to the specified value, treating null like an ordinary value.
+  """
+  notDistinctFrom: BigInt
+  """
+  Not equal to the specified value.
+  """
+  notEqualTo: BigInt
+  """
+  Not included in the specified list.
+  """
+  notIn: [BigInt!]
+}
+
+type CurationLim {
+  assay: String
+  experimentId: String
+  externalSampleId: String
+  externalSubjectId: String
+  internalSubjectId: String
+  libraryId: String
+  loadDatetime: Datetime
+  ownerId: String
+  phenotype: String
+  projectId: String
+  quality: String
+  sampleId: String
+  sequencingRunDate: Date
+  sequencingRunId: String
+  source: String
+  truseqIndex: String
+  type: String
+  workflow: String
+}
+
+"""
+A condition to be used against `CurationLim` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input CurationLimCondition {
+  """
+  Checks for equality with the object’s `assay` field.
+  """
+  assay: String
+  """
+  Checks for equality with the object’s `experimentId` field.
+  """
+  experimentId: String
+  """
+  Checks for equality with the object’s `externalSampleId` field.
+  """
+  externalSampleId: String
+  """
+  Checks for equality with the object’s `externalSubjectId` field.
+  """
+  externalSubjectId: String
+  """
+  Checks for equality with the object’s `internalSubjectId` field.
+  """
+  internalSubjectId: String
+  """
+  Checks for equality with the object’s `libraryId` field.
+  """
+  libraryId: String
+  """
+  Checks for equality with the object’s `loadDatetime` field.
+  """
+  loadDatetime: Datetime
+  """
+  Checks for equality with the object’s `ownerId` field.
+  """
+  ownerId: String
+  """
+  Checks for equality with the object’s `phenotype` field.
+  """
+  phenotype: String
+  """
+  Checks for equality with the object’s `projectId` field.
+  """
+  projectId: String
+  """
+  Checks for equality with the object’s `quality` field.
+  """
+  quality: String
+  """
+  Checks for equality with the object’s `sampleId` field.
+  """
+  sampleId: String
+  """
+  Checks for equality with the object’s `sequencingRunDate` field.
+  """
+  sequencingRunDate: Date
+  """
+  Checks for equality with the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: String
+  """
+  Checks for equality with the object’s `source` field.
+  """
+  source: String
+  """
+  Checks for equality with the object’s `truseqIndex` field.
+  """
+  truseqIndex: String
+  """
+  Checks for equality with the object’s `type` field.
+  """
+  type: String
+  """
+  Checks for equality with the object’s `workflow` field.
+  """
+  workflow: String
+}
+
+"""
+A filter to be used against `CurationLim` object types. All fields are combined with a logical ‘and.’
+"""
+input CurationLimFilter {
+  """
+  Checks for all expressions in this list.
+  """
+  and: [CurationLimFilter!]
+  """
+  Filter by the object’s `assay` field.
+  """
+  assay: StringFilter
+  """
+  Filter by the object’s `experimentId` field.
+  """
+  experimentId: StringFilter
+  """
+  Filter by the object’s `externalSampleId` field.
+  """
+  externalSampleId: StringFilter
+  """
+  Filter by the object’s `externalSubjectId` field.
+  """
+  externalSubjectId: StringFilter
+  """
+  Filter by the object’s `internalSubjectId` field.
+  """
+  internalSubjectId: StringFilter
+  """
+  Filter by the object’s `libraryId` field.
+  """
+  libraryId: StringFilter
+  """
+  Filter by the object’s `loadDatetime` field.
+  """
+  loadDatetime: DatetimeFilter
+  """
+  Negates the expression.
+  """
+  not: CurationLimFilter
+  """
+  Checks for any expressions in this list.
+  """
+  or: [CurationLimFilter!]
+  """
+  Filter by the object’s `ownerId` field.
+  """
+  ownerId: StringFilter
+  """
+  Filter by the object’s `phenotype` field.
+  """
+  phenotype: StringFilter
+  """
+  Filter by the object’s `projectId` field.
+  """
+  projectId: StringFilter
+  """
+  Filter by the object’s `quality` field.
+  """
+  quality: StringFilter
+  """
+  Filter by the object’s `sampleId` field.
+  """
+  sampleId: StringFilter
+  """
+  Filter by the object’s `sequencingRunDate` field.
+  """
+  sequencingRunDate: DateFilter
+  """
+  Filter by the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: StringFilter
+  """
+  Filter by the object’s `source` field.
+  """
+  source: StringFilter
+  """
+  Filter by the object’s `truseqIndex` field.
+  """
+  truseqIndex: StringFilter
+  """
+  Filter by the object’s `type` field.
+  """
+  type: StringFilter
+  """
+  Filter by the object’s `workflow` field.
+  """
+  workflow: StringFilter
+}
+
+"""
+A connection to a list of `CurationLim` values.
+"""
+type CurationLimsConnection {
+  """
+  A list of edges which contains the `CurationLim` and cursor to aid in pagination.
+  """
+  edges: [CurationLimsEdge!]!
+  """
+  A list of `CurationLim` objects.
+  """
+  nodes: [CurationLim!]!
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  The count of *all* `CurationLim` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+A `CurationLim` edge in the connection.
+"""
+type CurationLimsEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor
+  """
+  The `CurationLim` at the end of the edge.
+  """
+  node: CurationLim!
+}
+
+"""
+Methods to use when ordering `CurationLim`.
+"""
+enum CurationLimsOrderBy {
+  ASSAY_ASC
+  ASSAY_DESC
+  EXPERIMENT_ID_ASC
+  EXPERIMENT_ID_DESC
+  EXTERNAL_SAMPLE_ID_ASC
+  EXTERNAL_SAMPLE_ID_DESC
+  EXTERNAL_SUBJECT_ID_ASC
+  EXTERNAL_SUBJECT_ID_DESC
+  INTERNAL_SUBJECT_ID_ASC
+  INTERNAL_SUBJECT_ID_DESC
+  LIBRARY_ID_ASC
+  LIBRARY_ID_DESC
+  LOAD_DATETIME_ASC
+  LOAD_DATETIME_DESC
+  NATURAL
+  OWNER_ID_ASC
+  OWNER_ID_DESC
+  PHENOTYPE_ASC
+  PHENOTYPE_DESC
+  PROJECT_ID_ASC
+  PROJECT_ID_DESC
+  QUALITY_ASC
+  QUALITY_DESC
+  SAMPLE_ID_ASC
+  SAMPLE_ID_DESC
+  SEQUENCING_RUN_DATE_ASC
+  SEQUENCING_RUN_DATE_DESC
+  SEQUENCING_RUN_ID_ASC
+  SEQUENCING_RUN_ID_DESC
+  SOURCE_ASC
+  SOURCE_DESC
+  TRUSEQ_INDEX_ASC
+  TRUSEQ_INDEX_DESC
+  TYPE_ASC
+  TYPE_DESC
+  WORKFLOW_ASC
+  WORKFLOW_DESC
+}
+
+"""
+A location in a connection that can be used for resuming pagination.
+"""
+scalar Cursor
+
+"""
+A calendar date in YYYY-MM-DD format.
+"""
+scalar Date
+
+"""
+A filter to be used against Date fields. All fields are combined with a logical ‘and.’
+"""
+input DateFilter {
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Date
+  """
+  Equal to the specified value.
+  """
+  equalTo: Date
+  """
+  Greater than the specified value.
+  """
+  greaterThan: Date
+  """
+  Greater than or equal to the specified value.
+  """
+  greaterThanOrEqualTo: Date
+  """
+  Included in the specified list.
+  """
+  in: [Date!]
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+  """
+  Less than the specified value.
+  """
+  lessThan: Date
+  """
+  Less than or equal to the specified value.
+  """
+  lessThanOrEqualTo: Date
+  """
+  Equal to the specified value, treating null like an ordinary value.
+  """
+  notDistinctFrom: Date
+  """
+  Not equal to the specified value.
+  """
+  notEqualTo: Date
+  """
+  Not included in the specified list.
+  """
+  notIn: [Date!]
+}
+
+"""
+A point in time as described by the [ISO
+8601](https://en.wikipedia.org/wiki/ISO_8601) and, if it has a timezone, [RFC
+3339](https://datatracker.ietf.org/doc/html/rfc3339) standards. Input values
+that do not conform to both ISO 8601 and RFC 3339 may be coerced, which may lead
+to unexpected results.
+"""
+scalar Datetime
+
+"""
+A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’
+"""
+input DatetimeFilter {
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Datetime
+  """
+  Equal to the specified value.
+  """
+  equalTo: Datetime
+  """
+  Greater than the specified value.
+  """
+  greaterThan: Datetime
+  """
+  Greater than or equal to the specified value.
+  """
+  greaterThanOrEqualTo: Datetime
+  """
+  Included in the specified list.
+  """
+  in: [Datetime!]
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+  """
+  Less than the specified value.
+  """
+  lessThan: Datetime
+  """
+  Less than or equal to the specified value.
+  """
+  lessThanOrEqualTo: Datetime
+  """
+  Equal to the specified value, treating null like an ordinary value.
+  """
+  notDistinctFrom: Datetime
+  """
+  Not equal to the specified value.
+  """
+  notEqualTo: Datetime
+  """
+  Not included in the specified list.
+  """
+  notIn: [Datetime!]
+}
+
+type DawsonFastq {
+  bucket: String
+  eTag: String
+  filename: String
+  format: String
+  key: String
+  lastModifiedDate: Datetime
+  libraryId: String
+  portalRunId: String
+  sequencingRunDate: Date
+  sequencingRunId: String
+  size: BigInt
+  storageClass: String
+}
+
+"""
+A condition to be used against `DawsonFastq` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input DawsonFastqCondition {
+  """
+  Checks for equality with the object’s `bucket` field.
+  """
+  bucket: String
+  """
+  Checks for equality with the object’s `eTag` field.
+  """
+  eTag: String
+  """
+  Checks for equality with the object’s `filename` field.
+  """
+  filename: String
+  """
+  Checks for equality with the object’s `format` field.
+  """
+  format: String
+  """
+  Checks for equality with the object’s `key` field.
+  """
+  key: String
+  """
+  Checks for equality with the object’s `lastModifiedDate` field.
+  """
+  lastModifiedDate: Datetime
+  """
+  Checks for equality with the object’s `libraryId` field.
+  """
+  libraryId: String
+  """
+  Checks for equality with the object’s `portalRunId` field.
+  """
+  portalRunId: String
+  """
+  Checks for equality with the object’s `sequencingRunDate` field.
+  """
+  sequencingRunDate: Date
+  """
+  Checks for equality with the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: String
+  """
+  Checks for equality with the object’s `size` field.
+  """
+  size: BigInt
+  """
+  Checks for equality with the object’s `storageClass` field.
+  """
+  storageClass: String
+}
+
+"""
+A filter to be used against `DawsonFastq` object types. All fields are combined with a logical ‘and.’
+"""
+input DawsonFastqFilter {
+  """
+  Checks for all expressions in this list.
+  """
+  and: [DawsonFastqFilter!]
+  """
+  Filter by the object’s `bucket` field.
+  """
+  bucket: StringFilter
+  """
+  Filter by the object’s `eTag` field.
+  """
+  eTag: StringFilter
+  """
+  Filter by the object’s `filename` field.
+  """
+  filename: StringFilter
+  """
+  Filter by the object’s `format` field.
+  """
+  format: StringFilter
+  """
+  Filter by the object’s `key` field.
+  """
+  key: StringFilter
+  """
+  Filter by the object’s `lastModifiedDate` field.
+  """
+  lastModifiedDate: DatetimeFilter
+  """
+  Filter by the object’s `libraryId` field.
+  """
+  libraryId: StringFilter
+  """
+  Negates the expression.
+  """
+  not: DawsonFastqFilter
+  """
+  Checks for any expressions in this list.
+  """
+  or: [DawsonFastqFilter!]
+  """
+  Filter by the object’s `portalRunId` field.
+  """
+  portalRunId: StringFilter
+  """
+  Filter by the object’s `sequencingRunDate` field.
+  """
+  sequencingRunDate: DateFilter
+  """
+  Filter by the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: StringFilter
+  """
+  Filter by the object’s `size` field.
+  """
+  size: BigIntFilter
+  """
+  Filter by the object’s `storageClass` field.
+  """
+  storageClass: StringFilter
+}
+
+"""
+A connection to a list of `DawsonFastq` values.
+"""
+type DawsonFastqsConnection {
+  """
+  A list of edges which contains the `DawsonFastq` and cursor to aid in pagination.
+  """
+  edges: [DawsonFastqsEdge!]!
+  """
+  A list of `DawsonFastq` objects.
+  """
+  nodes: [DawsonFastq!]!
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  The count of *all* `DawsonFastq` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+A `DawsonFastq` edge in the connection.
+"""
+type DawsonFastqsEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor
+  """
+  The `DawsonFastq` at the end of the edge.
+  """
+  node: DawsonFastq!
+}
+
+"""
+Methods to use when ordering `DawsonFastq`.
+"""
+enum DawsonFastqsOrderBy {
+  BUCKET_ASC
+  BUCKET_DESC
+  E_TAG_ASC
+  E_TAG_DESC
+  FILENAME_ASC
+  FILENAME_DESC
+  FORMAT_ASC
+  FORMAT_DESC
+  KEY_ASC
+  KEY_DESC
+  LAST_MODIFIED_DATE_ASC
+  LAST_MODIFIED_DATE_DESC
+  LIBRARY_ID_ASC
+  LIBRARY_ID_DESC
+  NATURAL
+  PORTAL_RUN_ID_ASC
+  PORTAL_RUN_ID_DESC
+  SEQUENCING_RUN_DATE_ASC
+  SEQUENCING_RUN_DATE_DESC
+  SEQUENCING_RUN_ID_ASC
+  SEQUENCING_RUN_ID_DESC
+  SIZE_ASC
+  SIZE_DESC
+  STORAGE_CLASS_ASC
+  STORAGE_CLASS_DESC
+}
+
+type DawsonLim {
+  assay: String
+  experimentId: String
+  externalSampleId: String
+  externalSubjectId: String
+  internalSubjectId: String
+  libraryId: String
+  loadDatetime: Datetime
+  ownerId: String
+  phenotype: String
+  projectId: String
+  quality: String
+  sampleId: String
+  sequencingRunDate: Date
+  sequencingRunId: String
+  source: String
+  truseqIndex: String
+  type: String
+  workflow: String
+}
+
+"""
+A condition to be used against `DawsonLim` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input DawsonLimCondition {
+  """
+  Checks for equality with the object’s `assay` field.
+  """
+  assay: String
+  """
+  Checks for equality with the object’s `experimentId` field.
+  """
+  experimentId: String
+  """
+  Checks for equality with the object’s `externalSampleId` field.
+  """
+  externalSampleId: String
+  """
+  Checks for equality with the object’s `externalSubjectId` field.
+  """
+  externalSubjectId: String
+  """
+  Checks for equality with the object’s `internalSubjectId` field.
+  """
+  internalSubjectId: String
+  """
+  Checks for equality with the object’s `libraryId` field.
+  """
+  libraryId: String
+  """
+  Checks for equality with the object’s `loadDatetime` field.
+  """
+  loadDatetime: Datetime
+  """
+  Checks for equality with the object’s `ownerId` field.
+  """
+  ownerId: String
+  """
+  Checks for equality with the object’s `phenotype` field.
+  """
+  phenotype: String
+  """
+  Checks for equality with the object’s `projectId` field.
+  """
+  projectId: String
+  """
+  Checks for equality with the object’s `quality` field.
+  """
+  quality: String
+  """
+  Checks for equality with the object’s `sampleId` field.
+  """
+  sampleId: String
+  """
+  Checks for equality with the object’s `sequencingRunDate` field.
+  """
+  sequencingRunDate: Date
+  """
+  Checks for equality with the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: String
+  """
+  Checks for equality with the object’s `source` field.
+  """
+  source: String
+  """
+  Checks for equality with the object’s `truseqIndex` field.
+  """
+  truseqIndex: String
+  """
+  Checks for equality with the object’s `type` field.
+  """
+  type: String
+  """
+  Checks for equality with the object’s `workflow` field.
+  """
+  workflow: String
+}
+
+"""
+A filter to be used against `DawsonLim` object types. All fields are combined with a logical ‘and.’
+"""
+input DawsonLimFilter {
+  """
+  Checks for all expressions in this list.
+  """
+  and: [DawsonLimFilter!]
+  """
+  Filter by the object’s `assay` field.
+  """
+  assay: StringFilter
+  """
+  Filter by the object’s `experimentId` field.
+  """
+  experimentId: StringFilter
+  """
+  Filter by the object’s `externalSampleId` field.
+  """
+  externalSampleId: StringFilter
+  """
+  Filter by the object’s `externalSubjectId` field.
+  """
+  externalSubjectId: StringFilter
+  """
+  Filter by the object’s `internalSubjectId` field.
+  """
+  internalSubjectId: StringFilter
+  """
+  Filter by the object’s `libraryId` field.
+  """
+  libraryId: StringFilter
+  """
+  Filter by the object’s `loadDatetime` field.
+  """
+  loadDatetime: DatetimeFilter
+  """
+  Negates the expression.
+  """
+  not: DawsonLimFilter
+  """
+  Checks for any expressions in this list.
+  """
+  or: [DawsonLimFilter!]
+  """
+  Filter by the object’s `ownerId` field.
+  """
+  ownerId: StringFilter
+  """
+  Filter by the object’s `phenotype` field.
+  """
+  phenotype: StringFilter
+  """
+  Filter by the object’s `projectId` field.
+  """
+  projectId: StringFilter
+  """
+  Filter by the object’s `quality` field.
+  """
+  quality: StringFilter
+  """
+  Filter by the object’s `sampleId` field.
+  """
+  sampleId: StringFilter
+  """
+  Filter by the object’s `sequencingRunDate` field.
+  """
+  sequencingRunDate: DateFilter
+  """
+  Filter by the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: StringFilter
+  """
+  Filter by the object’s `source` field.
+  """
+  source: StringFilter
+  """
+  Filter by the object’s `truseqIndex` field.
+  """
+  truseqIndex: StringFilter
+  """
+  Filter by the object’s `type` field.
+  """
+  type: StringFilter
+  """
+  Filter by the object’s `workflow` field.
+  """
+  workflow: StringFilter
+}
+
+"""
+A connection to a list of `DawsonLim` values.
+"""
+type DawsonLimsConnection {
+  """
+  A list of edges which contains the `DawsonLim` and cursor to aid in pagination.
+  """
+  edges: [DawsonLimsEdge!]!
+  """
+  A list of `DawsonLim` objects.
+  """
+  nodes: [DawsonLim!]!
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  The count of *all* `DawsonLim` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+A `DawsonLim` edge in the connection.
+"""
+type DawsonLimsEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor
+  """
+  The `DawsonLim` at the end of the edge.
+  """
+  node: DawsonLim!
+}
+
+"""
+Methods to use when ordering `DawsonLim`.
+"""
+enum DawsonLimsOrderBy {
+  ASSAY_ASC
+  ASSAY_DESC
+  EXPERIMENT_ID_ASC
+  EXPERIMENT_ID_DESC
+  EXTERNAL_SAMPLE_ID_ASC
+  EXTERNAL_SAMPLE_ID_DESC
+  EXTERNAL_SUBJECT_ID_ASC
+  EXTERNAL_SUBJECT_ID_DESC
+  INTERNAL_SUBJECT_ID_ASC
+  INTERNAL_SUBJECT_ID_DESC
+  LIBRARY_ID_ASC
+  LIBRARY_ID_DESC
+  LOAD_DATETIME_ASC
+  LOAD_DATETIME_DESC
+  NATURAL
+  OWNER_ID_ASC
+  OWNER_ID_DESC
+  PHENOTYPE_ASC
+  PHENOTYPE_DESC
+  PROJECT_ID_ASC
+  PROJECT_ID_DESC
+  QUALITY_ASC
+  QUALITY_DESC
+  SAMPLE_ID_ASC
+  SAMPLE_ID_DESC
+  SEQUENCING_RUN_DATE_ASC
+  SEQUENCING_RUN_DATE_DESC
+  SEQUENCING_RUN_ID_ASC
+  SEQUENCING_RUN_ID_DESC
+  SOURCE_ASC
+  SOURCE_DESC
+  TRUSEQ_INDEX_ASC
+  TRUSEQ_INDEX_DESC
+  TYPE_ASC
+  TYPE_DESC
+  WORKFLOW_ASC
+  WORKFLOW_DESC
+}
+
+type Fastq {
+  bucket: String
+  cohortId: String
+  eTag: String
+  filename: String
+  format: String
+  key: String
+  lastModifiedDate: Datetime
+  libraryId: String
+  portalRunId: String
+  sequencingRunDate: Date
+  sequencingRunId: String
+  size: BigInt
+  storageClass: String
+}
+
+"""
+A condition to be used against `Fastq` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input FastqCondition {
+  """
+  Checks for equality with the object’s `bucket` field.
+  """
+  bucket: String
+  """
+  Checks for equality with the object’s `cohortId` field.
+  """
+  cohortId: String
+  """
+  Checks for equality with the object’s `eTag` field.
+  """
+  eTag: String
+  """
+  Checks for equality with the object’s `filename` field.
+  """
+  filename: String
+  """
+  Checks for equality with the object’s `format` field.
+  """
+  format: String
+  """
+  Checks for equality with the object’s `key` field.
+  """
+  key: String
+  """
+  Checks for equality with the object’s `lastModifiedDate` field.
+  """
+  lastModifiedDate: Datetime
+  """
+  Checks for equality with the object’s `libraryId` field.
+  """
+  libraryId: String
+  """
+  Checks for equality with the object’s `portalRunId` field.
+  """
+  portalRunId: String
+  """
+  Checks for equality with the object’s `sequencingRunDate` field.
+  """
+  sequencingRunDate: Date
+  """
+  Checks for equality with the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: String
+  """
+  Checks for equality with the object’s `size` field.
+  """
+  size: BigInt
+  """
+  Checks for equality with the object’s `storageClass` field.
+  """
+  storageClass: String
+}
+
+"""
+A filter to be used against `Fastq` object types. All fields are combined with a logical ‘and.’
+"""
+input FastqFilter {
+  """
+  Checks for all expressions in this list.
+  """
+  and: [FastqFilter!]
+  """
+  Filter by the object’s `bucket` field.
+  """
+  bucket: StringFilter
+  """
+  Filter by the object’s `cohortId` field.
+  """
+  cohortId: StringFilter
+  """
+  Filter by the object’s `eTag` field.
+  """
+  eTag: StringFilter
+  """
+  Filter by the object’s `filename` field.
+  """
+  filename: StringFilter
+  """
+  Filter by the object’s `format` field.
+  """
+  format: StringFilter
+  """
+  Filter by the object’s `key` field.
+  """
+  key: StringFilter
+  """
+  Filter by the object’s `lastModifiedDate` field.
+  """
+  lastModifiedDate: DatetimeFilter
+  """
+  Filter by the object’s `libraryId` field.
+  """
+  libraryId: StringFilter
+  """
+  Negates the expression.
+  """
+  not: FastqFilter
+  """
+  Checks for any expressions in this list.
+  """
+  or: [FastqFilter!]
+  """
+  Filter by the object’s `portalRunId` field.
+  """
+  portalRunId: StringFilter
+  """
+  Filter by the object’s `sequencingRunDate` field.
+  """
+  sequencingRunDate: DateFilter
+  """
+  Filter by the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: StringFilter
+  """
+  Filter by the object’s `size` field.
+  """
+  size: BigIntFilter
+  """
+  Filter by the object’s `storageClass` field.
+  """
+  storageClass: StringFilter
+}
+
+"""
+A connection to a list of `FastqHistory` values.
+"""
+type FastqHistoriesConnection {
+  """
+  A list of edges which contains the `FastqHistory` and cursor to aid in pagination.
+  """
+  edges: [FastqHistoriesEdge!]!
+  """
+  A list of `FastqHistory` objects.
+  """
+  nodes: [FastqHistory!]!
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  The count of *all* `FastqHistory` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+A `FastqHistory` edge in the connection.
+"""
+type FastqHistoriesEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor
+  """
+  The `FastqHistory` at the end of the edge.
+  """
+  node: FastqHistory!
+}
+
+"""
+Methods to use when ordering `FastqHistory`.
+"""
+enum FastqHistoriesOrderBy {
+  BUCKET_ASC
+  BUCKET_DESC
+  COHORT_ID_ASC
+  COHORT_ID_DESC
+  EFFECTIVE_FROM_ASC
+  EFFECTIVE_FROM_DESC
+  EFFECTIVE_TO_ASC
+  EFFECTIVE_TO_DESC
+  EXT1_ASC
+  EXT1_DESC
+  EXT2_ASC
+  EXT2_DESC
+  EXT3_ASC
+  EXT3_DESC
+  E_TAG_ASC
+  E_TAG_DESC
+  FILEMANAGER_ANNOTATED_ATTRIBUTES_ASC
+  FILEMANAGER_ANNOTATED_ATTRIBUTES_DESC
+  FILEMANAGER_INGEST_ID_ASC
+  FILEMANAGER_INGEST_ID_DESC
+  FILEMANAGER_S3OBJECT_ID_ASC
+  FILEMANAGER_S3OBJECT_ID_DESC
+  FILENAME_ASC
+  FILENAME_DESC
+  IS_CURRENT_ASC
+  IS_CURRENT_DESC
+  IS_DELETED_ASC
+  IS_DELETED_DESC
+  KEY_ASC
+  KEY_DESC
+  LAST_MODIFIED_DATE_ASC
+  LAST_MODIFIED_DATE_DESC
+  LIBRARY_ID_ASC
+  LIBRARY_ID_DESC
+  NATURAL
+  PORTAL_RUN_ID_ASC
+  PORTAL_RUN_ID_DESC
+  REASON_ASC
+  REASON_DESC
+  SEQUENCING_RUN_ID_ASC
+  SEQUENCING_RUN_ID_DESC
+  SIZE_ASC
+  SIZE_DESC
+  STORAGE_CLASS_ASC
+  STORAGE_CLASS_DESC
+}
+
+type FastqHistory {
+  bucket: String
+  cohortId: String
+  eTag: String
+  effectiveFrom: Datetime
+  effectiveTo: Datetime
+  ext1: String
+  ext2: String
+  ext3: String
+  filemanagerAnnotatedAttributes: JSON
+  filemanagerIngestId: UUID
+  filemanagerS3ObjectId: UUID
+  filename: String
+  isCurrent: Int
+  isDeleted: Int
+  key: String
+  lastModifiedDate: Datetime
+  libraryId: String
+  portalRunId: String
+  reason: String
+  sequencingRunId: String
+  size: BigInt
+  storageClass: String
+}
+
+"""
+A condition to be used against `FastqHistory` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input FastqHistoryCondition {
+  """
+  Checks for equality with the object’s `bucket` field.
+  """
+  bucket: String
+  """
+  Checks for equality with the object’s `cohortId` field.
+  """
+  cohortId: String
+  """
+  Checks for equality with the object’s `eTag` field.
+  """
+  eTag: String
+  """
+  Checks for equality with the object’s `effectiveFrom` field.
+  """
+  effectiveFrom: Datetime
+  """
+  Checks for equality with the object’s `effectiveTo` field.
+  """
+  effectiveTo: Datetime
+  """
+  Checks for equality with the object’s `ext1` field.
+  """
+  ext1: String
+  """
+  Checks for equality with the object’s `ext2` field.
+  """
+  ext2: String
+  """
+  Checks for equality with the object’s `ext3` field.
+  """
+  ext3: String
+  """
+  Checks for equality with the object’s `filemanagerAnnotatedAttributes` field.
+  """
+  filemanagerAnnotatedAttributes: JSON
+  """
+  Checks for equality with the object’s `filemanagerIngestId` field.
+  """
+  filemanagerIngestId: UUID
+  """
+  Checks for equality with the object’s `filemanagerS3ObjectId` field.
+  """
+  filemanagerS3ObjectId: UUID
+  """
+  Checks for equality with the object’s `filename` field.
+  """
+  filename: String
+  """
+  Checks for equality with the object’s `isCurrent` field.
+  """
+  isCurrent: Int
+  """
+  Checks for equality with the object’s `isDeleted` field.
+  """
+  isDeleted: Int
+  """
+  Checks for equality with the object’s `key` field.
+  """
+  key: String
+  """
+  Checks for equality with the object’s `lastModifiedDate` field.
+  """
+  lastModifiedDate: Datetime
+  """
+  Checks for equality with the object’s `libraryId` field.
+  """
+  libraryId: String
+  """
+  Checks for equality with the object’s `portalRunId` field.
+  """
+  portalRunId: String
+  """
+  Checks for equality with the object’s `reason` field.
+  """
+  reason: String
+  """
+  Checks for equality with the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: String
+  """
+  Checks for equality with the object’s `size` field.
+  """
+  size: BigInt
+  """
+  Checks for equality with the object’s `storageClass` field.
+  """
+  storageClass: String
+}
+
+"""
+A filter to be used against `FastqHistory` object types. All fields are combined with a logical ‘and.’
+"""
+input FastqHistoryFilter {
+  """
+  Checks for all expressions in this list.
+  """
+  and: [FastqHistoryFilter!]
+  """
+  Filter by the object’s `bucket` field.
+  """
+  bucket: StringFilter
+  """
+  Filter by the object’s `cohortId` field.
+  """
+  cohortId: StringFilter
+  """
+  Filter by the object’s `eTag` field.
+  """
+  eTag: StringFilter
+  """
+  Filter by the object’s `effectiveFrom` field.
+  """
+  effectiveFrom: DatetimeFilter
+  """
+  Filter by the object’s `effectiveTo` field.
+  """
+  effectiveTo: DatetimeFilter
+  """
+  Filter by the object’s `ext1` field.
+  """
+  ext1: StringFilter
+  """
+  Filter by the object’s `ext2` field.
+  """
+  ext2: StringFilter
+  """
+  Filter by the object’s `ext3` field.
+  """
+  ext3: StringFilter
+  """
+  Filter by the object’s `filemanagerAnnotatedAttributes` field.
+  """
+  filemanagerAnnotatedAttributes: JSONFilter
+  """
+  Filter by the object’s `filemanagerIngestId` field.
+  """
+  filemanagerIngestId: UUIDFilter
+  """
+  Filter by the object’s `filemanagerS3ObjectId` field.
+  """
+  filemanagerS3ObjectId: UUIDFilter
+  """
+  Filter by the object’s `filename` field.
+  """
+  filename: StringFilter
+  """
+  Filter by the object’s `isCurrent` field.
+  """
+  isCurrent: IntFilter
+  """
+  Filter by the object’s `isDeleted` field.
+  """
+  isDeleted: IntFilter
+  """
+  Filter by the object’s `key` field.
+  """
+  key: StringFilter
+  """
+  Filter by the object’s `lastModifiedDate` field.
+  """
+  lastModifiedDate: DatetimeFilter
+  """
+  Filter by the object’s `libraryId` field.
+  """
+  libraryId: StringFilter
+  """
+  Negates the expression.
+  """
+  not: FastqHistoryFilter
+  """
+  Checks for any expressions in this list.
+  """
+  or: [FastqHistoryFilter!]
+  """
+  Filter by the object’s `portalRunId` field.
+  """
+  portalRunId: StringFilter
+  """
+  Filter by the object’s `reason` field.
+  """
+  reason: StringFilter
+  """
+  Filter by the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: StringFilter
+  """
+  Filter by the object’s `size` field.
+  """
+  size: BigIntFilter
+  """
+  Filter by the object’s `storageClass` field.
+  """
+  storageClass: StringFilter
+}
+
+"""
+A connection to a list of `Fastq` values.
+"""
+type FastqsConnection {
+  """
+  A list of edges which contains the `Fastq` and cursor to aid in pagination.
+  """
+  edges: [FastqsEdge!]!
+  """
+  A list of `Fastq` objects.
+  """
+  nodes: [Fastq!]!
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  The count of *all* `Fastq` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+A `Fastq` edge in the connection.
+"""
+type FastqsEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor
+  """
+  The `Fastq` at the end of the edge.
+  """
+  node: Fastq!
+}
+
+"""
+Methods to use when ordering `Fastq`.
+"""
+enum FastqsOrderBy {
+  BUCKET_ASC
+  BUCKET_DESC
+  COHORT_ID_ASC
+  COHORT_ID_DESC
+  E_TAG_ASC
+  E_TAG_DESC
+  FILENAME_ASC
+  FILENAME_DESC
+  FORMAT_ASC
+  FORMAT_DESC
+  KEY_ASC
+  KEY_DESC
+  LAST_MODIFIED_DATE_ASC
+  LAST_MODIFIED_DATE_DESC
+  LIBRARY_ID_ASC
+  LIBRARY_ID_DESC
+  NATURAL
+  PORTAL_RUN_ID_ASC
+  PORTAL_RUN_ID_DESC
+  SEQUENCING_RUN_DATE_ASC
+  SEQUENCING_RUN_DATE_DESC
+  SEQUENCING_RUN_ID_ASC
+  SEQUENCING_RUN_ID_DESC
+  SIZE_ASC
+  SIZE_DESC
+  STORAGE_CLASS_ASC
+  STORAGE_CLASS_DESC
+}
+
+type GrimmondLim {
+  assay: String
+  experimentId: String
+  externalSampleId: String
+  externalSubjectId: String
+  internalSubjectId: String
+  libraryId: String
+  loadDatetime: Datetime
+  ownerId: String
+  phenotype: String
+  projectId: String
+  quality: String
+  sampleId: String
+  sequencingRunDate: Date
+  sequencingRunId: String
+  source: String
+  truseqIndex: String
+  type: String
+  workflow: String
+}
+
+"""
+A condition to be used against `GrimmondLim` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input GrimmondLimCondition {
+  """
+  Checks for equality with the object’s `assay` field.
+  """
+  assay: String
+  """
+  Checks for equality with the object’s `experimentId` field.
+  """
+  experimentId: String
+  """
+  Checks for equality with the object’s `externalSampleId` field.
+  """
+  externalSampleId: String
+  """
+  Checks for equality with the object’s `externalSubjectId` field.
+  """
+  externalSubjectId: String
+  """
+  Checks for equality with the object’s `internalSubjectId` field.
+  """
+  internalSubjectId: String
+  """
+  Checks for equality with the object’s `libraryId` field.
+  """
+  libraryId: String
+  """
+  Checks for equality with the object’s `loadDatetime` field.
+  """
+  loadDatetime: Datetime
+  """
+  Checks for equality with the object’s `ownerId` field.
+  """
+  ownerId: String
+  """
+  Checks for equality with the object’s `phenotype` field.
+  """
+  phenotype: String
+  """
+  Checks for equality with the object’s `projectId` field.
+  """
+  projectId: String
+  """
+  Checks for equality with the object’s `quality` field.
+  """
+  quality: String
+  """
+  Checks for equality with the object’s `sampleId` field.
+  """
+  sampleId: String
+  """
+  Checks for equality with the object’s `sequencingRunDate` field.
+  """
+  sequencingRunDate: Date
+  """
+  Checks for equality with the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: String
+  """
+  Checks for equality with the object’s `source` field.
+  """
+  source: String
+  """
+  Checks for equality with the object’s `truseqIndex` field.
+  """
+  truseqIndex: String
+  """
+  Checks for equality with the object’s `type` field.
+  """
+  type: String
+  """
+  Checks for equality with the object’s `workflow` field.
+  """
+  workflow: String
+}
+
+"""
+A filter to be used against `GrimmondLim` object types. All fields are combined with a logical ‘and.’
+"""
+input GrimmondLimFilter {
+  """
+  Checks for all expressions in this list.
+  """
+  and: [GrimmondLimFilter!]
+  """
+  Filter by the object’s `assay` field.
+  """
+  assay: StringFilter
+  """
+  Filter by the object’s `experimentId` field.
+  """
+  experimentId: StringFilter
+  """
+  Filter by the object’s `externalSampleId` field.
+  """
+  externalSampleId: StringFilter
+  """
+  Filter by the object’s `externalSubjectId` field.
+  """
+  externalSubjectId: StringFilter
+  """
+  Filter by the object’s `internalSubjectId` field.
+  """
+  internalSubjectId: StringFilter
+  """
+  Filter by the object’s `libraryId` field.
+  """
+  libraryId: StringFilter
+  """
+  Filter by the object’s `loadDatetime` field.
+  """
+  loadDatetime: DatetimeFilter
+  """
+  Negates the expression.
+  """
+  not: GrimmondLimFilter
+  """
+  Checks for any expressions in this list.
+  """
+  or: [GrimmondLimFilter!]
+  """
+  Filter by the object’s `ownerId` field.
+  """
+  ownerId: StringFilter
+  """
+  Filter by the object’s `phenotype` field.
+  """
+  phenotype: StringFilter
+  """
+  Filter by the object’s `projectId` field.
+  """
+  projectId: StringFilter
+  """
+  Filter by the object’s `quality` field.
+  """
+  quality: StringFilter
+  """
+  Filter by the object’s `sampleId` field.
+  """
+  sampleId: StringFilter
+  """
+  Filter by the object’s `sequencingRunDate` field.
+  """
+  sequencingRunDate: DateFilter
+  """
+  Filter by the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: StringFilter
+  """
+  Filter by the object’s `source` field.
+  """
+  source: StringFilter
+  """
+  Filter by the object’s `truseqIndex` field.
+  """
+  truseqIndex: StringFilter
+  """
+  Filter by the object’s `type` field.
+  """
+  type: StringFilter
+  """
+  Filter by the object’s `workflow` field.
+  """
+  workflow: StringFilter
+}
+
+"""
+A connection to a list of `GrimmondLim` values.
+"""
+type GrimmondLimsConnection {
+  """
+  A list of edges which contains the `GrimmondLim` and cursor to aid in pagination.
+  """
+  edges: [GrimmondLimsEdge!]!
+  """
+  A list of `GrimmondLim` objects.
+  """
+  nodes: [GrimmondLim!]!
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  The count of *all* `GrimmondLim` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+A `GrimmondLim` edge in the connection.
+"""
+type GrimmondLimsEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor
+  """
+  The `GrimmondLim` at the end of the edge.
+  """
+  node: GrimmondLim!
+}
+
+"""
+Methods to use when ordering `GrimmondLim`.
+"""
+enum GrimmondLimsOrderBy {
+  ASSAY_ASC
+  ASSAY_DESC
+  EXPERIMENT_ID_ASC
+  EXPERIMENT_ID_DESC
+  EXTERNAL_SAMPLE_ID_ASC
+  EXTERNAL_SAMPLE_ID_DESC
+  EXTERNAL_SUBJECT_ID_ASC
+  EXTERNAL_SUBJECT_ID_DESC
+  INTERNAL_SUBJECT_ID_ASC
+  INTERNAL_SUBJECT_ID_DESC
+  LIBRARY_ID_ASC
+  LIBRARY_ID_DESC
+  LOAD_DATETIME_ASC
+  LOAD_DATETIME_DESC
+  NATURAL
+  OWNER_ID_ASC
+  OWNER_ID_DESC
+  PHENOTYPE_ASC
+  PHENOTYPE_DESC
+  PROJECT_ID_ASC
+  PROJECT_ID_DESC
+  QUALITY_ASC
+  QUALITY_DESC
+  SAMPLE_ID_ASC
+  SAMPLE_ID_DESC
+  SEQUENCING_RUN_DATE_ASC
+  SEQUENCING_RUN_DATE_DESC
+  SEQUENCING_RUN_ID_ASC
+  SEQUENCING_RUN_ID_DESC
+  SOURCE_ASC
+  SOURCE_DESC
+  TRUSEQ_INDEX_ASC
+  TRUSEQ_INDEX_DESC
+  TYPE_ASC
+  TYPE_DESC
+  WORKFLOW_ASC
+  WORKFLOW_DESC
+}
+
+"""
+A filter to be used against Int fields. All fields are combined with a logical ‘and.’
+"""
+input IntFilter {
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Int
+  """
+  Equal to the specified value.
+  """
+  equalTo: Int
+  """
+  Greater than the specified value.
+  """
+  greaterThan: Int
+  """
+  Greater than or equal to the specified value.
+  """
+  greaterThanOrEqualTo: Int
+  """
+  Included in the specified list.
+  """
+  in: [Int!]
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+  """
+  Less than the specified value.
+  """
+  lessThan: Int
+  """
+  Less than or equal to the specified value.
+  """
+  lessThanOrEqualTo: Int
+  """
+  Equal to the specified value, treating null like an ordinary value.
+  """
+  notDistinctFrom: Int
+  """
+  Not equal to the specified value.
+  """
+  notEqualTo: Int
+  """
+  Not included in the specified list.
+  """
+  notIn: [Int!]
+}
+
+"""
+Represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+"""
+A filter to be used against JSON fields. All fields are combined with a logical ‘and.’
+"""
+input JSONFilter {
+  """
+  Contained by the specified JSON.
+  """
+  containedBy: JSON
+  """
+  Contains the specified JSON.
+  """
+  contains: JSON
+  """
+  Contains all of the specified keys.
+  """
+  containsAllKeys: [String!]
+  """
+  Contains any of the specified keys.
+  """
+  containsAnyKeys: [String!]
+  """
+  Contains the specified key.
+  """
+  containsKey: String
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: JSON
+  """
+  Equal to the specified value.
+  """
+  equalTo: JSON
+  """
+  Greater than the specified value.
+  """
+  greaterThan: JSON
+  """
+  Greater than or equal to the specified value.
+  """
+  greaterThanOrEqualTo: JSON
+  """
+  Included in the specified list.
+  """
+  in: [JSON!]
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+  """
+  Less than the specified value.
+  """
+  lessThan: JSON
+  """
+  Less than or equal to the specified value.
+  """
+  lessThanOrEqualTo: JSON
+  """
+  Equal to the specified value, treating null like an ordinary value.
+  """
+  notDistinctFrom: JSON
+  """
+  Not equal to the specified value.
+  """
+  notEqualTo: JSON
+  """
+  Not included in the specified list.
+  """
+  notIn: [JSON!]
+}
+
+type Lim {
+  aliasLibraryId: String
+  assay: String
+  experimentId: String
+  externalSampleId: String
+  externalSubjectId: String
+  internalSubjectId: String
+  libraryId: String
+  loadDatetime: Datetime
+  ownerId: String
+  phenotype: String
+  projectId: String
+  quality: String
+  sampleId: String
+  sequencingRunDate: Date
+  sequencingRunId: String
+  source: String
+  truseqIndex: String
+  type: String
+  workflow: String
+}
+
+"""
+A condition to be used against `Lim` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input LimCondition {
+  """
+  Checks for equality with the object’s `aliasLibraryId` field.
+  """
+  aliasLibraryId: String
+  """
+  Checks for equality with the object’s `assay` field.
+  """
+  assay: String
+  """
+  Checks for equality with the object’s `experimentId` field.
+  """
+  experimentId: String
+  """
+  Checks for equality with the object’s `externalSampleId` field.
+  """
+  externalSampleId: String
+  """
+  Checks for equality with the object’s `externalSubjectId` field.
+  """
+  externalSubjectId: String
+  """
+  Checks for equality with the object’s `internalSubjectId` field.
+  """
+  internalSubjectId: String
+  """
+  Checks for equality with the object’s `libraryId` field.
+  """
+  libraryId: String
+  """
+  Checks for equality with the object’s `loadDatetime` field.
+  """
+  loadDatetime: Datetime
+  """
+  Checks for equality with the object’s `ownerId` field.
+  """
+  ownerId: String
+  """
+  Checks for equality with the object’s `phenotype` field.
+  """
+  phenotype: String
+  """
+  Checks for equality with the object’s `projectId` field.
+  """
+  projectId: String
+  """
+  Checks for equality with the object’s `quality` field.
+  """
+  quality: String
+  """
+  Checks for equality with the object’s `sampleId` field.
+  """
+  sampleId: String
+  """
+  Checks for equality with the object’s `sequencingRunDate` field.
+  """
+  sequencingRunDate: Date
+  """
+  Checks for equality with the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: String
+  """
+  Checks for equality with the object’s `source` field.
+  """
+  source: String
+  """
+  Checks for equality with the object’s `truseqIndex` field.
+  """
+  truseqIndex: String
+  """
+  Checks for equality with the object’s `type` field.
+  """
+  type: String
+  """
+  Checks for equality with the object’s `workflow` field.
+  """
+  workflow: String
+}
+
+"""
+A filter to be used against `Lim` object types. All fields are combined with a logical ‘and.’
+"""
+input LimFilter {
+  """
+  Filter by the object’s `aliasLibraryId` field.
+  """
+  aliasLibraryId: StringFilter
+  """
+  Checks for all expressions in this list.
+  """
+  and: [LimFilter!]
+  """
+  Filter by the object’s `assay` field.
+  """
+  assay: StringFilter
+  """
+  Filter by the object’s `experimentId` field.
+  """
+  experimentId: StringFilter
+  """
+  Filter by the object’s `externalSampleId` field.
+  """
+  externalSampleId: StringFilter
+  """
+  Filter by the object’s `externalSubjectId` field.
+  """
+  externalSubjectId: StringFilter
+  """
+  Filter by the object’s `internalSubjectId` field.
+  """
+  internalSubjectId: StringFilter
+  """
+  Filter by the object’s `libraryId` field.
+  """
+  libraryId: StringFilter
+  """
+  Filter by the object’s `loadDatetime` field.
+  """
+  loadDatetime: DatetimeFilter
+  """
+  Negates the expression.
+  """
+  not: LimFilter
+  """
+  Checks for any expressions in this list.
+  """
+  or: [LimFilter!]
+  """
+  Filter by the object’s `ownerId` field.
+  """
+  ownerId: StringFilter
+  """
+  Filter by the object’s `phenotype` field.
+  """
+  phenotype: StringFilter
+  """
+  Filter by the object’s `projectId` field.
+  """
+  projectId: StringFilter
+  """
+  Filter by the object’s `quality` field.
+  """
+  quality: StringFilter
+  """
+  Filter by the object’s `sampleId` field.
+  """
+  sampleId: StringFilter
+  """
+  Filter by the object’s `sequencingRunDate` field.
+  """
+  sequencingRunDate: DateFilter
+  """
+  Filter by the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: StringFilter
+  """
+  Filter by the object’s `source` field.
+  """
+  source: StringFilter
+  """
+  Filter by the object’s `truseqIndex` field.
+  """
+  truseqIndex: StringFilter
+  """
+  Filter by the object’s `type` field.
+  """
+  type: StringFilter
+  """
+  Filter by the object’s `workflow` field.
+  """
+  workflow: StringFilter
+}
+
+"""
+A connection to a list of `Lim` values.
+"""
+type LimsConnection {
+  """
+  A list of edges which contains the `Lim` and cursor to aid in pagination.
+  """
+  edges: [LimsEdge!]!
+  """
+  A list of `Lim` objects.
+  """
+  nodes: [Lim!]!
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  The count of *all* `Lim` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+A `Lim` edge in the connection.
+"""
+type LimsEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor
+  """
+  The `Lim` at the end of the edge.
+  """
+  node: Lim!
+}
+
+"""
+Methods to use when ordering `Lim`.
+"""
+enum LimsOrderBy {
+  ALIAS_LIBRARY_ID_ASC
+  ALIAS_LIBRARY_ID_DESC
+  ASSAY_ASC
+  ASSAY_DESC
+  EXPERIMENT_ID_ASC
+  EXPERIMENT_ID_DESC
+  EXTERNAL_SAMPLE_ID_ASC
+  EXTERNAL_SAMPLE_ID_DESC
+  EXTERNAL_SUBJECT_ID_ASC
+  EXTERNAL_SUBJECT_ID_DESC
+  INTERNAL_SUBJECT_ID_ASC
+  INTERNAL_SUBJECT_ID_DESC
+  LIBRARY_ID_ASC
+  LIBRARY_ID_DESC
+  LOAD_DATETIME_ASC
+  LOAD_DATETIME_DESC
+  NATURAL
+  OWNER_ID_ASC
+  OWNER_ID_DESC
+  PHENOTYPE_ASC
+  PHENOTYPE_DESC
+  PROJECT_ID_ASC
+  PROJECT_ID_DESC
+  QUALITY_ASC
+  QUALITY_DESC
+  SAMPLE_ID_ASC
+  SAMPLE_ID_DESC
+  SEQUENCING_RUN_DATE_ASC
+  SEQUENCING_RUN_DATE_DESC
+  SEQUENCING_RUN_ID_ASC
+  SEQUENCING_RUN_ID_DESC
+  SOURCE_ASC
+  SOURCE_DESC
+  TRUSEQ_INDEX_ASC
+  TRUSEQ_INDEX_DESC
+  TYPE_ASC
+  TYPE_DESC
+  WORKFLOW_ASC
+  WORKFLOW_DESC
+}
+
+"""
+Information about pagination in a connection.
+"""
+type PageInfo {
+  """
+  When paginating forwards, the cursor to continue.
+  """
+  endCursor: Cursor
+  """
+  When paginating forwards, are there more items?
+  """
+  hasNextPage: Boolean!
+  """
+  When paginating backwards, are there more items?
+  """
+  hasPreviousPage: Boolean!
+  """
+  When paginating backwards, the cursor to continue.
+  """
+  startCursor: Cursor
+}
+
+"""
+The root query type which gives access points into the data universe.
+"""
+type Query {
+  """
+  Reads and enables pagination through a set of `Bam`.
+  """
+  allBams(
+    """
+    Read all values in the set after (below) this cursor.
+    """
+    after: Cursor
+    """
+    Read all values in the set before (above) this cursor.
+    """
+    before: Cursor
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: BamCondition
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: BamFilter
+    """
+    Only read the first `n` values of the set.
+    """
+    first: Int
+    """
+    Only read the last `n` values of the set.
+    """
+    last: Int
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+    """
+    The method to use when ordering `Bam`.
+    """
+    orderBy: [BamsOrderBy!] = [NATURAL]
+  ): BamsConnection
+  """
+  Reads and enables pagination through a set of `CurationLim`.
+  """
+  allCurationLims(
+    """
+    Read all values in the set after (below) this cursor.
+    """
+    after: Cursor
+    """
+    Read all values in the set before (above) this cursor.
+    """
+    before: Cursor
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: CurationLimCondition
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: CurationLimFilter
+    """
+    Only read the first `n` values of the set.
+    """
+    first: Int
+    """
+    Only read the last `n` values of the set.
+    """
+    last: Int
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+    """
+    The method to use when ordering `CurationLim`.
+    """
+    orderBy: [CurationLimsOrderBy!] = [NATURAL]
+  ): CurationLimsConnection
+  """
+  Reads and enables pagination through a set of `DawsonFastq`.
+  """
+  allDawsonFastqs(
+    """
+    Read all values in the set after (below) this cursor.
+    """
+    after: Cursor
+    """
+    Read all values in the set before (above) this cursor.
+    """
+    before: Cursor
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: DawsonFastqCondition
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: DawsonFastqFilter
+    """
+    Only read the first `n` values of the set.
+    """
+    first: Int
+    """
+    Only read the last `n` values of the set.
+    """
+    last: Int
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+    """
+    The method to use when ordering `DawsonFastq`.
+    """
+    orderBy: [DawsonFastqsOrderBy!] = [NATURAL]
+  ): DawsonFastqsConnection
+  """
+  Reads and enables pagination through a set of `DawsonLim`.
+  """
+  allDawsonLims(
+    """
+    Read all values in the set after (below) this cursor.
+    """
+    after: Cursor
+    """
+    Read all values in the set before (above) this cursor.
+    """
+    before: Cursor
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: DawsonLimCondition
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: DawsonLimFilter
+    """
+    Only read the first `n` values of the set.
+    """
+    first: Int
+    """
+    Only read the last `n` values of the set.
+    """
+    last: Int
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+    """
+    The method to use when ordering `DawsonLim`.
+    """
+    orderBy: [DawsonLimsOrderBy!] = [NATURAL]
+  ): DawsonLimsConnection
+  """
+  Reads and enables pagination through a set of `FastqHistory`.
+  """
+  allFastqHistories(
+    """
+    Read all values in the set after (below) this cursor.
+    """
+    after: Cursor
+    """
+    Read all values in the set before (above) this cursor.
+    """
+    before: Cursor
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: FastqHistoryCondition
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: FastqHistoryFilter
+    """
+    Only read the first `n` values of the set.
+    """
+    first: Int
+    """
+    Only read the last `n` values of the set.
+    """
+    last: Int
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+    """
+    The method to use when ordering `FastqHistory`.
+    """
+    orderBy: [FastqHistoriesOrderBy!] = [NATURAL]
+  ): FastqHistoriesConnection
+  """
+  Reads and enables pagination through a set of `Fastq`.
+  """
+  allFastqs(
+    """
+    Read all values in the set after (below) this cursor.
+    """
+    after: Cursor
+    """
+    Read all values in the set before (above) this cursor.
+    """
+    before: Cursor
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: FastqCondition
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: FastqFilter
+    """
+    Only read the first `n` values of the set.
+    """
+    first: Int
+    """
+    Only read the last `n` values of the set.
+    """
+    last: Int
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+    """
+    The method to use when ordering `Fastq`.
+    """
+    orderBy: [FastqsOrderBy!] = [NATURAL]
+  ): FastqsConnection
+  """
+  Reads and enables pagination through a set of `GrimmondLim`.
+  """
+  allGrimmondLims(
+    """
+    Read all values in the set after (below) this cursor.
+    """
+    after: Cursor
+    """
+    Read all values in the set before (above) this cursor.
+    """
+    before: Cursor
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GrimmondLimCondition
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GrimmondLimFilter
+    """
+    Only read the first `n` values of the set.
+    """
+    first: Int
+    """
+    Only read the last `n` values of the set.
+    """
+    last: Int
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+    """
+    The method to use when ordering `GrimmondLim`.
+    """
+    orderBy: [GrimmondLimsOrderBy!] = [NATURAL]
+  ): GrimmondLimsConnection
+  """
+  Reads and enables pagination through a set of `Lim`.
+  """
+  allLims(
+    """
+    Read all values in the set after (below) this cursor.
+    """
+    after: Cursor
+    """
+    Read all values in the set before (above) this cursor.
+    """
+    before: Cursor
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: LimCondition
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: LimFilter
+    """
+    Only read the first `n` values of the set.
+    """
+    first: Int
+    """
+    Only read the last `n` values of the set.
+    """
+    last: Int
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+    """
+    The method to use when ordering `Lim`.
+    """
+    orderBy: [LimsOrderBy!] = [NATURAL]
+  ): LimsConnection
+  """
+  Reads and enables pagination through a set of `TothillFastq`.
+  """
+  allTothillFastqs(
+    """
+    Read all values in the set after (below) this cursor.
+    """
+    after: Cursor
+    """
+    Read all values in the set before (above) this cursor.
+    """
+    before: Cursor
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: TothillFastqCondition
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: TothillFastqFilter
+    """
+    Only read the first `n` values of the set.
+    """
+    first: Int
+    """
+    Only read the last `n` values of the set.
+    """
+    last: Int
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+    """
+    The method to use when ordering `TothillFastq`.
+    """
+    orderBy: [TothillFastqsOrderBy!] = [NATURAL]
+  ): TothillFastqsConnection
+  """
+  Reads and enables pagination through a set of `TothillLim`.
+  """
+  allTothillLims(
+    """
+    Read all values in the set after (below) this cursor.
+    """
+    after: Cursor
+    """
+    Read all values in the set before (above) this cursor.
+    """
+    before: Cursor
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: TothillLimCondition
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: TothillLimFilter
+    """
+    Only read the first `n` values of the set.
+    """
+    first: Int
+    """
+    Only read the last `n` values of the set.
+    """
+    last: Int
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+    """
+    The method to use when ordering `TothillLim`.
+    """
+    orderBy: [TothillLimsOrderBy!] = [NATURAL]
+  ): TothillLimsConnection
+  """
+  Reads and enables pagination through a set of `Workflow`.
+  """
+  allWorkflows(
+    """
+    Read all values in the set after (below) this cursor.
+    """
+    after: Cursor
+    """
+    Read all values in the set before (above) this cursor.
+    """
+    before: Cursor
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: WorkflowCondition
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: WorkflowFilter
+    """
+    Only read the first `n` values of the set.
+    """
+    first: Int
+    """
+    Only read the last `n` values of the set.
+    """
+    last: Int
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+    """
+    The method to use when ordering `Workflow`.
+    """
+    orderBy: [WorkflowsOrderBy!] = [NATURAL]
+  ): WorkflowsConnection
+  """
+  Exposes the root query type nested one level down. This is helpful for Relay 1
+  which can only query top level fields if they are in a particular form.
+  """
+  query: Query!
+}
+
+"""
+A filter to be used against String fields. All fields are combined with a logical ‘and.’
+"""
+input StringFilter {
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: String
+  """
+  Not equal to the specified value, treating null like an ordinary value (case-insensitive).
+  """
+  distinctFromInsensitive: String
+  """
+  Ends with the specified string (case-sensitive).
+  """
+  endsWith: String
+  """
+  Ends with the specified string (case-insensitive).
+  """
+  endsWithInsensitive: String
+  """
+  Equal to the specified value.
+  """
+  equalTo: String
+  """
+  Equal to the specified value (case-insensitive).
+  """
+  equalToInsensitive: String
+  """
+  Greater than the specified value.
+  """
+  greaterThan: String
+  """
+  Greater than the specified value (case-insensitive).
+  """
+  greaterThanInsensitive: String
+  """
+  Greater than or equal to the specified value.
+  """
+  greaterThanOrEqualTo: String
+  """
+  Greater than or equal to the specified value (case-insensitive).
+  """
+  greaterThanOrEqualToInsensitive: String
+  """
+  Included in the specified list.
+  """
+  in: [String!]
+  """
+  Included in the specified list (case-insensitive).
+  """
+  inInsensitive: [String!]
+  """
+  Contains the specified string (case-sensitive).
+  """
+  includes: String
+  """
+  Contains the specified string (case-insensitive).
+  """
+  includesInsensitive: String
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+  """
+  Less than the specified value.
+  """
+  lessThan: String
+  """
+  Less than the specified value (case-insensitive).
+  """
+  lessThanInsensitive: String
+  """
+  Less than or equal to the specified value.
+  """
+  lessThanOrEqualTo: String
+  """
+  Less than or equal to the specified value (case-insensitive).
+  """
+  lessThanOrEqualToInsensitive: String
+  """
+  Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  like: String
+  """
+  Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  likeInsensitive: String
+  """
+  Equal to the specified value, treating null like an ordinary value.
+  """
+  notDistinctFrom: String
+  """
+  Equal to the specified value, treating null like an ordinary value (case-insensitive).
+  """
+  notDistinctFromInsensitive: String
+  """
+  Does not end with the specified string (case-sensitive).
+  """
+  notEndsWith: String
+  """
+  Does not end with the specified string (case-insensitive).
+  """
+  notEndsWithInsensitive: String
+  """
+  Not equal to the specified value.
+  """
+  notEqualTo: String
+  """
+  Not equal to the specified value (case-insensitive).
+  """
+  notEqualToInsensitive: String
+  """
+  Not included in the specified list.
+  """
+  notIn: [String!]
+  """
+  Not included in the specified list (case-insensitive).
+  """
+  notInInsensitive: [String!]
+  """
+  Does not contain the specified string (case-sensitive).
+  """
+  notIncludes: String
+  """
+  Does not contain the specified string (case-insensitive).
+  """
+  notIncludesInsensitive: String
+  """
+  Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  notLike: String
+  """
+  Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  notLikeInsensitive: String
+  """
+  Does not start with the specified string (case-sensitive).
+  """
+  notStartsWith: String
+  """
+  Does not start with the specified string (case-insensitive).
+  """
+  notStartsWithInsensitive: String
+  """
+  Starts with the specified string (case-sensitive).
+  """
+  startsWith: String
+  """
+  Starts with the specified string (case-insensitive).
+  """
+  startsWithInsensitive: String
+}
+
+type TothillFastq {
+  bucket: String
+  eTag: String
+  filename: String
+  format: String
+  key: String
+  lastModifiedDate: Datetime
+  libraryId: String
+  portalRunId: String
+  sequencingRunDate: Date
+  sequencingRunId: String
+  size: BigInt
+  storageClass: String
+}
+
+"""
+A condition to be used against `TothillFastq` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input TothillFastqCondition {
+  """
+  Checks for equality with the object’s `bucket` field.
+  """
+  bucket: String
+  """
+  Checks for equality with the object’s `eTag` field.
+  """
+  eTag: String
+  """
+  Checks for equality with the object’s `filename` field.
+  """
+  filename: String
+  """
+  Checks for equality with the object’s `format` field.
+  """
+  format: String
+  """
+  Checks for equality with the object’s `key` field.
+  """
+  key: String
+  """
+  Checks for equality with the object’s `lastModifiedDate` field.
+  """
+  lastModifiedDate: Datetime
+  """
+  Checks for equality with the object’s `libraryId` field.
+  """
+  libraryId: String
+  """
+  Checks for equality with the object’s `portalRunId` field.
+  """
+  portalRunId: String
+  """
+  Checks for equality with the object’s `sequencingRunDate` field.
+  """
+  sequencingRunDate: Date
+  """
+  Checks for equality with the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: String
+  """
+  Checks for equality with the object’s `size` field.
+  """
+  size: BigInt
+  """
+  Checks for equality with the object’s `storageClass` field.
+  """
+  storageClass: String
+}
+
+"""
+A filter to be used against `TothillFastq` object types. All fields are combined with a logical ‘and.’
+"""
+input TothillFastqFilter {
+  """
+  Checks for all expressions in this list.
+  """
+  and: [TothillFastqFilter!]
+  """
+  Filter by the object’s `bucket` field.
+  """
+  bucket: StringFilter
+  """
+  Filter by the object’s `eTag` field.
+  """
+  eTag: StringFilter
+  """
+  Filter by the object’s `filename` field.
+  """
+  filename: StringFilter
+  """
+  Filter by the object’s `format` field.
+  """
+  format: StringFilter
+  """
+  Filter by the object’s `key` field.
+  """
+  key: StringFilter
+  """
+  Filter by the object’s `lastModifiedDate` field.
+  """
+  lastModifiedDate: DatetimeFilter
+  """
+  Filter by the object’s `libraryId` field.
+  """
+  libraryId: StringFilter
+  """
+  Negates the expression.
+  """
+  not: TothillFastqFilter
+  """
+  Checks for any expressions in this list.
+  """
+  or: [TothillFastqFilter!]
+  """
+  Filter by the object’s `portalRunId` field.
+  """
+  portalRunId: StringFilter
+  """
+  Filter by the object’s `sequencingRunDate` field.
+  """
+  sequencingRunDate: DateFilter
+  """
+  Filter by the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: StringFilter
+  """
+  Filter by the object’s `size` field.
+  """
+  size: BigIntFilter
+  """
+  Filter by the object’s `storageClass` field.
+  """
+  storageClass: StringFilter
+}
+
+"""
+A connection to a list of `TothillFastq` values.
+"""
+type TothillFastqsConnection {
+  """
+  A list of edges which contains the `TothillFastq` and cursor to aid in pagination.
+  """
+  edges: [TothillFastqsEdge!]!
+  """
+  A list of `TothillFastq` objects.
+  """
+  nodes: [TothillFastq!]!
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  The count of *all* `TothillFastq` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+A `TothillFastq` edge in the connection.
+"""
+type TothillFastqsEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor
+  """
+  The `TothillFastq` at the end of the edge.
+  """
+  node: TothillFastq!
+}
+
+"""
+Methods to use when ordering `TothillFastq`.
+"""
+enum TothillFastqsOrderBy {
+  BUCKET_ASC
+  BUCKET_DESC
+  E_TAG_ASC
+  E_TAG_DESC
+  FILENAME_ASC
+  FILENAME_DESC
+  FORMAT_ASC
+  FORMAT_DESC
+  KEY_ASC
+  KEY_DESC
+  LAST_MODIFIED_DATE_ASC
+  LAST_MODIFIED_DATE_DESC
+  LIBRARY_ID_ASC
+  LIBRARY_ID_DESC
+  NATURAL
+  PORTAL_RUN_ID_ASC
+  PORTAL_RUN_ID_DESC
+  SEQUENCING_RUN_DATE_ASC
+  SEQUENCING_RUN_DATE_DESC
+  SEQUENCING_RUN_ID_ASC
+  SEQUENCING_RUN_ID_DESC
+  SIZE_ASC
+  SIZE_DESC
+  STORAGE_CLASS_ASC
+  STORAGE_CLASS_DESC
+}
+
+type TothillLim {
+  assay: String
+  experimentId: String
+  externalSampleId: String
+  externalSubjectId: String
+  internalSubjectId: String
+  libraryId: String
+  loadDatetime: Datetime
+  ownerId: String
+  phenotype: String
+  projectId: String
+  quality: String
+  sampleId: String
+  sequencingRunDate: Date
+  sequencingRunId: String
+  source: String
+  truseqIndex: String
+  type: String
+  workflow: String
+}
+
+"""
+A condition to be used against `TothillLim` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input TothillLimCondition {
+  """
+  Checks for equality with the object’s `assay` field.
+  """
+  assay: String
+  """
+  Checks for equality with the object’s `experimentId` field.
+  """
+  experimentId: String
+  """
+  Checks for equality with the object’s `externalSampleId` field.
+  """
+  externalSampleId: String
+  """
+  Checks for equality with the object’s `externalSubjectId` field.
+  """
+  externalSubjectId: String
+  """
+  Checks for equality with the object’s `internalSubjectId` field.
+  """
+  internalSubjectId: String
+  """
+  Checks for equality with the object’s `libraryId` field.
+  """
+  libraryId: String
+  """
+  Checks for equality with the object’s `loadDatetime` field.
+  """
+  loadDatetime: Datetime
+  """
+  Checks for equality with the object’s `ownerId` field.
+  """
+  ownerId: String
+  """
+  Checks for equality with the object’s `phenotype` field.
+  """
+  phenotype: String
+  """
+  Checks for equality with the object’s `projectId` field.
+  """
+  projectId: String
+  """
+  Checks for equality with the object’s `quality` field.
+  """
+  quality: String
+  """
+  Checks for equality with the object’s `sampleId` field.
+  """
+  sampleId: String
+  """
+  Checks for equality with the object’s `sequencingRunDate` field.
+  """
+  sequencingRunDate: Date
+  """
+  Checks for equality with the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: String
+  """
+  Checks for equality with the object’s `source` field.
+  """
+  source: String
+  """
+  Checks for equality with the object’s `truseqIndex` field.
+  """
+  truseqIndex: String
+  """
+  Checks for equality with the object’s `type` field.
+  """
+  type: String
+  """
+  Checks for equality with the object’s `workflow` field.
+  """
+  workflow: String
+}
+
+"""
+A filter to be used against `TothillLim` object types. All fields are combined with a logical ‘and.’
+"""
+input TothillLimFilter {
+  """
+  Checks for all expressions in this list.
+  """
+  and: [TothillLimFilter!]
+  """
+  Filter by the object’s `assay` field.
+  """
+  assay: StringFilter
+  """
+  Filter by the object’s `experimentId` field.
+  """
+  experimentId: StringFilter
+  """
+  Filter by the object’s `externalSampleId` field.
+  """
+  externalSampleId: StringFilter
+  """
+  Filter by the object’s `externalSubjectId` field.
+  """
+  externalSubjectId: StringFilter
+  """
+  Filter by the object’s `internalSubjectId` field.
+  """
+  internalSubjectId: StringFilter
+  """
+  Filter by the object’s `libraryId` field.
+  """
+  libraryId: StringFilter
+  """
+  Filter by the object’s `loadDatetime` field.
+  """
+  loadDatetime: DatetimeFilter
+  """
+  Negates the expression.
+  """
+  not: TothillLimFilter
+  """
+  Checks for any expressions in this list.
+  """
+  or: [TothillLimFilter!]
+  """
+  Filter by the object’s `ownerId` field.
+  """
+  ownerId: StringFilter
+  """
+  Filter by the object’s `phenotype` field.
+  """
+  phenotype: StringFilter
+  """
+  Filter by the object’s `projectId` field.
+  """
+  projectId: StringFilter
+  """
+  Filter by the object’s `quality` field.
+  """
+  quality: StringFilter
+  """
+  Filter by the object’s `sampleId` field.
+  """
+  sampleId: StringFilter
+  """
+  Filter by the object’s `sequencingRunDate` field.
+  """
+  sequencingRunDate: DateFilter
+  """
+  Filter by the object’s `sequencingRunId` field.
+  """
+  sequencingRunId: StringFilter
+  """
+  Filter by the object’s `source` field.
+  """
+  source: StringFilter
+  """
+  Filter by the object’s `truseqIndex` field.
+  """
+  truseqIndex: StringFilter
+  """
+  Filter by the object’s `type` field.
+  """
+  type: StringFilter
+  """
+  Filter by the object’s `workflow` field.
+  """
+  workflow: StringFilter
+}
+
+"""
+A connection to a list of `TothillLim` values.
+"""
+type TothillLimsConnection {
+  """
+  A list of edges which contains the `TothillLim` and cursor to aid in pagination.
+  """
+  edges: [TothillLimsEdge!]!
+  """
+  A list of `TothillLim` objects.
+  """
+  nodes: [TothillLim!]!
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  The count of *all* `TothillLim` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+A `TothillLim` edge in the connection.
+"""
+type TothillLimsEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor
+  """
+  The `TothillLim` at the end of the edge.
+  """
+  node: TothillLim!
+}
+
+"""
+Methods to use when ordering `TothillLim`.
+"""
+enum TothillLimsOrderBy {
+  ASSAY_ASC
+  ASSAY_DESC
+  EXPERIMENT_ID_ASC
+  EXPERIMENT_ID_DESC
+  EXTERNAL_SAMPLE_ID_ASC
+  EXTERNAL_SAMPLE_ID_DESC
+  EXTERNAL_SUBJECT_ID_ASC
+  EXTERNAL_SUBJECT_ID_DESC
+  INTERNAL_SUBJECT_ID_ASC
+  INTERNAL_SUBJECT_ID_DESC
+  LIBRARY_ID_ASC
+  LIBRARY_ID_DESC
+  LOAD_DATETIME_ASC
+  LOAD_DATETIME_DESC
+  NATURAL
+  OWNER_ID_ASC
+  OWNER_ID_DESC
+  PHENOTYPE_ASC
+  PHENOTYPE_DESC
+  PROJECT_ID_ASC
+  PROJECT_ID_DESC
+  QUALITY_ASC
+  QUALITY_DESC
+  SAMPLE_ID_ASC
+  SAMPLE_ID_DESC
+  SEQUENCING_RUN_DATE_ASC
+  SEQUENCING_RUN_DATE_DESC
+  SEQUENCING_RUN_ID_ASC
+  SEQUENCING_RUN_ID_DESC
+  SOURCE_ASC
+  SOURCE_DESC
+  TRUSEQ_INDEX_ASC
+  TRUSEQ_INDEX_DESC
+  TYPE_ASC
+  TYPE_DESC
+  WORKFLOW_ASC
+  WORKFLOW_DESC
+}
+
+"""
+A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122).
+"""
+scalar UUID
+
+"""
+A filter to be used against UUID fields. All fields are combined with a logical ‘and.’
+"""
+input UUIDFilter {
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: UUID
+  """
+  Equal to the specified value.
+  """
+  equalTo: UUID
+  """
+  Greater than the specified value.
+  """
+  greaterThan: UUID
+  """
+  Greater than or equal to the specified value.
+  """
+  greaterThanOrEqualTo: UUID
+  """
+  Included in the specified list.
+  """
+  in: [UUID!]
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+  """
+  Less than the specified value.
+  """
+  lessThan: UUID
+  """
+  Less than or equal to the specified value.
+  """
+  lessThanOrEqualTo: UUID
+  """
+  Equal to the specified value, treating null like an ordinary value.
+  """
+  notDistinctFrom: UUID
+  """
+  Not equal to the specified value.
+  """
+  notEqualTo: UUID
+  """
+  Not included in the specified list.
+  """
+  notIn: [UUID!]
+}
+
+type Workflow {
+  libraryId: String
+  portalRunId: String
+  workflowComment: String
+  workflowDuration: BigFloat
+  workflowEnd: Datetime
+  workflowName: String
+  workflowStart: Datetime
+  workflowStatus: String
+  workflowVersion: String
+}
+
+"""
+A condition to be used against `Workflow` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input WorkflowCondition {
+  """
+  Checks for equality with the object’s `libraryId` field.
+  """
+  libraryId: String
+  """
+  Checks for equality with the object’s `portalRunId` field.
+  """
+  portalRunId: String
+  """
+  Checks for equality with the object’s `workflowComment` field.
+  """
+  workflowComment: String
+  """
+  Checks for equality with the object’s `workflowDuration` field.
+  """
+  workflowDuration: BigFloat
+  """
+  Checks for equality with the object’s `workflowEnd` field.
+  """
+  workflowEnd: Datetime
+  """
+  Checks for equality with the object’s `workflowName` field.
+  """
+  workflowName: String
+  """
+  Checks for equality with the object’s `workflowStart` field.
+  """
+  workflowStart: Datetime
+  """
+  Checks for equality with the object’s `workflowStatus` field.
+  """
+  workflowStatus: String
+  """
+  Checks for equality with the object’s `workflowVersion` field.
+  """
+  workflowVersion: String
+}
+
+"""
+A filter to be used against `Workflow` object types. All fields are combined with a logical ‘and.’
+"""
+input WorkflowFilter {
+  """
+  Checks for all expressions in this list.
+  """
+  and: [WorkflowFilter!]
+  """
+  Filter by the object’s `libraryId` field.
+  """
+  libraryId: StringFilter
+  """
+  Negates the expression.
+  """
+  not: WorkflowFilter
+  """
+  Checks for any expressions in this list.
+  """
+  or: [WorkflowFilter!]
+  """
+  Filter by the object’s `portalRunId` field.
+  """
+  portalRunId: StringFilter
+  """
+  Filter by the object’s `workflowComment` field.
+  """
+  workflowComment: StringFilter
+  """
+  Filter by the object’s `workflowDuration` field.
+  """
+  workflowDuration: BigFloatFilter
+  """
+  Filter by the object’s `workflowEnd` field.
+  """
+  workflowEnd: DatetimeFilter
+  """
+  Filter by the object’s `workflowName` field.
+  """
+  workflowName: StringFilter
+  """
+  Filter by the object’s `workflowStart` field.
+  """
+  workflowStart: DatetimeFilter
+  """
+  Filter by the object’s `workflowStatus` field.
+  """
+  workflowStatus: StringFilter
+  """
+  Filter by the object’s `workflowVersion` field.
+  """
+  workflowVersion: StringFilter
+}
+
+"""
+A connection to a list of `Workflow` values.
+"""
+type WorkflowsConnection {
+  """
+  A list of edges which contains the `Workflow` and cursor to aid in pagination.
+  """
+  edges: [WorkflowsEdge!]!
+  """
+  A list of `Workflow` objects.
+  """
+  nodes: [Workflow!]!
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  The count of *all* `Workflow` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+A `Workflow` edge in the connection.
+"""
+type WorkflowsEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor
+  """
+  The `Workflow` at the end of the edge.
+  """
+  node: Workflow!
+}
+
+"""
+Methods to use when ordering `Workflow`.
+"""
+enum WorkflowsOrderBy {
+  LIBRARY_ID_ASC
+  LIBRARY_ID_DESC
+  NATURAL
+  PORTAL_RUN_ID_ASC
+  PORTAL_RUN_ID_DESC
+  WORKFLOW_COMMENT_ASC
+  WORKFLOW_COMMENT_DESC
+  WORKFLOW_DURATION_ASC
+  WORKFLOW_DURATION_DESC
+  WORKFLOW_END_ASC
+  WORKFLOW_END_DESC
+  WORKFLOW_NAME_ASC
+  WORKFLOW_NAME_DESC
+  WORKFLOW_START_ASC
+  WORKFLOW_START_DESC
+  WORKFLOW_STATUS_ASC
+  WORKFLOW_STATUS_DESC
+  WORKFLOW_VERSION_ASC
+  WORKFLOW_VERSION_DESC
+}
