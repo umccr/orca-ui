@@ -335,7 +335,7 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
                   selectedSequenceRunOrcabusId
                     ? sequenceRunDetail?.find(
                         (sequenceRun) => sequenceRun.orcabusId === selectedSequenceRunOrcabusId
-                      )?.sequenceRunId
+                      )?.sequenceRunId || 'All'
                     : 'All'
                 }
                 items={sequenceRunDetailDropdownItems ?? []}
