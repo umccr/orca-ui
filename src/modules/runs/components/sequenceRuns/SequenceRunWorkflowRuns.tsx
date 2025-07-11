@@ -14,7 +14,16 @@ const SequenceRunWorkflowRuns = () => {
 
   const { sequenceRunDetail } = useSequenceRunContext();
 
-  const libraryIds = sequenceRunDetail?.libraries;
+  // lastest run library ids
+  const libraryIds = sequenceRunDetail?.sort((a, b) => {
+    return dayjs(b.endTime).diff(dayjs(a.endTime));
+  })[0]?.libraries;
+
+  // time range (first run end time  to 2 days after)
+  const start_time = sequenceRunDetail?.sort((a, b) => {
+    return dayjs(a.endTime).diff(dayjs(b.endTime));
+  })[0]?.endTime;
+  const end_time = dayjs(start_time).add(2, 'days').toISOString();
 
   const { data: workflowRuns, isLoading: isLoadingWorkflowRuns } = useWorkflowRunListModel({
     params: {
@@ -28,8 +37,8 @@ const SequenceRunWorkflowRuns = () => {
           ? getQueryParams().workflowRunStatus
           : undefined,
         is_ongoing: getQueryParams().workflowRunStatus == 'ongoing' || undefined,
-        start_time: sequenceRunDetail?.endTime,
-        end_time: dayjs(sequenceRunDetail?.endTime).add(2, 'days').toISOString(),
+        start_time: start_time,
+        end_time: end_time,
       },
     },
   });

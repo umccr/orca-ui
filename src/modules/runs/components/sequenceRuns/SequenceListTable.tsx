@@ -1,0 +1,334 @@
+import { useSequenceRunListByInstrumentRunIdModel } from '@/api/sequenceRun';
+import {
+  GroupedStackTable,
+  GroupedStackTableColumn,
+  GroupedStackTableData,
+  TableData,
+} from '@/components/tables';
+import { getCurrentSortDirection } from '@/components/tables/Table';
+import { ReactNode, useEffect, useState } from 'react';
+import { useQueryParams } from '@/hooks/useQueryParams';
+import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
+import { dayjs } from '@/utils/dayjs';
+import { Badge } from '@/components/common/badges';
+// import SequenceRunDetailsDrawer from './SequenceRunDetailsDrawer';
+import { MultiqcIcon } from '@/components/icons/MultiqcIcon';
+import { Tooltip } from '@/components/common/tooltips';
+import { RedirectLink } from '@/components/common/link';
+// import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
+const SequenceListTable = () => {
+  // const [selectedSequenceRun, setSelectedSequenceRun] = useState<SequenceRunModel | null>(null);
+
+  const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
+
+  const [tableData, setTableData] = useState<GroupedStackTableData[]>([]);
+  const {
+    data: sequenceRunsData,
+    isError: isSequenceError,
+    error: sequenceError,
+    isFetching,
+  } = useSequenceRunListByInstrumentRunIdModel({
+    params: {
+      query: {
+        page: getQueryParams().page || 1,
+        rowsPerPage: getPaginationParams().rowsPerPage || DEFAULT_PAGE_SIZE,
+        search: getQueryParams().search || undefined,
+        status: getQueryParams().sequenceRunStatus || undefined,
+        start_time: getQueryParams().startDate || undefined,
+        end_time: getQueryParams().endDate || undefined,
+        ordering: getQueryParams().ordering || '-start_time',
+      },
+    },
+  });
+
+  if (isSequenceError) {
+    throw sequenceError;
+  }
+
+  // const onCloseDrawer = () => {
+  //   setSelectedSequenceRun(null);
+  //   setQueryParams({ sequenceRunId: null });
+  // };
+
+  const sequenceRunColumn: GroupedStackTableColumn[] = [
+    {
+      header: 'Instrument Run ID',
+      accessor: 'instrumentRunId',
+      onSort: () => {
+        if (getQueryParams().ordering === 'instrument_run_id') {
+          setQueryParams({ ordering: '-instrument_run_id' });
+        } else {
+          setQueryParams({ ordering: 'instrument_run_id' });
+        }
+      },
+      sortDirection: getCurrentSortDirection(getQueryParams().ordering, 'instrument_run_id'),
+      cell: (instrumentRunId: unknown, rowData: TableData) => {
+        if (instrumentRunId) {
+          return (
+            <div className='flex flex-col items-start space-y-1 px-1'>
+              <RedirectLink to={`/runs/sequence/${instrumentRunId}`}>
+                {instrumentRunId ? (instrumentRunId as string) : '-'}
+              </RedirectLink>
+            </div>
+          );
+        }
+
+        if (rowData && rowData.sequenceRunId) {
+          return (
+            <div className='space-y-1 px-1 font-mono text-gray-500 dark:text-gray-400'>
+              <div className='flex items-center gap-1'>
+                <span className='font-medium'>Run ID:</span>
+                <span>{rowData.sequenceRunId ? (rowData.sequenceRunId as string) : '-'}</span>
+              </div>
+            </div>
+          );
+        }
+
+        return <div>-</div>;
+      },
+    },
+    // {
+    //   header: 'Run ID',
+    //   accessor: 'sequenceRunId',
+    //   cell: (sequenceRunId: unknown) => {
+    //     return <div>{sequenceRunId ? (sequenceRunId as string) : '-'}</div>;
+    //   },
+    // },
+    {
+      header: 'Runs Count',
+      accessor: 'count',
+      cell: (count: unknown, rowData: TableData) => {
+        if (count) {
+          return <div>{count ? (count as string) : '-'}</div>;
+        }
+
+        if (rowData && rowData.experimentName) {
+          return (
+            <div className='space-y-1 px-1 font-mono text-gray-500 dark:text-gray-400'>
+              <div className='flex items-center gap-1'>
+                <span className='font-medium'>Experiment Name:</span>
+                <span>{rowData.experimentName ? (rowData.experimentName as string) : '-'}</span>
+              </div>
+            </div>
+          );
+        }
+
+        return <div>-</div>;
+      },
+    },
+    {
+      header: 'Status',
+      accessor: 'status',
+      cell: (status: unknown) => {
+        return (
+          <Badge status={(status as string) || 'UNKNOWN'}>
+            {(status || 'UNKNOWN') as ReactNode}
+          </Badge>
+        );
+      },
+    },
+    {
+      header: 'Start Time',
+      accessor: 'startTime',
+      onSort: () => {
+        if (getQueryParams().ordering === 'start_time') {
+          setQueryParams({ ordering: '-start_time' });
+        } else {
+          setQueryParams({ ordering: 'start_time' });
+        }
+      },
+      sortDirection: getCurrentSortDirection(getQueryParams().ordering, 'start_time'),
+      cell: (startTime: unknown) => {
+        // const endTime = sequenceRunRowData.endTime as string;
+        if (!startTime) {
+          return <div>-</div>;
+        } else {
+          return (
+            // <div className='flex flex-col space-y-1 px-1'>
+            //   <div className='flex items-center text-sm text-gray-700 dark:text-gray-200'>
+            //     <span className='min-w-[3.5rem] font-medium'>Start:</span>
+            //     <span>{startTime ? dayjs(startTime as string).format('lll') : '-'}</span>
+            //   </div>
+            //   <div className='flex items-center text-sm text-gray-700 dark:text-gray-200'>
+            //     <span className='min-w-[3.5rem] font-medium'>End:</span>
+            //     <span>{endTime ? dayjs(endTime as string).format('lll') : '-'}</span>
+            //   </div>
+            // </div>
+            <div>{startTime ? dayjs(startTime as string).format('lll') : '-'}</div>
+          );
+        }
+      },
+    },
+    {
+      header: 'End Time',
+      accessor: 'endTime',
+      onSort: () => {
+        if (getQueryParams().ordering === 'end_time') {
+          setQueryParams({ ordering: '-end_time' });
+        } else {
+          setQueryParams({ ordering: 'end_time' });
+        }
+      },
+      sortDirection: getCurrentSortDirection(getQueryParams().ordering, 'end_time'),
+      cell: (endTime: unknown) => {
+        if (!endTime) {
+          return <div>-</div>;
+        } else {
+          return <div>{endTime ? dayjs(endTime as string).format('lll') : '-'}</div>;
+        }
+      },
+    },
+    {
+      header: '',
+      accessor: 'instrumentRunId',
+      cell: (instrumentRunId: unknown) => {
+        if (!instrumentRunId) {
+          return <div className='h-4' />;
+        }
+
+        // Encode the URL parameters properly
+        const params = new URLSearchParams([
+          ['key', `*${instrumentRunId}_multiqc_report.html`],
+          ['key', `*${instrumentRunId}_*_qlims.csv`],
+          ['keyOp', 'or'],
+          ['bucketOp', 'or'],
+        ]);
+
+        return (
+          <div className='flex flex-row gap-2'>
+            {/* <Tooltip text='Comment' size='small' background='light'>
+              <div
+                className='flex cursor-pointer items-center'
+                onClick={() => {
+                  setSelectedSequenceRun(sequenceRunRowData as SequenceRunModel);
+                  setQueryParams({ sequenceRunId: sequenceRunRowData.orcabusId });
+                }}
+              >
+                <ChatBubbleBottomCenterTextIcon className='size-5 stroke-orange-300 stroke-3 hover:stroke-orange-600' />
+              </div>
+            </Tooltip> */}
+            <Tooltip text='MultiQC Report' size='small' background='light'>
+              <RedirectLink to={`/files?${params.toString()}`}>
+                <MultiqcIcon className='size-4 text-orange-300 hover:text-orange-600' />
+              </RedirectLink>
+            </Tooltip>
+          </div>
+        );
+      },
+    },
+    // {
+    //   header: 'Bcl Convert',
+    //   accessor: 'bclConvertStatus',
+    //   cell: (status: unknown) => {
+    //     return (
+    //       <Badge status={(status as string) || 'UNKNOWN'}>
+    //         {(status || 'UNKNOWN') as ReactNode}
+    //       </Badge>
+    //     );
+    //   },
+    // },
+    // {
+    //   header: '',
+    //   accessor: 'instrumentRunId',
+    //   cell: (instrumentRunId: unknown) => {
+    //     if (!instrumentRunId) {
+    //       return <div>-</div>;
+    //     } else {
+    //       return (
+    //         <div className='flex flex-row items-center'>
+    //           {/* <Link
+    //             to={`sequence/${instrumentRunId}/details`}
+    //             className={classNames(
+    //               'flex flex-row items-center text-sm font-medium hover:text-blue-700 text-blue-500'
+    //             )}
+    //           >
+    //             <TableCellsIcon
+    //               className='h-5 w-5 pr-1 shrink-0 text-blue-500'
+    //               aria-hidden='true'
+    //             />
+    //             Details
+    //           </Link> */}
+    //           {/* <Link
+    //           to={`sequence/${instrumentRunId}/diagram`}
+    //           className={classNames(
+    //             'flex flex-row items-center text-sm font-medium hover:text-blue-700 text-blue-500'
+    //           )}
+    //         >
+    //           <RectangleGroupIcon
+    //             className='h-5 w-5 pr-1 shrink-0 text-blue-500'
+    //             aria-hidden='true'
+    //           />
+    //           Diagram
+    //         </Link> */}
+    //           <Link
+    //             to={`sequence/${instrumentRunId}/report`}
+    //             className={classNames(
+    //               'flex flex-row items-center text-sm font-medium hover:text-blue-700 text-blue-500'
+    //             )}
+    //           >
+    //             <ClipboardIcon className='h-5 w-5 pr-1 shrink-0 text-blue-500' aria-hidden='true' />
+    //             Report
+    //           </Link>
+    //         </div>
+    //       );
+    //     }
+    //   },
+    // },
+  ];
+
+  useEffect(() => {
+    if (sequenceRunsData?.results) {
+      const groupedTableData = sequenceRunsData?.results?.map((sequenceRun) => ({
+        groupTitle: {
+          instrumentRunId: sequenceRun.instrumentRunId,
+          startTime: sequenceRun.startTime,
+          endTime: sequenceRun.endTime,
+          count: sequenceRun.count,
+          status: sequenceRun.status,
+        },
+        groupData: sequenceRun.items
+          ? sequenceRun.items.map((item) => ({
+              sequenceRunId: item.sequenceRunId,
+              experimentName: item.experimentName,
+              status: item.status,
+              startTime: item.startTime,
+              endTime: item.endTime,
+            }))
+          : [],
+      }));
+      setTableData(groupedTableData as unknown as GroupedStackTableData[]);
+    }
+  }, [sequenceRunsData, setTableData]);
+
+  return (
+    <div>
+      <GroupedStackTable
+        columns={sequenceRunColumn}
+        tableData={tableData as unknown as GroupedStackTableData[]}
+        inCard={true}
+        isFetchingData={isFetching}
+        paginationProps={{
+          totalCount: sequenceRunsData?.pagination?.count ?? 0,
+          rowsPerPage: sequenceRunsData?.pagination?.rows_per_page ?? DEFAULT_PAGE_SIZE,
+          currentPage: sequenceRunsData?.pagination?.page ?? 0,
+          setPage: (n: number) => {
+            setQueryParams({ page: n });
+          },
+          setRowsPerPage: (n: number) => {
+            setQueryParams({ rowsPerPage: n });
+          },
+          countUnit: 'runs',
+        }}
+      />
+
+      {/* {(getQueryParams().sequenceRunId || selectedSequenceRun) && (
+        <SequenceRunDetailsDrawer
+          selectedSequenceRunId={getQueryParams().sequenceRunId}
+          onCloseDrawer={onCloseDrawer}
+        />
+      )} */}
+    </div>
+  );
+};
+
+export default SequenceListTable;

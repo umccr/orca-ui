@@ -12,8 +12,12 @@ import dayjs from 'dayjs';
 const SequenceRunDetailsLinkage = () => {
   const { sequenceRunDetail, isFetchingSequenceRunDetail } = useSequenceRunContext();
 
-  const combinedLibraries = useMemo(() => {
-    return sequenceRunDetail?.flatMap((sequenceRun) => sequenceRun.libraries) || [];
+  // const combinedLibraries = useMemo(() => {
+  //   return sequenceRunDetail?.flatMap((sequenceRun) => sequenceRun.libraries) || [];
+  // }, [sequenceRunDetail]);
+
+  const lastLinkedLibraries = useMemo(() => {
+    return sequenceRunDetail?.[0]?.libraries || [];
   }, [sequenceRunDetail]);
 
   const {
@@ -24,12 +28,12 @@ const SequenceRunDetailsLinkage = () => {
   } = useQueryMetadataLibraryModel({
     params: {
       query: {
-        library_id: combinedLibraries,
-        rowsPerPage: combinedLibraries.length || 0 + 10,
+        library_id: lastLinkedLibraries,
+        rowsPerPage: lastLinkedLibraries.length || 0 + 10,
       },
     },
     reactQuery: {
-      enabled: !!combinedLibraries.length,
+      enabled: !!lastLinkedLibraries.length,
       placeholderData: keepPreviousData,
     },
   });
@@ -40,14 +44,14 @@ const SequenceRunDetailsLinkage = () => {
 
   const librariesTableData = useMemo(
     () =>
-      combinedLibraries && combinedLibraries.length > 0
-        ? combinedLibraries.map((library_id) => ({
+      lastLinkedLibraries && lastLinkedLibraries.length > 0
+        ? lastLinkedLibraries.map((library_id) => ({
             libraryId: library_id,
             orcabusId: librariesData?.results?.find((library) => library.libraryId === library_id)
               ?.orcabusId,
           }))
         : [],
-    [combinedLibraries, librariesData]
+    [lastLinkedLibraries, librariesData]
   );
 
   const sequenceRunsTableColumns = useMemo(
@@ -145,7 +149,11 @@ const SequenceRunDetailsLinkage = () => {
           // tableHeader='Libraries'
           inCard={true}
           columns={sequenceRunsTableColumns}
-          tableData={sequenceRunDetail ?? []}
+          tableData={
+            sequenceRunDetail?.sort((a, b) => {
+              return dayjs(a.startTime).diff(dayjs(b.startTime));
+            }) ?? []
+          }
           isFetchingData={isFetchingSequenceRunDetail}
         />
       </Accordion>

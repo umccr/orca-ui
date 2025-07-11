@@ -29,13 +29,23 @@ const SequenceRunWorkflowRunsStats = () => {
 
   const selectedStatus = getQueryParams().workflowRunStatus;
 
+  // lastest run library ids
+  const libraryIds = sequenceRunDetail?.sort((a, b) => {
+    return dayjs(b.endTime).diff(dayjs(a.endTime));
+  })[0]?.libraries;
+  // time range (first run end time  to 2 days after)
+  const start_time = sequenceRunDetail?.sort((a, b) => {
+    return dayjs(a.endTime).diff(dayjs(b.endTime));
+  })[0]?.endTime;
+  const end_time = dayjs(start_time).add(2, 'days').toISOString();
+
   const { data: workflowRunsCount, isLoading: isLoadingWorkflowRuns } =
     useWorkflowRunStatusCountModel({
       params: {
         query: {
-          libraries__libraryId: sequenceRunDetail?.libraries,
-          start_time: sequenceRunDetail?.endTime,
-          end_time: dayjs(sequenceRunDetail?.endTime).add(2, 'days').toISOString(),
+          libraries__libraryId: libraryIds,
+          start_time: start_time,
+          end_time: end_time,
         },
       },
     });
@@ -48,12 +58,7 @@ const SequenceRunWorkflowRunsStats = () => {
     );
   }
 
-  if (
-    !sequenceRunDetail?.libraries ||
-    sequenceRunDetail?.libraries.length === 0 ||
-    !workflowRunsCount ||
-    workflowRunsCount.all === 0
-  ) {
+  if (!libraryIds || libraryIds.length === 0 || !workflowRunsCount || workflowRunsCount.all === 0) {
     return <NoWorkflowsFound />;
   }
 

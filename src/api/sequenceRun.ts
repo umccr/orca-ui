@@ -144,9 +144,14 @@ export function createSequenceRunDeleteMutationHook<K extends keyof paths>(path:
 }
 
 export const useSequenceRunListModel = createSequenceRunQueryHook('/api/v1/sequence_run/');
+export const useSequenceRunListByInstrumentRunIdModel = createSequenceRunQueryHook(
+  '/api/v1/sequence_run/list_by_instrument_run_id/'
+);
 export const useSequenceRunDetailModel = createSequenceRunQueryHook(
   '/api/v1/sequence_run/{orcabusId}/'
 );
+
+// sequence run state
 export const useSequenceRunStateListModel = createSequenceRunQueryHook(
   '/api/v1/sequence_run/{orcabusId}/state/'
 );
@@ -157,6 +162,7 @@ export const useSequenceRunStateUpdateModel = createSequenceRunPatchMutationHook
   '/api/v1/sequence_run/{orcabusId}/state/{id}/'
 );
 
+// sequence run comment
 export const useSequenceRunCommentListModel = createSequenceRunQueryHook(
   '/api/v1/sequence_run/{orcabusId}/comment/'
 );
@@ -170,12 +176,17 @@ export const useSequenceRunCommentDeleteModel = createSequenceRunDeleteMutationH
   '/api/v1/sequence_run/{orcabusId}/comment/{id}/soft_delete/'
 );
 
+// status count
 export const useSequenceRunStatusCountModel = createSequenceRunQueryHook(
   '/api/v1/sequence_run/stats/status_counts/'
 );
 
+// sample sheet
 export const useSequenceRunSampleSheetModel = createSequenceRunQueryHook(
   '/api/v1/sequence_run/{orcabusId}/sample_sheet/'
+);
+export const useSequenceRunAddSampleSheetModel = createSequenceRunPostMutationHook(
+  '/api/v1/sequence_run/action/add_samplesheet/'
 );
 
 // sequence - sequence runs, comments, states, smaplesheet (group by instrument run id)

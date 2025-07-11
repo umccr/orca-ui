@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSequenceRunContext } from './SequenceRunContext';
+import { useSequenceRunDetailsContext } from './SequenceRunDetailsContext';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
 import { classNames } from '@/utils/commonUtils';
 import { Button } from '@/components/common/buttons';
@@ -16,12 +17,10 @@ import { dayjs } from '@/utils/dayjs';
 const SequenceRunDetailsActions = () => {
   const { user } = useAuthContext();
 
-  const {
-    sequenceRunDetail,
-    refetchSequenceRunComment,
-    sequenceRunStateValidMapData,
-    refetchSequenceRunState,
-  } = useSequenceRunContext();
+  const { sequenceRunDetail } = useSequenceRunContext();
+
+  const { refetchSequenceRunComment, sequenceRunStateValidMapData, refetchSequenceRunState } =
+    useSequenceRunDetailsContext();
 
   const orcabusIds =
     sequenceRunDetail
@@ -43,7 +42,6 @@ const SequenceRunDetailsActions = () => {
     orcabusIds[0]
   );
 
-  console.log(sequenceRunDetailDropdownItems);
   // comment dialog
   const [isOpenAddCommentDialog, setIsOpenAddCommentDialog] = useState(false);
   const [comment, setComment] = useState('');

@@ -5,19 +5,34 @@ import { classNames, formatSpaceCase } from '@/utils/commonUtils';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/common/buttons';
 import { Accordion } from '@/components/common/accordion';
+import { useSequenceRunDetailModel, useSequenceRunCommentListModel } from '@/api/sequenceRun';
+import { dayjs } from '@/utils/dayjs';
+import {
+  DocumentTextIcon,
+  ChatBubbleLeftEllipsisIcon,
+  UserCircleIcon,
+} from '@heroicons/react/24/outline';
 
 interface SampleSheetViewerProps {
   sampleSheetData: SampleSheetModel;
   sampleSheetName: string;
   sampleSheetOrcabusId: string;
+  associatedSequenceRun: ReturnType<typeof useSequenceRunDetailModel>['data'];
+  associationTimestamp: string;
   handleSelectSamplesheet: (orcabusId: string) => void;
+  comment:
+    | NonNullable<ReturnType<typeof useSequenceRunCommentListModel>['data']>[number]
+    | undefined;
 }
 
 const SampleSheetViewer: FC<SampleSheetViewerProps> = ({
   sampleSheetData,
   sampleSheetName,
   sampleSheetOrcabusId,
+  associatedSequenceRun,
+  associationTimestamp,
   handleSelectSamplesheet,
+  comment,
 }) => {
   const {
     header,
@@ -94,11 +109,76 @@ const SampleSheetViewer: FC<SampleSheetViewerProps> = ({
       {/* Header with Title and Actions */}
       <Accordion
         title={
-          <div className='flex w-full items-center justify-between rounded-lg'>
-            <div className='flex items-center gap-2'>
-              <h2 className='text-lg font-medium text-gray-900 dark:text-white'>
-                {sampleSheetName || 'Sample Sheet'}
-              </h2>
+          <div className='flex w-full items-start justify-between gap-4 rounded-lg'>
+            {/* Title */}
+            <div className='flex flex-col items-start gap-2'>
+              {/* Main Title */}
+              <div className='flex items-center gap-3'>
+                <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30'>
+                  <DocumentTextIcon className='h-4 w-4 text-blue-600 dark:text-blue-400' />
+                </div>
+                <div>
+                  <h2 className='text-xl font-semibold text-gray-900 dark:text-white'>
+                    {sampleSheetName || 'Sample Sheet'}
+                  </h2>
+                  <div className='flex items-center gap-2'>
+                    <div className='text-xs text-gray-500 dark:text-gray-400'>Sequence Run ID</div>
+                    <div className='flex items-center gap-1'>
+                      <span className='overflow-hidden text-sm font-bold text-gray-900 dark:text-white'>
+                        {associatedSequenceRun?.sequenceRunId || 'Unknown'}
+                      </span>
+                    </div>
+                    <div className='text-xs text-gray-500 dark:text-gray-400'>
+                      {dayjs(associationTimestamp).format('MMM DD, YYYY hh:mm A') || 'Unknown'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* Comment */}
+              <div className='w-full'>
+                {/* Comment */}
+                {comment && (
+                  <div className='group flex w-full items-start gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 shadow-sm transition-all duration-200 hover:border-blue-200 hover:bg-blue-50 dark:border-gray-700 dark:bg-gray-800/50 dark:hover:border-blue-800 dark:hover:bg-blue-900/20'>
+                    <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-gray-200 shadow-sm transition-all duration-200 group-hover:bg-blue-200 dark:bg-gray-700 dark:group-hover:bg-blue-800'>
+                      <ChatBubbleLeftEllipsisIcon className='h-4 w-4 text-gray-600 transition-colors duration-200 group-hover:text-blue-600 dark:text-gray-400 dark:group-hover:text-blue-400' />
+                    </div>
+                    <div className='flex flex-col gap-1'>
+                      <div className='flex items-center gap-2'>
+                        <span className='text-xs font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-400'>
+                          Comment
+                        </span>
+                        <div className='flex items-center gap-1'>
+                          <UserCircleIcon className='h-4 w-4 text-gray-500' />
+                          <span className='text-xs text-gray-500 dark:text-gray-400'>
+                            {comment?.createdBy || 'Unknown'}
+                          </span>
+                        </div>
+                        <div className='flex items-center gap-1.5'>
+                          <svg
+                            className='h-4 w-4 text-gray-400'
+                            fill='none'
+                            viewBox='0 0 24 24'
+                            stroke='currentColor'
+                          >
+                            <path
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              strokeWidth={2}
+                              d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'
+                            />
+                          </svg>
+                          <span className='text-xs text-gray-500 dark:text-gray-400'>
+                            {dayjs(comment?.createdAt).format('MMM DD, YYYY hh:mm A') || 'Unknown'}
+                          </span>
+                        </div>
+                      </div>
+                      <p className='line-clamp-2 text-sm leading-relaxed font-medium text-gray-900 dark:text-white'>
+                        {comment?.comment || 'No comment provided'}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className='flex items-center gap-4'>
@@ -128,6 +208,7 @@ const SampleSheetViewer: FC<SampleSheetViewerProps> = ({
         defaultOpen={false}
         className='rounded-lg'
         buttonClassName='rounded-lg'
+        showChevron={false}
         chevronPosition='right'
       >
         <div className='flex flex-col gap-6 px-2'>
