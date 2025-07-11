@@ -6,14 +6,14 @@
 # Set default values if not already set (default to dev)
 VITE_METADATA_URL ?= https://metadata.dev.umccr.org
 VITE_WORKFLOW_URL ?= https://workflow.dev.umccr.org
-# VITE_SEQUENCE_RUN_URL ?= https://sequence.dev.umccr.org
+VITE_SEQUENCE_RUN_URL ?= https://sequence.dev.umccr.org
 VITE_FILE_URL ?= https://file.dev.umccr.org
 VITE_SSCHECK_URL ?= https://sscheck-orcabus.dev.umccr.org
 
 # Set local development values when local Orcabus API is set up for development
 # VITE_METADATA_URL ?= http://localhost:8100
 # VITE_WORKFLOW_URL ?= http://localhost:8200
-VITE_SEQUENCE_RUN_URL ?= http://localhost:8300
+# VITE_SEQUENCE_RUN_URL ?= http://localhost:8300
 # VITE_FILE_URL ?= http://localhost:8400
 # VITE_SSCHECK_URL ?= NONE
 
