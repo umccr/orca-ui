@@ -37,8 +37,12 @@ const NoSampleSheetFound = () => (
 const SequenceRunsSampleSheet = () => {
   const { user } = useAuthContext();
   const { instrumentRunId } = useParams();
-  const { sequenceRunDetail, refetchSequenceRunDetail, isFetchingSequenceRunDetail } =
-    useSequenceRunContext();
+  const {
+    sequenceRunDetail,
+    refetchSequenceRunDetail,
+    isFetchingSequenceRunDetail,
+    refetchSequenceRunComment,
+  } = useSequenceRunContext();
   const {
     sequenceRunSampleSheetData,
     isFetchingSequenceRunSampleSheet,
@@ -95,6 +99,7 @@ const SequenceRunsSampleSheet = () => {
         message: 'Sample sheet uploaded successfully',
       });
       refetchSequenceRunDetail();
+      refetchSequenceRunComment();
       // wait for 1 second to ensure the backend is updated
       sleep(1000).then(() => {
         refetchSequenceRunSampleSheet();
@@ -120,6 +125,7 @@ const SequenceRunsSampleSheet = () => {
     resetUploadSequenceRunSampleSheet,
     refetchSequenceRunSampleSheet,
     refetchSequenceRunDetail,
+    refetchSequenceRunComment,
   ]);
 
   const handleUploadSamplesheet = () => {

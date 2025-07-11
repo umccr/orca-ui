@@ -3,7 +3,6 @@
 
 import { createContext, FC, PropsWithChildren, ReactElement, useContext } from 'react';
 import {
-  useSequenceRunCommentsByInstrumentRunIdModel,
   useSequenceRunStatesByInstrumentRunIdModel,
   useSequenceRunStateValidMapModel,
 } from '@/api/sequenceRun';
@@ -11,12 +10,6 @@ import { SpinnerWithText } from '@/components/common/spinner';
 import { useParams } from 'react-router-dom';
 
 const SequenceRunDetailsContext = createContext({
-  // comment
-  sequenceRunCommentData: undefined as ReturnType<
-    typeof useSequenceRunCommentsByInstrumentRunIdModel
-  >['data'],
-  isFetchingSequenceRunComment: true,
-  refetchSequenceRunComment: () => {},
   // state
   sequenceRunStateData: undefined as ReturnType<
     typeof useSequenceRunStatesByInstrumentRunIdModel
@@ -32,17 +25,6 @@ const SequenceRunDetailsContext = createContext({
 
 export const SequenceRunDetailsProvider: FC<PropsWithChildren> = ({ children }): ReactElement => {
   const { instrumentRunId } = useParams();
-
-  const {
-    data: sequenceRunCommentData,
-    isFetching: isFetchingSequenceRunComment,
-    refetch: refetchSequenceRunComment,
-  } = useSequenceRunCommentsByInstrumentRunIdModel({
-    params: { path: { instrumentRunId: instrumentRunId as string } },
-    reactQuery: {
-      enabled: !!instrumentRunId,
-    },
-  });
 
   const {
     data: sequenceRunStateData,
@@ -63,10 +45,7 @@ export const SequenceRunDetailsProvider: FC<PropsWithChildren> = ({ children }):
       },
     });
 
-  const isFetching =
-    isFetchingSequenceRunComment ||
-    isFetchingSequenceRunState ||
-    isFetchingSequenceRunStateValidMap;
+  const isFetching = isFetchingSequenceRunState || isFetchingSequenceRunStateValidMap;
 
   return (
     <>
@@ -77,9 +56,6 @@ export const SequenceRunDetailsProvider: FC<PropsWithChildren> = ({ children }):
       ) : (
         <SequenceRunDetailsContext.Provider
           value={{
-            sequenceRunCommentData,
-            isFetchingSequenceRunComment,
-            refetchSequenceRunComment,
             sequenceRunStateData,
             isFetchingSequenceRunState,
             refetchSequenceRunState,

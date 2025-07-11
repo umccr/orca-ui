@@ -28,15 +28,18 @@ interface SequenceRunTimelineProps {
 const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRunId }) => {
   const { user } = useAuthContext();
 
-  const { sequenceRunDetail } = useSequenceRunContext();
+  const {
+    sequenceRunDetail,
+    sequenceRunCommentData,
+    isFetchingSequenceRunComment,
+    refetchSequenceRunComment,
+  } = useSequenceRunContext();
 
   const {
     sequenceRunStateData,
     isFetchingSequenceRunState,
     refetchSequenceRunState,
-    sequenceRunCommentData,
-    isFetchingSequenceRunComment,
-    refetchSequenceRunComment,
+
     sequenceRunStateValidMapData,
     isFetchingSequenceRunStateValidMap,
   } = useSequenceRunDetailsContext();

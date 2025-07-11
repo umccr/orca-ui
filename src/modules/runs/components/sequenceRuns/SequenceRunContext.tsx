@@ -2,7 +2,10 @@
 // https://github.com/ArnaudBarre/eslint-plugin-react-refresh/issues/25#issuecomment-1729071347
 
 import { createContext, FC, PropsWithChildren, ReactElement, useContext } from 'react';
-import { useSequenceRunByInstrumentRunIdModel } from '@/api/sequenceRun';
+import {
+  useSequenceRunByInstrumentRunIdModel,
+  useSequenceRunCommentsByInstrumentRunIdModel,
+} from '@/api/sequenceRun';
 import { useParams } from 'react-router-dom';
 import { SpinnerWithText } from '@/components/common/spinner';
 
@@ -13,6 +16,13 @@ const SequenceRunContext = createContext({
   sequenceRunDetail: undefined as ReturnType<typeof useSequenceRunByInstrumentRunIdModel>['data'],
   isFetchingSequenceRunDetail: true,
   refetchSequenceRunDetail: () => {},
+
+  // comment
+  sequenceRunCommentData: undefined as ReturnType<
+    typeof useSequenceRunCommentsByInstrumentRunIdModel
+  >['data'],
+  isFetchingSequenceRunComment: true,
+  refetchSequenceRunComment: () => {},
 });
 
 export const SequenceRunProvider: FC<PropsWithChildren> = ({ children }): ReactElement => {
@@ -30,7 +40,18 @@ export const SequenceRunProvider: FC<PropsWithChildren> = ({ children }): ReactE
     },
   });
 
-  const isFetching = isFetchingSequenceRunDetail;
+  const {
+    data: sequenceRunCommentData,
+    isFetching: isFetchingSequenceRunComment,
+    refetch: refetchSequenceRunComment,
+  } = useSequenceRunCommentsByInstrumentRunIdModel({
+    params: { path: { instrumentRunId: instrumentRunId as string } },
+    reactQuery: {
+      enabled: !!instrumentRunId,
+    },
+  });
+
+  const isFetching = isFetchingSequenceRunDetail || isFetchingSequenceRunComment;
 
   return (
     <>
@@ -46,6 +67,9 @@ export const SequenceRunProvider: FC<PropsWithChildren> = ({ children }): ReactE
             sequenceRunDetail,
             isFetchingSequenceRunDetail,
             refetchSequenceRunDetail,
+            sequenceRunCommentData,
+            isFetchingSequenceRunComment,
+            refetchSequenceRunComment,
           }}
         >
           {children}
