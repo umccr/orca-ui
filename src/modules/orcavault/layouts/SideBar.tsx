@@ -10,9 +10,11 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 type Props = {
   children: ReactNode;
   sideBar?: ReactNode;
+  iconOnClosed?: ReactNode;
+  iconOnOpen?: ReactNode;
 };
 
-const SideBarLayout = ({ children, sideBar }: Props) => {
+const SideBarLayout = ({ children, sideBar, iconOnClosed, iconOnOpen }: Props) => {
   return (
     <div className='h-full w-full rounded-none! p-4 sm:px-4 lg:px-8 lg:py-6'>
       <LocationBreadcrumb className='mb-0' />
@@ -38,6 +40,8 @@ const SideBarLayout = ({ children, sideBar }: Props) => {
                   position='right'
                   preferenceStorageKey='vault-filter-sidebar'
                   openWidth='w-max'
+                  iconOnClosed={iconOnClosed}
+                  iconOnOpen={iconOnOpen}
                 >
                   {sideBar}
                 </Sidebar>
