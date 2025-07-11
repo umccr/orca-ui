@@ -1,3 +1,5 @@
+import { TrackLoad, TrackType } from 'igv';
+
 export const constructIgvNameParameter = ({ key }: { key: string }): string => {
   const filename = key.split('/').pop() ?? key;
   return `${filename}`;
@@ -23,7 +25,7 @@ export const createIgvFileTrack = ({
   igvName: string;
   baseFilePresignedUrl: string;
   idxFilePresignedUrl: string;
-}) => {
+}): TrackLoad<TrackType> => {
   const baseTrack = {
     sourceType: 'file',
     url: baseFilePresignedUrl,
@@ -49,5 +51,7 @@ export const createIgvFileTrack = ({
       type: 'alignment',
       format: 'cram',
     };
+  } else {
+    throw new Error('Unsupported file type for IGV track creation');
   }
 };

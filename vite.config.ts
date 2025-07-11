@@ -14,6 +14,10 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  optimizeDeps: {
+    // 'igv' has 'ERROR: Cannot assign to "i" because it is a constant'
+    exclude: ['igv'],
+  },
   build: {
     outDir: 'dist',
     sourcemap: true,

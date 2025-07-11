@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { genomes } from './genomes';
-// @ts-expect-error - IGV is not typed
 import igv from 'igv';
 import { constructIgvNameParameter, createIdxFileKey, createIgvFileTrack } from './utils';
 import { Dropdown } from '@/components/common/dropdowns';

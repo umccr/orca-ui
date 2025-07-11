@@ -1,33 +1,32 @@
-import { useMartListLimsQuery } from '../../api/lims';
 import { Table } from '@/components/tables';
 import { useQueryParams } from '@/hooks/useQueryParams';
-import { getCurrentSortDirection, getSortValue } from '@/components/tables/Table';
 import { SpinnerWithText } from '@/components/common/spinner';
-import { FieldDefinition } from '../GraphqlFilter';
+import { useAllLims } from '../../api/mart/lims';
+import { LimFilter, LimsOrderBy } from '../../api/graphql/codegen/graphql';
+import { FIELD_LABEL } from '../../api/graphql/queries/allLims';
+import { getMartSortDirection, getMartSortValue } from '../utils';
 
-export const LimsTable = ({ fieldDefinitions }: { fieldDefinitions: FieldDefinition[] }) => {
+export const LimsTable = () => {
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
   const queryParams = getQueryParams();
 
   const currentQueryFilter = queryParams.filter;
-  const filter = currentQueryFilter ? JSON.parse(currentQueryFilter) : {};
+  const filter = currentQueryFilter ? (JSON.parse(currentQueryFilter) as LimFilter) : undefined;
 
   const currentSort = queryParams?.ordering;
-  const sortKey = currentSort?.startsWith('-') ? currentSort.slice(1) : currentSort;
-  const sortDirection = currentSort?.startsWith('-') ? 'DESC' : 'ASC';
+  const currentSortType = currentSort as LimsOrderBy;
 
   const pagination = getPaginationParams();
   const offset = (pagination.page - 1) * pagination.rowsPerPage;
 
-  const libraryModel = useMartListLimsQuery({
-    selectedFields: fieldDefinitions.map((field) => field.key),
+  const libraryModel = useAllLims({
     filter: filter,
-    limit: pagination.rowsPerPage,
+    first: pagination.rowsPerPage,
     offset: offset,
-    orderBy: sortKey ? [{ [sortKey]: sortDirection }] : [{ sequencing_run_date: 'DESC' }],
+    orderBy: currentSort ? currentSortType : LimsOrderBy.SequencingRunDateDesc,
   });
 
-  if (libraryModel.loading) {
+  if (libraryModel.isLoading) {
     return (
       <div>
         <SpinnerWithText text='fetching LIMS records' />
@@ -35,7 +34,7 @@ export const LimsTable = ({ fieldDefinitions }: { fieldDefinitions: FieldDefinit
     );
   }
 
-  const data = libraryModel.data;
+  const data = libraryModel.data?.allLims;
   if (!data) {
     throw new Error('Error: unable to retrieve results!');
   }
@@ -44,15 +43,15 @@ export const LimsTable = ({ fieldDefinitions }: { fieldDefinitions: FieldDefinit
     <>
       <Table
         inCard={false}
-        columns={fieldDefinitions.map((field) => ({
+        columns={FIELD_LABEL.map((field) => ({
           header: field.label,
           accessor: field.key,
           onSort: () => {
-            setQueryParams({ ordering: getSortValue(currentSort, field.key) });
+            setQueryParams({ ordering: getMartSortValue(currentSort, field.sortKeyPrefix) });
           },
-          sortDirection: getCurrentSortDirection(currentSort, field.key),
+          sortDirection: getMartSortDirection({ currentSort, key: field.sortKeyPrefix }),
         }))}
-        tableData={data.items}
+        tableData={data.nodes}
         paginationProps={{
           totalCount: data.totalCount,
           rowsPerPage: pagination.rowsPerPage ?? 0,
