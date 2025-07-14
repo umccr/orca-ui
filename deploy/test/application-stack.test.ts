@@ -52,7 +52,10 @@ describe('cdk-nag-stack', () => {
 function applyNagSuppression(stackId: string, stack: Stack) {
   NagSuppressions.addStackSuppressions(
     stack,
-    [{ id: 'AwsSolutions-IAM4', reason: 'allow to use AWS managed policy' }],
+    [
+      { id: 'AwsSolutions-IAM4', reason: 'allow to use AWS managed policy' },
+      { id: 'AwsSolutions-L1', reason: 'allow non latest lambda runtime' },
+    ],
     true
   );
 
@@ -60,7 +63,7 @@ function applyNagSuppression(stackId: string, stack: Stack) {
     case 'ApplicationStack':
       NagSuppressions.addResourceSuppressionsByPath(
         stack,
-        `/ApplicationStack/CloudFrontDistribution/CFDistribution`,
+        `/ApplicationStack/CloudFrontDistribution/Resource`,
         [
           {
             id: 'AwsSolutions-CFR1',
@@ -75,33 +78,11 @@ function applyNagSuppression(stackId: string, stack: Stack) {
 
       NagSuppressions.addResourceSuppressionsByPath(
         stack,
-        `/ApplicationStack/ReactBuildCodeBuildProject/Role/DefaultPolicy/Resource`,
+        `/ApplicationStack/EnvConfigLambda/ServiceRole/DefaultPolicy/Resource`,
         [
           {
             id: 'AwsSolutions-IAM5',
             reason: 'The asterisk in the resource ARN is specific only for the CF bucket',
-          },
-        ]
-      );
-
-      NagSuppressions.addResourceSuppressionsByPath(
-        stack,
-        `/ApplicationStack/TriggerCodeBuildLambda/ServiceRole/DefaultPolicy/Resource`,
-        [
-          {
-            id: 'AwsSolutions-IAM5',
-            reason: 'The asterisk in the resource ARN is specific only for the CF bucket',
-          },
-        ]
-      );
-
-      NagSuppressions.addResourceSuppressionsByPath(
-        stack,
-        `/ApplicationStack/ReactBuildCodeBuildProject/Resource`,
-        [
-          {
-            id: 'AwsSolutions-CB4',
-            reason: 'Allow non KMS encrypted S3 bucket',
           },
         ]
       );
@@ -119,7 +100,7 @@ function applyNagSuppression(stackId: string, stack: Stack) {
 
       NagSuppressions.addResourceSuppressionsByPath(
         stack,
-        `/ApplicationStack/CloudFrontDistribution/CFDistribution`,
+        `/ApplicationStack/CloudFrontDistribution/Resource`,
         [
           {
             id: 'AwsSolutions-CFR3',
@@ -135,6 +116,17 @@ function applyNagSuppression(stackId: string, stack: Stack) {
           {
             id: 'AwsSolutions-IAM5',
             reason: 'Allow to use the default log group retention policy',
+          },
+        ]
+      );
+
+      NagSuppressions.addResourceSuppressionsByPath(
+        stack,
+        `/ApplicationStack/CloudFrontDistribution/Resource`,
+        [
+          {
+            id: 'AwsSolutions-CFR7',
+            reason: 'TODO: Convert  origin access identity (OAI) to Origin Access Control (OAC)',
           },
         ]
       );
