@@ -177,7 +177,7 @@ const SequenceRunTable = () => {
         });
 
         return (
-          <div className='flex flex-row gap-2'>
+          <div className='flex flex-row items-center gap-2'>
             {/* <Tooltip text='Comment' size='small' background='light'>
               <div
                 className='flex cursor-pointer items-center'
@@ -201,7 +201,7 @@ const SequenceRunTable = () => {
               background='light'
             >
               <RedirectLink to={`/vault?${vaultParams.toString()}`}>
-                <TableCellsIcon className='h-5 w-5 text-gray-400 hover:text-gray-600' />
+                <TableCellsIcon className='h-5 w-5 text-blue-400 hover:text-blue-600' />
               </RedirectLink>
             </Tooltip>
           </div>

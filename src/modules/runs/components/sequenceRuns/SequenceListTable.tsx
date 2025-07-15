@@ -15,6 +15,7 @@ import { Badge } from '@/components/common/badges';
 import { MultiqcIcon } from '@/components/icons/MultiqcIcon';
 import { Tooltip } from '@/components/common/tooltips';
 import { RedirectLink } from '@/components/common/link';
+import { TableCellsIcon } from '@heroicons/react/24/outline';
 // import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
 const SequenceListTable = () => {
   // const [selectedSequenceRun, setSelectedSequenceRun] = useState<SequenceRunModel | null>(null);
@@ -168,20 +169,22 @@ const SequenceListTable = () => {
       header: '',
       accessor: 'instrumentRunId',
       cell: (instrumentRunId: unknown) => {
-        if (!instrumentRunId) {
-          return <div className='h-4' />;
-        }
-
         // Encode the URL parameters properly
-        const params = new URLSearchParams([
+        const filesParams = new URLSearchParams([
           ['key', `*${instrumentRunId}_multiqc_report.html`],
           ['key', `*${instrumentRunId}_*_qlims.csv`],
           ['keyOp', 'or'],
           ['bucketOp', 'or'],
         ]);
 
+        const vaultParams = new URLSearchParams({
+          filter: JSON.stringify({
+            and: [{ sequencingRunId: { equalTo: instrumentRunId } }],
+          }),
+        });
+
         return (
-          <div className='flex flex-row gap-2'>
+          <div className='flex flex-row items-center gap-2'>
             {/* <Tooltip text='Comment' size='small' background='light'>
               <div
                 className='flex cursor-pointer items-center'
@@ -194,8 +197,18 @@ const SequenceListTable = () => {
               </div>
             </Tooltip> */}
             <Tooltip text='MultiQC Report' size='small' background='light'>
-              <RedirectLink to={`/files?${params.toString()}`}>
+              <RedirectLink to={`/files?${filesParams.toString()}`}>
                 <MultiqcIcon className='size-4 text-orange-300 hover:text-orange-600' />
+              </RedirectLink>
+            </Tooltip>
+            <Tooltip
+              position='left'
+              text='View metadata warehouse records'
+              size='small'
+              background='light'
+            >
+              <RedirectLink to={`/vault?${vaultParams.toString()}`}>
+                <TableCellsIcon className='h-5 w-5 text-blue-400 hover:text-blue-600' />
               </RedirectLink>
             </Tooltip>
           </div>
