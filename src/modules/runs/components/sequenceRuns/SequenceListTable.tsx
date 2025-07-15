@@ -75,39 +75,25 @@ const SequenceListTable = () => {
 
         if (rowData && rowData.sequenceRunId) {
           return (
-            <div className='space-y-1 px-1 font-mono text-gray-500 dark:text-gray-400'>
-              <div className='flex items-center gap-1'>
-                <span className='font-medium'>Run ID:</span>
-                <span>{rowData.sequenceRunId ? (rowData.sequenceRunId as string) : '-'}</span>
-              </div>
-            </div>
-          );
-        }
-
-        return <div>-</div>;
-      },
-    },
-    // {
-    //   header: 'Run ID',
-    //   accessor: 'sequenceRunId',
-    //   cell: (sequenceRunId: unknown) => {
-    //     return <div>{sequenceRunId ? (sequenceRunId as string) : '-'}</div>;
-    //   },
-    // },
-    {
-      header: 'Runs Count',
-      accessor: 'count',
-      cell: (count: unknown, rowData: TableData) => {
-        if (count) {
-          return <div>{count ? (count as string) : '-'}</div>;
-        }
-
-        if (rowData && rowData.experimentName) {
-          return (
-            <div className='space-y-1 px-1 font-mono text-gray-500 dark:text-gray-400'>
-              <div className='flex items-center gap-1'>
-                <span className='font-medium'>Experiment Name:</span>
-                <span>{rowData.experimentName ? (rowData.experimentName as string) : '-'}</span>
+            <div className='flex items-center gap-3'>
+              {/* Content container */}
+              <div className='flex flex-col gap-1.5'>
+                <div className='flex items-center gap-2'>
+                  <span className='text-xs font-semibold tracking-wider text-gray-500 uppercase dark:text-gray-400'>
+                    Run ID
+                  </span>
+                  <span className='font-mono text-sm font-medium text-gray-900 dark:text-gray-100'>
+                    {rowData.sequenceRunId ? (rowData.sequenceRunId as string) : '-'}
+                  </span>
+                </div>
+                <div className='flex items-center gap-2'>
+                  <span className='text-xs font-semibold tracking-wider text-gray-500 uppercase dark:text-gray-400'>
+                    Experiment
+                  </span>
+                  <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>
+                    {rowData.experimentName ? (rowData.experimentName as string) : '-'}
+                  </span>
+                </div>
               </div>
             </div>
           );

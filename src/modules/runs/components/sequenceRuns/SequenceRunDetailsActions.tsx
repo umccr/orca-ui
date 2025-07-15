@@ -17,10 +17,9 @@ import { dayjs } from '@/utils/dayjs';
 const SequenceRunDetailsActions = () => {
   const { user } = useAuthContext();
 
-  const { sequenceRunDetail } = useSequenceRunContext();
+  const { sequenceRunDetail, refetchSequenceRunComment } = useSequenceRunContext();
 
-  const { refetchSequenceRunComment, sequenceRunStateValidMapData, refetchSequenceRunState } =
-    useSequenceRunDetailsContext();
+  const { sequenceRunStateValidMapData, refetchSequenceRunState } = useSequenceRunDetailsContext();
 
   const orcabusIds =
     sequenceRunDetail

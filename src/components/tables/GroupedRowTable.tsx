@@ -33,18 +33,20 @@ const GroupedTable: FC<GroupedTableProps> = ({
 }) => {
   return (
     <div className='w-full'>
-      <div className='mb-6 sm:flex sm:items-center'>
-        <div className='sm:flex-auto'>
-          {tableHeader && (
-            <h1 className='text-lg leading-6 font-semibold text-gray-900 dark:text-gray-100'>
-              {tableHeader}
-            </h1>
-          )}
-          {tableDescription && (
-            <p className='mt-2 text-sm text-gray-600 dark:text-gray-400'>{tableDescription}</p>
-          )}
+      {tableHeader && (
+        <div className='mb-6 sm:flex sm:items-center'>
+          <div className='sm:flex-auto'>
+            {tableHeader && (
+              <h1 className='text-lg leading-6 font-semibold text-gray-900 dark:text-gray-100'>
+                {tableHeader}
+              </h1>
+            )}
+            {tableDescription && (
+              <p className='mt-2 text-sm text-gray-600 dark:text-gray-400'>{tableDescription}</p>
+            )}
+          </div>
         </div>
-      </div>
+      )}
       <div className='flow-root'>
         <div className='-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
           <div className='inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8'>

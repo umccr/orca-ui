@@ -63,13 +63,27 @@ const SequenceRunTable = () => {
           : '-';
         return (
           <div className='flex flex-col items-start space-y-1 px-1'>
-            <RedirectLink to={`/runs/sequence/${instrumentRunId}`}>
-              {instrumentRunId ? (instrumentRunId as string) : '-'}
-            </RedirectLink>
-            <div className='flex items-center pl-2 text-xs text-gray-500 dark:text-gray-400'>
-              <span className='font-medium'>Run ID:</span>
-              <span className='ml-1 font-mono'>{sequenceRunId}</span>
+            {/* Primary Instrument Run ID */}
+            <div className='flex items-center gap-2'>
+              <RedirectLink
+                to={`/runs/sequence/${instrumentRunId}`}
+                className='text-sm font-semibold text-blue-600 transition-colors duration-200 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300'
+              >
+                {instrumentRunId ? (instrumentRunId as string) : '-'}
+              </RedirectLink>
             </div>
+
+            {/* Secondary Run ID Info */}
+            <Badge status={'UNKNOWN'}>
+              <div className='flex items-center gap-2 pl-2'>
+                <span className='text-xs font-semibold tracking-wider text-gray-500 uppercase dark:text-gray-400'>
+                  Run ID
+                </span>
+                <span className='font-mono text-xs font-medium text-gray-700 dark:text-gray-300'>
+                  {sequenceRunId}
+                </span>
+              </div>
+            </Badge>
           </div>
         );
       },
