@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { fn } from '@storybook/test';
+import { fn } from 'storybook/test';
 import { Dropdown, IconDropdown } from '@/components/common/dropdowns';
 import { FunnelIcon, PlusIcon } from '@heroicons/react/20/solid';
 import PopoverDropdown from '@/components/common/dropdowns/PopoverDropdown';

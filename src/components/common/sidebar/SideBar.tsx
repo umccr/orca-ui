@@ -15,6 +15,8 @@ export interface SidebarProps {
   preferenceStorageKey?: string;
   openWidth?: string;
   collapsedWidth?: string;
+  iconOnClosed?: ReactNode;
+  iconOnOpen?: ReactNode;
 }
 
 const Sidebar: FC<SidebarProps> = ({
@@ -26,6 +28,8 @@ const Sidebar: FC<SidebarProps> = ({
   preferenceStorageKey,
   openWidth = '',
   collapsedWidth = 'w-16',
+  iconOnClosed,
+  iconOnOpen,
 }) => {
   const [isOpen, setIsOpen] = useUserPreferencesLocalStorage(
     preferenceStorageKey ?? 'sidebar-open',
@@ -69,7 +73,9 @@ const Sidebar: FC<SidebarProps> = ({
               )}
             >
               <span className='sr-only'>Close sidebar</span>
-              {position === 'left' ? (
+              {iconOnClosed ? (
+                iconOnClosed
+              ) : position === 'left' ? (
                 <ArrowLeftStartOnRectangleIcon className='h-4 w-4' />
               ) : (
                 <ArrowRightStartOnRectangleIcon className='h-4 w-4' />
@@ -123,7 +129,9 @@ const Sidebar: FC<SidebarProps> = ({
             )}
           >
             <span className='sr-only'>Open sidebar</span>
-            {position === 'left' ? (
+            {iconOnOpen ? (
+              iconOnOpen
+            ) : position === 'left' ? (
               <ArrowRightStartOnRectangleIcon className='h-4 w-4' />
             ) : (
               <ArrowLeftStartOnRectangleIcon className='h-4 w-4' />

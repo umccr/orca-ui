@@ -33,6 +33,7 @@ describe('cdk-nag-stack', () => {
     { id: 'AwsSolutions-S1', reason: 'Allow CDK Pipeline' },
     { id: 'AwsSolutions-KMS5', reason: 'Allow CDK Pipeline' },
     { id: 'AwsSolutions-CB3', reason: 'Allow CDK Pipeline' },
+    { id: 'AwsSolutions-CB4', reason: 'Allow CDK Pipeline' },
   ]);
 
   test('cdk-nag AwsSolutions Pack errors', () => {
