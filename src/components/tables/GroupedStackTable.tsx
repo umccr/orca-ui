@@ -1,4 +1,4 @@
-import { FC, ReactNode, Fragment } from 'react';
+import { FC, ReactNode, Fragment, useState } from 'react';
 import { classNames } from '@/utils/commonUtils';
 import Pagination, { PaginationProps } from './Pagination';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
@@ -44,6 +44,18 @@ const GroupedStackTable: FC<GroupedTableProps> = ({
   isFetchingData,
   headerActions,
 }) => {
+  const [expandedGroups, setExpandedGroups] = useState<Set<number>>(new Set());
+
+  const toggleGroup = (groupIndex: number) => {
+    const newExpanded = new Set(expandedGroups);
+    if (newExpanded.has(groupIndex)) {
+      newExpanded.delete(groupIndex);
+    } else {
+      newExpanded.add(groupIndex);
+    }
+    setExpandedGroups(newExpanded);
+  };
+
   return (
     <div className='w-full'>
       {/* Header Section */}
@@ -121,110 +133,112 @@ const GroupedStackTable: FC<GroupedTableProps> = ({
                     ? tableData.map((data, groupIndex) => (
                         <Fragment key={groupIndex}>
                           <Disclosure defaultOpen={false}>
-                            {({ open }) => (
-                              <>
-                                {/* Group Header Row */}
-                                <tr
-                                  className={classNames(
-                                    'border-t border-gray-200 dark:border-gray-700',
-                                    'bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700',
-                                    'font-semibold text-gray-900 dark:text-gray-100',
-                                    'cursor-pointer transition-colors duration-200',
-                                    'hover:to-gray-150 hover:from-gray-100 dark:hover:from-gray-700 dark:hover:to-gray-600'
-                                  )}
-                                >
-                                  {columns &&
-                                    columns.map((column, colIndex) => (
-                                      <td
-                                        key={colIndex}
-                                        className={classNames(
-                                          'px-3 py-3 text-sm whitespace-nowrap',
-                                          colIndex === 0
-                                            ? 'flex flex-row items-center gap-3 pl-6 sm:pl-8'
-                                            : '',
-                                          colIndex === columns.length - 1 ? 'pr-6 sm:pr-8' : ''
-                                        )}
-                                      >
-                                        {colIndex === 0 && (
-                                          <DisclosureButton
-                                            as='div'
-                                            className='flex cursor-pointer items-center'
-                                          >
-                                            <Tooltip
-                                              text={open ? 'Collapse' : 'Expand'}
-                                              position='bottom'
-                                              size='small'
-                                              background='light'
-                                            >
-                                              <div className='flex h-6 w-6 items-center justify-center rounded-md bg-white shadow-sm ring-1 ring-gray-200 transition-all duration-200 hover:bg-gray-50 hover:ring-gray-300 dark:bg-gray-700 dark:ring-gray-600 dark:hover:bg-gray-600 dark:hover:ring-gray-500'>
-                                                {open ? (
-                                                  <MinusCircleIcon className='h-4 w-4 text-gray-600 dark:text-gray-300' />
-                                                ) : (
-                                                  <PlusCircleIcon className='h-4 w-4 text-gray-600 dark:text-gray-300' />
-                                                )}
-                                              </div>
-                                            </Tooltip>
-                                          </DisclosureButton>
-                                        )}
-                                        <div className='flex items-center gap-2'>
-                                          {column.cell
-                                            ? column.cell(
-                                                data.groupTitle[column.accessor],
-                                                data.groupTitle
-                                              )
-                                            : (data.groupTitle[column.accessor] as ReactNode)}
-                                          {colIndex === 0 && (
-                                            <span className='inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'>
-                                              {data.groupData.length} items
-                                            </span>
-                                          )}
-                                        </div>
-                                      </td>
-                                    ))}
-                                </tr>
-
-                                {/* Group Data Rows */}
-                                {data.groupData.map((rowData, rowIndex) => (
-                                  <DisclosurePanel
-                                    as='tr'
-                                    key={rowIndex}
-                                    className={classNames(
-                                      'border-t border-gray-100 dark:border-gray-800',
-                                      'bg-white dark:bg-gray-900',
-                                      'transition-all duration-200',
-                                      'hover:bg-gray-50 dark:hover:bg-gray-800/75',
-                                      rowIndex === 0 &&
-                                        'border-t-2 border-blue-200 dark:border-blue-800'
-                                    )}
-                                  >
-                                    {columns &&
-                                      columns.map((column, colIndex) => (
-                                        <td
-                                          key={colIndex}
-                                          className={classNames(
-                                            'px-4 py-2 text-sm whitespace-nowrap text-gray-700 dark:text-gray-300',
-                                            colIndex === 0 ? 'pl-12 sm:pl-16' : '',
-                                            colIndex === columns.length - 1 ? 'pr-6 sm:pr-8' : ''
-                                          )}
+                            {/* Group Header Row */}
+                            <tr
+                              className={classNames(
+                                'border-t border-gray-200 dark:border-gray-700',
+                                'bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700',
+                                'font-semibold text-gray-900 dark:text-gray-100',
+                                'cursor-pointer transition-colors duration-200',
+                                'hover:to-gray-150 hover:from-gray-100 dark:hover:from-gray-700 dark:hover:to-gray-600'
+                              )}
+                            >
+                              {columns &&
+                                columns.map((column, colIndex) => {
+                                  const open = expandedGroups.has(groupIndex);
+                                  return (
+                                    <td
+                                      key={colIndex}
+                                      className={classNames(
+                                        'px-3 py-3 text-sm whitespace-nowrap',
+                                        colIndex === 0
+                                          ? 'flex flex-row items-center gap-3 pl-6 sm:pl-8'
+                                          : '',
+                                        colIndex === columns.length - 1 ? 'pr-6 sm:pr-8' : ''
+                                      )}
+                                    >
+                                      {colIndex === 0 && (
+                                        <DisclosureButton
+                                          as='div'
+                                          className='flex cursor-pointer items-center'
                                         >
-                                          {colIndex === 0 && (
-                                            <div className='flex items-center gap-2'>
-                                              <div className='flex h-2 w-2 rounded-full bg-gray-300 dark:bg-gray-600' />
-                                              {column.cell
-                                                ? column.cell(rowData[column.accessor], rowData)
-                                                : (rowData[column.accessor] as ReactNode)}
+                                          <Tooltip
+                                            text={open ? 'Collapse' : 'Expand'}
+                                            position='bottom'
+                                            size='small'
+                                            background='light'
+                                          >
+                                            <div
+                                              className='flex h-6 w-6 items-center justify-center rounded-md bg-white shadow-sm ring-1 ring-gray-200 transition-all duration-200 hover:bg-gray-50 hover:ring-gray-300 dark:bg-gray-700 dark:ring-gray-600 dark:hover:bg-gray-600 dark:hover:ring-gray-500'
+                                              onClick={() => toggleGroup(groupIndex)}
+                                            >
+                                              {open ? (
+                                                <MinusCircleIcon className='h-4 w-4 text-gray-600 dark:text-gray-300' />
+                                              ) : (
+                                                <PlusCircleIcon className='h-4 w-4 text-gray-600 dark:text-gray-300' />
+                                              )}
                                             </div>
-                                          )}
-                                          {colIndex !== 0 &&
-                                            (column.cell
-                                              ? column.cell(rowData[column.accessor], rowData)
-                                              : (rowData[column.accessor] as ReactNode))}
-                                        </td>
-                                      ))}
-                                  </DisclosurePanel>
-                                ))}
-                              </>
-                            )}
+                                          </Tooltip>
+                                        </DisclosureButton>
+                                      )}
+                                      <div className='flex items-center gap-2'>
+                                        {column.cell
+                                          ? column.cell(
+                                              data.groupTitle[column.accessor],
+                                              data.groupTitle
+                                            )
+                                          : (data.groupTitle[column.accessor] as ReactNode)}
+                                        {colIndex === 0 && (
+                                          <span className='inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'>
+                                            {data.groupData.length} items
+                                          </span>
+                                        )}
+                                      </div>
+                                    </td>
+                                  );
+                                })}
+                            </tr>
+
+                            {/* Group Data Rows */}
+                            {data.groupData.map((rowData, rowIndex) => (
+                              <DisclosurePanel
+                                as='tr'
+                                key={rowIndex}
+                                className={classNames(
+                                  'border-t border-gray-100 dark:border-gray-800',
+                                  'bg-white dark:bg-gray-900',
+                                  'transition-all duration-200',
+                                  'hover:bg-gray-50 dark:hover:bg-gray-800/75',
+                                  rowIndex === 0 &&
+                                    'border-t-2 border-blue-200 dark:border-blue-800'
+                                )}
+                              >
+                                {columns &&
+                                  columns.map((column, colIndex) => (
+                                    <td
+                                      key={colIndex}
+                                      className={classNames(
+                                        'px-4 py-2 text-sm whitespace-nowrap text-gray-700 dark:text-gray-300',
+                                        colIndex === 0 ? 'pl-12 sm:pl-16' : '',
+                                        colIndex === columns.length - 1 ? 'pr-6 sm:pr-8' : ''
+                                      )}
+                                    >
+                                      {colIndex === 0 && (
+                                        <div className='flex items-center gap-2'>
+                                          <div className='flex h-2 w-2 rounded-full bg-gray-300 dark:bg-gray-600' />
+                                          {column.cell
+                                            ? column.cell(rowData[column.accessor], rowData)
+                                            : (rowData[column.accessor] as ReactNode)}
+                                        </div>
+                                      )}
+                                      {colIndex !== 0 &&
+                                        (column.cell
+                                          ? column.cell(rowData[column.accessor], rowData)
+                                          : (rowData[column.accessor] as ReactNode))}
+                                    </td>
+                                  ))}
+                              </DisclosurePanel>
+                            ))}
                           </Disclosure>
                         </Fragment>
                       ))
@@ -270,9 +284,6 @@ const GroupedStackTable: FC<GroupedTableProps> = ({
           <h3 className='mt-2 text-sm font-medium text-gray-900 dark:text-gray-100'>
             No data found
           </h3>
-          <p className='mt-1 text-sm text-gray-500 dark:text-gray-400'>
-            Get started by creating your first record.
-          </p>
         </div>
       )}
 

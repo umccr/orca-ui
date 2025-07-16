@@ -168,7 +168,11 @@ const SequenceListTable = () => {
     {
       header: '',
       accessor: 'instrumentRunId',
-      cell: (instrumentRunId: unknown) => {
+      cell: (instrumentRunId: unknown, rowData: TableData) => {
+        if (rowData && rowData.sequenceRunId) {
+          return null;
+        }
+
         // Encode the URL parameters properly
         const filesParams = new URLSearchParams([
           ['key', `*${instrumentRunId}_multiqc_report.html`],
