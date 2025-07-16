@@ -123,7 +123,7 @@ const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) =
   );
 
   return (
-    <div>
+    <div className='mt-4'>
       <Table
         columns={[...workflowRunColumn]}
         tableData={workflowRunsData?.results ?? []}
