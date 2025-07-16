@@ -2,57 +2,66 @@ import { useMemo } from 'react';
 import { useSequenceRunContext } from './SequenceRunContext';
 import { Sidebar } from '@/components/common/sidebar';
 import { AccordionList } from '@/components/common/accordion';
+import { dayjs } from '@/utils/dayjs';
 
 const SequenceRunDetailsSidebar = () => {
   const { sequenceRunDetail } = useSequenceRunContext();
   // format data and disply in the table
 
+  const lastSequenceRunDetail = useMemo(() => {
+    return sequenceRunDetail
+      ?.filter((detail) => detail.status !== null)
+      ?.sort((a, b) => {
+        return dayjs(a.startTime).isAfter(dayjs(b.startTime)) ? -1 : 1;
+      })[0];
+  }, [sequenceRunDetail]);
+
   const sequenceRunDetailsData = useMemo(
     () =>
-      sequenceRunDetail
+      lastSequenceRunDetail
         ? {
             sequenceRunInfo: [
               {
                 key: 'instrumentRunId',
-                value: sequenceRunDetail[0].instrumentRunId,
+                value: lastSequenceRunDetail.instrumentRunId,
               },
               {
                 key: 'sequenceRunId',
-                value: sequenceRunDetail[0].sequenceRunId,
+                value: lastSequenceRunDetail.sequenceRunId,
               },
               {
                 key: 'experimentName',
-                value: sequenceRunDetail[0].experimentName,
+                value: lastSequenceRunDetail.experimentName,
               },
               {
                 key: 'icaProjectId',
-                value: sequenceRunDetail[0].icaProjectId,
+                value: lastSequenceRunDetail.icaProjectId,
               },
             ],
             runDetails: [
               {
                 key: 'runStatus',
-                value: sequenceRunDetail[0].status,
+                value: lastSequenceRunDetail.status,
               },
               {
                 key: 'runVolumeName',
-                value: sequenceRunDetail[0].runVolumeName,
+                value: lastSequenceRunDetail.runVolumeName,
               },
               {
                 key: 'runFolderPath',
-                value: sequenceRunDetail[0].runFolderPath,
+                value: lastSequenceRunDetail.runFolderPath,
               },
               {
                 key: 'runDataUri',
-                value: sequenceRunDetail[0].runDataUri,
+                value: lastSequenceRunDetail.runDataUri,
               },
               {
                 key: 'startTime',
-                value: sequenceRunDetail[0].startTime,
+                value: lastSequenceRunDetail.startTime,
               },
               {
                 key: 'endTime',
-                value: sequenceRunDetail[0].endTime,
+                value: lastSequenceRunDetail.endTime,
               },
             ],
             runProperties: [
@@ -62,24 +71,24 @@ const SequenceRunDetailsSidebar = () => {
               // },
               {
                 key: 'flowcellBarcode',
-                value: sequenceRunDetail[0].flowcellBarcode,
+                value: lastSequenceRunDetail.flowcellBarcode,
               },
               {
                 key: 'reagentBarcode',
-                value: sequenceRunDetail[0].reagentBarcode,
+                value: lastSequenceRunDetail.reagentBarcode,
               },
               {
                 key: 'sampleSheetName',
-                value: sequenceRunDetail[0].sampleSheetName,
+                value: lastSequenceRunDetail.sampleSheetName,
               },
               {
                 key: 'v1pre3Id',
-                value: sequenceRunDetail[0].v1pre3Id,
+                value: lastSequenceRunDetail.v1pre3Id,
               },
             ],
           }
         : null,
-    [sequenceRunDetail]
+    [lastSequenceRunDetail]
   );
 
   return (
