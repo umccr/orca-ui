@@ -5,7 +5,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react
 import { BackdropWithText } from '@/components/common/backdrop';
 import Skeleton from 'react-loading-skeleton';
 import { TableData } from './Table';
-import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { Tooltip } from '@/components/common/tooltips';
 
 export type GroupedStackTableData = {
@@ -31,6 +31,7 @@ export interface GroupedTableProps {
   paginationProps?: PaginationProps;
   isFetchingData?: boolean;
   headerActions?: ReactNode;
+  chevronPosition?: 'left' | 'right';
 }
 
 const GroupedStackTable: FC<GroupedTableProps> = ({
@@ -43,6 +44,7 @@ const GroupedStackTable: FC<GroupedTableProps> = ({
   paginationProps,
   isFetchingData,
   headerActions,
+  chevronPosition = 'left',
 }) => {
   const [expandedGroups, setExpandedGroups] = useState<Set<number>>(new Set());
 
@@ -154,10 +156,12 @@ const GroupedStackTable: FC<GroupedTableProps> = ({
                                         colIndex === 0
                                           ? 'flex flex-row items-center gap-3 pl-6 sm:pl-8'
                                           : '',
-                                        colIndex === columns.length - 1 ? 'pr-6 sm:pr-8' : ''
+                                        colIndex === columns.length - 1
+                                          ? 'flex flex-row items-center justify-between gap-3 sm:pr-8 sm:pl-8'
+                                          : ''
                                       )}
                                     >
-                                      {colIndex === 0 && (
+                                      {chevronPosition === 'left' && colIndex === 0 && (
                                         <DisclosureButton
                                           as='div'
                                           className='flex cursor-pointer items-center'
@@ -170,13 +174,16 @@ const GroupedStackTable: FC<GroupedTableProps> = ({
                                           >
                                             <div
                                               className='flex h-6 w-6 items-center justify-center rounded-md bg-white shadow-sm ring-1 ring-gray-200 transition-all duration-200 hover:bg-gray-50 hover:ring-gray-300 dark:bg-gray-700 dark:ring-gray-600 dark:hover:bg-gray-600 dark:hover:ring-gray-500'
-                                              onClick={() => toggleGroup(groupIndex)}
+                                              onClick={() => {
+                                                toggleGroup(groupIndex);
+                                              }}
                                             >
-                                              {open ? (
-                                                <MinusCircleIcon className='h-4 w-4 text-gray-600 dark:text-gray-300' />
-                                              ) : (
-                                                <PlusCircleIcon className='h-4 w-4 text-gray-600 dark:text-gray-300' />
-                                              )}
+                                              <ChevronDownIcon
+                                                className={classNames(
+                                                  'h-4 w-4 text-gray-600 transition-transform group-data-open:rotate-180 dark:text-gray-300',
+                                                  open ? 'rotate-180' : ''
+                                                )}
+                                              />
                                             </div>
                                           </Tooltip>
                                         </DisclosureButton>
@@ -194,6 +201,34 @@ const GroupedStackTable: FC<GroupedTableProps> = ({
                                           </span>
                                         )}
                                       </div>
+                                      {chevronPosition === 'right' &&
+                                        colIndex === columns.length - 1 && (
+                                          <DisclosureButton
+                                            as='div'
+                                            className='flex cursor-pointer items-center'
+                                          >
+                                            <Tooltip
+                                              text={open ? 'Collapse' : 'Expand'}
+                                              position='bottom'
+                                              size='small'
+                                              background='light'
+                                            >
+                                              <div
+                                                className='flex h-6 w-6 items-center justify-center rounded-md bg-white shadow-sm ring-1 ring-gray-200 transition-all duration-200 hover:bg-gray-50 hover:ring-gray-300 dark:bg-gray-700 dark:ring-gray-600 dark:hover:bg-gray-600 dark:hover:ring-gray-500'
+                                                onClick={() => {
+                                                  toggleGroup(groupIndex);
+                                                }}
+                                              >
+                                                <ChevronDownIcon
+                                                  className={classNames(
+                                                    'h-4 w-4 text-gray-600 transition-transform group-data-open:rotate-180 dark:text-gray-300',
+                                                    open ? 'rotate-180' : ''
+                                                  )}
+                                                />
+                                              </div>
+                                            </Tooltip>
+                                          </DisclosureButton>
+                                        )}
                                     </td>
                                   );
                                 })}
