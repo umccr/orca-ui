@@ -1,6 +1,5 @@
 import { useState, useMemo, Fragment, FC } from 'react';
 import { classNames } from '@/utils/commonUtils';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { DEFAULT_ITEMS_PER_PAGE_OPTIONS } from '@/utils/constant';
 
 interface ListTableProps {
@@ -115,7 +114,6 @@ const ListTable: FC<ListTableProps> = ({
                 </option>
               ))}
             </select>
-            <ChevronDownIcon className='pointer-events-none absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2 text-gray-500 dark:text-gray-400' />
           </div>
         </div>
       </div>

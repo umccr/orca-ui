@@ -79,10 +79,14 @@ export const getBadgeStatusType = (status: string) => {
       return 'abort';
 
     case 'FAILED':
+    case 'FAILEDUPLOAD':
+    case 'STOPPED':
+    case 'TIMEDOUT':
       return 'fail';
 
     case 'SUCCEEDED':
     case 'RESOLVED':
+    case 'COMPLETE':
       return 'success';
 
     case 'DEPRECATED':

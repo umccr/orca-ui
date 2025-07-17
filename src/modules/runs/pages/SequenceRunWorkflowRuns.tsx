@@ -1,5 +1,5 @@
 import SequenceRunWorkflowRunsStats from '../components/sequenceRuns/SequenceRunWorkflowRunsStats';
-import SequenceRunWorkflowRuns from '../components/sequenceRuns/SequenceRunWorkflowRuns';
+import SequenceRunWorkflowRunsComponent from '../components/sequenceRuns/SequenceRunWorkflowRuns';
 import { NotificationContainer } from '@/components/common/notification';
 
 const SequenceRunsWorkflowRuns = () => {
@@ -16,7 +16,7 @@ const SequenceRunsWorkflowRuns = () => {
         ]}
       />
       <SequenceRunWorkflowRunsStats />
-      <SequenceRunWorkflowRuns />
+      <SequenceRunWorkflowRunsComponent />
     </div>
   );
 };

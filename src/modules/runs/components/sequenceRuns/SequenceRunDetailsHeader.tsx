@@ -36,7 +36,7 @@ const SequenceRunDetailsHeader = () => {
           <div className='flex items-center justify-between pt-4 pb-1'>
             <div className='flex flex-col gap-2'>
               <h1 className='truncate text-xl font-semibold text-gray-900 dark:text-white'>
-                {sequenceRunDetail?.sequenceRunName}
+                {sequenceRunDetail?.[0]?.instrumentRunId}
               </h1>
               {/* <p className='text-sm text-gray-500 dark:text-gray-400'>
                 {sequenceRunDetail?.instrumentRunId}

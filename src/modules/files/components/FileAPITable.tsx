@@ -87,28 +87,30 @@ export const FileAPITable = ({
           </Tooltip>
         </div>
       )}
-      <Table
-        isFetchingData={fileQueryResult.isFetching}
-        columns={tableColumn}
-        tableHeader={isSearchBoxKey && <SearchBox onSearch={(s) => setSearchBox(s)} />}
-        tableData={recordData.map((item) => ({
-          lastModifiedDate: item.lastModifiedDate,
-          size: item.size,
-          fileRecord: item,
-        }))}
-        paginationProps={{
-          totalCount: pagination?.count ?? 0,
-          rowsPerPage: pagination?.rowsPerPage ?? 0,
-          currentPage: pagination?.page ?? 0,
-          setPage: (n: number) => {
-            setQueryParams({ page: n });
-          },
-          countUnit: 'files',
-          setRowsPerPage: (n) => {
-            setQueryParams({ rowsPerPage: n });
-          },
-        }}
-      />
+      <div className='mt-4'>
+        <Table
+          isFetchingData={fileQueryResult.isFetching}
+          columns={tableColumn}
+          tableHeader={isSearchBoxKey && <SearchBox onSearch={(s) => setSearchBox(s)} />}
+          tableData={recordData.map((item) => ({
+            lastModifiedDate: item.lastModifiedDate,
+            size: item.size,
+            fileRecord: item,
+          }))}
+          paginationProps={{
+            totalCount: pagination?.count ?? 0,
+            rowsPerPage: pagination?.rowsPerPage ?? 0,
+            currentPage: pagination?.page ?? 0,
+            setPage: (n: number) => {
+              setQueryParams({ page: n });
+            },
+            countUnit: 'files',
+            setRowsPerPage: (n) => {
+              setQueryParams({ rowsPerPage: n });
+            },
+          }}
+        />
+      </div>
     </>
   );
 };
