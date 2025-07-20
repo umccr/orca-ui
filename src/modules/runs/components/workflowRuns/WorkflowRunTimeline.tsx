@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { Timeline } from '@/components/common/timelines';
+import { Timeline, TimelineEventTypes } from '@/components/common/timelines';
 import type { TimelineEvent } from '@/components/common/timelines';
 import { ContentTabs } from '@/components/navigation/tabs';
 import { JsonToNestedList, JsonDisplay } from '@/components/common/json-to-table';
@@ -96,7 +96,7 @@ const WorkflowRunTimeline = () => {
             status: state.status,
             iconBackground: statusBackgroundColor(getBadgeStatusType(state.status)),
             payloadId: state?.payload || '',
-            eventType: 'stateChange' as const,
+            eventType: TimelineEventTypes.STATE_CHANGE,
           }))
         : [],
     [workflowStateData, workflowRunStateCreationValidMapData]
@@ -130,7 +130,7 @@ const WorkflowRunTimeline = () => {
                 },
               },
             ],
-            eventType: 'comment' as const,
+            eventType: TimelineEventTypes.COMMENT,
             user: {
               name: getUsername(comment.createdBy || ''),
               // Optional: Add avatar if available
