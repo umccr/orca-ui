@@ -1,4 +1,4 @@
-import { Table, GroupedTable } from '@/components/tables';
+import { Table, GroupedTable, GroupedStackTable } from '@/components/tables';
 
 import { Meta, StoryObj } from '@storybook/react';
 
@@ -193,5 +193,80 @@ export const GroupedRowTableExample: Story = {
     };
 
     return <GroupedTable {...args} />;
+  },
+};
+
+export const GroupedStackTableExample: Story = {
+  render: () => {
+    const args = {
+      tableHeader: 'People',
+      tableDescription: 'List of people in the company',
+      columns: [
+        { header: 'Name', accessor: 'name' },
+        { header: 'Title', accessor: 'title' },
+        {
+          header: 'Email',
+          accessor: 'email',
+          cell: (data: unknown) => (
+            <div>
+              <span>Custom Node example</span>
+              <div className='text-red-600'>{String(data)}</div>
+            </div>
+          ),
+        },
+      ],
+      tableData: [
+        {
+          groupTitle: {
+            name: 'Group 1',
+            title: 'Group 1',
+            email: 'xx@example.com',
+          },
+          groupData: [
+            {
+              name: 'John Doe',
+              title: 'CEO',
+              email: 'xx@example.com',
+            },
+            {
+              name: 'Jane Doe',
+              title: 'CTO',
+              email: 'xx@example.com',
+            },
+            {
+              name: 'John Smith',
+              title: 'Developer',
+              email: 'xx@example.com',
+            },
+          ],
+        },
+        {
+          groupTitle: {
+            name: 'Group 2',
+            title: 'Group 2',
+            email: 'xx@example.com',
+          },
+          groupData: [
+            {
+              name: 'John Doe',
+              title: 'CEO',
+              email: 'xx@example.com',
+            },
+            {
+              name: 'Jane Doe',
+              title: 'CTO',
+              email: 'xx@example.com',
+            },
+            {
+              name: 'John Smith',
+              title: 'Developer',
+              email: 'xx@example.com',
+            },
+          ],
+        },
+      ],
+    };
+
+    return <GroupedStackTable {...args} />;
   },
 };

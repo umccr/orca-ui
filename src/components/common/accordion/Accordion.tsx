@@ -7,6 +7,7 @@ interface AccordionProps {
   title: ReactNode;
   children: ReactNode;
   defaultOpen?: boolean;
+  showChevron?: boolean;
   chevronPosition?: 'left' | 'right';
   className?: string;
   buttonClassName?: string;
@@ -17,6 +18,7 @@ const Accordion: FC<AccordionProps> = ({
   title,
   children,
   defaultOpen = true,
+  showChevron = true,
   chevronPosition = 'left',
   className,
   buttonClassName,
@@ -36,13 +38,15 @@ const Accordion: FC<AccordionProps> = ({
       )}
     >
       <DisclosureButton
+        as='div'
         className={classNames(
           'group flex w-full items-center justify-between gap-2 rounded-lg px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700',
           'focus:ring-2 focus:ring-blue-500 focus:outline-hidden focus:ring-inset dark:focus:ring-blue-400',
+          'cursor-pointer',
           buttonClassName
         )}
       >
-        {chevronPosition === 'left' && (
+        {chevronPosition === 'left' && showChevron && (
           <ChevronDownIcon
             className={`h-5 w-5 shrink-0 text-gray-500 transition-transform group-data-open:rotate-180 dark:text-gray-400`}
           />
@@ -50,7 +54,7 @@ const Accordion: FC<AccordionProps> = ({
 
         {title}
 
-        {chevronPosition === 'right' && (
+        {chevronPosition === 'right' && showChevron && (
           <ChevronDownIcon
             className={`h-5 w-5 shrink-0 text-gray-500 transition-transform group-data-open:rotate-180 dark:text-gray-400`}
           />

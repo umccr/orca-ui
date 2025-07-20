@@ -58,6 +58,7 @@ const FileViewDialog: FC<FileViewDialogProps> = ({
   };
 
   const csvFileContent = useMemo(() => {
+    if (!fileContent) return '';
     return jsonToCsv(fileContent as SampleSheetModel);
   }, [fileContent]);
 
@@ -120,13 +121,23 @@ const FileViewDialog: FC<FileViewDialogProps> = ({
               tabs={[
                 {
                   label: 'JSON',
-                  content: <JsonDisplay data={fileContent} isFetchingData={isLoading} />,
+                  content: fileContent ? (
+                    <JsonDisplay data={fileContent} isFetchingData={isLoading} />
+                  ) : (
+                    <div className='flex h-full w-full items-center justify-center'>
+                      <p>No data available</p>
+                    </div>
+                  ),
                 },
                 {
                   label: 'CSV',
-                  content: (
+                  content: fileContent ? (
                     <div className='overflow-auto rounded-lg bg-white px-4 py-2 dark:bg-gray-900'>
                       <pre>{csvFileContent}</pre>
+                    </div>
+                  ) : (
+                    <div className='flex h-full w-full items-center justify-center'>
+                      <p>No data available</p>
                     </div>
                   ),
                 },

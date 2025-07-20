@@ -3,10 +3,8 @@
 
 import { createContext, FC, PropsWithChildren, ReactElement, useContext } from 'react';
 import {
-  useSequenceRunDetailModel,
-  useSequenceRunCommentListModel,
-  useSequenceRunStateListModel,
-  useSequenceRunStateValidMapModel,
+  useSequenceRunByInstrumentRunIdModel,
+  useSequenceRunCommentsByInstrumentRunIdModel,
 } from '@/api/sequenceRun';
 import { useParams } from 'react-router-dom';
 import { SpinnerWithText } from '@/components/common/spinner';
@@ -15,77 +13,51 @@ const SequenceRunContext = createContext({
   // refreshSequenceRuns: false,
   // //eslint-disable-next-line @typescript-eslint/no-unused-vars
   // setRefreshSequenceRuns: (_value: boolean) => {},
-  sequenceRunDetail: undefined as ReturnType<typeof useSequenceRunDetailModel>['data'],
+  sequenceRunDetail: undefined as ReturnType<typeof useSequenceRunByInstrumentRunIdModel>['data'],
   isFetchingSequenceRunDetail: true,
+  refetchSequenceRunDetail: () => {},
+
   // comment
-  sequenceRunCommentData: undefined as ReturnType<typeof useSequenceRunCommentListModel>['data'],
+  sequenceRunCommentData: undefined as ReturnType<
+    typeof useSequenceRunCommentsByInstrumentRunIdModel
+  >['data'],
   isFetchingSequenceRunComment: true,
   refetchSequenceRunComment: () => {},
-  // state
-  sequenceRunStateData: undefined as ReturnType<typeof useSequenceRunStateListModel>['data'],
-  isFetchingSequenceRunState: true,
-  refetchSequenceRunState: () => {},
-
-  // state valid map
-  sequenceRunStateValidMapData: undefined as ReturnType<
-    typeof useSequenceRunStateValidMapModel
-  >['data'],
-  isFetchingSequenceRunStateValidMap: true,
 });
 
 export const SequenceRunProvider: FC<PropsWithChildren> = ({ children }): ReactElement => {
   // const [refreshSequenceRuns, setRefreshSequenceRuns] = useState<boolean>(false);
-  const { orcabusId } = useParams();
+  const { instrumentRunId } = useParams();
 
-  const { data: sequenceRunDetail, isFetching: isFetchingSequenceRunDetail } =
-    useSequenceRunDetailModel({
-      params: { path: { orcabusId: orcabusId as string } },
-      reactQuery: {
-        enabled: !!orcabusId,
-      },
-    });
+  const {
+    data: sequenceRunDetail,
+    isFetching: isFetchingSequenceRunDetail,
+    refetch: refetchSequenceRunDetail,
+  } = useSequenceRunByInstrumentRunIdModel({
+    params: { path: { instrumentRunId: instrumentRunId as string } },
+    reactQuery: {
+      enabled: !!instrumentRunId,
+    },
+  });
 
   const {
     data: sequenceRunCommentData,
     isFetching: isFetchingSequenceRunComment,
     refetch: refetchSequenceRunComment,
-  } = useSequenceRunCommentListModel({
-    params: { path: { orcabusId: orcabusId as string } },
+  } = useSequenceRunCommentsByInstrumentRunIdModel({
+    params: { path: { instrumentRunId: instrumentRunId as string } },
     reactQuery: {
-      enabled: !!orcabusId,
+      enabled: !!instrumentRunId,
     },
   });
 
-  const {
-    data: sequenceRunStateData,
-    isFetching: isFetchingSequenceRunState,
-    refetch: refetchSequenceRunState,
-  } = useSequenceRunStateListModel({
-    params: { path: { orcabusId: orcabusId as string } },
-    reactQuery: {
-      enabled: !!orcabusId,
-    },
-  });
-
-  const { data: sequenceRunStateValidMapData, isFetching: isFetchingSequenceRunStateValidMap } =
-    useSequenceRunStateValidMapModel({
-      params: { path: { orcabusId: orcabusId as string } },
-      reactQuery: {
-        enabled: !!orcabusId,
-      },
-    });
-
-  const isFetching =
-    isFetchingSequenceRunDetail ||
-    isFetchingSequenceRunComment ||
-    isFetchingSequenceRunState ||
-    isFetchingSequenceRunStateValidMap;
+  const isFetching = isFetchingSequenceRunDetail || isFetchingSequenceRunComment;
 
   return (
     <>
       {isFetching ? (
         <div className='h-screen'>
-          <SpinnerWithText text='Loading...' />
+          <SpinnerWithText text='Loading ...' />
         </div>
       ) : (
         <SequenceRunContext.Provider
@@ -94,14 +66,10 @@ export const SequenceRunProvider: FC<PropsWithChildren> = ({ children }): ReactE
             // setRefreshSequenceRuns,
             sequenceRunDetail,
             isFetchingSequenceRunDetail,
+            refetchSequenceRunDetail,
             sequenceRunCommentData,
             isFetchingSequenceRunComment,
             refetchSequenceRunComment,
-            sequenceRunStateData,
-            isFetchingSequenceRunState,
-            refetchSequenceRunState,
-            sequenceRunStateValidMapData,
-            isFetchingSequenceRunStateValidMap,
           }}
         >
           {children}

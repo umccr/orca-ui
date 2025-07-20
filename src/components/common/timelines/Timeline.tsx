@@ -1,14 +1,26 @@
+/* eslint-disable react-refresh/only-export-components */
+// https://github.com/ArnaudBarre/eslint-plugin-react-refresh/issues/25#issuecomment-1729071347
+
 import { FC, useState, useEffect, ReactNode } from 'react';
 import { classNames } from '@/utils/commonUtils';
 import {
   ChatBubbleBottomCenterTextIcon,
   CheckCircleIcon,
   EllipsisHorizontalIcon,
+  DocumentTextIcon,
+  ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { dayjs } from '@/utils/dayjs';
 import { Badge } from '../badges';
 import { IconDropdown } from '@/components/common/dropdowns';
 import type { DropdownItemProps } from '@/components/common/dropdowns/IconDropdown';
+
+export enum TimelineEventTypes {
+  STATE_CHANGE = 'stateChange',
+  COMMENT = 'comment',
+  SAMPLE_SHEET_UPLOAD = 'sampleSheetUpload',
+  FAILED_ACTION = 'failedAction',
+}
 
 export interface TimelineEvent {
   id: string;
@@ -18,7 +30,7 @@ export interface TimelineEvent {
   datetime: string;
   iconBackground?: string;
   payloadId?: string;
-  eventType?: 'stateChange' | 'comment';
+  eventType?: TimelineEventTypes;
   title?: string;
   subtitle?: string;
   tags?: string[];
@@ -50,10 +62,16 @@ const Timeline: FC<TimelineProps> = ({
   }, [selectId]);
 
   const eventIcon = (eventType: TimelineEvent['eventType'] | undefined) => {
-    if (eventType === 'comment') {
+    if (eventType === TimelineEventTypes.COMMENT) {
       return (
         <ChatBubbleBottomCenterTextIcon aria-hidden='true' className='h-5 w-5 text-gray-500' />
       );
+    }
+    if (eventType === TimelineEventTypes.SAMPLE_SHEET_UPLOAD) {
+      return <DocumentTextIcon aria-hidden='true' className='h-5 w-5 text-green-500' />;
+    }
+    if (eventType === TimelineEventTypes.FAILED_ACTION) {
+      return <ExclamationCircleIcon aria-hidden='true' className='h-5 w-5 text-red-500' />;
     }
     return <CheckCircleIcon aria-hidden='true' className='h-5 w-5 text-green-500' />;
   };

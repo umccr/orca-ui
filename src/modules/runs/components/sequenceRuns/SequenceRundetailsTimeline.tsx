@@ -6,19 +6,20 @@ import {
 import { useState, useEffect, useMemo, FC } from 'react';
 import { dayjs } from '@/utils/dayjs';
 import { classNames, getUsername } from '@/utils/commonUtils';
-import { Timeline } from '@/components/common/timelines';
+import { Timeline, TimelineEventTypes } from '@/components/common/timelines';
 import { getBadgeStatusType, statusBackgroundColor } from '@/utils/statusUtils';
 import { BackdropWithText } from '@/components/common/backdrop';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
 import toaster from '@/components/common/toaster';
 import CommentDialog from '../common/CommentDialog';
-import { useParams } from 'react-router-dom';
 import { Button } from '@/components/common/buttons';
 import { BarsArrowUpIcon, BarsArrowDownIcon } from '@heroicons/react/24/outline';
 import { useUserPreferencesLocalStorage } from '@/hooks/useLocalStorage';
 import StateDialog from '../common/StateDialog';
 import { useSequenceRunContext } from './SequenceRunContext';
+import { useSequenceRunDetailsContext } from './SequenceRunDetailsContext';
+import { Dropdown } from '@/components/common/dropdowns';
 
 interface SequenceRunTimelineProps {
   selectedSequenceRunId?: string;
@@ -26,19 +27,22 @@ interface SequenceRunTimelineProps {
 
 const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRunId }) => {
   const { user } = useAuthContext();
-  const { orcabusId } = useParams();
 
   const {
     sequenceRunDetail,
-    sequenceRunStateData,
-    isFetchingSequenceRunState,
-    refetchSequenceRunState,
     sequenceRunCommentData,
     isFetchingSequenceRunComment,
     refetchSequenceRunComment,
+  } = useSequenceRunContext();
+
+  const {
+    sequenceRunStateData,
+    isFetchingSequenceRunState,
+    refetchSequenceRunState,
+
     sequenceRunStateValidMapData,
     isFetchingSequenceRunStateValidMap,
-  } = useSequenceRunContext();
+  } = useSequenceRunDetailsContext();
 
   // comment dialog
   const [isOpenUpdateCommentDialog, setIsOpenUpdateCommentDialog] = useState<boolean>(false);
@@ -51,16 +55,40 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
   const [stateId, setStateId] = useState<string | null>(null);
   const [stateComment, setStateComment] = useState<string>('');
 
+  const [selectedSequenceRunOrcabusId, setSelectedSequenceRunOrcabusId] = useState<string | null>(
+    null
+  );
+
+  const [selectedMutationSequenceRunOrcabusId, setSelectedMutationSequenceRunOrcabusId] = useState<
+    string | null
+  >(null);
+
   const [isReverseOrder, setIsReverseOrder] = useUserPreferencesLocalStorage(
     'sequence-run-timeline-reverse-order',
     false
   );
 
-  const sequenceRunId = selectedSequenceRunId || orcabusId;
+  const sequenceRunOrcabusId = selectedSequenceRunId || selectedMutationSequenceRunOrcabusId;
+
+  const selectedSequenceRunState = useMemo(() => {
+    return selectedSequenceRunOrcabusId
+      ? sequenceRunStateData?.filter((state) => state.sequence === selectedSequenceRunOrcabusId)
+      : sequenceRunStateData;
+  }, [sequenceRunStateData, selectedSequenceRunOrcabusId]);
+
+  const selectedSequenceRunComment = useMemo(() => {
+    return selectedSequenceRunOrcabusId
+      ? sequenceRunCommentData?.filter(
+          (comment) => comment.targetId === selectedSequenceRunOrcabusId?.split('.')[1]
+        )
+      : sequenceRunCommentData;
+  }, [sequenceRunCommentData, selectedSequenceRunOrcabusId]);
 
   const SequenceRunStateTimelineData = useMemo(() => {
-    return sequenceRunStateData
-      ? sequenceRunStateData?.map((state) => ({
+    const failedSateList = ['failed', 'needsattention', 'timedout', 'failedupload', 'stopped'];
+
+    return selectedSequenceRunState
+      ? selectedSequenceRunState?.map((state) => ({
           id: state.orcabusId || '',
           title: 'Status Updated',
           actionsList: Object.keys(sequenceRunStateValidMapData || {}).includes(state.status)
@@ -71,27 +99,35 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
                   onClick: () => {
                     setStateId(state.orcabusId as string);
                     setStateComment(state.comment || '');
+                    setSelectedMutationSequenceRunOrcabusId(state.sequence as string);
                     setIsOpenUpdateStateDialog(true);
                   },
                 },
               ]
             : [],
-          datetime: dayjs(state.timestamp).format('YYYY-MM-DD HH:mm'),
+          datetime: state.timestamp,
           comment: state.comment || '',
           status: state.status,
           iconBackground: statusBackgroundColor(getBadgeStatusType(state.status)),
           payloadId: '',
-          eventType: 'stateChange' as const,
+          eventType: failedSateList.includes(state.status.toLowerCase())
+            ? TimelineEventTypes.FAILED_ACTION
+            : TimelineEventTypes.STATE_CHANGE,
         }))
       : [];
-  }, [sequenceRunStateData, sequenceRunStateValidMapData]);
+  }, [selectedSequenceRunState, sequenceRunStateValidMapData]);
 
   const SequenceRunCommentTimelineData = useMemo(() => {
-    return sequenceRunCommentData
-      ? sequenceRunCommentData?.map((comment) => ({
+    return selectedSequenceRunComment
+      ? selectedSequenceRunComment?.map((comment) => ({
           id: comment.orcabusId || '',
-          title: 'Comment Added',
-          datetime: comment.updatedAt,
+          title:
+            comment.targetType === 'sequence'
+              ? 'Comment Added to Sequence'
+              : comment.targetType === 'sample_sheet'
+                ? 'New Sample Sheet Added to Sequence'
+                : 'Comment Added',
+          datetime: comment.createdAt,
           iconBackground: 'bg-blue-100 dark:bg-blue-900',
           comment: comment.comment,
           actionsList: [
@@ -100,6 +136,7 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
               onClick: () => {
                 setCommentId(comment.orcabusId as string);
                 setComment(comment.comment);
+                setSelectedMutationSequenceRunOrcabusId(comment.targetId as string);
                 setIsOpenUpdateCommentDialog(true);
               },
               icon: PencilIcon,
@@ -108,12 +145,16 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
               label: 'Delete',
               onClick: () => {
                 setCommentId(comment.orcabusId as string);
+                setSelectedMutationSequenceRunOrcabusId(comment.targetId as string);
                 setIsOpenDeleteCommentDialog(true);
               },
               icon: TrashIcon,
             },
           ],
-          eventType: 'comment' as const,
+          eventType:
+            comment.targetType === 'sample_sheet'
+              ? TimelineEventTypes.SAMPLE_SHEET_UPLOAD
+              : TimelineEventTypes.COMMENT,
           user: {
             name: getUsername(comment.createdBy || ''),
             // Optional: Add avatar if available
@@ -121,7 +162,7 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
           },
         }))
       : [];
-  }, [sequenceRunCommentData]);
+  }, [selectedSequenceRunComment]);
 
   const timelineData = [...SequenceRunStateTimelineData, ...SequenceRunCommentTimelineData].sort(
     (a, b) => (dayjs(a.datetime).isBefore(dayjs(b.datetime)) ? -1 : 1)
@@ -133,7 +174,7 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
     isError: isErrorUpdatingSequenceRunComment,
     reset: resetUpdateSequenceRunComment,
   } = useSequenceRunCommentUpdateModel({
-    params: { path: { orcabusId: sequenceRunId as string, id: commentId as string } },
+    params: { path: { orcabusId: sequenceRunOrcabusId as string, id: commentId as string } },
     body: {
       comment: comment,
       createdBy: user?.email,
@@ -173,7 +214,7 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
     isError: isErrorDeletingSequenceRunComment,
     reset: resetDeleteSequenceRunComment,
   } = useSequenceRunCommentDeleteModel({
-    params: { path: { orcabusId: sequenceRunId as string, id: commentId as string } },
+    params: { path: { orcabusId: sequenceRunOrcabusId as string, id: commentId as string } },
     body: {
       createdBy: user?.email,
     },
@@ -209,7 +250,7 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
     isError: isErrorUpdatingSequenceRunState,
     reset: resetUpdateSequenceRunState,
   } = useSequenceRunStateUpdateModel({
-    params: { path: { orcabusId: sequenceRunId as string, id: stateId as string } },
+    params: { path: { orcabusId: sequenceRunOrcabusId as string, id: stateId as string } },
     body: {
       comment: stateComment,
     },
@@ -238,13 +279,26 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
     isErrorUpdatingSequenceRunState,
   ]);
 
+  const sequenceRunDetailDropdownItems = useMemo(() => {
+    return sequenceRunDetail
+      ?.map((sequenceRun) => ({
+        label: sequenceRun.sequenceRunId,
+        onClick: () => setSelectedSequenceRunOrcabusId(sequenceRun.orcabusId),
+      }))
+      .concat({
+        label: 'All',
+        onClick: () => setSelectedSequenceRunOrcabusId(null),
+      })
+      .reverse();
+  }, [sequenceRunDetail]);
+
   const isFetching =
     isFetchingSequenceRunState ||
     isFetchingSequenceRunComment ||
     isFetchingSequenceRunStateValidMap;
 
   return (
-    <div className='h-full gap-4 px-4 pb-2'>
+    <div className='h-full gap-4 px-4 py-2'>
       {isFetching && <BackdropWithText text='Loading Timeline data...' />}
       <div className='flex h-full flex-col gap-4'>
         {/* timeline header part */}
@@ -255,6 +309,7 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
               {timelineData.length} events
             </span>
           </div>
+          {/* timeeline actions part */}
           <div className='flex items-center gap-2'>
             <Button
               type='gray'
@@ -276,6 +331,21 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
               )}
               <span>{isReverseOrder ? 'Oldest First' : 'Latest First'}</span>
             </Button>
+            <div className='flex items-center gap-2'>
+              <Dropdown
+                floatingLabel='Sequence Run ID'
+                value={
+                  selectedSequenceRunOrcabusId
+                    ? sequenceRunDetail?.find(
+                        (sequenceRun) => sequenceRun.orcabusId === selectedSequenceRunOrcabusId
+                      )?.sequenceRunId || 'All'
+                    : 'All'
+                }
+                items={sequenceRunDetailDropdownItems ?? []}
+                className='min-w-[250px] dark:bg-gray-800 dark:text-gray-200'
+                menuItemsClassName='min-w-[250px] overflow-y-auto'
+              />
+            </div>
           </div>
         </div>
         {/* content part */}
@@ -310,7 +380,7 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
         isOpenAddStateDialog={false}
         isOpenUpdateStateDialog={isOpenUpdateStateDialog}
         user={user}
-        currentState={sequenceRunDetail?.status as string | null}
+        currentState={sequenceRunDetail?.[0]?.status as string | null}
         handleClose={() => {
           setIsOpenUpdateStateDialog(false);
         }}
