@@ -44,7 +44,7 @@ const inputThemeClassName = classNames(
 );
 
 const operatorsByType: Record<FieldType, string[]> = {
-  string: ['equalTo', 'in', 'startsWith', 'notEqualTo'],
+  string: ['equalTo', 'notEqualTo'],
   float: [
     'equalTo',
     'notEqualTo',
@@ -61,8 +61,8 @@ const operatorsByType: Record<FieldType, string[]> = {
     'greaterThanOrEqualTo',
     'lessThanOrEqualTo',
   ],
-  date: ['greaterThanOrEqualTo', 'lessThanOrEqualTo'],
-  timestamp: ['greaterThanOrEqualTo', 'lessThanOrEqualTo'],
+  date: ['greaterThanOrEqualTo', 'lessThanOrEqualTo', 'greaterThan', 'lessThan'],
+  timestamp: ['greaterThanOrEqualTo', 'lessThanOrEqualTo', 'greaterThan', 'lessThan'],
 };
 
 const operatorLabels: Record<string, string> = {
