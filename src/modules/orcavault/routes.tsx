@@ -4,7 +4,7 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
-const MartLimsPage = lazy(() => import('@/modules/orcavault/pages/MartLims'));
+const MartLimsPage = lazy(() => import('@/modules/orcavault/pages/WarehouseMart'));
 
 export const Router: RouteObject = {
   path: 'vault',

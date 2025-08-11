@@ -13,7 +13,7 @@ import { Select } from '@/components/common/select';
 import dayjs from 'dayjs';
 import toaster from '@/components/common/toaster';
 import { Tooltip } from '@/components/common/tooltips';
-import { GraphQLFilterProps } from '../api/graphql/queries/allLims';
+import { GraphQLFilterProps } from '../api/mart/queries';
 
 type Filter = {
   key: string;
@@ -49,20 +49,20 @@ const operatorsByType: Record<FieldType, string[]> = {
     'equalTo',
     'notEqualTo',
     'greaterThan',
-    'lessThan',
     'greaterThanOrEqualTo',
+    'lessThan',
     'lessThanOrEqualTo',
   ],
   int: [
     'equalTo',
     'notEqualTo',
     'greaterThan',
-    'lessThan',
     'greaterThanOrEqualTo',
+    'lessThan',
     'lessThanOrEqualTo',
   ],
-  date: ['greaterThanOrEqualTo', 'lessThanOrEqualTo', 'greaterThan', 'lessThan'],
-  timestamp: ['greaterThanOrEqualTo', 'lessThanOrEqualTo', 'greaterThan', 'lessThan'],
+  date: ['greaterThan', 'greaterThanOrEqualTo', 'lessThan', 'lessThanOrEqualTo'],
+  timestamp: ['greaterThan', 'greaterThanOrEqualTo', 'lessThan', 'lessThanOrEqualTo'],
 };
 
 const operatorLabels: Record<string, string> = {
@@ -83,7 +83,7 @@ type Props = {
 };
 
 export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
-  const { setQueryParams, getQueryParams, clearQueryParams } = useQueryParams();
+  const { setQueryParams, getQueryParams } = useQueryParams();
   const currentQueryFilter = getQueryParams().filter;
   const jsonQueryFilter = currentQueryFilter ? JSON.parse(currentQueryFilter) : null;
   const originalFilters = jsonQueryFilter ? parseGraphQLFilter(jsonQueryFilter) : [];
@@ -221,6 +221,16 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
                     className={inputThemeClassName}
                   />
                 </>
+              ) : fieldMeta.type === 'boolean' ? (
+                <>
+                  <input
+                    type='number'
+                    value={filter.value}
+                    placeholder='Enter value'
+                    onChange={(e) => handleValueFilterChange(index, e.target.value)}
+                    className={inputThemeClassName}
+                  />
+                </>
               ) : (
                 <div className='relative w-full'>
                   <input
@@ -260,7 +270,10 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
           type='light'
           onClick={() => {
             setFilters([]);
-            clearQueryParams();
+            setQueryParams(
+              getQueryParams().tableName ? { tableName: getQueryParams().tableName } : {},
+              true
+            );
           }}
         >
           Reset

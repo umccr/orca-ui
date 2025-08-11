@@ -4,7 +4,6 @@ import { SpinnerWithText } from '@/components/common/spinner';
 import { DetailedErrorBoundary } from '@/components/common/error';
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from '@/components/common/sidebar';
-import LocationBreadcrumb from '@/components/navigation/breadcrumbs';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 type Props = {
@@ -17,7 +16,6 @@ type Props = {
 const SideBarLayout = ({ children, sideBar, iconOnClosed, iconOnOpen }: Props) => {
   return (
     <div className='h-full w-full rounded-none! p-4 sm:px-4 lg:px-8 lg:py-6'>
-      <LocationBreadcrumb className='mb-0' />
       <DetailedErrorBoundary errorTitle='Unable to load page'>
         <Suspense fallback={<SpinnerWithText text='Loading page ...' />}>
           <div className='flex h-full w-full flex-row'>
