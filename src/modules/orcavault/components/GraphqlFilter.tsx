@@ -14,12 +14,7 @@ import dayjs from 'dayjs';
 import toaster from '@/components/common/toaster';
 import { Tooltip } from '@/components/common/tooltips';
 import { GraphQLFilterProps } from '../api/mart/queries';
-
-type Filter = {
-  key: string;
-  operator: string;
-  value: string;
-};
+import { Filter } from './utils';
 
 type FieldType = 'string' | 'int' | 'float' | 'date' | 'timestamp';
 export type FieldDefinition = {
@@ -44,7 +39,7 @@ const inputThemeClassName = classNames(
 );
 
 const operatorsByType: Record<FieldType, string[]> = {
-  string: ['equalTo', 'notEqualTo'],
+  string: ['equalTo', 'notEqualTo', 'isNull'],
   float: [
     'equalTo',
     'notEqualTo',
@@ -52,6 +47,7 @@ const operatorsByType: Record<FieldType, string[]> = {
     'greaterThanOrEqualTo',
     'lessThan',
     'lessThanOrEqualTo',
+    'isNull',
   ],
   int: [
     'equalTo',
@@ -60,9 +56,10 @@ const operatorsByType: Record<FieldType, string[]> = {
     'greaterThanOrEqualTo',
     'lessThan',
     'lessThanOrEqualTo',
+    'isNull',
   ],
-  date: ['greaterThan', 'greaterThanOrEqualTo', 'lessThan', 'lessThanOrEqualTo'],
-  timestamp: ['greaterThan', 'greaterThanOrEqualTo', 'lessThan', 'lessThanOrEqualTo'],
+  date: ['greaterThan', 'greaterThanOrEqualTo', 'lessThan', 'lessThanOrEqualTo', 'isNull'],
+  timestamp: ['greaterThan', 'greaterThanOrEqualTo', 'lessThan', 'lessThanOrEqualTo', 'isNull'],
 };
 
 const operatorLabels: Record<string, string> = {
@@ -72,9 +69,7 @@ const operatorLabels: Record<string, string> = {
   lessThan: 'Less than',
   greaterThanOrEqualTo: 'Greater equal',
   lessThanOrEqualTo: 'Less equal',
-  in: 'in',
-  startsWith: 'Starts with',
-  endsWith: 'Ends with',
+  isNull: 'Is null',
 };
 
 type Props = {
@@ -101,7 +96,7 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
     setFilters(newFilters);
   };
 
-  const handleValueFilterChange = (index: number, val: string) => {
+  const handleValueFilterChange = (index: number, val: string | boolean) => {
     const newFilters = [...filters];
     newFilters[index]['value'] = val;
     setFilters(newFilters);
@@ -215,19 +210,22 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
                 <>
                   <input
                     type='number'
-                    value={filter.value}
+                    value={filter.value as number | string}
                     placeholder='Enter value'
                     onChange={(e) => handleValueFilterChange(index, e.target.value)}
                     className={inputThemeClassName}
                   />
                 </>
-              ) : fieldMeta.type === 'boolean' ? (
+              ) : filter.operator === 'isNull' ? (
+                // Perhaps split component for input based on filter.operator and fieldMeta.type might be better
                 <>
-                  <input
-                    type='number'
-                    value={filter.value}
-                    placeholder='Enter value'
-                    onChange={(e) => handleValueFilterChange(index, e.target.value)}
+                  <Select
+                    value={filter.value === true ? 'true' : filter.value === false ? 'false' : ''}
+                    onChange={(value) => handleValueFilterChange(index, value === 'true')}
+                    options={[
+                      { label: 'Is Null (True)', value: 'true' },
+                      { label: 'Is Not Null (False)', value: 'false' },
+                    ]}
                     className={inputThemeClassName}
                   />
                 </>
@@ -235,7 +233,7 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
                 <div className='relative w-full'>
                   <input
                     type='text'
-                    value={filter.value}
+                    value={filter.value as number | string}
                     placeholder='Enter value'
                     onChange={(e) => handleValueFilterChange(index, e.target.value)}
                     className={inputThemeClassName}
@@ -283,7 +281,7 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
           className='w-full justify-center'
           type='primary'
           onClick={() => {
-            if (filters.length === 0 || filters.find((f) => !f.value)) {
+            if (filters.length === 0 || filters.find((f) => !f.value && f.value !== false)) {
               toaster.error({ title: 'Error', message: 'One or more filter value is empty!' });
               return;
             }

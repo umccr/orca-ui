@@ -1,7 +1,7 @@
 export type Filter = {
   key: string;
   operator: string;
-  value: string;
+  value: string | boolean;
 };
 
 type SortDirectionType = { currentSort: string | undefined; key: string };

@@ -3,6 +3,7 @@ import { FieldDefinition, GraphqlFilter } from '../components/GraphqlFilter';
 import { FunnelIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { GenericDataTable } from '../components/GenericTable';
 import { SpinnerWithText } from '@/components/common/spinner';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 import {
   All_BamsQuery,
@@ -91,9 +92,16 @@ export default function WarehouseMartPage() {
   ];
 
   return (
-    <div className='p-4 lg:py-6'>
+    <div className='h-full w-full rounded-none! p-4 sm:px-4 lg:px-8 lg:py-6'>
       <LocationBreadcrumb className='mb-0' />
 
+      <div className='my-4 flex items-center justify-start rounded-md bg-yellow-100 p-3 text-yellow-700'>
+        <ExclamationTriangleIcon className='mr-2 h-5 w-5 flex-shrink-0' aria-hidden='true' />
+        <p className='text-xs'>
+          <strong>Warning:</strong> This Vault page is still experimental and may have some issues.
+          For more reliable data, please check the metadata table on the Lab page.
+        </p>
+      </div>
       <div className='rounded-lg bg-white dark:bg-gray-900'>
         <div className='border-b border-gray-200 text-sm font-medium dark:border-gray-700'>
           <ul className='-mb-px flex flex-wrap'>
