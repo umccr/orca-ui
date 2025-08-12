@@ -192,7 +192,20 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
 
             {/* The value for each corresponding filter */}
             <div className='relative flex w-[10rem] flex-wrap'>
-              {fieldMeta.type === 'date' || fieldMeta.type === 'timestamp' ? (
+              {filter.operator === 'isNull' ? (
+                // Perhaps split component for input based on filter.operator and fieldMeta.type might be better
+                <>
+                  <Select
+                    value={filter.value === true ? 'true' : filter.value === false ? 'false' : ''}
+                    onChange={(value) => handleValueFilterChange(index, value === 'true')}
+                    options={[
+                      { label: 'Is null (True)', value: 'true' },
+                      { label: 'Is not null (False)', value: 'false' },
+                    ]}
+                    className={inputThemeClassName}
+                  />
+                </>
+              ) : fieldMeta.type === 'date' || fieldMeta.type === 'timestamp' ? (
                 <>
                   <DateSinglePicker
                     align='left'
@@ -213,19 +226,6 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
                     value={filter.value as number | string}
                     placeholder='Enter value'
                     onChange={(e) => handleValueFilterChange(index, e.target.value)}
-                    className={inputThemeClassName}
-                  />
-                </>
-              ) : filter.operator === 'isNull' ? (
-                // Perhaps split component for input based on filter.operator and fieldMeta.type might be better
-                <>
-                  <Select
-                    value={filter.value === true ? 'true' : filter.value === false ? 'false' : ''}
-                    onChange={(value) => handleValueFilterChange(index, value === 'true')}
-                    options={[
-                      { label: 'Is Null (True)', value: 'true' },
-                      { label: 'Is Not Null (False)', value: 'false' },
-                    ]}
                     className={inputThemeClassName}
                   />
                 </>
