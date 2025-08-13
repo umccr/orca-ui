@@ -1,9 +1,7 @@
 import { FieldDefinition } from '@/modules/orcavault/components/GraphqlFilter';
 import { graphql } from '../codegen/gql';
-import { LimFilter } from '../codegen/graphql';
-import { Filter } from '@/modules/orcavault/components/utils';
 
-export const FIELD_LABEL: FieldDefinition[] = [
+export const LIMS_FIELD_LABEL: FieldDefinition[] = [
   {
     key: 'aliasLibraryId',
     label: 'Alias Library ID',
@@ -93,17 +91,3 @@ export const ALL_LIMS_QUERY = graphql(`
     }
   }
 `);
-
-export type GraphQLFilterProps = {
-  filterOp: 'and' | 'or';
-  filters: Filter[];
-};
-export function buildGraphQLFilter({ filterOp, filters }: GraphQLFilterProps): LimFilter {
-  return {
-    [filterOp]: filters.map((f) => ({
-      [f.key]: {
-        [f.operator]: f.value,
-      },
-    })),
-  };
-}

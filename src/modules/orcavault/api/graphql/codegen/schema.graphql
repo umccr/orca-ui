@@ -203,10 +203,6 @@ A filter to be used against BigFloat fields. All fields are combined with a logi
 """
 input BigFloatFilter {
   """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: BigFloat
-  """
   Equal to the specified value.
   """
   equalTo: BigFloat
@@ -218,10 +214,6 @@ input BigFloatFilter {
   Greater than or equal to the specified value.
   """
   greaterThanOrEqualTo: BigFloat
-  """
-  Included in the specified list.
-  """
-  in: [BigFloat!]
   """
   Is null (if `true` is specified) or is not null (if `false` is specified).
   """
@@ -235,17 +227,9 @@ input BigFloatFilter {
   """
   lessThanOrEqualTo: BigFloat
   """
-  Equal to the specified value, treating null like an ordinary value.
-  """
-  notDistinctFrom: BigFloat
-  """
   Not equal to the specified value.
   """
   notEqualTo: BigFloat
-  """
-  Not included in the specified list.
-  """
-  notIn: [BigFloat!]
 }
 
 """
@@ -260,10 +244,6 @@ A filter to be used against BigInt fields. All fields are combined with a logica
 """
 input BigIntFilter {
   """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: BigInt
-  """
   Equal to the specified value.
   """
   equalTo: BigInt
@@ -275,10 +255,6 @@ input BigIntFilter {
   Greater than or equal to the specified value.
   """
   greaterThanOrEqualTo: BigInt
-  """
-  Included in the specified list.
-  """
-  in: [BigInt!]
   """
   Is null (if `true` is specified) or is not null (if `false` is specified).
   """
@@ -292,17 +268,9 @@ input BigIntFilter {
   """
   lessThanOrEqualTo: BigInt
   """
-  Equal to the specified value, treating null like an ordinary value.
-  """
-  notDistinctFrom: BigInt
-  """
   Not equal to the specified value.
   """
   notEqualTo: BigInt
-  """
-  Not included in the specified list.
-  """
-  notIn: [BigInt!]
 }
 
 type CurationLim {
@@ -589,10 +557,6 @@ A filter to be used against Date fields. All fields are combined with a logical 
 """
 input DateFilter {
   """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: Date
-  """
   Equal to the specified value.
   """
   equalTo: Date
@@ -604,10 +568,6 @@ input DateFilter {
   Greater than or equal to the specified value.
   """
   greaterThanOrEqualTo: Date
-  """
-  Included in the specified list.
-  """
-  in: [Date!]
   """
   Is null (if `true` is specified) or is not null (if `false` is specified).
   """
@@ -621,17 +581,9 @@ input DateFilter {
   """
   lessThanOrEqualTo: Date
   """
-  Equal to the specified value, treating null like an ordinary value.
-  """
-  notDistinctFrom: Date
-  """
   Not equal to the specified value.
   """
   notEqualTo: Date
-  """
-  Not included in the specified list.
-  """
-  notIn: [Date!]
 }
 
 """
@@ -648,10 +600,6 @@ A filter to be used against Datetime fields. All fields are combined with a logi
 """
 input DatetimeFilter {
   """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: Datetime
-  """
   Equal to the specified value.
   """
   equalTo: Datetime
@@ -663,10 +611,6 @@ input DatetimeFilter {
   Greater than or equal to the specified value.
   """
   greaterThanOrEqualTo: Datetime
-  """
-  Included in the specified list.
-  """
-  in: [Datetime!]
   """
   Is null (if `true` is specified) or is not null (if `false` is specified).
   """
@@ -680,17 +624,9 @@ input DatetimeFilter {
   """
   lessThanOrEqualTo: Datetime
   """
-  Equal to the specified value, treating null like an ordinary value.
-  """
-  notDistinctFrom: Datetime
-  """
   Not equal to the specified value.
   """
   notEqualTo: Datetime
-  """
-  Not included in the specified list.
-  """
-  notIn: [Datetime!]
 }
 
 type DawsonFastq {
@@ -1965,10 +1901,6 @@ A filter to be used against Int fields. All fields are combined with a logical �
 """
 input IntFilter {
   """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: Int
-  """
   Equal to the specified value.
   """
   equalTo: Int
@@ -1980,10 +1912,6 @@ input IntFilter {
   Greater than or equal to the specified value.
   """
   greaterThanOrEqualTo: Int
-  """
-  Included in the specified list.
-  """
-  in: [Int!]
   """
   Is null (if `true` is specified) or is not null (if `false` is specified).
   """
@@ -1997,17 +1925,9 @@ input IntFilter {
   """
   lessThanOrEqualTo: Int
   """
-  Equal to the specified value, treating null like an ordinary value.
-  """
-  notDistinctFrom: Int
-  """
   Not equal to the specified value.
   """
   notEqualTo: Int
-  """
-  Not included in the specified list.
-  """
-  notIn: [Int!]
 }
 
 """
@@ -2019,30 +1939,6 @@ scalar JSON
 A filter to be used against JSON fields. All fields are combined with a logical ‘and.’
 """
 input JSONFilter {
-  """
-  Contained by the specified JSON.
-  """
-  containedBy: JSON
-  """
-  Contains the specified JSON.
-  """
-  contains: JSON
-  """
-  Contains all of the specified keys.
-  """
-  containsAllKeys: [String!]
-  """
-  Contains any of the specified keys.
-  """
-  containsAnyKeys: [String!]
-  """
-  Contains the specified key.
-  """
-  containsKey: String
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: JSON
   """
   Equal to the specified value.
   """
@@ -2056,10 +1952,6 @@ input JSONFilter {
   """
   greaterThanOrEqualTo: JSON
   """
-  Included in the specified list.
-  """
-  in: [JSON!]
-  """
   Is null (if `true` is specified) or is not null (if `false` is specified).
   """
   isNull: Boolean
@@ -2072,17 +1964,9 @@ input JSONFilter {
   """
   lessThanOrEqualTo: JSON
   """
-  Equal to the specified value, treating null like an ordinary value.
-  """
-  notDistinctFrom: JSON
-  """
   Not equal to the specified value.
   """
   notEqualTo: JSON
-  """
-  Not included in the specified list.
-  """
-  notIn: [JSON!]
 }
 
 type Lim {
@@ -2820,61 +2704,17 @@ A filter to be used against String fields. All fields are combined with a logica
 """
 input StringFilter {
   """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: String
-  """
-  Not equal to the specified value, treating null like an ordinary value (case-insensitive).
-  """
-  distinctFromInsensitive: String
-  """
-  Ends with the specified string (case-sensitive).
-  """
-  endsWith: String
-  """
-  Ends with the specified string (case-insensitive).
-  """
-  endsWithInsensitive: String
-  """
   Equal to the specified value.
   """
   equalTo: String
-  """
-  Equal to the specified value (case-insensitive).
-  """
-  equalToInsensitive: String
   """
   Greater than the specified value.
   """
   greaterThan: String
   """
-  Greater than the specified value (case-insensitive).
-  """
-  greaterThanInsensitive: String
-  """
   Greater than or equal to the specified value.
   """
   greaterThanOrEqualTo: String
-  """
-  Greater than or equal to the specified value (case-insensitive).
-  """
-  greaterThanOrEqualToInsensitive: String
-  """
-  Included in the specified list.
-  """
-  in: [String!]
-  """
-  Included in the specified list (case-insensitive).
-  """
-  inInsensitive: [String!]
-  """
-  Contains the specified string (case-sensitive).
-  """
-  includes: String
-  """
-  Contains the specified string (case-insensitive).
-  """
-  includesInsensitive: String
   """
   Is null (if `true` is specified) or is not null (if `false` is specified).
   """
@@ -2884,89 +2724,13 @@ input StringFilter {
   """
   lessThan: String
   """
-  Less than the specified value (case-insensitive).
-  """
-  lessThanInsensitive: String
-  """
   Less than or equal to the specified value.
   """
   lessThanOrEqualTo: String
   """
-  Less than or equal to the specified value (case-insensitive).
-  """
-  lessThanOrEqualToInsensitive: String
-  """
-  Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
-  """
-  like: String
-  """
-  Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
-  """
-  likeInsensitive: String
-  """
-  Equal to the specified value, treating null like an ordinary value.
-  """
-  notDistinctFrom: String
-  """
-  Equal to the specified value, treating null like an ordinary value (case-insensitive).
-  """
-  notDistinctFromInsensitive: String
-  """
-  Does not end with the specified string (case-sensitive).
-  """
-  notEndsWith: String
-  """
-  Does not end with the specified string (case-insensitive).
-  """
-  notEndsWithInsensitive: String
-  """
   Not equal to the specified value.
   """
   notEqualTo: String
-  """
-  Not equal to the specified value (case-insensitive).
-  """
-  notEqualToInsensitive: String
-  """
-  Not included in the specified list.
-  """
-  notIn: [String!]
-  """
-  Not included in the specified list (case-insensitive).
-  """
-  notInInsensitive: [String!]
-  """
-  Does not contain the specified string (case-sensitive).
-  """
-  notIncludes: String
-  """
-  Does not contain the specified string (case-insensitive).
-  """
-  notIncludesInsensitive: String
-  """
-  Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
-  """
-  notLike: String
-  """
-  Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
-  """
-  notLikeInsensitive: String
-  """
-  Does not start with the specified string (case-sensitive).
-  """
-  notStartsWith: String
-  """
-  Does not start with the specified string (case-insensitive).
-  """
-  notStartsWithInsensitive: String
-  """
-  Starts with the specified string (case-sensitive).
-  """
-  startsWith: String
-  """
-  Starts with the specified string (case-insensitive).
-  """
-  startsWithInsensitive: String
 }
 
 type TothillFastq {
@@ -3451,10 +3215,6 @@ A filter to be used against UUID fields. All fields are combined with a logical 
 """
 input UUIDFilter {
   """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: UUID
-  """
   Equal to the specified value.
   """
   equalTo: UUID
@@ -3466,10 +3226,6 @@ input UUIDFilter {
   Greater than or equal to the specified value.
   """
   greaterThanOrEqualTo: UUID
-  """
-  Included in the specified list.
-  """
-  in: [UUID!]
   """
   Is null (if `true` is specified) or is not null (if `false` is specified).
   """
@@ -3483,17 +3239,9 @@ input UUIDFilter {
   """
   lessThanOrEqualTo: UUID
   """
-  Equal to the specified value, treating null like an ordinary value.
-  """
-  notDistinctFrom: UUID
-  """
   Not equal to the specified value.
   """
   notEqualTo: UUID
-  """
-  Not included in the specified list.
-  """
-  notIn: [UUID!]
 }
 
 type Workflow {

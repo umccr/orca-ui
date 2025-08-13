@@ -1,10 +1,6 @@
 import { Table } from '@/components/tables';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { SpinnerWithText } from '@/components/common/spinner';
-import { useAllLims } from '../../api/mart/lims';
-import { LimFilter, LimsOrderBy } from '../../api/graphql/codegen/graphql';
-import { FIELD_LABEL } from '../../api/graphql/queries/allLims';
-import { getMartSortDirection, getMartSortValue } from '../utils';
 import { PopoverDropdown } from '@/components/common/dropdowns';
 import Button from '@/components/common/buttons/Button';
 import { classNames } from '@/utils/commonUtils';
@@ -12,16 +8,41 @@ import { ArrowDownTrayIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react';
 import { Checkbox } from '@/components/common/checkbox';
 import Papa from 'papaparse';
+import { FieldDefinition } from './GraphqlFilter';
+import { UseQueryResult } from '@tanstack/react-query';
+import { getMartSortDirection, getMartSortValue } from './utils';
 
-export const LimsTable = () => {
+interface GenericTableProps<TData extends Record<string, unknown>, TFilter, TOrderBy> {
+  useDataHook: (params: {
+    filter?: TFilter;
+    first: number;
+    offset: number;
+    orderBy?: TOrderBy;
+  }) => UseQueryResult<TData, Error>;
+  /**
+   * Field definitions for table columns and data mapping.
+   */
+  fieldLabel: FieldDefinition[];
+  /**
+   * The name of the data field in the response that contains the array of items.
+   */
+  dataKeyField: string;
+  /**
+   * On exporting tables to CSV, this prefix will be used to generate the filename.
+   */
+  exportFilenamePrefix: string;
+}
+
+export const GenericDataTable = <TData extends Record<string, unknown>, TFilter, TOrderBy>(
+  props: GenericTableProps<TData, TFilter, TOrderBy>
+) => {
   const { setQueryParams, getPaginationParams, getQueryParams } = useQueryParams();
   const queryParams = getQueryParams();
 
   const currentQueryFilter = queryParams.filter;
-  const filter = currentQueryFilter ? (JSON.parse(currentQueryFilter) as LimFilter) : undefined;
+  const filter = currentQueryFilter ? (JSON.parse(currentQueryFilter) as TFilter) : undefined;
 
   const currentSort = queryParams?.ordering;
-  const currentSortType = currentSort as LimsOrderBy;
 
   const pagination = getPaginationParams();
   const offset = (pagination.page - 1) * pagination.rowsPerPage;
@@ -29,15 +50,15 @@ export const LimsTable = () => {
   // export state for CSV export
   const [isExporting, setIsExporting] = useState(false);
 
-  const libraryModel = useAllLims({
+  const libraryModel = props.useDataHook({
     filter: filter,
     first: pagination.rowsPerPage,
     offset: offset,
-    orderBy: currentSort ? currentSortType : LimsOrderBy.SequencingRunDateDesc,
+    orderBy: currentSort ? (currentSort as TOrderBy) : undefined,
   });
 
   const [displayedColumns, setDisplayedColumns] = useState<Record<string, boolean>>(
-    FIELD_LABEL.reduce(
+    props.fieldLabel.reduce(
       (acc, field) => ({
         ...acc,
         [field.key]: true,
@@ -49,12 +70,13 @@ export const LimsTable = () => {
   if (libraryModel.isLoading) {
     return (
       <div>
-        <SpinnerWithText text='fetching LIMS records' />
+        <SpinnerWithText text='Fetching records' />
       </div>
     );
   }
 
-  const data = libraryModel.data?.allLims;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data = libraryModel.data ? (libraryModel.data[props.dataKeyField] as any) : undefined;
   if (!data) {
     throw new Error('Error: unable to retrieve results!');
   }
@@ -63,7 +85,7 @@ export const LimsTable = () => {
 
     try {
       // Get only visible columns based on displayedColumns state
-      const visibleFields = FIELD_LABEL.filter((field) => displayedColumns[field.key]);
+      const visibleFields = props.fieldLabel.filter((field) => displayedColumns[field.key]);
 
       // Check if at least one column is selected
       if (visibleFields.length === 0) {
@@ -72,7 +94,8 @@ export const LimsTable = () => {
       }
 
       // Transform data to include only visible columns
-      const exportData = data.nodes.map((row) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const exportData = data.nodes.map((row: any) => {
         const filteredRow: Record<string, unknown> = {};
         visibleFields.forEach((field) => {
           filteredRow[field.label] = row[field.key as keyof typeof row] ?? '';
@@ -163,7 +186,7 @@ export const LimsTable = () => {
                   Show Columns
                 </h3>
                 <div className='max-h-max space-y-2 overflow-y-auto'>
-                  {FIELD_LABEL.map((field) => (
+                  {props.fieldLabel.map((field) => (
                     <div
                       key={field.key}
                       className={classNames(
@@ -192,7 +215,10 @@ export const LimsTable = () => {
                       type='primary'
                       onClick={() =>
                         setDisplayedColumns(
-                          FIELD_LABEL.reduce((acc, field) => ({ ...acc, [field.key]: true }), {})
+                          props.fieldLabel.reduce(
+                            (acc, field) => ({ ...acc, [field.key]: true }),
+                            {}
+                          )
                         )
                       }
                     >
@@ -205,7 +231,10 @@ export const LimsTable = () => {
                       type='primary'
                       onClick={() =>
                         setDisplayedColumns(
-                          FIELD_LABEL.reduce((acc, field) => ({ ...acc, [field.key]: false }), {})
+                          props.fieldLabel.reduce(
+                            (acc, field) => ({ ...acc, [field.key]: false }),
+                            {}
+                          )
                         )
                       }
                     >
@@ -220,14 +249,16 @@ export const LimsTable = () => {
       </div>
       <Table
         inCard={false}
-        columns={FIELD_LABEL.filter((field) => displayedColumns[field.key]).map((field) => ({
-          header: field.label,
-          accessor: field.key,
-          onSort: () => {
-            setQueryParams({ ordering: getMartSortValue(currentSort, field.sortKeyPrefix) });
-          },
-          sortDirection: getMartSortDirection({ currentSort, key: field.sortKeyPrefix }),
-        }))}
+        columns={props.fieldLabel
+          .filter((field) => displayedColumns[field.key])
+          .map((field) => ({
+            header: field.label,
+            accessor: field.key,
+            onSort: () => {
+              setQueryParams({ ordering: getMartSortValue(currentSort, field.sortKeyPrefix) });
+            },
+            sortDirection: getMartSortDirection({ currentSort, key: field.sortKeyPrefix }),
+          }))}
         tableData={data.nodes}
         paginationProps={{
           totalCount: data.totalCount,

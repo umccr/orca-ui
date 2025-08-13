@@ -13,13 +13,8 @@ import { Select } from '@/components/common/select';
 import dayjs from 'dayjs';
 import toaster from '@/components/common/toaster';
 import { Tooltip } from '@/components/common/tooltips';
-import { GraphQLFilterProps } from '../api/graphql/queries/allLims';
-
-type Filter = {
-  key: string;
-  operator: string;
-  value: string;
-};
+import { GraphQLFilterProps } from '../api/mart/queries';
+import { Filter } from './utils';
 
 type FieldType = 'string' | 'int' | 'float' | 'date' | 'timestamp';
 export type FieldDefinition = {
@@ -44,25 +39,27 @@ const inputThemeClassName = classNames(
 );
 
 const operatorsByType: Record<FieldType, string[]> = {
-  string: ['equalTo', 'notEqualTo'],
+  string: ['equalTo', 'notEqualTo', 'isNull'],
   float: [
     'equalTo',
     'notEqualTo',
     'greaterThan',
-    'lessThan',
     'greaterThanOrEqualTo',
+    'lessThan',
     'lessThanOrEqualTo',
+    'isNull',
   ],
   int: [
     'equalTo',
     'notEqualTo',
     'greaterThan',
-    'lessThan',
     'greaterThanOrEqualTo',
+    'lessThan',
     'lessThanOrEqualTo',
+    'isNull',
   ],
-  date: ['greaterThanOrEqualTo', 'lessThanOrEqualTo', 'greaterThan', 'lessThan'],
-  timestamp: ['greaterThanOrEqualTo', 'lessThanOrEqualTo', 'greaterThan', 'lessThan'],
+  date: ['greaterThan', 'greaterThanOrEqualTo', 'lessThan', 'lessThanOrEqualTo', 'isNull'],
+  timestamp: ['greaterThan', 'greaterThanOrEqualTo', 'lessThan', 'lessThanOrEqualTo', 'isNull'],
 };
 
 const operatorLabels: Record<string, string> = {
@@ -72,9 +69,7 @@ const operatorLabels: Record<string, string> = {
   lessThan: 'Less than',
   greaterThanOrEqualTo: 'Greater equal',
   lessThanOrEqualTo: 'Less equal',
-  in: 'in',
-  startsWith: 'Starts with',
-  endsWith: 'Ends with',
+  isNull: 'Is null',
 };
 
 type Props = {
@@ -83,7 +78,7 @@ type Props = {
 };
 
 export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
-  const { setQueryParams, getQueryParams, clearQueryParams } = useQueryParams();
+  const { setQueryParams, getQueryParams } = useQueryParams();
   const currentQueryFilter = getQueryParams().filter;
   const jsonQueryFilter = currentQueryFilter ? JSON.parse(currentQueryFilter) : null;
   const originalFilters = jsonQueryFilter ? parseGraphQLFilter(jsonQueryFilter) : [];
@@ -101,7 +96,7 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
     setFilters(newFilters);
   };
 
-  const handleValueFilterChange = (index: number, val: string) => {
+  const handleValueFilterChange = (index: number, val: string | boolean) => {
     const newFilters = [...filters];
     newFilters[index]['value'] = val;
     setFilters(newFilters);
@@ -197,7 +192,24 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
 
             {/* The value for each corresponding filter */}
             <div className='relative flex w-[10rem] flex-wrap'>
-              {fieldMeta.type === 'date' || fieldMeta.type === 'timestamp' ? (
+              {filter.operator === 'isNull' ? (
+                // Perhaps split component for input based on filter.operator and fieldMeta.type might be better
+                <>
+                  <Select
+                    value={filter.value === true ? 'true' : filter.value === false ? 'false' : ''}
+                    onChange={(value) =>
+                      handleValueFilterChange(index, value === '' ? '' : value === 'true')
+                    }
+                    options={[
+                      // A placeholder when no value is selected on initial render
+                      { label: '', value: '' },
+                      { label: 'Is null (True)', value: 'true' },
+                      { label: 'Is not null (False)', value: 'false' },
+                    ]}
+                    className={inputThemeClassName}
+                  />
+                </>
+              ) : fieldMeta.type === 'date' || fieldMeta.type === 'timestamp' ? (
                 <>
                   <DateSinglePicker
                     align='left'
@@ -215,7 +227,7 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
                 <>
                   <input
                     type='number'
-                    value={filter.value}
+                    value={filter.value as number | string}
                     placeholder='Enter value'
                     onChange={(e) => handleValueFilterChange(index, e.target.value)}
                     className={inputThemeClassName}
@@ -225,7 +237,7 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
                 <div className='relative w-full'>
                   <input
                     type='text'
-                    value={filter.value}
+                    value={filter.value as number | string}
                     placeholder='Enter value'
                     onChange={(e) => handleValueFilterChange(index, e.target.value)}
                     className={inputThemeClassName}
@@ -260,7 +272,10 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
           type='light'
           onClick={() => {
             setFilters([]);
-            clearQueryParams();
+            setQueryParams(
+              getQueryParams().tableName ? { tableName: getQueryParams().tableName } : {},
+              true
+            );
           }}
         >
           Reset
@@ -270,7 +285,7 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
           className='w-full justify-center'
           type='primary'
           onClick={() => {
-            if (filters.length === 0 || filters.find((f) => !f.value)) {
+            if (filters.find((f) => !f.value && f.value !== false)) {
               toaster.error({ title: 'Error', message: 'One or more filter value is empty!' });
               return;
             }

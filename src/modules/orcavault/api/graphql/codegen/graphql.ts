@@ -168,54 +168,38 @@ export enum BamsOrderBy {
 
 /** A filter to be used against BigFloat fields. All fields are combined with a logical ‘and.’ */
 export type BigFloatFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['BigFloat']['input']>;
   /** Equal to the specified value. */
   equalTo?: InputMaybe<Scalars['BigFloat']['input']>;
   /** Greater than the specified value. */
   greaterThan?: InputMaybe<Scalars['BigFloat']['input']>;
   /** Greater than or equal to the specified value. */
   greaterThanOrEqualTo?: InputMaybe<Scalars['BigFloat']['input']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['BigFloat']['input']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
   isNull?: InputMaybe<Scalars['Boolean']['input']>;
   /** Less than the specified value. */
   lessThan?: InputMaybe<Scalars['BigFloat']['input']>;
   /** Less than or equal to the specified value. */
   lessThanOrEqualTo?: InputMaybe<Scalars['BigFloat']['input']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['BigFloat']['input']>;
   /** Not equal to the specified value. */
   notEqualTo?: InputMaybe<Scalars['BigFloat']['input']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['BigFloat']['input']>>;
 };
 
 /** A filter to be used against BigInt fields. All fields are combined with a logical ‘and.’ */
 export type BigIntFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['BigInt']['input']>;
   /** Equal to the specified value. */
   equalTo?: InputMaybe<Scalars['BigInt']['input']>;
   /** Greater than the specified value. */
   greaterThan?: InputMaybe<Scalars['BigInt']['input']>;
   /** Greater than or equal to the specified value. */
   greaterThanOrEqualTo?: InputMaybe<Scalars['BigInt']['input']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
   isNull?: InputMaybe<Scalars['Boolean']['input']>;
   /** Less than the specified value. */
   lessThan?: InputMaybe<Scalars['BigInt']['input']>;
   /** Less than or equal to the specified value. */
   lessThanOrEqualTo?: InputMaybe<Scalars['BigInt']['input']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['BigInt']['input']>;
   /** Not equal to the specified value. */
   notEqualTo?: InputMaybe<Scalars['BigInt']['input']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['BigInt']['input']>>;
 };
 
 export type CurationLim = {
@@ -394,54 +378,38 @@ export enum CurationLimsOrderBy {
 
 /** A filter to be used against Date fields. All fields are combined with a logical ‘and.’ */
 export type DateFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['Date']['input']>;
   /** Equal to the specified value. */
   equalTo?: InputMaybe<Scalars['Date']['input']>;
   /** Greater than the specified value. */
   greaterThan?: InputMaybe<Scalars['Date']['input']>;
   /** Greater than or equal to the specified value. */
   greaterThanOrEqualTo?: InputMaybe<Scalars['Date']['input']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['Date']['input']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
   isNull?: InputMaybe<Scalars['Boolean']['input']>;
   /** Less than the specified value. */
   lessThan?: InputMaybe<Scalars['Date']['input']>;
   /** Less than or equal to the specified value. */
   lessThanOrEqualTo?: InputMaybe<Scalars['Date']['input']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['Date']['input']>;
   /** Not equal to the specified value. */
   notEqualTo?: InputMaybe<Scalars['Date']['input']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['Date']['input']>>;
 };
 
 /** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
 export type DatetimeFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['Datetime']['input']>;
   /** Equal to the specified value. */
   equalTo?: InputMaybe<Scalars['Datetime']['input']>;
   /** Greater than the specified value. */
   greaterThan?: InputMaybe<Scalars['Datetime']['input']>;
   /** Greater than or equal to the specified value. */
   greaterThanOrEqualTo?: InputMaybe<Scalars['Datetime']['input']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['Datetime']['input']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
   isNull?: InputMaybe<Scalars['Boolean']['input']>;
   /** Less than the specified value. */
   lessThan?: InputMaybe<Scalars['Datetime']['input']>;
   /** Less than or equal to the specified value. */
   lessThanOrEqualTo?: InputMaybe<Scalars['Datetime']['input']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['Datetime']['input']>;
   /** Not equal to the specified value. */
   notEqualTo?: InputMaybe<Scalars['Datetime']['input']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['Datetime']['input']>>;
 };
 
 export type DawsonFastq = {
@@ -1264,64 +1232,38 @@ export enum GrimmondLimsOrderBy {
 
 /** A filter to be used against Int fields. All fields are combined with a logical ‘and.’ */
 export type IntFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['Int']['input']>;
   /** Equal to the specified value. */
   equalTo?: InputMaybe<Scalars['Int']['input']>;
   /** Greater than the specified value. */
   greaterThan?: InputMaybe<Scalars['Int']['input']>;
   /** Greater than or equal to the specified value. */
   greaterThanOrEqualTo?: InputMaybe<Scalars['Int']['input']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['Int']['input']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
   isNull?: InputMaybe<Scalars['Boolean']['input']>;
   /** Less than the specified value. */
   lessThan?: InputMaybe<Scalars['Int']['input']>;
   /** Less than or equal to the specified value. */
   lessThanOrEqualTo?: InputMaybe<Scalars['Int']['input']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['Int']['input']>;
   /** Not equal to the specified value. */
   notEqualTo?: InputMaybe<Scalars['Int']['input']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['Int']['input']>>;
 };
 
 /** A filter to be used against JSON fields. All fields are combined with a logical ‘and.’ */
 export type JsonFilter = {
-  /** Contained by the specified JSON. */
-  containedBy?: InputMaybe<Scalars['JSON']['input']>;
-  /** Contains the specified JSON. */
-  contains?: InputMaybe<Scalars['JSON']['input']>;
-  /** Contains all of the specified keys. */
-  containsAllKeys?: InputMaybe<Array<Scalars['String']['input']>>;
-  /** Contains any of the specified keys. */
-  containsAnyKeys?: InputMaybe<Array<Scalars['String']['input']>>;
-  /** Contains the specified key. */
-  containsKey?: InputMaybe<Scalars['String']['input']>;
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['JSON']['input']>;
   /** Equal to the specified value. */
   equalTo?: InputMaybe<Scalars['JSON']['input']>;
   /** Greater than the specified value. */
   greaterThan?: InputMaybe<Scalars['JSON']['input']>;
   /** Greater than or equal to the specified value. */
   greaterThanOrEqualTo?: InputMaybe<Scalars['JSON']['input']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
   isNull?: InputMaybe<Scalars['Boolean']['input']>;
   /** Less than the specified value. */
   lessThan?: InputMaybe<Scalars['JSON']['input']>;
   /** Less than or equal to the specified value. */
   lessThanOrEqualTo?: InputMaybe<Scalars['JSON']['input']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['JSON']['input']>;
   /** Not equal to the specified value. */
   notEqualTo?: InputMaybe<Scalars['JSON']['input']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['JSON']['input']>>;
 };
 
 export type Lim = {
@@ -1681,80 +1623,20 @@ export type QueryAllWorkflowsArgs = {
 
 /** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
 export type StringFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['String']['input']>;
-  /** Not equal to the specified value, treating null like an ordinary value (case-insensitive). */
-  distinctFromInsensitive?: InputMaybe<Scalars['String']['input']>;
-  /** Ends with the specified string (case-sensitive). */
-  endsWith?: InputMaybe<Scalars['String']['input']>;
-  /** Ends with the specified string (case-insensitive). */
-  endsWithInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Equal to the specified value. */
   equalTo?: InputMaybe<Scalars['String']['input']>;
-  /** Equal to the specified value (case-insensitive). */
-  equalToInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Greater than the specified value. */
   greaterThan?: InputMaybe<Scalars['String']['input']>;
-  /** Greater than the specified value (case-insensitive). */
-  greaterThanInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Greater than or equal to the specified value. */
   greaterThanOrEqualTo?: InputMaybe<Scalars['String']['input']>;
-  /** Greater than or equal to the specified value (case-insensitive). */
-  greaterThanOrEqualToInsensitive?: InputMaybe<Scalars['String']['input']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['String']['input']>>;
-  /** Included in the specified list (case-insensitive). */
-  inInsensitive?: InputMaybe<Array<Scalars['String']['input']>>;
-  /** Contains the specified string (case-sensitive). */
-  includes?: InputMaybe<Scalars['String']['input']>;
-  /** Contains the specified string (case-insensitive). */
-  includesInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
   isNull?: InputMaybe<Scalars['Boolean']['input']>;
   /** Less than the specified value. */
   lessThan?: InputMaybe<Scalars['String']['input']>;
-  /** Less than the specified value (case-insensitive). */
-  lessThanInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Less than or equal to the specified value. */
   lessThanOrEqualTo?: InputMaybe<Scalars['String']['input']>;
-  /** Less than or equal to the specified value (case-insensitive). */
-  lessThanOrEqualToInsensitive?: InputMaybe<Scalars['String']['input']>;
-  /** Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  like?: InputMaybe<Scalars['String']['input']>;
-  /** Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  likeInsensitive?: InputMaybe<Scalars['String']['input']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['String']['input']>;
-  /** Equal to the specified value, treating null like an ordinary value (case-insensitive). */
-  notDistinctFromInsensitive?: InputMaybe<Scalars['String']['input']>;
-  /** Does not end with the specified string (case-sensitive). */
-  notEndsWith?: InputMaybe<Scalars['String']['input']>;
-  /** Does not end with the specified string (case-insensitive). */
-  notEndsWithInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Not equal to the specified value. */
   notEqualTo?: InputMaybe<Scalars['String']['input']>;
-  /** Not equal to the specified value (case-insensitive). */
-  notEqualToInsensitive?: InputMaybe<Scalars['String']['input']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['String']['input']>>;
-  /** Not included in the specified list (case-insensitive). */
-  notInInsensitive?: InputMaybe<Array<Scalars['String']['input']>>;
-  /** Does not contain the specified string (case-sensitive). */
-  notIncludes?: InputMaybe<Scalars['String']['input']>;
-  /** Does not contain the specified string (case-insensitive). */
-  notIncludesInsensitive?: InputMaybe<Scalars['String']['input']>;
-  /** Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  notLike?: InputMaybe<Scalars['String']['input']>;
-  /** Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  notLikeInsensitive?: InputMaybe<Scalars['String']['input']>;
-  /** Does not start with the specified string (case-sensitive). */
-  notStartsWith?: InputMaybe<Scalars['String']['input']>;
-  /** Does not start with the specified string (case-insensitive). */
-  notStartsWithInsensitive?: InputMaybe<Scalars['String']['input']>;
-  /** Starts with the specified string (case-sensitive). */
-  startsWith?: InputMaybe<Scalars['String']['input']>;
-  /** Starts with the specified string (case-insensitive). */
-  startsWithInsensitive?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type TothillFastq = {
@@ -2065,28 +1947,20 @@ export enum TothillLimsOrderBy {
 
 /** A filter to be used against UUID fields. All fields are combined with a logical ‘and.’ */
 export type UuidFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['UUID']['input']>;
   /** Equal to the specified value. */
   equalTo?: InputMaybe<Scalars['UUID']['input']>;
   /** Greater than the specified value. */
   greaterThan?: InputMaybe<Scalars['UUID']['input']>;
   /** Greater than or equal to the specified value. */
   greaterThanOrEqualTo?: InputMaybe<Scalars['UUID']['input']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['UUID']['input']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
   isNull?: InputMaybe<Scalars['Boolean']['input']>;
   /** Less than the specified value. */
   lessThan?: InputMaybe<Scalars['UUID']['input']>;
   /** Less than or equal to the specified value. */
   lessThanOrEqualTo?: InputMaybe<Scalars['UUID']['input']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['UUID']['input']>;
   /** Not equal to the specified value. */
   notEqualTo?: InputMaybe<Scalars['UUID']['input']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['UUID']['input']>>;
 };
 
 export type Workflow = {
@@ -2200,6 +2074,66 @@ export enum WorkflowsOrderBy {
   WorkflowVersionDesc = 'WORKFLOW_VERSION_DESC',
 }
 
+export type All_BamsQueryVariables = Exact<{
+  first?: Scalars['Int']['input'];
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<BamsOrderBy> | BamsOrderBy>;
+  filter?: InputMaybe<BamFilter>;
+}>;
+
+export type All_BamsQuery = {
+  __typename?: 'Query';
+  allBams?: {
+    __typename?: 'BamsConnection';
+    totalCount: number;
+    nodes: Array<{
+      __typename?: 'Bam';
+      bucket?: string | null;
+      cohortId?: string | null;
+      eTag?: string | null;
+      filename?: string | null;
+      format?: string | null;
+      key?: string | null;
+      lastModifiedDate?: any | null;
+      libraryId?: string | null;
+      portalRunId?: string | null;
+      size?: any | null;
+      storageClass?: string | null;
+    }>;
+  } | null;
+};
+
+export type All_FastqsQueryVariables = Exact<{
+  first?: Scalars['Int']['input'];
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<FastqsOrderBy> | FastqsOrderBy>;
+  filter?: InputMaybe<FastqFilter>;
+}>;
+
+export type All_FastqsQuery = {
+  __typename?: 'Query';
+  allFastqs?: {
+    __typename?: 'FastqsConnection';
+    totalCount: number;
+    nodes: Array<{
+      __typename?: 'Fastq';
+      sequencingRunId?: string | null;
+      sequencingRunDate?: any | null;
+      portalRunId?: string | null;
+      cohortId?: string | null;
+      bucket?: string | null;
+      key?: string | null;
+      libraryId?: string | null;
+      filename?: string | null;
+      format?: string | null;
+      size?: any | null;
+      storageClass?: string | null;
+      eTag?: string | null;
+      lastModifiedDate?: any | null;
+    }>;
+  } | null;
+};
+
 export type All_LimsQueryVariables = Exact<{
   first?: Scalars['Int']['input'];
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -2237,6 +2171,33 @@ export type All_LimsQuery = {
   } | null;
 };
 
+export type All_WorkflowsQueryVariables = Exact<{
+  first?: Scalars['Int']['input'];
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<WorkflowsOrderBy> | WorkflowsOrderBy>;
+  filter?: InputMaybe<WorkflowFilter>;
+}>;
+
+export type All_WorkflowsQuery = {
+  __typename?: 'Query';
+  allWorkflows?: {
+    __typename?: 'WorkflowsConnection';
+    totalCount: number;
+    nodes: Array<{
+      __typename?: 'Workflow';
+      libraryId?: string | null;
+      portalRunId?: string | null;
+      workflowComment?: string | null;
+      workflowDuration?: any | null;
+      workflowEnd?: any | null;
+      workflowName?: string | null;
+      workflowStatus?: string | null;
+      workflowVersion?: string | null;
+      workflowStart?: any | null;
+    }>;
+  } | null;
+};
+
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -2256,6 +2217,48 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const All_BamsDocument = new TypedDocumentString(`
+    query all_bams($first: Int! = 10, $offset: Int = 0, $orderBy: [BamsOrderBy!] = [LAST_MODIFIED_DATE_DESC], $filter: BamFilter) {
+  allBams(first: $first, offset: $offset, orderBy: $orderBy, filter: $filter) {
+    nodes {
+      bucket
+      cohortId
+      eTag
+      filename
+      format
+      key
+      lastModifiedDate
+      libraryId
+      portalRunId
+      size
+      storageClass
+    }
+    totalCount
+  }
+}
+    `) as unknown as TypedDocumentString<All_BamsQuery, All_BamsQueryVariables>;
+export const All_FastqsDocument = new TypedDocumentString(`
+    query all_fastqs($first: Int! = 10, $offset: Int = 0, $orderBy: [FastqsOrderBy!] = [LAST_MODIFIED_DATE_DESC], $filter: FastqFilter) {
+  allFastqs(first: $first, offset: $offset, orderBy: $orderBy, filter: $filter) {
+    nodes {
+      sequencingRunId
+      sequencingRunDate
+      portalRunId
+      cohortId
+      bucket
+      key
+      libraryId
+      filename
+      format
+      size
+      storageClass
+      eTag
+      lastModifiedDate
+    }
+    totalCount
+  }
+}
+    `) as unknown as TypedDocumentString<All_FastqsQuery, All_FastqsQueryVariables>;
 export const All_LimsDocument = new TypedDocumentString(`
     query all_lims($first: Int! = 10, $offset: Int = 0, $orderBy: [LimsOrderBy!] = [SEQUENCING_RUN_DATE_DESC], $filter: LimFilter) {
   allLims(first: $first, offset: $offset, orderBy: $orderBy, filter: $filter) {
@@ -2284,3 +2287,21 @@ export const All_LimsDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<All_LimsQuery, All_LimsQueryVariables>;
+export const All_WorkflowsDocument = new TypedDocumentString(`
+    query all_workflows($first: Int! = 10, $offset: Int = 0, $orderBy: [WorkflowsOrderBy!] = [WORKFLOW_END_DESC], $filter: WorkflowFilter) {
+  allWorkflows(first: $first, offset: $offset, orderBy: $orderBy, filter: $filter) {
+    nodes {
+      libraryId
+      portalRunId
+      workflowComment
+      workflowDuration
+      workflowEnd
+      workflowName
+      workflowStatus
+      workflowVersion
+      workflowStart
+    }
+    totalCount
+  }
+}
+    `) as unknown as TypedDocumentString<All_WorkflowsQuery, All_WorkflowsQueryVariables>;
