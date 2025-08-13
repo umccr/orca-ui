@@ -200,7 +200,7 @@ const SequenceRunTable = () => {
               size='small'
               background='light'
             >
-              <RedirectLink to={`/vault?${vaultParams.toString()}`}>
+              <RedirectLink to={`/vault?tableName=LIMS&${vaultParams.toString()}`}>
                 <TableCellsIcon className='h-5 w-5 text-blue-400 hover:text-blue-600' />
               </RedirectLink>
             </Tooltip>

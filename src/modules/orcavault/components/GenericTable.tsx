@@ -17,16 +17,12 @@ interface GenericTableProps<TData extends Record<string, unknown>, TFilter, TOrd
     filter?: TFilter;
     first: number;
     offset: number;
-    orderBy: TOrderBy;
+    orderBy?: TOrderBy;
   }) => UseQueryResult<TData, Error>;
   /**
    * Field definitions for table columns and data mapping.
    */
   fieldLabel: FieldDefinition[];
-  /**
-   * When no ordering is specified, this will be used as the default order.
-   */
-  orderByDefault: TOrderBy;
   /**
    * The name of the data field in the response that contains the array of items.
    */
@@ -58,7 +54,7 @@ export const GenericDataTable = <TData extends Record<string, unknown>, TFilter,
     filter: filter,
     first: pagination.rowsPerPage,
     offset: offset,
-    orderBy: currentSort ? (currentSort as TOrderBy) : props.orderByDefault,
+    orderBy: currentSort ? (currentSort as TOrderBy) : undefined,
   });
 
   const [displayedColumns, setDisplayedColumns] = useState<Record<string, boolean>>(

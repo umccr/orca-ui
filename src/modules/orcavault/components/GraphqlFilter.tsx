@@ -197,8 +197,12 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
                 <>
                   <Select
                     value={filter.value === true ? 'true' : filter.value === false ? 'false' : ''}
-                    onChange={(value) => handleValueFilterChange(index, value === 'true')}
+                    onChange={(value) =>
+                      handleValueFilterChange(index, value === '' ? '' : value === 'true')
+                    }
                     options={[
+                      // A placeholder when no value is selected on initial render
+                      { label: '', value: '' },
                       { label: 'Is null (True)', value: 'true' },
                       { label: 'Is not null (False)', value: 'false' },
                     ]}
@@ -281,7 +285,7 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
           className='w-full justify-center'
           type='primary'
           onClick={() => {
-            if (filters.length === 0 || filters.find((f) => !f.value && f.value !== false)) {
+            if (filters.find((f) => !f.value && f.value !== false)) {
               toaster.error({ title: 'Error', message: 'One or more filter value is empty!' });
               return;
             }

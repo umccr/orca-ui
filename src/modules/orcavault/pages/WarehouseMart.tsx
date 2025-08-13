@@ -33,7 +33,7 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { BAMS_FIELD_LABEL } from '../api/graphql/queries/allBams';
 import { Navigate } from 'react-router-dom';
 import LocationBreadcrumb from '@/components/navigation/breadcrumbs';
-import { Fragment, Suspense } from 'react';
+import { Fragment, Suspense, useEffect } from 'react';
 import { FASTQS_FIELD_LABEL } from '../api/graphql/queries/allFastqs';
 import { WORKFLOWS_FIELD_LABEL } from '../api/graphql/queries/allWorkflows';
 
@@ -44,14 +44,33 @@ const regularClassName =
 
 export default function WarehouseMartPage() {
   const { getQueryParams, setQueryParams } = useQueryParams();
-  const tableName = getQueryParams().tableName;
+  const currentParams = getQueryParams();
+
+  const tableName = currentParams.tableName;
+  const ordering = currentParams.ordering;
+  const filter = currentParams.filter;
+
+  useEffect(() => {
+    if (!tableName || !isValidTableType(tableName)) {
+      return;
+    }
+
+    if (!ordering && !filter) {
+      const tableProps = getMartTableProperties(tableName);
+
+      // Apply table-specific defaults on initial load: filter out null records and sort by most recent entries
+      setQueryParams({ tableName, ...tableProps.defaultQueryParams }, true);
+    }
+  }, [tableName, ordering, filter, setQueryParams]);
+
   if (!tableName || !isValidTableType(tableName)) {
     return <Navigate replace to='?tableName=LIMS' />;
   }
-  // const [tableNameTab, setTableNameTab] = useState(tableName);
+
+  // Get the properties for the selected table
   const tableProps = getMartTableProperties(tableName);
 
-  const table = () => (
+  const Table = () => (
     <SideBarLayout
       sideBar={
         <GraphqlFilter
@@ -75,8 +94,6 @@ export default function WarehouseMartPage() {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           useDataHook={tableProps.dataHook as any}
           fieldLabel={tableProps.fieldLabel}
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          orderByDefault={tableProps.orderByDefault as any}
           dataKeyField={tableProps.dataKeyField}
           exportFilenamePrefix={tableProps.exportFilenamePrefix}
         />
@@ -85,10 +102,10 @@ export default function WarehouseMartPage() {
   );
 
   const tabs = [
-    { label: 'LIMS', content: table() },
-    { label: 'BAMS', content: table() },
-    { label: 'FASTQS', content: table() },
-    { label: 'WORKFLOWS', content: table() },
+    { label: 'LIMS', content: <Table /> },
+    { label: 'BAMS', content: <Table /> },
+    { label: 'FASTQS', content: <Table /> },
+    { label: 'WORKFLOWS', content: <Table /> },
   ];
 
   return (
@@ -143,12 +160,11 @@ interface MartTableProperties<TData, TFilter, TOrderBy> {
     filter: TFilter;
     first: number;
     offset: number;
-    orderBy: TOrderBy;
+    orderBy?: TOrderBy;
   }) => UseQueryResult<TData, Error>;
-  orderByDefault: TOrderBy;
   dataKeyField: string;
   exportFilenamePrefix: string;
-  description?: string;
+  defaultQueryParams?: Record<string, string>;
 }
 type TableType = 'LIMS' | 'BAMS' | 'FASTQS' | 'WORKFLOWS';
 // Type guard function to check if a string is a valid TableType
@@ -170,18 +186,24 @@ const getMartTableProperties = (tableName: TableType): MartTablePropertiesUnion 
         tableName: 'BAMS',
         fieldLabel: BAMS_FIELD_LABEL,
         dataHook: useAllBams,
-        orderByDefault: BamsOrderBy.LastModifiedDateDesc,
         dataKeyField: 'allBams',
         exportFilenamePrefix: 'bams-data',
+        defaultQueryParams: {
+          ordering: BamsOrderBy.LastModifiedDateDesc,
+          filter: JSON.stringify({ and: [{ lastModifiedDate: { isNull: false } }] }),
+        },
       };
     case 'LIMS':
       return {
         tableName: 'LIMS',
         fieldLabel: LIMS_FIELD_LABEL,
         dataHook: useAllLims,
-        orderByDefault: LimsOrderBy.SequencingRunDateDesc,
         dataKeyField: 'allLims',
         exportFilenamePrefix: 'lims-data',
+        defaultQueryParams: {
+          ordering: LimsOrderBy.SequencingRunDateDesc,
+          filter: JSON.stringify({ and: [{ sequencingRunDate: { isNull: false } }] }),
+        },
       };
 
     case 'FASTQS':
@@ -189,18 +211,24 @@ const getMartTableProperties = (tableName: TableType): MartTablePropertiesUnion 
         tableName: 'FASTQS',
         fieldLabel: FASTQS_FIELD_LABEL,
         dataHook: useAllFastqs,
-        orderByDefault: FastqsOrderBy.LastModifiedDateDesc,
         dataKeyField: 'allFastqs',
         exportFilenamePrefix: 'fastqs-data',
+        defaultQueryParams: {
+          ordering: FastqsOrderBy.LastModifiedDateDesc,
+          filter: JSON.stringify({ and: [{ lastModifiedDate: { isNull: false } }] }),
+        },
       };
     case 'WORKFLOWS':
       return {
         tableName: 'WORKFLOWS',
         fieldLabel: WORKFLOWS_FIELD_LABEL,
         dataHook: useAllWorkflows,
-        orderByDefault: WorkflowsOrderBy.WorkflowEndDesc,
         dataKeyField: 'allWorkflows',
         exportFilenamePrefix: 'workflows-data',
+        defaultQueryParams: {
+          ordering: WorkflowsOrderBy.WorkflowEndDesc,
+          filter: JSON.stringify({ and: [{ workflowEnd: { isNull: false } }] }),
+        },
       };
   }
 };
