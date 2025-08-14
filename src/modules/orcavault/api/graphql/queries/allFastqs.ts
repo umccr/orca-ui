@@ -2,24 +2,24 @@ import { FieldDefinition } from '@/modules/orcavault/components/GraphqlFilter';
 import { graphql } from '../codegen/gql';
 
 export const FASTQS_FIELD_LABEL: FieldDefinition[] = [
-  {
-    key: 'sequencingRunId',
-    label: 'Sequencing Run ID',
-    type: 'string',
-    sortKeyPrefix: 'SEQUENCING_RUN_ID',
-  },
+  { key: 'filename', label: 'Filename', type: 'string', sortKeyPrefix: 'FILENAME' },
+  { key: 'libraryId', label: 'Library ID', type: 'string', sortKeyPrefix: 'LIBRARY_ID' },
   {
     key: 'sequencingRunDate',
     label: 'Sequencing Run Date',
     type: 'date',
     sortKeyPrefix: 'SEQUENCING_RUN_DATE',
   },
+  {
+    key: 'sequencingRunId',
+    label: 'Sequencing Run ID',
+    type: 'string',
+    sortKeyPrefix: 'SEQUENCING_RUN_ID',
+  },
   { key: 'portalRunId', label: 'Portal Run ID', type: 'string', sortKeyPrefix: 'PORTAL_RUN_ID' },
   { key: 'cohortId', label: 'Cohort ID', type: 'string', sortKeyPrefix: 'COHORT_ID' },
   { key: 'bucket', label: 'Bucket', type: 'string', sortKeyPrefix: 'BUCKET' },
   { key: 'key', label: 'Key', type: 'string', sortKeyPrefix: 'KEY' },
-  { key: 'libraryId', label: 'Library ID', type: 'string', sortKeyPrefix: 'LIBRARY_ID' },
-  { key: 'filename', label: 'Filename', type: 'string', sortKeyPrefix: 'FILENAME' },
   { key: 'format', label: 'Format', type: 'string', sortKeyPrefix: 'FORMAT' },
   { key: 'size', label: 'Size', type: 'int', sortKeyPrefix: 'SIZE' },
   { key: 'storageClass', label: 'Storage Class', type: 'string', sortKeyPrefix: 'STORAGE_CLASS' },
