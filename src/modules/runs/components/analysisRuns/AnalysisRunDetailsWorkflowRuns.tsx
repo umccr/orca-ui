@@ -8,6 +8,7 @@ import { classNames } from '@/utils/commonUtils';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/common/badges';
 import { useWorkflowRunListModel } from '@/api/workflow';
+import { TIMESTAMP_FORMAT } from '@/utils/dayjs';
 
 const AnalysisRunDetailsWorkflowRuns = () => {
   const { orcabusId } = useParams();
@@ -115,7 +116,7 @@ const AnalysisRunDetailsWorkflowRuns = () => {
           if (!timestamp) {
             return <div>-</div>;
           } else {
-            return <div>{dayjs(timestamp as string).format('YYYY-MM-DD')}</div>;
+            return <div>{dayjs(timestamp as string).format(TIMESTAMP_FORMAT)}</div>;
           }
         },
       },

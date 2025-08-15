@@ -210,7 +210,7 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
                   />
                 </>
               ) : fieldMeta.type === 'date' || fieldMeta.type === 'timestamp' ? (
-                <>
+                <div className='flex flex-row items-center gap-2'>
                   <DateSinglePicker
                     align='left'
                     selectedDate={filter.value as string | null}
@@ -222,7 +222,15 @@ export const GraphqlFilter = ({ fieldFilters, buildGraphQLFilter }: Props) => {
                     }}
                     className={inputWidth}
                   />
-                </>
+                  <Tooltip
+                    text='Filters applied in UTC timezone'
+                    position='left'
+                    background='light'
+                    size='medium'
+                  >
+                    <InformationCircleIcon className='h-4 w-4 cursor-help text-gray-400 hover:text-gray-600' />
+                  </Tooltip>
+                </div>
               ) : fieldMeta.type === 'float' || fieldMeta.type === 'int' ? (
                 <>
                   <input

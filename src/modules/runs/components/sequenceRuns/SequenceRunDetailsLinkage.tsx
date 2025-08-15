@@ -8,6 +8,7 @@ import { useQueryMetadataLibraryModel } from '@/api/metadata';
 import { Badge } from '@/components/common/badges';
 import { keepPreviousData } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import { TIMESTAMP_FORMAT } from '@/utils/dayjs';
 
 const SequenceRunDetailsLinkage = () => {
   const { sequenceRunDetail, isFetchingSequenceRunDetail } = useSequenceRunContext();
@@ -82,7 +83,7 @@ const SequenceRunDetailsLinkage = () => {
             return <div>-</div>;
           } else {
             return (
-              <div>{startTime ? dayjs(startTime as string).format('YYYY-MM-DD HH:mm') : '-'}</div>
+              <div>{startTime ? dayjs(startTime as string).format(TIMESTAMP_FORMAT) : '-'}</div>
             );
           }
         },
@@ -94,7 +95,7 @@ const SequenceRunDetailsLinkage = () => {
           if (!endTime) {
             return <div>-</div>;
           } else {
-            return <div>{endTime ? dayjs(endTime as string).format('YYYY-MM-DD HH:mm') : '-'}</div>;
+            return <div>{endTime ? dayjs(endTime as string).format(TIMESTAMP_FORMAT) : '-'}</div>;
           }
         },
       },

@@ -6,7 +6,7 @@ import { EyeIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/common/buttons';
 import { Accordion } from '@/components/common/accordion';
 import { useSequenceRunDetailModel, useSequenceRunCommentListModel } from '@/api/sequenceRun';
-import { dayjs } from '@/utils/dayjs';
+import { dayjs, TIMESTAMP_FORMAT } from '@/utils/dayjs';
 import {
   DocumentTextIcon,
   ChatBubbleLeftEllipsisIcon,
@@ -129,7 +129,7 @@ const SampleSheetViewer: FC<SampleSheetViewerProps> = ({
                       </span>
                     </div>
                     <div className='text-xs text-gray-500 dark:text-gray-400'>
-                      {dayjs(associationTimestamp).format('MMM DD, YYYY hh:mm A') || 'Unknown'}
+                      {dayjs(associationTimestamp).format(TIMESTAMP_FORMAT) || 'Unknown'}
                     </div>
                   </div>
                 </div>
@@ -168,7 +168,7 @@ const SampleSheetViewer: FC<SampleSheetViewerProps> = ({
                             />
                           </svg>
                           <span className='text-xs text-gray-500 dark:text-gray-400'>
-                            {dayjs(comment?.createdAt).format('MMM DD, YYYY hh:mm A') || 'Unknown'}
+                            {dayjs(comment?.createdAt).format(TIMESTAMP_FORMAT) || 'Unknown'}
                           </span>
                         </div>
                       </div>

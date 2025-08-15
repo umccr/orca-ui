@@ -11,6 +11,7 @@ import Papa from 'papaparse';
 import { FieldDefinition } from './GraphqlFilter';
 import { UseQueryResult } from '@tanstack/react-query';
 import { getMartSortDirection, getMartSortValue } from './utils';
+import { dayjs, TIMESTAMP_FORMAT } from '@/utils/dayjs';
 
 interface GenericTableProps<TData extends Record<string, unknown>, TFilter, TOrderBy> {
   useDataHook: (params: {
@@ -258,6 +259,12 @@ export const GenericDataTable = <TData extends Record<string, unknown>, TFilter,
               setQueryParams({ ordering: getMartSortValue(currentSort, field.sortKeyPrefix) });
             },
             sortDirection: getMartSortDirection({ currentSort, key: field.sortKeyPrefix }),
+            cell:
+              field.type === 'timestamp'
+                ? (data) => {
+                    return dayjs(data as string).format(TIMESTAMP_FORMAT);
+                  }
+                : undefined,
           }))}
         tableData={data.nodes}
         paginationProps={{

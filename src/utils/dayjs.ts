@@ -6,6 +6,8 @@ import dayjsUtc from 'dayjs/plugin/utc';
 // import relativeTime from 'dayjs/plugin/relativeTime';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 
+export const TIMESTAMP_FORMAT = 'YYYY-MM-DD HH:mm Z'; // e.g. "2025-08-11 17:44:30 +10:00"
+
 dayjs.extend(dayjsUtc);
 dayjs.extend(localizedFormat);
 // dayjs.extend(dayjsWeekday);

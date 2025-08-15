@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { Column, TableData, Table } from '@/components/tables';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/common/badges';
-import { dayjs } from '@/utils/dayjs';
+import { dayjs, TIMESTAMP_FORMAT } from '@/utils/dayjs';
 import { classNames } from '@/utils/commonUtils';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { useQueryParams } from '@/hooks/useQueryParams';
@@ -94,7 +94,7 @@ const SequenceRunWorkflowRuns = () => {
           if (!timestamp) {
             return <div>-</div>;
           } else {
-            return <div>{dayjs(timestamp as string).format('YYYY-MM-DD')}</div>;
+            return <div>{dayjs(timestamp as string).format(TIMESTAMP_FORMAT)}</div>;
           }
         },
       },
