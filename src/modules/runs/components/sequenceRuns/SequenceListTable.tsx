@@ -9,7 +9,7 @@ import { getCurrentSortDirection } from '@/components/tables/Table';
 import { ReactNode, useEffect, useState } from 'react';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
-import { dayjs } from '@/utils/dayjs';
+import { dayjs, TIMESTAMP_FORMAT } from '@/utils/dayjs';
 import { Badge } from '@/components/common/badges';
 // import SequenceRunDetailsDrawer from './SequenceRunDetailsDrawer';
 import { MultiqcIcon } from '@/components/icons/MultiqcIcon';
@@ -141,7 +141,7 @@ const SequenceListTable = () => {
             //     <span>{endTime ? dayjs(endTime as string).format('lll') : '-'}</span>
             //   </div>
             // </div>
-            <div>{startTime ? dayjs(startTime as string).format('lll') : '-'}</div>
+            <div>{startTime ? dayjs(startTime as string).format(TIMESTAMP_FORMAT) : '-'}</div>
           );
         }
       },
@@ -161,7 +161,7 @@ const SequenceListTable = () => {
         if (!endTime) {
           return <div>-</div>;
         } else {
-          return <div>{endTime ? dayjs(endTime as string).format('lll') : '-'}</div>;
+          return <div>{endTime ? dayjs(endTime as string).format(TIMESTAMP_FORMAT) : '-'}</div>;
         }
       },
     },

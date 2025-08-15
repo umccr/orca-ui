@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Table, Column, TableData } from '@/components/tables';
 import { keepPreviousData } from '@tanstack/react-query';
-import { dayjs } from '@/utils/dayjs';
+import { dayjs, TIMESTAMP_FORMAT } from '@/utils/dayjs';
 import { Badge } from '@/components/common/badges';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant';
 import { useQueryParams } from '@/hooks/useQueryParams';
@@ -114,7 +114,7 @@ const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) =
           if (!timestamp) {
             return <div>-</div>;
           } else {
-            return <div>{dayjs(timestamp as string).format('YYYY-MM-DD')}</div>;
+            return <div>{dayjs(timestamp as string).format(TIMESTAMP_FORMAT)}</div>;
           }
         },
       },

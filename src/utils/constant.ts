@@ -1,6 +1,6 @@
 export const DEFAULT_PAGE_SIZE = 10;
 
-export const DEFAULT_PAGE_SIZE_OPTIONS = [10, 20, 30, 40, 50];
+export const DEFAULT_PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
 // Mainly for component that do not have pagination implementation (e.g. dropdowns)
 export const DEFAULT_NON_PAGINATE_PAGE_SIZE = 100;
