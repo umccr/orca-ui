@@ -214,8 +214,8 @@ const getMartTableProperties = (tableName: TableType): MartTablePropertiesUnion 
         dataKeyField: 'allFastqs',
         exportFilenamePrefix: 'fastqs-data',
         defaultQueryParams: {
-          ordering: FastqsOrderBy.LastModifiedDateDesc,
-          filter: JSON.stringify({ and: [{ lastModifiedDate: { isNull: false } }] }),
+          ordering: FastqsOrderBy.SequencingRunDateDesc,
+          filter: JSON.stringify({ and: [{ sequencingRunDate: { isNull: false } }] }),
         },
       };
     case 'WORKFLOWS':

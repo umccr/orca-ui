@@ -6,25 +6,11 @@ export const WORKFLOWS_FIELD_LABEL: FieldDefinition[] = [
   { key: 'portalRunId', label: 'Portal Run ID', type: 'string', sortKeyPrefix: 'PORTAL_RUN_ID' },
   { key: 'workflowName', label: 'Workflow Name', type: 'string', sortKeyPrefix: 'WORKFLOW_NAME' },
   {
-    key: 'workflowVersion',
-    label: 'Workflow Version',
-    type: 'string',
-    sortKeyPrefix: 'WORKFLOW_VERSION',
-  },
-  {
     key: 'workflowStatus',
     label: 'Workflow Status',
     type: 'string',
     sortKeyPrefix: 'WORKFLOW_STATUS',
   },
-
-  {
-    key: 'workflowComment',
-    label: 'Workflow Comment',
-    type: 'string',
-    sortKeyPrefix: 'WORKFLOW_COMMENT',
-  },
-
   {
     key: 'workflowStart',
     label: 'Workflow Start',
@@ -37,6 +23,18 @@ export const WORKFLOWS_FIELD_LABEL: FieldDefinition[] = [
     label: 'Workflow Duration',
     type: 'float',
     sortKeyPrefix: 'WORKFLOW_DURATION',
+  },
+  {
+    key: 'workflowVersion',
+    label: 'Workflow Version',
+    type: 'string',
+    sortKeyPrefix: 'WORKFLOW_VERSION',
+  },
+  {
+    key: 'workflowComment',
+    label: 'Workflow Comment',
+    type: 'string',
+    sortKeyPrefix: 'WORKFLOW_COMMENT',
   },
 ];
 
