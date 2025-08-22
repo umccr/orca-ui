@@ -7679,10 +7679,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"igv@npm:^3.4.1":
-  version: 3.4.1
-  resolution: "igv@npm:3.4.1"
-  checksum: 10c0/b850c683a0f3a6c92bf61541025053c4e8ff9bb8f38f08dceb0aeb97c5b46bc17337e3142f40f81490158a6ce1963457343d1715d2ec5af25385e5c6dab19f87
+"igv@npm:^3.5.0":
+  version: 3.5.0
+  resolution: "igv@npm:3.5.0"
+  checksum: 10c0/cd8d516539c40870f2d57de862c1cee355d3415f3afe009ad2679f16a5efeab6e1dcb2e80821a5d5bdf9e08a521447271b2e31f306f9c417b7b5624885d55156
   languageName: node
   linkType: hard
 
@@ -9201,7 +9201,7 @@ __metadata:
     eslint-plugin-storybook: "npm:^9.1.2"
     globals: "npm:^16.3.0"
     graphql: "npm:^16.11.0"
-    igv: "npm:^3.4.1"
+    igv: "npm:^3.5.0"
     mime-db: "npm:^1.54.0"
     openapi-fetch: "npm:^0.14.0"
     openapi-typescript: "npm:^7.9.1"

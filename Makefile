@@ -9,6 +9,7 @@ VITE_WORKFLOW_URL ?= https://workflow.dev.umccr.org
 VITE_SEQUENCE_RUN_URL ?= https://sequence.dev.umccr.org
 VITE_FILE_URL ?= https://file.dev.umccr.org
 VITE_SSCHECK_URL ?= https://sscheck-orcabus.dev.umccr.org
+VITE_HTSGET_URL ?= https://htsget-file.dev.umccr.org
 
 # Set local development values when local Orcabus API is set up for development
 # VITE_METADATA_URL ?= http://localhost:8100
@@ -24,6 +25,7 @@ export VITE_WORKFLOW_URL
 export VITE_FILE_URL
 export VITE_SSCHECK_URL
 export VITE_SEQUENCE_RUN_URL
+export VITE_HTSGET_URL
 
 install:
 	@yarn install

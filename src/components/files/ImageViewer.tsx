@@ -10,6 +10,7 @@ export const ImageViewer = ({ s3ObjectId, s3Key }: Props) => {
   const url = usePresignedFileObjectId({
     params: { path: { id: s3ObjectId }, query: { responseContentDisposition: 'inline' } },
     headers: { 'Content-Type': getMimeType(s3Key) },
+    enabled: true,
   }).data;
 
   if (!url) throw new Error('Unable to create presigned url');

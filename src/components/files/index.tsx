@@ -6,6 +6,7 @@ import { IFrameViewer } from './IFrameViewer';
 import { PreViewer } from './PreViewer';
 import { TableViewer } from './TableViewer';
 import { IgvViewer } from './igv';
+import config from '@/config.ts';
 
 export const IMAGE_FILETYPE_LIST: string[] = ['png', 'jpg', 'jpeg'];
 export const IFRAME_FILETYPE_LIST: string[] = ['html', 'pdf'];
@@ -39,7 +40,11 @@ export const FileViewer = (props: Props) => {
   }
 
   if (IGV_FILETYPE_LIST.find((f) => s3Key.endsWith(f))) {
-    return <IgvViewer {...props} />;
+    const igvProps = {
+      htsGetBaseUrl: config.apiEndpoint.htsget,
+      ...props,
+    };
+    return <IgvViewer {...igvProps} />;
   }
 
   return <div>Unsupported Filetype</div>;
