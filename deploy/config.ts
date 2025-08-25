@@ -41,6 +41,7 @@ export const getAppStackConfig = (appStage: AppStage): ApplicationStackProps => 
           VITE_SEQUENCE_RUN_URL: `https://sequence.dev.umccr.org`,
           VITE_FILE_URL: `https://file.dev.umccr.org`,
           VITE_SSCHECK_URL: `https://sscheck-orcabus.dev.umccr.org`,
+          VITE_HTSGET_URL: `https://htsget-file.dev.umccr.org`,
         },
       };
 

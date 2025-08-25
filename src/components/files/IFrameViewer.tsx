@@ -13,6 +13,7 @@ export const IFrameViewer = ({ s3ObjectId, s3Key }: Props) => {
       query: { responseContentDisposition: 'inline' },
     },
     headers: { 'Content-Type': getMimeType(s3Key) },
+    enabled: true,
   }).data;
 
   if (!url) throw new Error('Unable to create presigned url');

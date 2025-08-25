@@ -11,6 +11,7 @@ const config = {
     sequenceRun: env.VITE_SEQUENCE_RUN_URL,
     file: env.VITE_FILE_URL,
     sscheck: env.VITE_SSCHECK_URL,
+    htsget: env.VITE_HTSGET_URL,
   },
   cognito: {
     REGION: REGION,

@@ -2,7 +2,11 @@ import config from '@/config';
 import createClient from 'openapi-fetch';
 import type { paths } from './types/file';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { authMiddleware, UseSuspenseQueryOptions } from './utils';
+import {
+  authMiddleware,
+  ConditionalUseSuspenseQueryOptions,
+  UseSuspenseQueryOptions,
+} from './utils';
 
 const client = createClient<paths>({
   baseUrl: config.apiEndpoint.file,
@@ -47,11 +51,16 @@ export function usePresignedFileObjectId({
   params,
   reactQuery,
   headers,
-}: UseSuspenseQueryOptions<paths[typeof s3PresignObjIdPath]['get']>) {
+  enabled,
+}: ConditionalUseSuspenseQueryOptions<paths[typeof s3PresignObjIdPath]['get']>) {
   return useSuspenseQuery({
     ...reactQuery,
     queryKey: ['GET', s3PresignObjIdPath, params],
     queryFn: async ({ signal }) => {
+      if (!enabled) {
+        return null;
+      }
+
       const { data, error, response } = await client.GET(s3PresignObjIdPath, {
         params,
         signal, // allows React Query to cancel request

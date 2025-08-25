@@ -2,27 +2,37 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { genomes } from './genomes';
 import igv from 'igv';
-import { constructIgvNameParameter, createIdxFileKey, createIgvFileTrack } from './utils';
+import {
+  constructHtsGetUrl,
+  constructIgvNameParameter,
+  createIdxFileKey,
+  createIgvFileTrack,
+} from './utils';
 import { Dropdown } from '@/components/common/dropdowns';
 import { usePresignedFileList, usePresignedFileObjectId } from '@/api/file';
 import { IgvDesktopButton } from './IgvDesktop';
 import { SpinnerWithText } from '@/components/common/spinner';
 
-type Props = { s3ObjectId: string; bucket: string; s3Key: string };
-export const IgvViewer = ({ s3ObjectId, bucket, s3Key }: Props) => {
+type Props = { s3ObjectId: string; bucket: string; s3Key: string; htsGetBaseUrl?: string };
+export const IgvViewer = ({ s3ObjectId, bucket, s3Key, htsGetBaseUrl }: Props) => {
   const idxKey = createIdxFileKey(s3Key);
 
-  const baseFileSignedUrl = usePresignedFileObjectId({
+  let baseFileUrl = usePresignedFileObjectId({
     params: { path: { id: s3ObjectId } },
+    enabled: !htsGetBaseUrl,
   }).data;
+
+  if (htsGetBaseUrl) {
+    baseFileUrl = constructHtsGetUrl({ htsGetBaseUrl, bucket, s3Key });
+  } else {
+    if (!baseFileUrl) throw new Error('Unable to presigned url!');
+  }
 
   const idxFileSignedUrlResults = usePresignedFileList({
     params: { query: { bucket, key: idxKey } },
   }).data;
   const idxFileSignedUrl =
     idxFileSignedUrlResults?.results.length == 1 ? idxFileSignedUrlResults?.results[0] : null;
-
-  if (!baseFileSignedUrl) throw new Error('Unable to presigned url!');
   if (!idxFileSignedUrl) throw new Error('No index file found!');
 
   const [isInitIgv, setIsInitIgv] = useState(false);
@@ -37,9 +47,10 @@ export const IgvViewer = ({ s3ObjectId, bucket, s3Key }: Props) => {
       if (!igvDiv) throw new Error('No IGV Div Element');
 
       const igvName = constructIgvNameParameter({ key: s3Key });
-      const track = createIgvFileTrack({
+      const track = await createIgvFileTrack({
         igvName,
-        baseFilePresignedUrl: baseFileSignedUrl,
+        sourceType: htsGetBaseUrl ? 'htsget' : 'file',
+        baseFileUrl,
         idxFilePresignedUrl: idxFileSignedUrl,
       });
       if (!track) throw new Error('No IGV Track available');
@@ -53,7 +64,7 @@ export const IgvViewer = ({ s3ObjectId, bucket, s3Key }: Props) => {
       setIsInitIgv(true);
       return await igv.createBrowser(igvDiv, options);
     },
-    enabled: isInitIgv == false,
+    enabled: !isInitIgv,
     refetchOnMount: 'always',
   }).data;
 

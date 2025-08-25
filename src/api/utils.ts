@@ -44,6 +44,12 @@ export type UseSuspenseQueryOptions<T> = RequestBodyOption<T> & {
   headers?: Record<string, string>;
 };
 
+export type ConditionalUseSuspenseQueryOptions<T> = UseSuspenseQueryOptions<T> & {
+  // UseSuspenseQuery does not support enabled, should be okay to return null from the query instead:
+  // https://github.com/TanStack/query/discussions/6206
+  enabled: boolean;
+};
+
 // Extend the UseMutationOptions type
 export type UseMutationOptions<T> = {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
