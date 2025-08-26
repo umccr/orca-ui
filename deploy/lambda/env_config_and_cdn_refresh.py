@@ -28,7 +28,8 @@ def update_api_versions(event):
         'metadata_api_version': 'VITE_METADATA_API_VERSION',
         'workflow_api_version': 'VITE_WORKFLOW_API_VERSION',
         'sequence_run_api_version': 'VITE_SEQUENCE_RUN_API_VERSION',
-        'file_api_version': 'VITE_FILE_API_VERSION'
+        'file_api_version': 'VITE_FILE_API_VERSION',
+        'htsget_api_version': 'VITE_HTSGET_API_VERSION',
     }
 
     # Check if any version keys exist in the event
@@ -69,12 +70,14 @@ def handler(event, context):
         'VITE_SEQUENCE_RUN_URL': os.environ['VITE_SEQUENCE_RUN_URL'],
         'VITE_FILE_URL': os.environ['VITE_FILE_URL'],
         'VITE_SSCHECK_URL': os.environ['VITE_SSCHECK_URL'],
+        'VITE_HTSGET_URL': os.environ.get('VITE_HTSGET_URL', None),
 
         # API Version
         'VITE_METADATA_API_VERSION': os.environ.get('VITE_METADATA_API_VERSION', None),
         'VITE_WORKFLOW_API_VERSION': os.environ.get('VITE_WORKFLOW_API_VERSION', None),
         'VITE_SEQUENCE_RUN_API_VERSION': os.environ.get('VITE_SEQUENCE_RUN_API_VERSION', None),
         'VITE_FILE_API_VERSION': os.environ.get('VITE_FILE_API_VERSION', None),
+        'VITE_HTSGET_API_VERSION': os.environ.get('VITE_HTSGET_API_VERSION', None),
     }
     # Remove null values
     env_vars = {k: v for k, v in env_vars.items() if v is not None}
