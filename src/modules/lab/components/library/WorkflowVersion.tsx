@@ -33,7 +33,7 @@ export const WorkflowVersion = ({
       className='ml-6 flex h-full cursor-pointer items-center text-xs font-light text-blue-500 hover:text-blue-700'
       onClick={() => setIsOpenWorkflowDetails(true)}
     >
-      {wf.workflowVersion}
+      {wf.version}
       {isOpenWorkflowDetails && (
         <Dialog
           open={isOpenWorkflowDetails}

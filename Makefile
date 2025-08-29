@@ -11,14 +11,6 @@ VITE_FILE_URL ?= https://file.dev.umccr.org
 VITE_SSCHECK_URL ?= https://sscheck-orcabus.dev.umccr.org
 VITE_HTSGET_URL ?= https://htsget-file.dev.umccr.org
 
-# Set local development values when local Orcabus API is set up for development
-# VITE_METADATA_URL ?= http://localhost:8100
-# VITE_WORKFLOW_URL ?= http://localhost:8200
-# VITE_SEQUENCE_RUN_URL ?= http://localhost:8300
-# VITE_FILE_URL ?= http://localhost:8400
-# VITE_SSCHECK_URL ?= NONE
-
-
 # Export the variables
 export VITE_METADATA_URL
 export VITE_WORKFLOW_URL

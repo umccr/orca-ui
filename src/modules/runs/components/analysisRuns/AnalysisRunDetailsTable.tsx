@@ -27,8 +27,8 @@ const AnalysisRunDetailsTable = () => {
               analysisVersion: analysisRun?.analysis?.analysisVersion,
               analysisStatus: analysisRun?.analysis?.status,
               workflows: analysisRun?.analysis?.workflows.map((workflow) => ({
-                name: workflow.workflowName,
-                version: workflow.workflowVersion,
+                name: workflow.name,
+                version: workflow.version,
               })),
               contexts: analysisRun?.analysis?.contexts.map((context) => ({
                 name: context.name,

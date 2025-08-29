@@ -28,11 +28,11 @@ const WorkflowRunDetailsSidebar = () => {
             workflowDetails: [
               {
                 key: 'workflowName',
-                value: workflowRunDetail.workflow.workflowName,
+                value: workflowRunDetail.workflow.name,
               },
               {
                 key: 'workflowVersion',
-                value: workflowRunDetail.workflow.workflowVersion,
+                value: workflowRunDetail.workflow.version,
               },
               {
                 key: 'excutionEngine',

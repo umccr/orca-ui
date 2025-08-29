@@ -50,8 +50,8 @@ const WorkflowRunFilterHeader = () => {
             { value: '-1', label: 'All workflows', secondaryLabel: '' },
             ...workflowData.results.map((workflowType: WorkflowModel) => ({
               value: workflowType.orcabusId?.toString().split('.')[1] || '',
-              label: workflowType.workflowName,
-              secondaryLabel: 'v' + workflowType.workflowVersion,
+              label: workflowType.name,
+              secondaryLabel: 'v' + workflowType.version,
             })),
           ].sort((a, b) => a.label.localeCompare(b.label))
         : [],
