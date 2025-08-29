@@ -56,13 +56,12 @@ export const LibrarySideNavBar = () => {
           children:
             workflow?.results
               .map((wf) => ({
-                name: `${wf.workflowName}`,
-                href: `${baseHref}/${wf.workflowName}`,
+                name: `${wf.name}`,
+                href: `${baseHref}/${wf.name}`,
                 isCurrent: portalRunId
-                  ? pathname.split(portalRunId)[0].endsWith(`${wf.workflowName}/`)
+                  ? pathname.split(portalRunId)[0].endsWith(`${wf.name}/`)
                   : // In case trailing slash in pathname
-                    pathname.endsWith(`${wf.workflowName}/`) ||
-                    pathname.endsWith(`${wf.workflowName}`),
+                    pathname.endsWith(`${wf.name}/`) || pathname.endsWith(`${wf.name}`),
               }))
               // Filter out duplicate workflows
               .filter((wf) => {
