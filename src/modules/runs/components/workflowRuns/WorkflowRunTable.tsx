@@ -82,7 +82,7 @@ const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) =
       //     if (!workflow) {
       //       return <div>-</div>;
       //     } else {
-      //       return <div>{(workflow as { workflowName: string }).workflowName}</div>;
+      //       return <div>{(workflow as { name: string }).name}</div>;
       //     }
       //   },
       // },
@@ -93,7 +93,7 @@ const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) =
       //     if (!workflow) {
       //       return <div>-</div>;
       //     } else {
-      //       return <div>{(workflow as { workflowVersion: string }).workflowVersion}</div>;
+      //       return <div>{(workflow as { version: string }).version}</div>;
       //     }
       //   },
       // },

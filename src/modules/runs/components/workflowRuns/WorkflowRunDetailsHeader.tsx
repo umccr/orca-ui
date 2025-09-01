@@ -290,7 +290,7 @@ const WorkflowRunDetailsHeader = () => {
       <RerunDialog
         isOpenRerunWorkflowDialog={isOpenRerunWorkflowDialog}
         workflowRunName={workflowRunDetail?.workflowRunName || ''}
-        workflowName={workflowRunDetail?.workflow.workflowName || ''}
+        workflowName={workflowRunDetail?.workflow.name || ''}
         workflowRunRerunValidMapData={workflowRunRerunValidMapData || null}
         selectedDataset={selectedDataset || ''}
         setSelectedDataset={setSelectedDataset}

@@ -74,18 +74,6 @@ export VITE_COG_APP_CLIENT_ID=$cog_app_client_id_local
 export VITE_OAUTH_REDIRECT_IN=$oauth_redirect_in_local
 export VITE_OAUTH_REDIRECT_OUT=$oauth_redirect_out_local
 
-# Backend API URLs (default to dev), see [README.md](./README.md)
-export VITE_METADATA_URL=${VITE_METADATA_URL:-"https://metadata.dev.umccr.org"}
-export VITE_WORKFLOW_URL=${VITE_WORKFLOW_URL:-"https://workflow.dev.umccr.org"}
-export VITE_SEQUENCE_RUN_URL=${VITE_SEQUENCE_RUN_URL:-"https://sequence.dev.umccr.org"}
-export VITE_FILE_URL=${VITE_FILE_URL:-"https://file.dev.umccr.org"}
-export VITE_SSCHECK_URL=${VITE_SSCHECK_URL:-"https://sscheck-orcabus.dev.umccr.org"}
-
-# API Version (default is v1, update this to update the api version respectively)
-# export VITE_METADATA_API_VERSION=${VITE_METADATA_API_VERSION:-"v1"}
-# export VITE_WORKFLOW_API_VERSION=${VITE_WORKFLOW_API_VERSION:-"v1"}
-# export VITE_SEQUENCE_RUN_API_VERSION=${VITE_SEQUENCE_RUN_API_VERSION:-"v1"}
-# export VITE_FILE_API_VERSION=${VITE_FILE_API_VERSION:-"v1"}
 
 env | grep VITE
 
