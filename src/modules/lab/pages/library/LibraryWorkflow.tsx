@@ -14,6 +14,7 @@ import { CursorArrowRaysIcon, InformationCircleIcon } from '@heroicons/react/24/
 import { areArraysEqual } from '@/modules/files/components/utils';
 import { Checkbox } from '@/components/common/checkbox';
 import { Tooltip } from '@/components/common/tooltips';
+import ErrorBox from '@/components/common/error/ErrorBox';
 
 interface KeyPatternType {
   label: string;
@@ -117,7 +118,7 @@ export default function LibraryWorkflowPage() {
 
   const workflowRunResults = workflowRun?.results;
   if (!workflowRunResults?.length) {
-    throw new Error('No workflow run found!');
+    return <ErrorBox message={'No workflow run found!'} />;
   }
   if (!portalRunId) {
     return <Navigate to={`${workflowRunResults[0].portalRunId}`} />;
@@ -126,7 +127,7 @@ export default function LibraryWorkflowPage() {
   // If portalRunId is not found in the list of workflowRun, it is invalid link
   const currentWorkflowRunDetail = workflowRunResults.find((i) => i.portalRunId === portalRunId);
   if (!currentWorkflowRunDetail) {
-    throw new Error('Invalid link!');
+    return <ErrorBox message={'Invalid link!'} />;
   }
 
   const isMultipleRuns = workflowRunResults.length > 1;
