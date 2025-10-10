@@ -149,13 +149,13 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
    * Notes:
    * WGS library type => "UMCCRISE" && "tumor-normal" workflow type html reports
    * WTS library type => "wts" && "rnasum" workflow type pdf/html reports
-   * ctDNA library type && "ctTSO" assay => "cttsov2" workflow pdf/html reports
+   * ctDNA library type && "ctTSO" assay => "dragen-tso500-ctDNA" or "cttsov2" workflow pdf/html reports
    */
 
   const libraryDisplayNotes = {
     '"WGS" type': ['sash', 'tumor-normal'],
     '"WTS" type': ['wts', 'rnasum'],
-    '"ctDNA" type, "ctTSO" assay': ['cttsov2'],
+    '"ctDNA" type, "ctTSO" assay': ['dragen-tso500-ctDNA or cttsov2'],
   };
 
   return (
@@ -229,11 +229,13 @@ export const LibraryAnalysisReportTable: FC<LibraryAnalysisReportTableProps> = (
         ) : libraryDetail.type === 'ctDNA' &&
           (libraryDetail.assay?.toLowerCase() === 'cttso' ||
             libraryDetail.assay?.toLowerCase() == 'cttsov2') ? (
-          <DetailedErrorBoundary errorTitle={`Unable to load 'cttsov2' report files`}>
+          <DetailedErrorBoundary
+            errorTitle={`Unable to load 'dragen-tso500-ctdna' or 'cttsov2' report files`}
+          >
             <Suspense fallback={<SpinnerWithText text='loading data ...' />}>
               <AnalysisTable
                 libraryOrcabusId={libraryDetail.orcabusId}
-                workflowType='cttsov2'
+                workflowType={['cttsov2', 'dragen-tso500-ctdna']}
                 keyPatterns={WORKFLOW_ANALYSIS_TABLE['cttsov2']['keyPatterns']}
                 getTableDataFormat={WORKFLOW_ANALYSIS_TABLE['cttsov2']['getTableData']}
               />
@@ -254,7 +256,7 @@ export const AnalysisTable = ({
   getTableDataFormat,
 }: {
   libraryOrcabusId: string;
-  workflowType: string;
+  workflowType: string | string[];
   keyPatterns: string[];
   getTableDataFormat: (data: ({ key: string } & Record<string, unknown>)[]) => TableData[];
 }) => {
@@ -275,8 +277,8 @@ export const AnalysisTable = ({
   if (!workflowRunResults || workflowRunResults.length <= 0) {
     throw new Error(`No '${workflowType}' run found!`);
   }
-  const initPortalRunId = workflowRunResults[0].portalRunId;
-  const [selectedPortalRunId, setSelectedPortalRunId] = useState(initPortalRunId);
+
+  const [selectedWorkflowRun, setSelectedWorkflowRun] = useState(workflowRunResults[0]);
 
   const fileQueryResult = useQueryFileObject({
     params: {
@@ -284,7 +286,7 @@ export const AnalysisTable = ({
         'key[]': keyPatterns,
         rowsPerPage: DEFAULT_NON_PAGINATE_PAGE_SIZE,
         currentState: true,
-        'attributes[portalRunId]': selectedPortalRunId,
+        'attributes[portalRunId]': selectedWorkflowRun.portalRunId,
       },
     },
   });
@@ -308,7 +310,7 @@ export const AnalysisTable = ({
 
   const isMultipleRuns = workflowRunResults.length > 1;
   const currentSelectedWorkflowDetail = workflowRunResults.find(
-    (w) => w.portalRunId === selectedPortalRunId
+    (w) => w.portalRunId === selectedWorkflowRun.portalRunId
   );
   if (!currentSelectedWorkflowDetail) {
     throw new Error('No workflow detail found!');
@@ -321,10 +323,12 @@ export const AnalysisTable = ({
           <div className='flex flex-col space-y-2'>
             <div className='flex items-center justify-between'>
               <div className='flex items-center'>
-                <div className='text-gray-900 dark:text-gray-100'>{workflowType}</div>
+                <div className='text-gray-900 dark:text-gray-100'>
+                  {selectedWorkflowRun.workflow.name}
+                </div>
 
                 <WorkflowDialogDetail
-                  portalRunId={selectedPortalRunId}
+                  portalRunId={selectedWorkflowRun.portalRunId}
                   workflowDetail={currentSelectedWorkflowDetail}
                 />
                 <div className='flex h-full items-center text-sm font-normal text-gray-500 dark:text-gray-400'>
@@ -350,10 +354,10 @@ export const AnalysisTable = ({
                   </Badge>
                   <Dropdown
                     floatingLabel='Portal Run ID'
-                    value={selectedPortalRunId}
+                    value={selectedWorkflowRun.portalRunId}
                     items={workflowRunResults.map((i) => ({
                       label: i.portalRunId,
-                      onClick: () => setSelectedPortalRunId(i.portalRunId),
+                      onClick: () => setSelectedWorkflowRun(i),
                     }))}
                     className='min-w-[200px] dark:bg-gray-800 dark:text-gray-200'
                   />
