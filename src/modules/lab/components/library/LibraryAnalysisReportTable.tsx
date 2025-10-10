@@ -263,7 +263,7 @@ export const AnalysisTable = ({
     params: {
       query: {
         libraries__orcabusId: libraryOrcabusId,
-        workflow__workflowName: workflowType,
+        workflow__name: workflowType,
         ordering: '-portalRunId',
         rowsPerPage: DEFAULT_NON_PAGINATE_PAGE_SIZE,
         status: 'SUCCEEDED',
