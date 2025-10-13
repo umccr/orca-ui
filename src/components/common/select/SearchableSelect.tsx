@@ -12,7 +12,7 @@ import { useState } from 'react';
 interface SearchableSelectProps {
   options: string[];
   value: string | null;
-  onChange: (value: string) => void;
+  onChange: (value: string | null) => void;
   placeholder?: string;
   examples?: string[];
 }

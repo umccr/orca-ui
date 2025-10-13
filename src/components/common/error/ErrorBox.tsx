@@ -1,5 +1,3 @@
-import React from 'react';
-
 type Props = { message: string };
 
 export default function ErrorBox({ message }: Props) {
