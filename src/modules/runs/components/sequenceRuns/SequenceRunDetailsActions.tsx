@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { startTransition, useEffect, useMemo, useState } from 'react';
 import { useSequenceRunContext } from './SequenceRunContext';
 import { useSequenceRunDetailsContext } from './SequenceRunDetailsContext';
 import { useAuthContext } from '@/context/AmplifyAuthContext';
@@ -26,6 +26,17 @@ const SequenceRunDetailsActions = () => {
       ?.sort((a, b) => (dayjs(a.startTime).isAfter(dayjs(b.startTime)) ? -1 : 1))
       .map((sequenceRun) => sequenceRun.orcabusId) ?? [];
 
+  // real sequence run orcabus id with status
+  const latestRealSequenceRunOrcabusId =
+    sequenceRunDetail
+      ?.sort((a, b) => (dayjs(a.startTime).isAfter(dayjs(b.startTime)) ? -1 : 1))
+      ?.filter((sequenceRun) => sequenceRun.status !== null)
+      ?.map((sequenceRun) => sequenceRun.orcabusId)[0] ?? null;
+
+  const [selectedSequenceRunOrcabusId, setSelectedSequenceRunOrcabusId] = useState<string>(
+    (latestRealSequenceRunOrcabusId as string) ?? orcabusIds[0]
+  );
+
   const sequenceRunDetailDropdownItems = useMemo(() => {
     return sequenceRunDetail
       ? sequenceRunDetail
@@ -35,11 +46,18 @@ const SequenceRunDetailsActions = () => {
             onClick: () => setSelectedSequenceRunOrcabusId(sequenceRun.orcabusId),
           }))
       : [];
-  }, [sequenceRunDetail]);
+  }, [sequenceRunDetail, setSelectedSequenceRunOrcabusId]);
 
-  const [selectedSequenceRunOrcabusId, setSelectedSequenceRunOrcabusId] = useState<string>(
-    orcabusIds[0]
-  );
+  // sequence run state dropdown items (sequence run with status)
+  const sequenceRunStateDropdownItems = useMemo(() => {
+    return sequenceRunDetail
+      ?.sort((a, b) => (dayjs(a.startTime).isAfter(dayjs(b.startTime)) ? -1 : 1))
+      ?.filter((sequenceRun) => sequenceRun.status !== null)
+      ?.map((sequenceRun) => ({
+        label: sequenceRun.sequenceRunId,
+        onClick: () => setSelectedSequenceRunOrcabusId(sequenceRun.orcabusId),
+      }));
+  }, [sequenceRunDetail, setSelectedSequenceRunOrcabusId]);
 
   // comment dialog
   const [isOpenAddCommentDialog, setIsOpenAddCommentDialog] = useState(false);
@@ -68,7 +86,9 @@ const SequenceRunDetailsActions = () => {
       toaster.success({ title: 'Comment added successfully' });
       refetchSequenceRunComment();
       resetCreateSequenceRunComment();
-      setComment('');
+      startTransition(() => {
+        setComment('');
+      });
     }
 
     if (isErrorCreatingSequenceRunComment) {
@@ -111,8 +131,10 @@ const SequenceRunDetailsActions = () => {
       toaster.success({ title: 'State added successfully' });
       refetchSequenceRunState();
       resetCreateSequenceRunState();
-      setStateStatus(null);
-      setStateComment('');
+      startTransition(() => {
+        setStateStatus(null);
+        setStateComment('');
+      });
     }
 
     if (isErrorCreatingSequenceRunState) {
@@ -210,14 +232,14 @@ const SequenceRunDetailsActions = () => {
         setSelectedState={setStateStatus}
         handleClose={() => {
           setIsOpenAddStateDialog(false);
-          setSelectedSequenceRunOrcabusId(orcabusIds[0]);
+          setSelectedSequenceRunOrcabusId(latestRealSequenceRunOrcabusId as string);
         }}
         stateComment={stateComment}
         setStateComment={setStateComment}
         handleStateCreationEvent={handleStateCreationEvent}
         handleUpdateState={() => {}}
         selectedRunId={selectedSequenceRun?.sequenceRunId}
-        runDetailDropdownItems={sequenceRunDetailDropdownItems}
+        runDetailDropdownItems={sequenceRunStateDropdownItems}
       />
     </div>
   );
