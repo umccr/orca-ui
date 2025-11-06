@@ -3,7 +3,7 @@ import {
   useSequenceRunCommentDeleteModel,
   useSequenceRunStateUpdateModel,
 } from '@/api/sequenceRun';
-import { useState, useEffect, useMemo, FC } from 'react';
+import { useState, useEffect, useMemo, FC, startTransition } from 'react';
 import { dayjs } from '@/utils/dayjs';
 import { classNames, getUsername } from '@/utils/commonUtils';
 import { Timeline, TimelineEventTypes } from '@/components/common/timelines';
@@ -77,12 +77,43 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
   }, [sequenceRunStateData, selectedSequenceRunOrcabusId]);
 
   const selectedSequenceRunComment = useMemo(() => {
+    // check if fake sequence run is selected
+    const isFakeSequenceRunSelected = selectedSequenceRunOrcabusId
+      ? sequenceRunDetail?.find(
+          (sequenceRun) => sequenceRun.orcabusId === selectedSequenceRunOrcabusId
+        )?.status == null
+        ? true
+        : false
+      : false;
+
+    if (isFakeSequenceRunSelected) {
+      // if fake sequence run is selected, then select sample sheet comment by time sequence of sequence run
+      const fakeRunIndex = sequenceRunDetail
+        ?.filter((sequenceRun) => sequenceRun.status == null)
+        .sort((a, b) => (dayjs(a.startTime).isAfter(dayjs(b.startTime)) ? -1 : 1))
+        .findIndex((sequenceRun) => sequenceRun.orcabusId === selectedSequenceRunOrcabusId);
+      const sampleSheetComment = sequenceRunCommentData
+        ?.filter((comment) => comment.targetType === 'sample_sheet')
+        .sort((a, b) => (dayjs(a.createdAt).isAfter(dayjs(b.createdAt)) ? -1 : 1))[
+        fakeRunIndex ?? 0
+      ];
+      const otherComments = selectedSequenceRunOrcabusId
+        ? sequenceRunCommentData?.filter(
+            (comment) => comment.targetId === selectedSequenceRunOrcabusId?.split('.')[1]
+          )
+        : sequenceRunCommentData;
+      return [
+        ...(sampleSheetComment ? [sampleSheetComment] : []),
+        ...(otherComments ? otherComments : []),
+      ];
+    }
+
     return selectedSequenceRunOrcabusId
       ? sequenceRunCommentData?.filter(
           (comment) => comment.targetId === selectedSequenceRunOrcabusId?.split('.')[1]
         )
       : sequenceRunCommentData;
-  }, [sequenceRunCommentData, selectedSequenceRunOrcabusId]);
+  }, [sequenceRunCommentData, selectedSequenceRunOrcabusId, sequenceRunDetail]);
 
   const SequenceRunStateTimelineData = useMemo(() => {
     const failedSateList = ['failed', 'needsattention', 'timedout', 'failedupload', 'stopped'];
@@ -130,27 +161,41 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
           datetime: comment.createdAt,
           iconBackground: 'bg-blue-100 dark:bg-blue-900',
           comment: comment.comment,
-          actionsList: [
-            {
-              label: 'Update',
-              onClick: () => {
-                setCommentId(comment.orcabusId as string);
-                setComment(comment.comment);
-                setSelectedMutationSequenceRunOrcabusId(comment.targetId as string);
-                setIsOpenUpdateCommentDialog(true);
-              },
-              icon: PencilIcon,
-            },
-            {
-              label: 'Delete',
-              onClick: () => {
-                setCommentId(comment.orcabusId as string);
-                setSelectedMutationSequenceRunOrcabusId(comment.targetId as string);
-                setIsOpenDeleteCommentDialog(true);
-              },
-              icon: TrashIcon,
-            },
-          ],
+          actionsList:
+            comment.targetType === 'sample_sheet'
+              ? [
+                  {
+                    label: 'Update',
+                    onClick: () => {
+                      setCommentId(comment.orcabusId as string);
+                      setComment(comment.comment);
+                      setSelectedMutationSequenceRunOrcabusId(comment.targetId as string);
+                      setIsOpenUpdateCommentDialog(true);
+                    },
+                    icon: PencilIcon,
+                  },
+                ]
+              : [
+                  {
+                    label: 'Update',
+                    onClick: () => {
+                      setCommentId(comment.orcabusId as string);
+                      setComment(comment.comment);
+                      setSelectedMutationSequenceRunOrcabusId(comment.targetId as string);
+                      setIsOpenUpdateCommentDialog(true);
+                    },
+                    icon: PencilIcon,
+                  },
+                  {
+                    label: 'Delete',
+                    onClick: () => {
+                      setCommentId(comment.orcabusId as string);
+                      setSelectedMutationSequenceRunOrcabusId(comment.targetId as string);
+                      setIsOpenDeleteCommentDialog(true);
+                    },
+                    icon: TrashIcon,
+                  },
+                ],
           eventType:
             comment.targetType === 'sample_sheet'
               ? TimelineEventTypes.SAMPLE_SHEET_UPLOAD
@@ -194,7 +239,9 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
       toaster.success({ title: 'Comment updated successfully' });
       refetchSequenceRunComment();
       resetUpdateSequenceRunComment();
-      setComment('');
+      startTransition(() => {
+        setComment('');
+      });
     }
 
     if (isErrorUpdatingSequenceRunComment) {
@@ -230,7 +277,9 @@ const SequenceRunTimeline: FC<SequenceRunTimelineProps> = ({ selectedSequenceRun
       toaster.success({ title: 'Comment deleted successfully' });
       refetchSequenceRunComment();
       resetDeleteSequenceRunComment();
-      setComment('');
+      startTransition(() => {
+        setComment('');
+      });
     }
 
     if (isErrorDeletingSequenceRunComment) {
