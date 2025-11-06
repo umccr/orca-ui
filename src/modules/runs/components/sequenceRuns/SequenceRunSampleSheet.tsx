@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, startTransition } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSequenceRunAddSampleSheetModel } from '@/api/sequenceRun';
 import SampleSheetViewer from '../common/SampleSheetViewer';
@@ -105,8 +105,10 @@ const SequenceRunsSampleSheet = () => {
         refetchSequenceRunSampleSheet();
       });
       resetUploadSequenceRunSampleSheet();
-      setComment('');
-      setFile(null);
+      startTransition(() => {
+        setComment('');
+        setFile(null);
+      });
     }
 
     if (isErrorUploadSequenceRunSampleSheet) {
@@ -115,8 +117,10 @@ const SequenceRunsSampleSheet = () => {
         message: 'Failed to upload sample sheet',
       });
       resetUploadSequenceRunSampleSheet();
-      setComment('');
-      setFile(null);
+      startTransition(() => {
+        setComment('');
+        setFile(null);
+      });
     }
   }, [
     isSuccessUploadSequenceRunSampleSheet,
@@ -148,7 +152,11 @@ const SequenceRunsSampleSheet = () => {
     setIsOpenSampleSheetUploadDialog(false);
   };
 
-  if (!sequenceRunSampleSheetData || !sequenceRunSampleSheetData[0].sampleSheetContent) {
+  if (
+    !sequenceRunSampleSheetData ||
+    sequenceRunSampleSheetData.length === 0 ||
+    !sequenceRunSampleSheetData[0].sampleSheetContent
+  ) {
     return <NoSampleSheetFound />;
   }
 
