@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, startTransition } from 'react';
 import { useParams } from 'react-router-dom';
 import { Timeline, TimelineEventTypes } from '@/components/common/timelines';
 import type { TimelineEvent } from '@/components/common/timelines';
@@ -32,6 +32,134 @@ import CommentDialog from '../common/CommentDialog';
 import StateDialog from '../common/StateDialog';
 import { Accordion } from '@/components/common/accordion';
 import { useUserPreferencesLocalStorage } from '@/hooks/useLocalStorage';
+
+interface PayloadContentProps {
+  selectedState: string;
+  currentState: string;
+  selectedWorkflowPayloadData: unknown;
+  isFetching: boolean;
+}
+
+const PayloadContent = ({
+  selectedState,
+  currentState,
+  selectedWorkflowPayloadData,
+  isFetching,
+}: PayloadContentProps) => (
+  <div className='flex flex-col space-y-4 px-2'>
+    {/* State Badge Card */}
+    <div
+      className={classNames(
+        'flex items-center gap-3 rounded-lg p-3',
+        'bg-linear-to-r from-gray-50/80 to-white dark:from-gray-800/80 dark:to-gray-800/50'
+      )}
+    >
+      <span className='text-sm font-medium text-gray-600 dark:text-gray-400'>
+        {selectedState ? 'Selected State' : 'Current State'}:
+      </span>
+      <Badge status={selectedState || currentState || 'unknown'} className='shadow-xs'>
+        {selectedState || currentState || 'unknown'}
+      </Badge>
+    </div>
+
+    {/* Content Section */}
+    <div className='flex flex-col space-y-1 rounded-lg'>
+      <ContentTabs
+        className='rounded-lg bg-white bg-linear-to-r from-gray-50/80 to-white shadow-xs dark:bg-gray-900 dark:from-gray-800/80 dark:to-gray-800/50'
+        tabs={[
+          {
+            label: 'Payload Data',
+            content: (
+              <div className='flex flex-col gap-3 p-2'>
+                {selectedWorkflowPayloadData ? (
+                  Object.entries(
+                    (selectedWorkflowPayloadData as { data?: Record<string, unknown> })
+                      ?.data as Record<string, unknown>
+                  ).map(([key, value]) => (
+                    <Accordion
+                      key={key}
+                      title={key}
+                      defaultOpen={true}
+                      chevronPosition='right'
+                      className={classNames(
+                        'rounded-lg',
+                        'bg-linear-to-r from-white via-gray-50/80 to-gray-100/50',
+                        'dark:from-gray-900 dark:via-gray-800/80 dark:to-gray-800/50',
+                        'shadow-xs hover:shadow-md',
+                        'ring-1 ring-gray-200/50 dark:ring-gray-700/50',
+                        'transition-all duration-200 ease-in-out',
+                        'group'
+                      )}
+                      buttonClassName={classNames(
+                        'border-0',
+                        'bg-linear-to-r from-blue-50/90 to-transparent',
+                        'dark:from-blue-900/30 dark:to-transparent',
+                        'group-hover:from-blue-100/80 dark:group-hover:from-blue-800/40',
+                        'transition-all duration-300'
+                      )}
+                    >
+                      <div className='divide-y divide-gray-100 bg-white/50 dark:divide-gray-800 dark:bg-gray-900/50'>
+                        {typeof value === 'string' ? (
+                          <div className='max-w-lg overflow-auto p-2 text-sm break-words whitespace-pre-wrap text-gray-700 dark:text-gray-300'>
+                            {value}
+                          </div>
+                        ) : (
+                          <JsonToNestedList
+                            data={value as Record<string, unknown>}
+                            isURIIncluded={true}
+                            isFetchingData={isFetching}
+                            inCard={false}
+                            className='space-y-0'
+                            listClassName='hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors duration-200'
+                          />
+                        )}
+                      </div>
+                    </Accordion>
+                  ))
+                ) : (
+                  <div className='flex flex-col gap-3 p-2'>
+                    <div className='flex flex-col gap-1'>
+                      <span className='text-sm font-medium text-gray-600 dark:text-gray-400'>
+                        No payload data found
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ),
+          },
+          {
+            label: 'JSON View',
+            content: (
+              <div
+                className={classNames(
+                  'rounded-lg p-4',
+                  'bg-gray-50/50 dark:bg-gray-800/50',
+                  'font-mono text-sm'
+                )}
+              >
+                {selectedWorkflowPayloadData ? (
+                  <JsonDisplay
+                    data={selectedWorkflowPayloadData as Record<string, unknown>}
+                    isFetchingData={isFetching}
+                  />
+                ) : (
+                  <div className='flex flex-col gap-3 p-2'>
+                    <div className='flex flex-col gap-1'>
+                      <span className='text-sm font-medium text-gray-600 dark:text-gray-400'>
+                        No payload data found
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ),
+          },
+        ]}
+      />
+    </div>
+  </div>
+);
 
 const WorkflowRunTimeline = () => {
   const { orcabusId } = useParams();
@@ -148,8 +276,10 @@ const WorkflowRunTimeline = () => {
 
   useEffect(() => {
     if (workflowLastState) {
-      setCurrentState(workflowLastState?.status || '');
-      setSelectedPayloadId(workflowLastState?.payload || '');
+      startTransition(() => {
+        setCurrentState(workflowLastState?.status || '');
+        setSelectedPayloadId(workflowLastState?.payload || '');
+      });
     }
   }, [workflowLastState]);
 
@@ -201,7 +331,9 @@ const WorkflowRunTimeline = () => {
       toaster.success({ title: 'Comment updated successfully' });
       refetchWorkflowComment();
       resetUpdateWorkflowRunComment();
-      setComment('');
+      startTransition(() => {
+        setComment('');
+      });
     }
 
     if (isErrorUpdatingWorkflowRunComment) {
@@ -242,7 +374,9 @@ const WorkflowRunTimeline = () => {
       toaster.success({ title: 'Comment deleted successfully' });
       refetchWorkflowComment();
       resetDeleteWorkflowRunComment();
-      setComment('');
+      startTransition(() => {
+        setComment('');
+      });
     }
 
     if (isErrorDeletingWorkflowRunComment) {
@@ -283,7 +417,9 @@ const WorkflowRunTimeline = () => {
       toaster.success({ title: 'State updated successfully' });
       refetchWorkflowState();
       resetUpdateWorkflowRunState();
-      setStateComment('');
+      startTransition(() => {
+        setStateComment('');
+      });
     }
 
     if (isErrorUpdatingWorkflowRunState) {
@@ -297,127 +433,8 @@ const WorkflowRunTimeline = () => {
     isErrorUpdatingWorkflowRunState,
   ]);
 
-  // Create a PayloadContent component for the drawer
-  const PayloadContent = ({
-    selectedState,
-    currentState,
-  }: {
-    selectedState: string;
-    currentState: string;
-  }) => (
-    <div className='flex flex-col space-y-4 px-2'>
-      {/* State Badge Card */}
-      <div
-        className={classNames(
-          'flex items-center gap-3 rounded-lg p-3',
-          'bg-linear-to-r from-gray-50/80 to-white dark:from-gray-800/80 dark:to-gray-800/50'
-        )}
-      >
-        <span className='text-sm font-medium text-gray-600 dark:text-gray-400'>
-          {selectedState ? 'Selected State' : 'Current State'}:
-        </span>
-        <Badge status={selectedState || currentState || 'unknown'} className='shadow-xs'>
-          {selectedState || currentState || 'unknown'}
-        </Badge>
-      </div>
-
-      {/* Content Section */}
-      <div className='flex flex-col space-y-1 rounded-lg'>
-        <ContentTabs
-          className='rounded-lg bg-white bg-linear-to-r from-gray-50/80 to-white shadow-xs dark:bg-gray-900 dark:from-gray-800/80 dark:to-gray-800/50'
-          tabs={[
-            {
-              label: 'Payload Data',
-              content: (
-                <div className='flex flex-col gap-3 p-2'>
-                  {selectedWorkflowPayloadData ? (
-                    Object.entries(
-                      selectedWorkflowPayloadData?.data as Record<string, unknown>
-                    ).map(([key, value]) => (
-                      <Accordion
-                        key={key}
-                        title={key}
-                        defaultOpen={true}
-                        chevronPosition='right'
-                        className={classNames(
-                          'rounded-lg',
-                          'bg-linear-to-r from-white via-gray-50/80 to-gray-100/50',
-                          'dark:from-gray-900 dark:via-gray-800/80 dark:to-gray-800/50',
-                          'shadow-xs hover:shadow-md',
-                          'ring-1 ring-gray-200/50 dark:ring-gray-700/50',
-                          'transition-all duration-200 ease-in-out',
-                          'group'
-                        )}
-                        buttonClassName={classNames(
-                          'border-0',
-                          'bg-linear-to-r from-blue-50/90 to-transparent',
-                          'dark:from-blue-900/30 dark:to-transparent',
-                          'group-hover:from-blue-100/80 dark:group-hover:from-blue-800/40',
-                          'transition-all duration-300'
-                        )}
-                      >
-                        <div className='divide-y divide-gray-100 bg-white/50 dark:divide-gray-800 dark:bg-gray-900/50'>
-                          {typeof value === 'string' ? (
-                            <div className='max-w-lg overflow-auto p-2 text-sm break-words whitespace-pre-wrap text-gray-700 dark:text-gray-300'>
-                              {value}
-                            </div>
-                          ) : (
-                            <JsonToNestedList
-                              data={value as Record<string, unknown>}
-                              isURIIncluded={true}
-                              isFetchingData={isFetching}
-                              inCard={false}
-                              className='space-y-0'
-                              listClassName='hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors duration-200'
-                            />
-                          )}
-                        </div>
-                      </Accordion>
-                    ))
-                  ) : (
-                    <div className='flex flex-col gap-3 p-2'>
-                      <div className='flex flex-col gap-1'>
-                        <span className='text-sm font-medium text-gray-600 dark:text-gray-400'>
-                          No payload data found
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ),
-            },
-            {
-              label: 'JSON View',
-              content: (
-                <div
-                  className={classNames(
-                    'rounded-lg p-4',
-                    'bg-gray-50/50 dark:bg-gray-800/50',
-                    'font-mono text-sm'
-                  )}
-                >
-                  {selectedWorkflowPayloadData ? (
-                    <JsonDisplay
-                      data={selectedWorkflowPayloadData as Record<string, unknown>}
-                      isFetchingData={isFetching}
-                    />
-                  ) : (
-                    <div className='flex flex-col gap-3 p-2'>
-                      <div className='flex flex-col gap-1'>
-                        <span className='text-sm font-medium text-gray-600 dark:text-gray-400'>
-                          No payload data found
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ),
-            },
-          ]}
-        />
-      </div>
-    </div>
-  );
+  console.log('selectedWorkflowPayloadData', selectedWorkflowPayloadData);
+  console.log('isFetching', selectedPayloadId);
 
   return (
     <div>
@@ -493,6 +510,8 @@ const WorkflowRunTimeline = () => {
               <PayloadContent
                 selectedState={selectedState || ''}
                 currentState={currentState || ''}
+                selectedWorkflowPayloadData={selectedPayloadId ? selectedWorkflowPayloadData : null}
+                isFetching={isFetching}
               />
             </div>
           )}
