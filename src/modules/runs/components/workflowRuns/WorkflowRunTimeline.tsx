@@ -292,7 +292,11 @@ const WorkflowRunTimeline = () => {
   });
 
   const handleTimelineSelect = (event: TimelineEvent) => {
-    if (event.eventType !== 'stateChange') return;
+    if (event.eventType !== 'stateChange') {
+      setSelectedPayloadId(null);
+      setSelectedState(null);
+      return;
+    }
 
     // Update state and show payload for new selection
     setSelectedPayloadId(event.payloadId || null);
@@ -432,9 +436,6 @@ const WorkflowRunTimeline = () => {
     resetUpdateWorkflowRunState,
     isErrorUpdatingWorkflowRunState,
   ]);
-
-  console.log('selectedWorkflowPayloadData', selectedWorkflowPayloadData);
-  console.log('isFetching', selectedPayloadId);
 
   return (
     <div>
