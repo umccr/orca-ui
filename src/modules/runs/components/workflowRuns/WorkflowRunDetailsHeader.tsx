@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, startTransition } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   useWorkflowRunRerunModel,
@@ -63,14 +63,61 @@ const WorkflowRunDetailsHeader = () => {
 
   const workflowLastState = workflowRunDetail?.currentState?.status;
 
-  // find all valid state key who has vale of workflowLastState
-  const validState = useMemo(
-    () =>
-      Object.entries(workflowRunStateCreationValidMapData || {})
-        .filter(([, value]) => (value as string[]).includes(workflowLastState as string))
-        .map(([key]) => key),
-    [workflowRunStateCreationValidMapData, workflowLastState]
-  );
+  // find all valid state transition options
+  // Handles three formats:
+  // 1. Array: ['STATE1', 'STATE2'] - only these states can transition to the key
+  // 2. Dict with 'excludedStates': allows all states except those listed
+  // 3. Dict with 'allowedStates': same as array format
+  // Special case: when workflowLastState is empty/null, states with excludedStates
+  // that don't exclude empty/null will be allowed (e.g., DEPRECATED)
+  const validState = useMemo(() => {
+    if (!workflowRunStateCreationValidMapData) {
+      return [];
+    }
+
+    // Handle empty/null state: treat as empty string for comparison
+    // This allows states with excluded_states to permit empty workflows
+    const currentState =
+      workflowLastState && typeof workflowLastState === 'string' ? workflowLastState : '';
+
+    return Object.entries(workflowRunStateCreationValidMapData)
+      .filter(([, value]) => {
+        // Handle array format: ['STATE1', 'STATE2']
+        // Only matches if currentState is explicitly in the array
+        if (Array.isArray(value)) {
+          return value.includes(currentState);
+        }
+
+        // Handle dict format
+        if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+          const dictValue = value as Record<string, unknown>;
+
+          // Handle 'excluded_states': allows all states except those listed
+          // If currentState is empty and not in excluded list, it's allowed
+          // This enables empty workflows to transition to states like DEPRECATED
+          if ('excludedStates' in dictValue) {
+            const excludedStates = dictValue.excludedStates;
+            if (Array.isArray(excludedStates)) {
+              // Check if currentState (or empty string for null) is in excluded list
+              return !excludedStates.includes(currentState);
+            }
+            return false;
+          }
+
+          // Handle 'allowed_states': same as array format
+          // Only matches if currentState is explicitly in the allowed list
+          if ('allowedStates' in dictValue) {
+            const allowedStates = dictValue.allowedStates;
+            if (Array.isArray(allowedStates)) {
+              return allowedStates.includes(currentState);
+            }
+            return false;
+          }
+        }
+        return false;
+      })
+      .map(([key]) => key);
+  }, [workflowRunStateCreationValidMapData, workflowLastState]);
 
   const {
     mutate: createWorkflowRunComment,
@@ -95,7 +142,9 @@ const WorkflowRunDetailsHeader = () => {
       toaster.success({ title: 'Comment added successfully' });
       refetchWorkflowComment();
       resetCreateWorkflowRunComment();
-      setComment('');
+      startTransition(() => {
+        setComment('');
+      });
     }
 
     if (isErrorCreatingWorkflowRunComment) {
@@ -132,8 +181,10 @@ const WorkflowRunDetailsHeader = () => {
       toaster.success({ title: 'State added' });
       refetchWorkflowState();
       resetCreateWorkflowRunState();
-      setStateStatus(null);
-      setStateComment('');
+      startTransition(() => {
+        setStateStatus(null);
+        setStateComment('');
+      });
     }
 
     if (isErrorCreatingWorkflowRunState) {
@@ -158,18 +209,22 @@ const WorkflowRunDetailsHeader = () => {
   useEffect(() => {
     if (isRerunWorkflowSuccess) {
       toaster.success({ title: 'Workflow rerun successfully' });
-      setIsOpenRerunWorkflowDialog(false);
+      startTransition(() => {
+        setIsOpenRerunWorkflowDialog(false);
+        setSelectedDataset(null);
+        setIsDeprecated(false);
+      });
       resetRerunWorkflow();
       setRefreshWorkflowRuns(true);
-      setSelectedDataset(null);
-      setIsDeprecated(false);
     }
     if (isErrorRerunWorkflow) {
       toaster.error({ title: 'Error rerunning workflow', message: rerunWorkflowError?.message });
-      setIsOpenRerunWorkflowDialog(false);
+      startTransition(() => {
+        setIsOpenRerunWorkflowDialog(false);
+        setSelectedDataset(null);
+        setIsDeprecated(false);
+      });
       resetRerunWorkflow();
-      setSelectedDataset(null);
-      setIsDeprecated(false);
     }
   }, [
     isRerunWorkflowSuccess,
