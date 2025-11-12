@@ -201,7 +201,7 @@ export const useWorkflowRunStateUpdateModel = createWorkflowPatchMutationHook(
   '/api/v1/workflowrun/{orcabusId}/state/{id}/'
 );
 export const useWorkflowRunStateCreationValidMapModel = createWorkflowQueryHook(
-  '/api/v1/workflowrun/{orcabusId}/state/valid_states_map/'
+  '/api/v1/workflowrun/{orcabusId}/state/get_states_transition_validation_map/'
 );
 
 // Use suspenseQuery hook for fetching data
