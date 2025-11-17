@@ -37,7 +37,12 @@ const SequenceRunWorkflowRunsStats = () => {
   const start_time = sequenceRunDetail?.sort((a, b) => {
     return dayjs(a.endTime).diff(dayjs(b.endTime));
   })[0]?.endTime;
-  const end_time = dayjs(start_time).add(2, 'days').toISOString();
+  // Set end_time to be 2 days after start_time, but not after now
+  const calculatedEndTime = dayjs(start_time).add(2, 'days');
+  const now = dayjs();
+  const end_time = calculatedEndTime.isAfter(now)
+    ? now.toISOString()
+    : calculatedEndTime.toISOString();
 
   const { data: workflowRunsCount, isLoading: isLoadingWorkflowRuns } =
     useWorkflowRunStatusCountModel({
