@@ -11,7 +11,7 @@ import toaster from '@/components/common/toaster';
 import { Tooltip } from '@/components/common/tooltips';
 export type TableData = Record<string, unknown>;
 
-export type Column = {
+export interface Column {
   header: ReactNode;
   headerClassName?: string;
   headerGroup?: { label?: string; colSpan: number; additionalClassName?: string };
@@ -19,9 +19,9 @@ export type Column = {
   cellClassName?: string;
   cell?: (cellData: unknown, rowData: TableData) => ReactNode;
   onSort?: () => void;
-  sortDirection?: 'asc' | 'desc';
+  sortDirection?: 'asc' | 'desc' | undefined;
   copyable?: boolean;
-};
+}
 
 export interface TableProps {
   tableHeader?: ReactNode | string;
