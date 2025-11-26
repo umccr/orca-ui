@@ -113,7 +113,11 @@ const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) =
         onSort: () => {
           const { orderBy } = getQueryParams();
           setQueryParams({
-            orderBy: orderBy === 'timestamp' ? '-timestamp' : 'timestamp',
+            orderBy: orderBy
+              ? orderBy === 'timestamp'
+                ? '-timestamp'
+                : 'timestamp'
+              : '-timestamp',
           });
         },
         sortDirection:
