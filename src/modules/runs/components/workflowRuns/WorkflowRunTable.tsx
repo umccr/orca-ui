@@ -33,7 +33,7 @@ const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) =
         start_time: getQueryParams().startDate || undefined,
         end_time: getQueryParams().endDate || undefined,
         libraries__orcabusId: libraryOrcabusId ? libraryOrcabusId : undefined,
-        order_by: getQueryParams().orderBy || undefined,
+        order_by: getQueryParams().orderBy || 'timestamp',
       },
     },
     reactQuery: {
@@ -121,7 +121,7 @@ const WorkflowRunTable = ({ libraryOrcabusId }: { libraryOrcabusId?: string }) =
             ? 'asc'
             : getQueryParams().orderBy === 'timestamp'
               ? 'desc'
-              : undefined,
+              : 'desc',
         cell: (currentState: unknown) => {
           const timestamp = currentState ? (currentState as { timestamp: string }).timestamp : null;
           if (!timestamp) {
