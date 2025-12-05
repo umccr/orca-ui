@@ -10,6 +10,7 @@ VITE_SEQUENCE_RUN_URL ?= https://sequence.dev.umccr.org
 VITE_FILE_URL ?= https://file.dev.umccr.org
 VITE_SSCHECK_URL ?= https://sscheck-orcabus.dev.umccr.org
 VITE_HTSGET_URL ?= https://htsget-file.dev.umccr.org
+VITE_CASE_URL ?= https://case.dev.umccr.org
 
 # Export the variables
 export VITE_METADATA_URL
@@ -18,6 +19,7 @@ export VITE_FILE_URL
 export VITE_SSCHECK_URL
 export VITE_SEQUENCE_RUN_URL
 export VITE_HTSGET_URL
+export VITE_CASE_URL
 
 install:
 	@yarn install
@@ -31,8 +33,9 @@ generate-openapi-types:
 	@echo "Generating Workflow OpenAPI types from ${VITE_WORKFLOW_URL}..."
 	@yarn run -B openapi-typescript ${VITE_WORKFLOW_URL}/schema/openapi.json -o ./src/api/types/workflow.d.ts
 	@echo "Generating File OpenAPI types from ${VITE_FILE_URL}..."
-	@yarn run -B openapi-typescript ${VITE_FILE_URL}/schema/openapi.json -o ./src/api/types/file.d.ts
-
+	@yarn run -B openapi-typescnript ${VITE_FILE_URL}/schema/openapi.json -o ./src/api/types/file.d.ts
+	@echo "Generating Case OpenAPI types from ${VITE_CASE_URL}..."
+	@yarn run -B openapi-typescript ${VITE_CASE_URL}/schema/openapi.json -o ./src/api/types/case.d.ts
 start: generate-openapi-types
 	@yarn run start
 
