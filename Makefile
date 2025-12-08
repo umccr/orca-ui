@@ -33,7 +33,7 @@ generate-openapi-types:
 	@echo "Generating Workflow OpenAPI types from ${VITE_WORKFLOW_URL}..."
 	@yarn run -B openapi-typescript ${VITE_WORKFLOW_URL}/schema/openapi.json -o ./src/api/types/workflow.d.ts
 	@echo "Generating File OpenAPI types from ${VITE_FILE_URL}..."
-	@yarn run -B openapi-typescnript ${VITE_FILE_URL}/schema/openapi.json -o ./src/api/types/file.d.ts
+	@yarn run -B openapi-typescript ${VITE_FILE_URL}/schema/openapi.json -o ./src/api/types/file.d.ts
 	@echo "Generating Case OpenAPI types from ${VITE_CASE_URL}..."
 	@yarn run -B openapi-typescript ${VITE_CASE_URL}/schema/openapi.json -o ./src/api/types/case.d.ts
 start: generate-openapi-types
