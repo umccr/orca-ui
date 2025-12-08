@@ -29,6 +29,9 @@ const WorkflowRunTable = ({ externalEntitySet }: { externalEntitySet: Record<str
         orcabusId: Object.keys(wfrMapCase),
       },
     },
+    reactQuery: {
+      enabled: Object.keys(wfrMapCase).length > 0,
+    },
   });
 
   if (isError) {
@@ -97,7 +100,6 @@ const WorkflowRunTable = ({ externalEntitySet }: { externalEntitySet: Record<str
         accessor: 'orcabusId',
         cell: (p: unknown) => {
           const rawOrcabusId = (p as string).split('.')[1];
-
           return <>{wfrMapCase[rawOrcabusId].addedVia ?? '-'}</>;
         },
       },
