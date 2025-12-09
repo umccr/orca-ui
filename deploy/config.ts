@@ -42,6 +42,7 @@ export const getAppStackConfig = (appStage: AppStage): ApplicationStackProps => 
           VITE_FILE_URL: `https://file.dev.umccr.org`,
           VITE_SSCHECK_URL: `https://sscheck-orcabus.dev.umccr.org`,
           VITE_HTSGET_URL: `https://htsget-file.dev.umccr.org`,
+          VITE_CASE_URL: `https://case.dev.umccr.org`,
         },
       };
 
@@ -56,6 +57,7 @@ export const getAppStackConfig = (appStage: AppStage): ApplicationStackProps => 
           VITE_SEQUENCE_RUN_URL: `https://sequence.stg.umccr.org`,
           VITE_FILE_URL: `https://file.stg.umccr.org`,
           VITE_SSCHECK_URL: `https://sscheck-orcabus.stg.umccr.org`,
+          VITE_CASE_URL: `https://case.stg.umccr.org`,
         },
       };
 
@@ -75,6 +77,7 @@ export const getAppStackConfig = (appStage: AppStage): ApplicationStackProps => 
           VITE_SEQUENCE_RUN_URL: `https://sequence.prod.umccr.org`,
           VITE_FILE_URL: `https://file.prod.umccr.org`,
           VITE_SSCHECK_URL: `https://sscheck-orcabus.prod.umccr.org`,
+          VITE_CASE_URL: `https://case.prod.umccr.org`,
         },
       };
   }

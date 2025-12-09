@@ -12,6 +12,7 @@ const config = {
     file: env.VITE_FILE_URL,
     sscheck: env.VITE_SSCHECK_URL,
     htsget: env.VITE_HTSGET_URL,
+    case: env.VITE_CASE_URL,
   },
   cognito: {
     REGION: REGION,
