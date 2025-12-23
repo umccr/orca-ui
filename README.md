@@ -1,6 +1,6 @@
 # OrcaUI
 
-This project is the UI representation of our [OrcaBus project](https://github.com/umccr/orcabus).
+This project is the UI representation of our [OrcaBus project](https://github.com/OrcaBus).
 
 Currently, this project is still in development.
 

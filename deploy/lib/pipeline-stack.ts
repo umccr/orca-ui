@@ -45,7 +45,7 @@ export class PipelineStack extends Stack {
     // A connection where the pipeline get its source code
     const codeStarArn = StringParameter.valueForStringParameter(this, 'codestar_github_arn');
     const codeStarSourceActionName = 'infra-src';
-    const sourceFile = CodePipelineSource.connection('umccr/orca-ui', ghBranchName, {
+    const sourceFile = CodePipelineSource.connection('OrcaBus/orca-ui', ghBranchName, {
       connectionArn: codeStarArn,
       actionName: codeStarSourceActionName,
       triggerOnPush: true,
@@ -313,7 +313,7 @@ export class PipelineStack extends Stack {
           actions: [
             new CodeStarConnectionsSourceAction({
               actionName: codesStarSourceName,
-              owner: 'umccr',
+              owner: 'OrcaBus',
               repo: 'orca-ui',
               branch: ghBranchName,
               connectionArn: codeStarArn,
