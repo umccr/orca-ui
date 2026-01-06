@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { WorkflowRunModel } from '@/api/workflow';
 import { JsonToTable } from '@/components/common/json-to-table';
 import { Dialog } from '@/components/common/dialogs';
 import { Link } from 'react-router-dom';
@@ -11,7 +10,8 @@ export const WorkflowDialogDetail = ({
   workflowDetail,
 }: {
   portalRunId: string;
-  workflowDetail: WorkflowRunModel;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  workflowDetail: Record<string, any>;
 }) => {
   const [isOpenWorkflowDetails, setIsOpenWorkflowDetails] = useState(false);
 
