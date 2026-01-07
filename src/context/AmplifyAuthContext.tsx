@@ -171,7 +171,6 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }): ReactElement 
           dispatch({ type: AuthActionTypes.LOGOUT });
           break;
         default:
-          console.log('default auth event: ', payload.event);
           break;
       }
     });

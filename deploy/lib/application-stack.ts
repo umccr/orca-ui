@@ -75,7 +75,6 @@ export class ApplicationStack extends Stack {
         VITE_OAUTH_REDIRECT_IN: '/orcaui/oauth_redirect_in_stage',
         VITE_OAUTH_REDIRECT_OUT: '/orcaui/oauth_redirect_out_stage',
         VITE_COG_USER_POOL_ID: '/data_portal/client/cog_user_pool_id',
-        VITE_COG_IDENTITY_POOL_ID: '/data_portal/client/cog_identity_pool_id',
         VITE_OAUTH_DOMAIN: '/data_portal/client/oauth_domain',
         VITE_UNSPLASH_CLIENT_ID: '/data_portal/unsplash/client_id',
       },
